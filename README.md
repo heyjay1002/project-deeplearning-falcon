@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/e3b09218-c739-49b2-96ca-543965c307d0)
+![FALCON_logo_compressed](https://github.com/user-attachments/assets/462717ba-894c-4ad8-9bdc-2d7cc524c57d)
 
 # FALCON: 딥러닝 기반 비행장 안전 대응 시스템
 > Foreign object Auto-detection & Localization Camera Observation Network
