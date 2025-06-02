@@ -1,4 +1,5 @@
-![image](https://github.com/user-attachments/assets/f0bc3659-ac31-4527-bb33-bc2ac338e28a)
+![Screenshot from 2025-06-02 23-33-12](https://github.com/user-attachments/assets/3792ca68-67eb-465f-a0cf-677b4572b339)
+
 
 # FALCON: 딥러닝 기반 비행장 안전 대응 시스템
 > Foreign object Auto-detection & Localization Camera Observation Network
@@ -9,6 +10,7 @@
 ### 딥러닝 기술조사
 ##### 조사하고자하는 기능에 대해 폴더 생성후 데이터셋을 제외한 학습 모델 및 data.yaml, 성능 지표 기입. 
 ##### 모델 따로 추가시 해당 기능 폴더 및에 폴더 추가 생성
+-----------------------------------------------------
 📁technical_test        # 기술조사
 ㄴ 📁 dl_model_test           # 딥러닝 모델 조사
     ㄴ 📁 object_detecting     # 객체감지
