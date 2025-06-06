@@ -30,8 +30,8 @@
 
 📂 request_router/
 - 📄 request_executor.py
-- request_code에 따라 실제 처리 분기 (ex: DB 조회, 캐시 조회 등)
-- 필요한 경우 응답 텍스트까지 구성 (e.g., response_text, response_code)
+    - request_code에 따라 실제 처리 분기 (ex: DB 조회, 캐시 조회 등)
+    - 필요한 경우 응답 텍스트까지 구성 (e.g., response_text, response_code)
 
 ---
 

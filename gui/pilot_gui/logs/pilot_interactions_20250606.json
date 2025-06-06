@@ -1,0 +1,15 @@
+[
+  {
+    "timestamp": "2025-06-05T16:28:30.142978+00:00",
+    "session_id": "pilot-20250605-162830-601092",
+    "callsign": "TEST123",
+    "stt_text": "테스트 음성 인식",
+    "request_code": "BIRD_RISK_CHECK",
+    "parameters": {
+      "runway": "RWY-A"
+    },
+    "response_text": "테스트 응답",
+    "processing_time": 1.5,
+    "confidence_score": 0.85
+  }
+]
