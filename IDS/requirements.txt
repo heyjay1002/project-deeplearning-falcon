@@ -1,0 +1,6 @@
+opencv-python
+torch
+ultralytics
+deep-oc-sort
+mediapipe
+pydantic
