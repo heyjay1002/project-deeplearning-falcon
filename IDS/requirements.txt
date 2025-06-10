@@ -1,6 +1,8 @@
-opencv-python
-torch
-ultralytics
-deep-oc-sort
-mediapipe
-pydantic
+opencv-python>=4.8.0
+numpy>=1.26.0
+PyYAML>=6.0
+torch>=2.2.0+cu121 # 본인 CUDA 버전에 맞춰 수정 (예: cu118, cu121 등)
+torchvision>=0.17.0+cu121 # torch와 동일한 버전 및 CUDA 지정
+ultralytics>=8.0.0 # YOLOv8, YOLOv11 모델 사용 시
+scipy>=1.11.0 # OC-SORT에 필요할 수 있는 기본 라이브러리
+# filterpy # OC-SORT 구현체에 따라 필요할 수 있음
