@@ -9,8 +9,7 @@ falcon_gui/
 ├── requirements.txt 
 ├── main.py                      # 실행 진입점
 ├── config/
-│   ├── settings.py              # 설정값 (포트, IP 등)
-│   └── constants.py             # 공통 상수 정의
+│   └──  settings.py             # 설정값, 상수 정의(포트, IP 등)
 ├── ui/                          # Qt Designer 기반 UI 클래스
 │   ├── main_window.ui           # Main 창 전체 레이아웃 UI
 │   ├── main_page.ui             # 위험도/지도/리스트 통합 UI
