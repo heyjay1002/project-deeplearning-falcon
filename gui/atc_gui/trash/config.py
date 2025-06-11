@@ -50,11 +50,11 @@ OBJECT_CLASS_MAPPING = {
 # 조류 위험도 등급
 # ============================================================================
 
-class BirdRiskLevel(IntEnum):
+class BirdRiskLevel(Enum):
     """조류 위험도 등급"""
-    LOW = 0        # 안전
-    MEDIUM = 1     # 주의
-    HIGH = 2       # 경고
+    LOW = "안전"
+    MEDIUM = "주의"
+    HIGH = "경고"
 
 BIRD_RISK_MAPPING = {
     0: BirdRiskLevel.LOW,
@@ -66,7 +66,7 @@ BIRD_RISK_MAPPING = {
 RISK_COLORS = {
     BirdRiskLevel.LOW: "#00FF00",      # 녹색
     BirdRiskLevel.MEDIUM: "#FFFF00",   # 노란색
-    BirdRiskLevel.HIGH: "#FF0000"    # 빨간색
+    BirdRiskLevel.HIGH: "#FF0000"      # 빨간색
 }
 
 # ============================================================================
@@ -103,14 +103,14 @@ ZONE_MAPPING = {
 
 class SecurityLevel(Enum):
     """보안 등급"""
-    LEVEL_1 = "UNRESTRICTED"
-    LEVEL_2 = "RESTRICTED"
-    LEVEL_3 = "FORBIDDEN"
+    LEVEL_1 = "무제한"
+    LEVEL_2 = "제한"
+    LEVEL_3 = "금지"
 
 class AccessTarget(Enum):
     """출입 대상"""
     VEHICLE = "차량"
-    PERSONNEL = "인원"
+    PERSON = "인원"
 
 SECURITY_LEVEL_MAPPING = {
     0: SecurityLevel.LEVEL_1,
@@ -119,145 +119,85 @@ SECURITY_LEVEL_MAPPING = {
 }
 
 # ============================================================================
-# 알림 타입
-# ============================================================================
-
-class AlertType(Enum):
-    """알림 타입"""
-    GROUND_HAZARD = "지상_위험요소"
-    BIRD_RISK = "조류_위험도"
-    ACCESS_VIOLATION = "출입_위반"
-    RESCUE_NEEDED = "구조_필요"
-    # PILOT_REQUEST = "조종사_요청"
-
-
-
-# ============================================================================
 # UDP 프로토콜
 # ============================================================================
 
-# UDP 상수 추가
+# CCTV 카메라 ID
+class CameraID(Enum):
+    """CCTV 카메라 식별자"""
+    A = "A"
+    B = "B"
+
+# UDP 데이터 형식
+UDP_DATA_SEPARATOR = ":"  # 카메라 ID와 바이너리 이미지 데이터 구분자
+
+# UDP 데이터 파싱 상수
+UDP_HEADER_LENGTH = 2     # "A:" 또는 "B:" 형식의 헤더 길이
 
 # ============================================================================
 # TCP 메시지 프로토콜
 # ============================================================================
 
-class MessageType(Enum):
-    """메시지 타입"""
-    ME = "EVENT"        # 서버 -> GUI (이벤트 알림)
-    MC = "COMMAND"      # GUI -> 서버 (요청/명령)
-    MR = "RESPONSE"     # 서버 -> GUI (응답)
+class MessagePrefix(Enum):
+    """메시지 프리픽스"""
+    # 이벤트 메시지 (서버 -> GUI)
+    ME_OD = "ME_OD"      # 객체 감지 이벤트
+    ME_BR = "ME_BR"      # 조류 위험도 변경 이벤트
+    ME_RA = "ME_RA"      # 활주로 A 위험도 변경 이벤트
+    ME_RB = "ME_RB"      # 활주로 B 위험도 변경 이벤트
+    
+    # 명령 메시지 (GUI -> 서버)
+    MC_CA = "MC_CA"      # CCTV A 영상 요청
+    MC_CB = "MC_CB"      # CCTV B 영상 요청
+    MC_MP = "MC_MP"      # 지도 영상 요청
+    MC_OD = "MC_OD"      # 객체 상세보기 요청
+    
+    # 응답 메시지 (서버 -> GUI)
+    MR_CA = "MR_CA"      # CCTV A 응답
+    MR_CB = "MR_CB"      # CCTV B 응답
+    MR_MP = "MR_MP"      # 지도 응답
+    MR_OD = "MR_OD"      # 객체 상세보기 응답
 
-class MessageCategory(Enum):
-    """메시지 카테고리"""
-    OD = "OBJECT_DETECTION"
-    BR = "BIRD_RISK_UPDATE"
-    RA = "RWY_A_RISK"
-    RB = "RWY_B_RISK"
-    CA = "CCTV_A"
-    CB = "CCTV_B"    
-    MP = "MAP"      # CCTV 송출 멈추기 위한 목적
+# 객체 정보 필드 정의
+OBJECT_INFO = "{object_id},{class},{x_coord},{y_coord},{zone},{timestamp}[,{extra_info}]"  # 기본 객체 정보
+OBJECT_INFO_DETAIL = "{object_id},{class},{x_coord},{y_coord},{zone},{timestamp},{image_data}"  # 상세 객체 정보 (이미지 포함)
 
-class MessagePrefix:
-    """미리 정의된 메시지 프리픽스"""
-    # 이벤트 (서버 -> GUI)
-    OBJECT_DETECTION = "ME_OD"      # 객체 감지 이벤트
-    BIRD_RISK_UPDATE = "ME_BR"      # 조류 위험도 업데이트
-    RWY_A_RISK = "ME_RA"           # 활주로 A 위험도
-    RWY_B_RISK = "ME_RB"   
+# 메시지 형식 정의
+# 서버 -> GUI (이벤트/응답): 프리픽스:데이터
+# GUI -> 서버 (명령): 프리픽스만
+MESSAGE_FORMAT = {
+    # 이벤트 메시지 (서버 -> GUI)
+    MessagePrefix.ME_OD: (
+        f"ME_OD:{OBJECT_INFO}"  # 첫 번째 객체 정보
+        f"[;{OBJECT_INFO}]*"    # 추가 객체 정보가 있는 경우, 세미콜론으로 구분
+    ),  # 객체 감지 이벤트
+    
+    MessagePrefix.ME_BR: "ME_BR:{risk_level}",    # 조류 위험도 변경 이벤트
+    MessagePrefix.ME_RA: "ME_RA:{risk_level}",    # 활주로 A 위험도 변경 이벤트
+    MessagePrefix.ME_RB: "ME_RB:{risk_level}",    # 활주로 B 위험도 변경 이벤트
+    
+    # 명령 메시지 (GUI -> 서버)
+    MessagePrefix.MC_CA: "MC_CA",              # CCTV A 영상 요청
+    MessagePrefix.MC_CB: "MC_CB",              # CCTV B 영상 요청
+    MessagePrefix.MC_MP: "MC_MP",              # 지도 영상 요청
+    MessagePrefix.MC_OD: "MC_OD:{object_id}",  # 객체 상세보기 요청
+    
+    # 응답 메시지 (서버 -> GUI)
+    MessagePrefix.MR_CA: "MR_CA:{response}",    # CCTV A 응답
+    MessagePrefix.MR_CB: "MR_CB:{response}",    # CCTV B 응답
+    MessagePrefix.MR_MP: "MR_MP:{response}",    # 지도 응답
+    MessagePrefix.MR_OD: (
+        f"MR_OD:{{response}}"  # 기본 응답 (ERR인 경우 여기까지)
+        f"[,{OBJECT_INFO_DETAIL}]"  # OK인 경우에만 객체 상세 정보 포함
+    )  # 객체 상세보기 응답
+}
 
 # 메시지 파싱을 위한 상수
 MESSAGE_SEPARATOR = ":"            # 프리픽스와 데이터 구분자
-MESSAGE_PREFIX_LENGTH = 5          # "ME_OD" 같은 프리픽스 길이
 
-class CCTVCommand(Enum):
-    """CCTV 제어 커맨드"""
-    CCTV_A = "MC_CA"      # CCTV A 영상 요청
-    CCTV_B = "MC_CB"      # CCTV B 영상 요청
-    MAP = "MC_MP"         # MAP 영상 요청(CCTV A,B 영상 중지를 위한 것임)
-
-class CCTVResponse(Enum):
-    """CCTV 응답 코드"""
-    OK = "OK"               # 성공
-    ERR = "ERROR"           # 실패
-
-# CCTV 커맨드별 응답 형식
-CCTV_RESPONSE_FORMAT = {
-    CCTVCommand.CCTV_A: "MC_CA:{response}",
-    CCTVCommand.CCTV_B: "MC_CB:{response}",
-    CCTVCommand.MAP: "MC_MP:{response}"
-}
-
-# # CCTV 인덱스 매핑
-# CCTV_INDEX_MAP = {
-#     0: CCTVMAPCommand.CCTV_A,
-#     1: CCTVMAPCommand.CCTV_B
-# }
-
-# ============================================================================
-# 객체 감지 데이터 프로토콜
-# ============================================================================
-
-class ObjectDetectionCommand(Enum):
-    """객체 감지 커맨드"""
-    DETECTION_EVENT = "ME_OD"
-
-# 객체 감지 데이터 필드 정의
-OBJECT_DETECTION_FIELDS = [
-    'object_id',      # 1001
-    'object_type',    # 1 or 'FOD'
-    'x_coord',        # 100
-    'y_coord',        # 100
-    'zone',          # 'RWY_A'
-    'timestamp',     # '2025-06-05T19:21:00Z'
-    'extra_info'     # 'rescue' (선택적, 객체가 사람인 경우에만)
-]
-
-# 데이터 파싱 상수
-OBJECT_DETECTION_SEPARATOR = ":"    # 커맨드와 데이터 구분
+# 객체 정보 파싱을 위한 상수
 OBJECT_FIELD_SEPARATOR = ","        # 필드 구분
 OBJECT_RECORD_SEPARATOR = ";"       # 객체 간 구분
-
-# 필수 필드 개수
-OBJECT_DETECTION_MIN_FIELDS = 6     # extra_info는 선택적
-OBJECT_DETECTION_MAX_FIELDS = 7
-
-# ============================================================================
-# UI 설정 및 상수
-# ============================================================================
-
-# # 메인 윈도우
-# WINDOW_TITLE = "FALCON - 딥러닝 기반 활주로 안전 대응 시스템"
-# WINDOW_MIN_WIDTH = 1200
-# WINDOW_MIN_HEIGHT = 800
-
-# # 페이지 인덱스
-# class PageIndex(IntEnum):
-#     MAIN = 0
-#     ACCESS = 1
-#     LOG = 2
-
-# # 스택 위젯 인덱스
-# class StackIndex(IntEnum):
-#     MAP = 0
-#     CCTV_1 = 1
-#     CCTV_2 = 2
-#     CCTV_3 = 3
-
-# class ObjectAreaIndex(IntEnum):
-#     TABLE = 0
-#     DETAIL = 1
-
-# # 테이블 설정
-# TABLE_ROW_HEIGHT = 30
-# TABLE_HEADER_HEIGHT = 35
-# MAX_TABLE_ROWS = 1000
-
-# # 이미지 및 지도 설정
-# MAP_WIDTH = 1000
-# MAP_HEIGHT = 600
-# MARKER_SIZE = 20
-# IMAGE_REFRESH_INTERVAL = 33  # 약 30fps
 
 # ============================================================================
 # 알림 설정

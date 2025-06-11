@@ -9,7 +9,9 @@ falcon_gui/
 ├── requirements.txt 
 ├── main.py                      # 실행 진입점
 ├── config/
-│   └──  settings.py             # 설정값, 상수 정의(포트, IP 등)
+│   ├── __init__.py 
+|   ├── settings.py              # 설정값 정의(포트, IP 등)
+│   └── constants.py             # 상수값 정의
 ├── ui/                          # Qt Designer 기반 UI 클래스
 │   ├── main_window.ui           # Main 창 전체 레이아웃 UI
 │   ├── main_page.ui             # 위험도/지도/리스트 통합 UI
@@ -31,7 +33,6 @@ falcon_gui/
 │   ├── tcp_client.py
 │   ├── udp_client.py
 │   ├── interface.py             # signal 포함 인터페이스 클래스
-│   ├── data_validator.py        # 데이터 유효성 검증
 │   └── logger.py
 ├── resources/
 │   ├── images/
