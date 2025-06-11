@@ -1,11 +1,15 @@
-from PyQt6.QtWidgets import QWidget, QTableWidgetItem, QSizePolicy
+from PyQt6.QtWidgets import QWidget, QTableWidgetItem, QSizePolicy, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QMessageBox
 from PyQt6 import uic
-from PyQt6.QtGui import QPixmap
-from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPixmap, QColor, QImage
+from PyQt6.QtCore import Qt, QTimer
 import os
 from pages.object_detail_dialog import ObjectDetailDialog
-from models.sample_object_data import sample_object_data
-from widgets.marker_overlay_widget import MarkerOverlayWidget
+from pages.object_detection_dialog import ObjectDetectionDialog
+from models.detected_object import DetectedObject
+from config import BirdRiskLevel, RunwayRiskLevel, Constants, ObjectType, AirportZone
+from utils.tcp_client import TcpClient
+from widgets.map_marker_widget import MapMarkerWidget
+from utils.logger import logger
 
 class MainPage(QWidget):
     def __init__(self, parent=None):
@@ -22,51 +26,187 @@ class MainPage(QWidget):
         # 원본 이미지 저장
         self.map_pixmap = QPixmap(self.map_path)
         self.cctv_pixmap = QPixmap(self.cctv_path)
-        
-        # # CCTV 레이블 크기 정책 설정
-        # for label in [self.label_map, self.label_cctv_1, self.label_cctv_2, self.label_cctv_3]:
-        #     label.setSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
-        #     label.setMinimumSize(600, 400)  # 최소 크기 설정
-        #     label.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         # 초기 이미지 설정
         self.update_images()
 
-        # 샘플 데이터 테이블에 추가
-        self.table_object_list.setRowCount(len(sample_object_data))
-        for row, obj in enumerate(sample_object_data):
-            self.table_object_list.setItem(row, 0, QTableWidgetItem(obj['id']))
-            self.table_object_list.setItem(row, 1, QTableWidgetItem(obj['location']))
-            self.table_object_list.setItem(row, 2, QTableWidgetItem(obj['type']))
-
-        self.table_object_list.setSelectionBehavior(self.table_object_list.SelectionBehavior.SelectRows)
+        # 테이블 설정
+        self.setup_table()
+        
+        # TCP 클라이언트 설정
+        self.setup_tcp_client()
 
         # 마커 오버레이 연동
-        self.marker_overlay = MarkerOverlayWidget(self.map_overlay_frame)
+        self.setup_marker_overlay()
+
+        # 버튼 연결
+        self.setup_buttons()
+
+        # 상세보기 다이얼로그 설정
+        self.setup_detail_dialog()
+
+        # 첫 객체 감지 여부를 추적하는 변수
+        self.is_first_detection = True
+
+        # # TCP 클라이언트 연결
+        # self.tcp_client.connected.connect(self.on_connected)
+        # self.tcp_client.disconnected.connect(self.on_disconnected)
+        # self.tcp_client.connection_error.connect(self.on_connection_error)
+        # self.tcp_client.connect_to_server()
+
+    def setup_table(self):
+        """테이블 초기 설정"""
+        # 컬럼 헤더 설정
+        headers = ["ID", "위치", "종류"]
+        self.table_object_list.setColumnCount(len(headers))
+        self.table_object_list.setHorizontalHeaderLabels(headers)
+        
+        # 선택 모드 설정
+        self.table_object_list.setSelectionBehavior(self.table_object_list.SelectionBehavior.SelectRows)
+        
+        # 초기 데이터 클리어
+        self.table_object_list.setRowCount(0)
+
+    def setup_tcp_client(self):
+        """TCP 클라이언트 설정 및 시그널 연결"""
+        self.tcp_client = TcpClient()
+        
+        # 시그널 연결
+        self.tcp_client.object_detected.connect(self.update_object_list)
+        self.tcp_client.bird_risk_changed.connect(self.update_bird_risk)
+        self.tcp_client.runway_a_risk_changed.connect(self.update_runway_a_risk)
+        self.tcp_client.runway_b_risk_changed.connect(self.update_runway_b_risk)
+        self.tcp_client.object_detail_response.connect(self.update_object_detail)
+        self.tcp_client.object_detail_error.connect(self.handle_object_detail_error)
+
+    def setup_marker_overlay(self):
+        """마커 오버레이 설정"""
+        self.map_marker = MapMarkerWidget(self.map_overlay_frame)
         layout = self.map_overlay_frame.layout()
         idx = layout.indexOf(self.marker_overlay_placeholder)
         layout.removeWidget(self.marker_overlay_placeholder)
         self.marker_overlay_placeholder.deleteLater()
-        layout.addWidget(self.marker_overlay, 0, 0)  # row 0, column 0에 추가
-
-        # 마커 추가
-        self.marker_overlay.add_marker(400, 200, self.marker_icon_path, 0, self.select_table_row)
-
-        # 지도/영상 전환 버튼 연결
+        layout.addWidget(self.map_marker, 0, 0)
+        
+        # 지도 이미지 설정
+        self.map_marker.set_map_image(self.map_path)
+    def setup_buttons(self):
+        """버튼 시그널 연결"""
         self.btn_show_map.clicked.connect(self.show_map)
         self.btn_show_cctv.clicked.connect(self.show_cctv)
+        self.btn_detail.clicked.connect(self.show_detail)
 
-        # 상세보기 페이지: ObjectDetailDialog 동적 추가
+    def setup_detail_dialog(self):
+        """상세보기 다이얼로그 설정"""
         self.object_detail_dialog = ObjectDetailDialog(self)
         self.object_area.addWidget(self.object_detail_dialog)
-        self.btn_detail.clicked.connect(self.show_detail)
         self.object_detail_dialog.btn_back.clicked.connect(self.show_table)
+
+    def update_object_list(self, objects: list[DetectedObject]):
+        """객체 목록 업데이트"""
+        logger.debug(f"객체 목록 업데이트: {len(objects)}개 객체")
+        self.table_object_list.setRowCount(len(objects))
+        
+        for row, obj in enumerate(objects):
+            # ID
+            self.table_object_list.setItem(row, 0, QTableWidgetItem(str(obj.object_id)))
+            # 위치
+            self.table_object_list.setItem(row, 1, QTableWidgetItem(obj.zone.value))
+            # 종류
+            self.table_object_list.setItem(row, 2, QTableWidgetItem(obj.object_type.value))
+
+        # 마커 업데이트
+        self.update_markers(objects)
+
+        # 첫 객체 감지 시 팝업 표시
+        if self.is_first_detection and objects:
+            self.is_first_detection = False
+            logger.info("첫 번째 객체 감지")
+            dialog = ObjectDetectionDialog(objects[0], self)
+            dialog.exec()
+
+    def update_markers(self, objects: list[DetectedObject]):
+        """마커 업데이트"""
+        logger.debug(f"마커 업데이트: {len(objects)}개 객체")
+        self.map_marker.clear_markers()
+        
+        for obj in objects:
+            self.map_marker.add_marker(
+                obj.x_coord, 
+                obj.y_coord, 
+                self.marker_icon_path, 
+                obj.object_id,
+                self.select_table_row
+            )
+
+    def update_bird_risk(self, risk_level: BirdRiskLevel):
+        """조류 위험도 업데이트"""
+        logger.info(f"조류 위험도 변경: {risk_level.value}")
+        self.label_bird_risk_status.setText(risk_level.value)
+        self.label_bird_risk_status.setStyleSheet(
+            f"background-color: {Constants.RISK_COLORS[risk_level]}; "
+            f"color: {'#000000' if risk_level == BirdRiskLevel.MEDIUM else '#FFFFFF'}; "
+            "font-weight: bold;"
+        )
+
+    def update_runway_a_risk(self, risk_level: RunwayRiskLevel):
+        """활주로 A 위험도 업데이트"""
+        logger.info(f"활주로 A 위험도 변경: {risk_level.value}")
+        self.label_rwy1_status.setText(risk_level.value)
+        self.label_rwy1_status.setStyleSheet(
+            f"background-color: {Constants.RISK_COLORS[risk_level]}; "
+            f"color: {'#000000' if risk_level == RunwayRiskLevel.MEDIUM else '#FFFFFF'}; "
+            "font-weight: bold;"
+        )
+
+    def update_runway_b_risk(self, risk_level: RunwayRiskLevel):
+        """활주로 B 위험도 업데이트"""
+        logger.info(f"활주로 B 위험도 변경: {risk_level.value}")
+        self.label_rwy2_status.setText(risk_level.value)
+        self.label_rwy2_status.setStyleSheet(
+            f"background-color: {Constants.RISK_COLORS[risk_level]}; "
+            f"color: {'#000000' if risk_level == RunwayRiskLevel.MEDIUM else '#FFFFFF'}; "
+            "font-weight: bold;"
+        )
+
+    def update_object_detail(self, obj: DetectedObject):
+        """객체 상세 정보 업데이트"""
+        logger.debug(f"객체 상세 정보 업데이트: ID {obj.object_id}")
+        info = f"객체 ID: {obj.object_id}\n"
+        info += f"종류: {obj.object_type.value}\n"
+        info += f"위치: {obj.zone.value}\n"
+        info += f"발견 시각: {obj.timestamp.strftime('%Y-%m-%d %H:%M:%S')}"
+        
+        if obj.extra_info:
+            info += f"\n추가 정보: {obj.extra_info}"
+            
+        self.object_detail_dialog.detail_info.setText(info)
+        
+        if obj.image_data:
+            pixmap = QPixmap()
+            pixmap.loadFromData(obj.image_data)
+            self.object_detail_dialog.detail_img.setPixmap(
+                pixmap.scaled(
+                    self.object_detail_dialog.detail_img.size(),
+                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.TransformationMode.SmoothTransformation
+                )
+            )
+        
+        self.object_area.setCurrentIndex(2)
+
+    def handle_object_detail_error(self, error_msg: str):
+        """객체 상세보기 오류 처리"""
+        logger.error(f"객체 상세보기 오류: {error_msg}")
+        QMessageBox.critical(self, "오류", f"객체 상세보기 오류: {error_msg}")
 
     def resizeEvent(self, event):
         super().resizeEvent(event)
         self.update_images()
 
     def update_images(self):
+        """이미지 업데이트"""
+        logger.debug("이미지 업데이트")
         # 지도 이미지 업데이트
         if not self.map_pixmap.isNull():
             self.label_map.setPixmap(self.map_pixmap.scaled(
@@ -89,34 +229,39 @@ class MainPage(QWidget):
             self.label_cctv_3.clear()
 
     def select_table_row(self, row_idx):
+        """테이블 행 선택"""
+        logger.debug(f"테이블 행 선택: {row_idx}")
         self.table_object_list.selectRow(row_idx)
 
     def show_map(self):
+        """지도 보기"""
+        logger.debug("지도 보기")
         self.map_cctv_stack.setCurrentIndex(0)
 
     def show_cctv(self):
+        """CCTV 보기"""
         idx = self.combo_cctv.currentIndex()
+        logger.debug(f"CCTV 보기: {idx + 1}")
         self.map_cctv_stack.setCurrentIndex(idx + 1)
 
     def show_table(self):
+        """테이블 보기"""
+        logger.debug("테이블 보기")
         self.object_area.setCurrentIndex(0)
 
     def show_detail(self):
+        """상세보기"""
         row = self.table_object_list.currentRow()
         if row < 0:
+            logger.warning("선택된 객체가 없음")
             return
-        id_ = self.table_object_list.item(row, 0).text()
-        loc = self.table_object_list.item(row, 1).text()
-        kind = self.table_object_list.item(row, 2).text()
-        # 예시 정보
-        info = f"객체 ID : {id_}\n종류 : {kind}\n위치 : {loc}\n발견 시각 : 2025-02-23 18:00:00"
-        self.object_detail_dialog.detail_info.setText(info)
-        detail_img_path = os.path.join(os.path.dirname(__file__), '../resources/images/bird.png')
-        self.object_detail_dialog.detail_img.setPixmap(
-            QPixmap(detail_img_path).scaled(
-                self.object_detail_dialog.detail_img.size(),
-                Qt.AspectRatioMode.KeepAspectRatio,
-                Qt.TransformationMode.SmoothTransformation
-            )
-        )
-        self.object_area.setCurrentIndex(2)
+            
+        object_id = int(self.table_object_list.item(row, 0).text())
+        logger.debug(f"객체 상세보기 요청: ID {object_id}")
+        self.tcp_client.request_object_detail(object_id)
+
+
+    # TCP 연결 관련 함수 (ui에 연결/해제 버튼 추가)
+
+    # 명령어 전송 관련 함수
+    

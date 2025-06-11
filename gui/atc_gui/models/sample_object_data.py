@@ -1,8 +1,15 @@
+from datetime import datetime
+from config import ObjectType, AirportZone
+
 sample_object_data = [
     {
-        'id': 'BRD_1',
-        'location': 'RWY_2',
-        'type': 'bird',
-        'detected_time': '2025-02-23 18:00:00'
+        'object_id': 1,
+        'object_type': ObjectType.BIRD,
+        'x_coord': 100.0,
+        'y_coord': 200.0,
+        'zone': AirportZone.RWY_A,
+        'timestamp': datetime.now(),
+        'risk_level': None,
+        'extra_info': None
     }
-] 
+]

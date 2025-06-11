@@ -1,20 +1,8 @@
-from dataclasses import dataclass
 from datetime import datetime
 from typing import Optional, List, Dict, Any
 import base64
-from config import ObjectType, BirdRiskLevel, AirportZone, MessagePrefix, Constants
-
-@dataclass
-class ObjectInfo:
-    """객체 정보 데이터 클래스"""
-    object_id: int
-    object_type: ObjectType
-    x_coord: float
-    y_coord: float
-    zone: AirportZone
-    timestamp: datetime
-    extra_info: Optional[Dict[str, Any]] = None
-    image_data: Optional[bytes] = None
+from config import ObjectType, BirdRiskLevel, RunwayRiskLevel, AirportZone, MessagePrefix, Constants
+from models.detected_object import DetectedObject
 
 class MessageInterface:
     """TCP 메시지 인터페이스 클래스"""
@@ -50,12 +38,17 @@ class MessageInterface:
             return False
     
     @staticmethod
-    def validate_risk_level(risk_level: int) -> bool:
-        """위험도 값 유효성 검증"""
+    def validate_bird_risk_level(risk_level: int) -> bool:
+        """조류 위험도 값 유효성 검증"""
         return risk_level in Constants.BIRD_RISK_MAPPING
     
     @staticmethod
-    def parse_object_info(object_str: str, include_image: bool = False) -> ObjectInfo:
+    def validate_runway_risk_level(risk_level: int) -> bool:
+        """활주로 위험도 값 유효성 검증"""
+        return risk_level in Constants.RUNWAY_RISK_MAPPING
+    
+    @staticmethod
+    def parse_object_info(object_str: str, include_image: bool = False) -> DetectedObject:
         """객체 정보 문자열 파싱"""
         fields = object_str.split(Constants.OBJECT_FIELD_SEPARATOR)
         
@@ -108,7 +101,7 @@ class MessageInterface:
             else:
                 extra_info = fields[6]
         
-        return ObjectInfo(
+        return DetectedObject(
             object_id=object_id,
             object_type=object_type,
             x_coord=x_coord,
@@ -138,7 +131,7 @@ class MessageInterface:
         return prefix, data
     
     @staticmethod
-    def parse_object_detection_event(data: str) -> List[ObjectInfo]:
+    def parse_object_detection_event(data: str) -> List[DetectedObject]:
         """객체 감지 이벤트 메시지 파싱"""
         if not data.strip():
             return []
@@ -158,24 +151,43 @@ class MessageInterface:
         return objects
     
     @staticmethod
-    def parse_risk_level_event(data: str) -> BirdRiskLevel:
-        """위험도 변경 이벤트 메시지 파싱"""
+    def parse_bird_risk_level_event(data: str) -> BirdRiskLevel:
+        """조류 위험도 변경 이벤트 메시지 파싱"""
         try:
             risk_level = int(data.strip())
         except ValueError:
-            raise ValueError(f"Invalid risk level format: {data}")
+            raise ValueError(f"Invalid bird risk level format: {data}")
             
-        if not MessageInterface.validate_risk_level(risk_level):
-            raise ValueError(f"Invalid risk level value: {risk_level}")
+        if not MessageInterface.validate_bird_risk_level(risk_level):
+            raise ValueError(f"Invalid bird risk level value: {risk_level}")
             
         return Constants.BIRD_RISK_MAPPING[risk_level]
     
+    @staticmethod
+    def parse_runway_risk_level_event(data: str) -> RunwayRiskLevel:
+        """활주로 위험도 변경 이벤트 메시지 파싱"""
+        try:
+            risk_level = int(data.strip())
+        except ValueError:
+            raise ValueError(f"Invalid runway risk level format: {data}")
+            
+        if not MessageInterface.validate_runway_risk_level(risk_level):
+            raise ValueError(f"Invalid runway risk level value: {risk_level}")
+            
+        return Constants.RUNWAY_RISK_MAPPING[risk_level]
+    
+    @staticmethod
+    def create_message(prefix: MessagePrefix, **kwargs) -> str:
+        """메시지 생성"""
+        format_str = Constants.MESSAGE_FORMAT[prefix]
+        return format_str.format(prefix=prefix.value, **kwargs)
+
     @staticmethod
     def create_object_detail_request(object_id: int) -> str:
         """객체 상세보기 요청 메시지 생성"""
         if not isinstance(object_id, int) or object_id < 0:
             raise ValueError("Invalid object ID")
-        return f"{MessagePrefix.MC_OD.value}{Constants.MESSAGE_SEPARATOR}{object_id}"
+        return MessageInterface.create_message(MessagePrefix.MC_OD, object_id=object_id)
     
     @staticmethod
     def create_cctv_request(camera_id: str) -> str:
@@ -183,9 +195,9 @@ class MessageInterface:
         if camera_id not in ["A", "B"]:
             raise ValueError("Invalid camera ID")
         prefix = MessagePrefix.MC_CA if camera_id == "A" else MessagePrefix.MC_CB
-        return prefix.value
+        return MessageInterface.create_message(prefix)
     
     @staticmethod
     def create_map_request() -> str:
         """지도 영상 요청 메시지 생성"""
-        return MessagePrefix.MC_MP.value
+        return MessageInterface.create_message(MessagePrefix.MC_MP)

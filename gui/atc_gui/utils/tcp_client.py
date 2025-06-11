@@ -1,7 +1,9 @@
 from PyQt6.QtCore import QObject, pyqtSignal, QTimer
 from PyQt6.QtNetwork import QTcpSocket
-from config import Settings, Constants, MessagePrefix, BirdRiskLevel
-from .interface import MessageInterface, ObjectInfo
+from config import Settings, Constants, MessagePrefix, BirdRiskLevel, RunwayRiskLevel
+from .interface import MessageInterface
+from models.detected_object import DetectedObject
+from .logger import logger
 
 class TcpClient(QObject):
     # 연결 상태 시그널
@@ -10,16 +12,16 @@ class TcpClient(QObject):
     connection_error = pyqtSignal(str)
     
     # 이벤트 시그널
-    object_detected = pyqtSignal(list)  # ObjectInfo 리스트
+    object_detected = pyqtSignal(list)  # DetectedObject 리스트
     bird_risk_changed = pyqtSignal(BirdRiskLevel)
-    runway_a_risk_changed = pyqtSignal(BirdRiskLevel)
-    runway_b_risk_changed = pyqtSignal(BirdRiskLevel)
+    runway_a_risk_changed = pyqtSignal(RunwayRiskLevel)
+    runway_b_risk_changed = pyqtSignal(RunwayRiskLevel)
     
     # 응답 시그널
     cctv_a_response = pyqtSignal(str)
     cctv_b_response = pyqtSignal(str)
     map_response = pyqtSignal(str)
-    object_detail_response = pyqtSignal(ObjectInfo)
+    object_detail_response = pyqtSignal(DetectedObject)
     object_detail_error = pyqtSignal(str)
     
     def __init__(self):
@@ -46,7 +48,7 @@ class TcpClient(QObject):
             return
             
         self.is_connecting = True
-        print(f"서버 연결 시도: {self.settings.server.tcp_ip}:{self.settings.server.tcp_port}")
+        logger.info(f"서버 연결 시도: {self.settings.server.tcp_ip}:{self.settings.server.tcp_port}")
         
         self.socket.connectToHost(
             self.settings.server.tcp_ip, 
@@ -62,23 +64,25 @@ class TcpClient(QObject):
         """서버 연결 해제"""
         self.reconnect_timer.stop()
         if self.socket.state() == QTcpSocket.SocketState.ConnectedState:
+            logger.info("서버 연결 해제")
             self.socket.disconnectFromHost()
     
     def send_command(self, command_text: str) -> bool:
         """명령어 전송"""
-        if self.socket.state() != QTcpSocket.SocketState.ConnectedState:
-            print(f"연결되지 않은 상태에서 명령 전송 실패: {command_text}")
+        if not self.is_connected():
+            logger.error(f"연결되지 않은 상태에서 명령 전송 실패: {command_text}")
             return False
             
         try:
             data = (command_text + '\n').encode('utf-8')
             bytes_written = self.socket.write(data)
             if bytes_written == -1:
-                print(f"명령 전송 실패: {command_text}")
+                logger.error(f"명령 전송 실패: {command_text}")
                 return False
+            logger.debug(f"명령 전송 성공: {command_text}")
             return True
         except Exception as e:
-            print(f"명령 전송 중 오류: {e}")
+            logger.error(f"명령 전송 중 오류: {e}")
             return False
     
     def request_cctv_a(self) -> bool:
@@ -119,7 +123,7 @@ class TcpClient(QObject):
     
     def on_connected(self):
         """연결 성공"""
-        print("TCP 서버 연결 성공")
+        logger.info("TCP 서버 연결 성공")
         self.is_connecting = False
         self.reconnect_timer.stop()
         self.message_buffer = ""  # 버퍼 초기화
@@ -127,7 +131,7 @@ class TcpClient(QObject):
     
     def on_disconnected(self):
         """연결 해제"""
-        print("TCP 서버 연결 해제")
+        logger.info("TCP 서버 연결 해제")
         self.is_connecting = False
         self.disconnected.emit()
         self.start_reconnect()
@@ -148,7 +152,7 @@ class TcpClient(QObject):
                         self.process_message(message)
                         
             except UnicodeDecodeError as e:
-                print(f"텍스트 디코딩 오류: {e}")
+                logger.error(f"텍스트 디코딩 오류: {e}")
                 # 잘못된 데이터는 버퍼에서 제거
                 self.message_buffer = ""
     
@@ -156,7 +160,7 @@ class TcpClient(QObject):
         """메시지 처리"""
         try:
             prefix, data = MessageInterface.parse_message(message)
-            print(f"수신 메시지 - {prefix.value}: {data}")
+            logger.debug(f"수신 메시지 - {prefix.value}: {data}")
             
             if prefix == MessagePrefix.ME_OD:
                 # 객체 감지 이벤트
@@ -165,17 +169,17 @@ class TcpClient(QObject):
                 
             elif prefix == MessagePrefix.ME_BR:
                 # 조류 위험도 변경 이벤트
-                risk_level = MessageInterface.parse_risk_level_event(data)
+                risk_level = MessageInterface.parse_bird_risk_level_event(data)
                 self.bird_risk_changed.emit(risk_level)
                 
             elif prefix == MessagePrefix.ME_RA:
                 # 활주로 A 위험도 변경 이벤트
-                risk_level = MessageInterface.parse_risk_level_event(data)
+                risk_level = MessageInterface.parse_runway_risk_level_event(data)
                 self.runway_a_risk_changed.emit(risk_level)
                 
             elif prefix == MessagePrefix.ME_RB:
                 # 활주로 B 위험도 변경 이벤트
-                risk_level = MessageInterface.parse_risk_level_event(data)
+                risk_level = MessageInterface.parse_runway_risk_level_event(data)
                 self.runway_b_risk_changed.emit(risk_level)
                 
             elif prefix == MessagePrefix.MR_CA:
@@ -195,11 +199,11 @@ class TcpClient(QObject):
                 self.process_object_detail_response(data)
                 
             else:
-                print(f"알 수 없는 메시지 타입: {prefix}")
+                logger.warning(f"알 수 없는 메시지 타입: {prefix}")
                 
         except Exception as e:
-            print(f"메시지 처리 오류: {e}")
-            print(f"원본 메시지: {message}")
+            logger.error(f"메시지 처리 오류: {e}")
+            logger.error(f"원본 메시지: {message}")
     
     def process_object_detail_response(self, data: str):
         """객체 상세보기 응답 처리"""
@@ -216,21 +220,24 @@ class TcpClient(QObject):
                 # ERR:error_message 형식
                 if Constants.MESSAGE_SEPARATOR in data:
                     _, error_msg = data.split(Constants.MESSAGE_SEPARATOR, 1)
+                    logger.error(f"객체 상세보기 오류: {error_msg}")
                     self.object_detail_error.emit(error_msg)
                 else:
-                    self.object_detail_error.emit("Unknown error")
+                    error_msg = "Unknown error"
+                    logger.error(f"객체 상세보기 오류: {error_msg}")
+                    self.object_detail_error.emit(error_msg)
             else:
                 raise ValueError(f"Unknown response format: {data}")
                 
         except Exception as e:
             error_msg = f"객체 상세보기 응답 처리 오류: {e}"
-            print(error_msg)
+            logger.error(error_msg)
             self.object_detail_error.emit(error_msg)
     
     def on_error(self, error):
         """연결 오류"""
         error_msg = f"TCP 연결 오류: {self.socket.errorString()}"
-        print(error_msg)
+        logger.error(error_msg)
         self.is_connecting = False
         self.connection_error.emit(error_msg)
         self.start_reconnect()
@@ -238,7 +245,7 @@ class TcpClient(QObject):
     def start_reconnect(self):
         """재연결 시도"""
         if not self.reconnect_timer.isActive() and not self.is_connecting:
-            print(f"{self.settings.server.reconnect_interval}초 후 재연결 시도")
+            logger.info(f"{self.settings.server.reconnect_interval}초 후 재연결 시도")
             self.reconnect_timer.start(self.settings.server.reconnect_interval * 1000)
     
     def is_connected(self) -> bool:
