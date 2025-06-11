@@ -22,36 +22,27 @@ class CameraWorker(multiprocessing.Process):
         self.drop_oldest_on_full = settings.CAMERA_DROP_OLDEST_ON_FULL  #큐가 가득 찼을때 프레임을 드롭할지 설정
 
     def run(self):
-        """
-        이 메서드는 CameraWorker 프로세스가 시작될 때 자동으로 실행됩니다.
-        여기서 카메라 캡처 및 큐에 프레임을 넣는 루프를 구현합니다.
-        """ 
         print(f"[{self.display_name}] CameraWorker started. Path: {self.camera_path}")
-
         cap = None
 
         try:
-            # VideoCapture 객체 초기화 및 설정
             cap = cv2.VideoCapture(self.camera_path)
             if not cap.isOpened():
-                print(f"Error: [{self.display_name}] Could not open camera{self.camera_path}")
+                print(f"Error: [{self.display_name}] Could not open camera {self.camera_path}")
                 return
 
-            # 카메라 해상도 및 FPS를 설정
             cap.set(cv2.CAP_PROP_FRAME_WIDTH, self.width)
             cap.set(cv2.CAP_PROP_FRAME_HEIGHT, self.height)
             cap.set(cv2.CAP_PROP_FPS, self.fps)
 
-            # 메인 캡처 루프: stop_event가 설정되지 않는 동안 계속 프레임을 캡처
             while not self.stop_event.is_set():
-                ret, frame = cap.read() # 프레임 읽기 시도  
+                ret, frame = cap.read()
 
-                if not ret: # 프레임 읽기 실패 시
+                if not ret:
                     print(f"[{self.display_name}] Failed to grab frame, retrying...")
-                    time.sleep(0.05) # 짧게 대기 후 재시도
-                    continue # 다음 루프로 넘어갑니다.
+                    time.sleep(0.05)
+                    continue
                 
-                # 프레임 ID (img_id) 생성
                 current_img_id = time.time_ns() 
 
                 try:
@@ -62,7 +53,9 @@ class CameraWorker(multiprocessing.Process):
                 except queue.Full:
                     pass
                 except Exception as e:
-                    print(f"[{self.diaplay_name}] Error putting frame to queue: {e}")
+                    # --- 이 부분이 핵심 수정입니다! 'diaplay_name'을 'display_name'으로 변경 ---
+                    print(f"[{self.display_name}] Error putting frame to queue: {e}") 
+                    # --- ---------------------------------------------------------------- ---
         except Exception as e:
             print(f"[{self.display_name}] An unexpected error occurred in run(): {e}")
         finally:

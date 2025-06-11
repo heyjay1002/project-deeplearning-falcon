@@ -12,14 +12,14 @@ class Settings:
         # -----------------------------------------------------------
         # 실행 전 `ls -l /dev/video*`로 현재 할당된 이름을 확인하고 업데이트
         self.CAMERA_DEVICES = {
-            "/dev/video2" : "CAM_A", # 첫 번째 웹캠의 장치 경로 
-            "/dev/video4" : "CAM_B"# 두 번째 웹캠의 장치 경로 
+            "CAM_A": "/dev/video2", # <-- 키가 논리적 ID, 값이 실제 경로
+            "CAM_B": "/dev/video4"  # <-- 키가 논리적 ID, 값이 실제 경로
         }
         
         self.CAMERA_RESOLUTION_WIDTH = 1920     # 카메라 캡처 해상도 (너비)
         self.CAMERA_RESOLUTION_HEIGHT = 1080    # 카메라 캡처 해상도 (높이)
         self.CAMERA_FPS = 30                    # 카메라 캡처 프레임 속도 (FPS)
-        self.CAMERA_QUEUE_MAX_SIZE = 5          # multiprocessing.Queue의 최대 크기. 너무 커지면 지연 증가, 너무 작으면 프레임 드롭 가능성
+        self.CAMERA_QUEUE_MAX_SIZE = 20          # multiprocessing.Queue의 최대 크기. 너무 커지면 지연 증가, 너무 작으면 프레임 드롭 가능성
         self.CAMERA_DROP_OLDEST_ON_FULL = True       
 
         # -----------------------------------------------------------
@@ -29,11 +29,11 @@ class Settings:
         self.MODELS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "models")
         
         # YOLO Detecting 모델 파일 경로
-        self.YOLO_DETECTING_MODEL_PATH = os.path.join(self.MODELS_DIR, "yolo_segv4.pt")
+        self.YOLO_DETECTING_MODEL_PATH = os.path.join(self.MODELS_DIR, "yolov11seg-m.pt")
         # YOLOv8-pose 모델 파일 경로
-        self.YOLO_POSE_MODEL_PATH = os.path.join(self.MODELS_DIR, "yolov8n-pose.pt")
+        self.YOLO_POSE_MODEL_PATH = os.path.join(self.MODELS_DIR, "yolo11n-pose.pt")
         # (선택 사항) 마커 감지용 모델 파일 경로 (예: ArUco 마커 감지 모델)
-        self.ARUCO_MARKER_MODEL_PATH = os.path.join(self.MODELS_DIR, "aruco_marker_model.pt") # 실제 모델 파일명으로 변경
+        # self.ARUCO_MARKER_MODEL_PATH = os.path.join(self.MODELS_DIR, "aruco_marker_model.pt") # 실제 모델 파일명으로 변경
 
         # 현재 IDS 서버의 동작 모드: 'object_detect' 또는 'marker_detect'
         self.DETECTOR_CURRENT_MODE = "object_detect" 
@@ -42,7 +42,7 @@ class Settings:
         # 3. 트래커 설정 (Tracker Settings)
         # -----------------------------------------------------------
         # OC-SORT 트래커가 객체를 몇 프레임 동안 추적하지 못하면 'lost' 상태로 간주하고 추적을 중단할지
-        self.TRACKER_LOST_COUNT_THRESHOLD = 20 # 20프레임 동안 감지 안 되면 트랙 삭제
+        self.TRACKER_LOST_COUNT_THRESHOLD = 30 # 20프레임 동안 감지 안 되면 트랙 삭제
 
         # -----------------------------------------------------------
         # 4. 네트워크 설정 (Network Settings)
@@ -62,8 +62,7 @@ class Settings:
         # 5. 시각화 설정 (Visualization Settings)
         # -----------------------------------------------------------
         # 화면에 IDS 처리 결과를 표시할지 여부
-        self.ENABLE_DISPLAY = True     # True: 화면 표시 활성화, False: 화면 표시 비활성화
-        
+        self.ENABLE_DISPLAY = True     # True: 화면 표시 활성화, False: 화면 표시 비활성화        
         # 시각화 창에 표시될 각 카메라의 이름
         self.DISPLAY_CAMERA_NAMES = {
             "CAM_A": "RWY CCTV A",
