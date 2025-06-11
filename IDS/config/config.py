@@ -11,24 +11,25 @@ class Settings:
         # 1. 카메라 설정 (Camera Settings)
         # -----------------------------------------------------------
         # 실행 전 `ls -l /dev/video*`로 현재 할당된 이름을 확인하고 업데이트
-        self.CAMERA_A_PATH = "/dev/video0"  # 좌측 웹캠의 장치 경로
-        self.CAMERA_B_PATH = "/dev/video1"  # 우측 웹캠의 장치 경로
+        self.CAMERA_DEVICES = {
+            "/dev/video2" : "CAM_A", # 첫 번째 웹캠의 장치 경로 
+            "/dev/video4" : "CAM_B"# 두 번째 웹캠의 장치 경로 
+        }
         
-        self.CAMERA_RESOLUTION_WIDTH = 1920  # 카메라 캡처 해상도 (너비)
-        self.CAMERA_RESOLUTION_HEIGHT = 1080 # 카메라 캡처 해상도 (높이)
-        self.CAMERA_FPS = 30                 # 카메라 캡처 프레임 속도 (FPS)
-        
-        # multiprocessing.Queue의 최대 크기. 너무 커지면 지연 증가, 너무 작으면 프레임 드롭 가능성
-        self.CAMERA_QUEUE_MAX_SIZE = 5       
+        self.CAMERA_RESOLUTION_WIDTH = 1920     # 카메라 캡처 해상도 (너비)
+        self.CAMERA_RESOLUTION_HEIGHT = 1080    # 카메라 캡처 해상도 (높이)
+        self.CAMERA_FPS = 30                    # 카메라 캡처 프레임 속도 (FPS)
+        self.CAMERA_QUEUE_MAX_SIZE = 5          # multiprocessing.Queue의 최대 크기. 너무 커지면 지연 증가, 너무 작으면 프레임 드롭 가능성
+        self.CAMERA_DROP_OLDEST_ON_FULL = True       
 
         # -----------------------------------------------------------
         # 2. 모델 설정 (Model Settings)
-        # -----------------------------------------------------------
+
         # `config.py` 파일이 있는 디렉토리를 기준으로 `models` 폴더의 경로를 설정
         self.MODELS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "models")
         
-        # YOLOv11seg-m 모델 파일 경로
-        self.YOLO_SEG_MODEL_PATH = os.path.join(self.MODELS_DIR, "yolo_segv4.pt")
+        # YOLO Detecting 모델 파일 경로
+        self.YOLO_DETECTING_MODEL_PATH = os.path.join(self.MODELS_DIR, "yolo_segv4.pt")
         # YOLOv8-pose 모델 파일 경로
         self.YOLO_POSE_MODEL_PATH = os.path.join(self.MODELS_DIR, "yolov8n-pose.pt")
         # (선택 사항) 마커 감지용 모델 파일 경로 (예: ArUco 마커 감지 모델)
@@ -55,7 +56,7 @@ class Settings:
         self.IDS_TCP_PORT = 5000
         
         # TCP 통신 시 타임아웃 설정 (밀리초). 서버 응답 대기 시간
-        self.TCP_COMM_TIMEOUT_MS = 500 
+        self.TCP_COMM_TIMEOUT_MS = 1000 
 
         # -----------------------------------------------------------
         # 5. 시각화 설정 (Visualization Settings)
@@ -64,8 +65,10 @@ class Settings:
         self.ENABLE_DISPLAY = True     # True: 화면 표시 활성화, False: 화면 표시 비활성화
         
         # 시각화 창에 표시될 각 카메라의 이름
-        self.DISPLAY_CAMERA_A_NAME = "CCTV A"
-        self.DISPLAY_CAMERA_B_NAME = "CCTV B"
+        self.DISPLAY_CAMERA_NAMES = {
+            "CAM_A": "RWY CCTV A",
+            "CAM_B": "RWY CCTV B"
+        }
         
         # 화면에 FPS 정보를 표시할지 여부
         self.DISPLAY_FPS = True        
