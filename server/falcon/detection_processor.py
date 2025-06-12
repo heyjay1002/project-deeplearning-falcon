@@ -1,0 +1,142 @@
+"""
+검출 프로세서 모듈
+- 객체 검출 결과 처리
+- 검출 결과 시각화
+- 검출 통계 관리
+"""
+
+import cv2
+import numpy as np
+from PyQt6.QtCore import QThread, pyqtSignal
+import time
+
+from config import *
+
+class FPSCalculator:
+    """FPS 계산을 위한 유틸리티 클래스"""
+    def __init__(self):
+        self.frame_count = 0
+        self.last_time = time.time()
+        self.current_fps = 0
+    
+    def update(self):
+        self.frame_count += 1
+        current_time = time.time()
+        elapsed = current_time - self.last_time
+        
+        if elapsed >= 1.0:
+            self.current_fps = self.frame_count / elapsed
+            self.frame_count = 0
+            self.last_time = current_time
+            return True
+        return False
+
+class DetectionProcessor(QThread):
+    """객체 검출 결과 처리를 담당하는 클래스"""
+    # 시그널 정의
+    detection_processed = pyqtSignal(dict)  # 처리된 검출 결과 전달용 시그널
+    stats_ready = pyqtSignal(dict)  # 통계 전달용 시그널
+    
+    def __init__(self):
+        super().__init__()
+        # 검출 결과 버퍼
+        self.detection_buffer = {}
+        
+        # FPS 계산기
+        self.fps_calc = FPSCalculator()
+        
+        # 마지막 처리 결과 저장
+        self.last_detection = None
+        self.last_detection_img_id = None
+    
+    def process_detection(self, detection_data):
+        """검출 결과 처리
+        Args:
+            detection_data (dict): {
+                'img_id': int,  # 이미지 ID
+                'detections': list  # 검출 결과 리스트
+            }
+        """
+        if not detection_data or 'detections' not in detection_data:
+            return
+        
+        img_id = detection_data['img_id']
+        detections = detection_data['detections']
+        
+        # 검출 결과 버퍼에 저장
+        self.detection_buffer[img_id] = detections
+        
+        # 마지막 검출 결과 업데이트
+        self.last_detection = detections
+        self.last_detection_img_id = img_id
+        
+        # 처리된 검출 결과 전달
+        processed_data = {
+            'detections': detections,
+            'img_id': img_id
+        }
+        self.detection_processed.emit(processed_data)
+        
+        # FPS 계산 및 통계 업데이트
+        if self.fps_calc.update():
+            stats = {
+                'fps': round(self.fps_calc.current_fps, 1)
+            }
+            self.stats_ready.emit(stats)
+    
+    def draw_detections(self, frame, img_id):
+        """검출 결과를 프레임에 시각화
+        Args:
+            frame (np.ndarray): 원본 프레임
+            img_id (int): 이미지 ID
+        Returns:
+            np.ndarray: 검출 결과가 그려진 프레임
+        """
+        frame_with_boxes = frame.copy()
+        
+        # 현재 프레임의 검출 결과 확인
+        if img_id in self.detection_buffer:
+            detections = self.detection_buffer[img_id]
+        else:
+            # 현재 프레임보다 이전의 가장 가까운 검출 결과 찾기
+            prev_frame_id = None
+            for frame_id in self.detection_buffer.keys():
+                if frame_id < img_id and (prev_frame_id is None or frame_id > prev_frame_id):
+                    prev_frame_id = frame_id
+            
+            if prev_frame_id is not None:
+                detections = self.detection_buffer[prev_frame_id]
+            else:
+                return frame_with_boxes
+        
+        # 검출 결과 시각화
+        for detection in detections:
+            bbox = detection.get('bbox', [])
+            if not bbox or len(bbox) != 4:
+                continue
+            
+            x1, y1, x2, y2 = map(int, bbox)
+            cls = detection.get('class', 'Unknown')
+            conf = detection.get('confidence', 0.0)
+            
+            # 박스 그리기
+            cv2.rectangle(frame_with_boxes, (x1, y1), (x2, y2), (0, 255, 0), 2)
+            
+            # 레이블 표시
+            label = f"{cls}: {conf:.2f}"
+            (label_w, label_h), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 2)
+            cv2.rectangle(frame_with_boxes, (x1, y1 - label_h - 10), (x1 + label_w, y1), (0, 255, 0), -1)
+            cv2.putText(frame_with_boxes, label, (x1, y1 - 5),
+                      cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+        
+        return frame_with_boxes
+    
+    def get_detection(self, img_id):
+        """특정 이미지 ID의 검출 결과 반환"""
+        return self.detection_buffer.get(img_id)
+    
+    def clear_buffer(self):
+        """버퍼 초기화"""
+        self.detection_buffer.clear()
+        self.last_detection = None
+        self.last_detection_img_id = None 

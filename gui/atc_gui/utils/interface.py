@@ -194,7 +194,10 @@ class MessageInterface:
         """CCTV 영상 요청 메시지 생성"""
         if camera_id not in ["A", "B"]:
             raise ValueError("Invalid camera ID")
-        prefix = MessagePrefix.MC_CA if camera_id == "A" else MessagePrefix.MC_CB
+        if camera_id == "A":
+            prefix = MessagePrefix.MC_CA
+        elif camera_id == "B":
+            prefix = MessagePrefix.MC_CB
         return MessageInterface.create_message(prefix)
     
     @staticmethod

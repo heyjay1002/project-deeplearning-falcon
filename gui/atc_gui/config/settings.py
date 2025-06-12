@@ -4,14 +4,15 @@ from typing import Optional
 @dataclass
 class ServerSettings:
     """서버 연결 설정"""
-    tcp_ip: str = "127.0.0.1"
-    tcp_port: int = 8080
-    udp_ip: str = "127.0.0.1"
-    udp_port: int = 8081
+    tcp_ip: str = "192.168.0.8"
+    tcp_port: int = 4100
+    udp_ip: str = "192.168.0.8"
+    udp_port: int = 5100
     connection_timeout: int = 5
     reconnect_interval: int = 3
     tcp_buffer_size: int = 4096
     udp_buffer_size: int = 65536
+    video_fps: int = 30  # 비디오 프레임 레이트
 
 @dataclass
 class AlertSettings:
@@ -23,6 +24,7 @@ class AlertSettings:
 class DataSettings:
     """데이터 처리 설정"""
     refresh_interval: int = 100  # 데이터 수신 주기 (밀리초)
+    video_buffer_size: int = 10  # 비디오 프레임 버퍼 크기
 
 @dataclass
 class LogSettings:
@@ -39,6 +41,7 @@ class DebugSettings:
     debug_mode: bool = True
     sample_data_interval: int = 2  # 샘플 데이터 생성 간격 (초)
     network_debug: bool = True
+    video_debug: bool = True  # 비디오 디버그 모드
 
 class Settings:
     """설정 관리 클래스"""

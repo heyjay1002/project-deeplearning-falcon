@@ -9,9 +9,10 @@ from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLa
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QImage, QPixmap
 
-from falcon.video_communicator import VideoCommunicator
+from falcon.udp_stream import VideoCommunicator
 from falcon.video_processor import VideoProcessor
-from falcon.detection_communicator import DetectionCommunicator
+from falcon.detection_processor import DetectionProcessor
+from falcon.tcp_stream import DetectionCommunicator
 
 class MainWindow(QMainWindow):
     """메인 윈도우 클래스"""
@@ -39,7 +40,7 @@ class MainWindow(QMainWindow):
 
         # 상태 표시 레이블들
         self.video_stats_label = QLabel('비디오: 0 FPS')
-        self.detection_stats_label = QLabel('감지: 0 FPS, 처리 시간: 0ms')
+        self.detection_stats_label = QLabel('감지: 0 FPS')
         self.buffer_status_label = QLabel('버퍼: 0/0 프레임')
         
         layout.addWidget(self.video_stats_label)
@@ -48,88 +49,78 @@ class MainWindow(QMainWindow):
     
     def _init_threads(self):
         """스레드 초기화"""
-        # 검지 결과 버퍼 (스레드 간 공유)
-        self.detection_buffer = {}
+        # 비디오 프로세서 스레드
+        self.video_processor = VideoProcessor()
+        self.video_processor.frame_processed.connect(self._on_frame_processed)
+        self.video_processor.stats_ready.connect(self.update_video_stats)
+        self.video_processor.buffer_status_ready.connect(self.update_buffer_status)
         
-        # 검지 결과 처리 스레드
-        self.processor_thread = VideoProcessor(self.detection_buffer)
+        # 검출 프로세서 스레드
+        self.detection_processor = DetectionProcessor()
+        self.detection_processor.detection_processed.connect(self._on_detection_processed)
+        self.detection_processor.stats_ready.connect(self.update_detection_stats)
         
         # 비디오 통신 스레드
-        self.video_thread = VideoCommunicator(self.processor_thread)
-        self.video_thread.server_frame_ready.connect(self.update_frame)
-        self.video_thread.server_stats_ready.connect(self.update_video_stats)
-        self.video_thread.server_buffer_status_ready.connect(self.update_buffer_status)
+        self.video_thread = VideoCommunicator()
+        self.video_thread.frame_received.connect(self.video_processor.process_frame)
         
         # IDS 통신 스레드
-        self.detection_thread = DetectionCommunicator(self.detection_buffer)
-        self.detection_thread.stats_ready.connect(self.update_detection_stats)
+        self.detection_thread = DetectionCommunicator()
+        self.detection_thread.detection_received.connect(self.detection_processor.process_detection)
         
         # 스레드 시작
         print("[INFO] 서버 시작")
-        self.processor_thread.start()  # VideoProcessor를 먼저 시작
+        self.video_processor.start()
+        self.detection_processor.start()
         self.video_thread.start()
         self.detection_thread.start()
     
-    def update_frame(self, frame_data):
-        """프레임 업데이트
-        
+    def _on_frame_processed(self, frame_data):
+        """프레임 처리 완료 시 호출
         Args:
-            frame_data (dict): 프레임 데이터
-                - frame: 검지 결과가 그려진 프레임
-                - detections: 검지 결과 리스트
-                - seq: 프레임 시퀀스 번호
+            frame_data (dict): 처리된 프레임 데이터
+                - frame: 원본 프레임
+                - img_id: 이미지 ID
         """
         frame = frame_data['frame']
+        img_id = frame_data['img_id']
+        
+        # 검출 결과 그리기
+        frame_with_boxes = self.detection_processor.draw_detections(frame, img_id)
         
         # OpenCV BGR 이미지를 Qt QImage로 변환
-        height, width, channel = frame.shape
+        height, width, channel = frame_with_boxes.shape
         bytes_per_line = 3 * width
-        q_image = QImage(frame.data, width, height, bytes_per_line, QImage.Format.Format_RGB888).rgbSwapped()
+        q_image = QImage(frame_with_boxes.data, width, height, bytes_per_line, QImage.Format.Format_RGB888).rgbSwapped()
         
         # QImage를 QPixmap으로 변환하여 화면에 표시
         pixmap = QPixmap.fromImage(q_image)
         scaled_pixmap = pixmap.scaled(self.video_label.size(), Qt.AspectRatioMode.KeepAspectRatio)
         self.video_label.setPixmap(scaled_pixmap)
     
+    def _on_detection_processed(self, detection_data):
+        """검출 처리 완료 시 호출"""
+        pass  # 필요한 경우 여기에 추가 처리 구현
+    
     def update_video_stats(self, stats):
-        """비디오 통계 업데이트
-        
-        Args:
-            stats (dict): 통계 정보
-                - fps: 현재 FPS
-                - seq: 현재 프레임 시퀀스 번호
-                - total_frames: 총 수신 프레임 수
-        """
-        self.video_stats_label.setText(
-            f"비디오: {stats['fps']} FPS (seq: {stats['seq']}, total: {stats['total_frames']})"
-        )
+        """비디오 통계 업데이트"""
+        self.video_stats_label.setText(f"비디오: {stats['fps']} FPS")
     
     def update_detection_stats(self, stats):
-        """검지 통계 업데이트
-        
-        Args:
-            stats (dict): 통계 정보
-                - fps: 검지 FPS
-                - processing_time: 프레임당 처리 시간 (ms)
-        """
-        self.detection_stats_label.setText(
-            f"감지: {stats['fps']} FPS, 처리 시간: {stats['processing_time']}ms"
-        )
+        """검출 통계 업데이트"""
+        self.detection_stats_label.setText(f"감지: {stats['fps']} FPS")
     
     def update_buffer_status(self, status):
-        """버퍼 상태 업데이트
-        
-        Args:
-            status (str): 버퍼 상태 문자열
-        """
+        """버퍼 상태 업데이트"""
         self.buffer_status_label.setText(status)
     
     def closeEvent(self, event):
-        """윈도우 종료 이벤트 처리"""
-        print("[INFO] 서버 종료")
+        """윈도우 종료 시 호출"""
+        # 모든 스레드 종료
         self.video_thread.stop()
-        self.processor_thread.stop()
         self.detection_thread.stop()
+        self.video_processor.quit()
+        self.detection_processor.quit()
         event.accept()
 
 def main():
