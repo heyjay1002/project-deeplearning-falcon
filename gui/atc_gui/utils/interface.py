@@ -3,6 +3,7 @@ from typing import Optional, List, Dict, Any
 import base64
 from config import ObjectType, BirdRiskLevel, RunwayRiskLevel, AirportZone, MessagePrefix, Constants
 from models.detected_object import DetectedObject
+from utils.logger import logger
 
 class MessageInterface:
     """TCP 메시지 인터페이스 클래스"""
@@ -145,7 +146,7 @@ class MessageInterface:
                     obj_info = MessageInterface.parse_object_info(record.strip())
                     objects.append(obj_info)
                 except Exception as e:
-                    print(f"객체 정보 파싱 오류: {e}")
+                    logger.error(f"객체 정보 파싱 오류: {e}")
                     continue
         
         return objects

@@ -75,7 +75,7 @@ class MessagePrefix(Enum):
 class Constants:
     """상수 정의 클래스"""
     
-    # 매핑 테이블
+    # --- 매핑 테이블 ---
     OBJECT_CLASS_MAPPING = {
         0: ObjectType.BIRD,
         1: ObjectType.FOD,
@@ -117,50 +117,56 @@ class Constants:
         2: SecurityLevel.LEVEL_3,
     }
     
-    # 위험도별 색상
-    RISK_COLORS = {
-        BirdRiskLevel.LOW: "#00FF00",      # 녹색
-        BirdRiskLevel.MEDIUM: "#FFFF00",   # 노란색
-        BirdRiskLevel.HIGH: "#FF0000",     # 빨간색
-        RunwayRiskLevel.LOW: "#00FF00",    # 녹색
-        RunwayRiskLevel.MEDIUM: "#FFFF00", # 노란색
-        RunwayRiskLevel.HIGH: "#FF0000"    # 빨간색
-    }
-    
-    # 메시지 형식
-    MESSAGE_FORMAT = {
-        # 이벤트 메시지 (서버 -> GUI)
-        MessagePrefix.ME_OD: "{prefix}:{object_info}[;{object_info}]*",  # 객체 감지 이벤트
-        MessagePrefix.ME_BR: "{prefix}:{risk_level}",    # 조류 위험도 변경 이벤트
-        MessagePrefix.ME_RA: "{prefix}:{risk_level}",    # 활주로 A 위험도 변경 이벤트
-        MessagePrefix.ME_RB: "{prefix}:{risk_level}",    # 활주로 B 위험도 변경 이벤트
+    # --- UI/표시 관련 ---
+    class Display:
+        """위험도별 색상 등 UI 표시 관련 상수"""
+        RISK_COLORS = {
+            BirdRiskLevel.LOW: "#00FF00",      # 녹색
+            BirdRiskLevel.MEDIUM: "#FFFF00",   # 노란색
+            BirdRiskLevel.HIGH: "#FF0000",     # 빨간색
+            RunwayRiskLevel.LOW: "#00FF00",    # 녹색
+            RunwayRiskLevel.MEDIUM: "#FFFF00", # 노란색
+            RunwayRiskLevel.HIGH: "#FF0000"    # 빨간색
+        }
+
+    # --- 통신 프로토콜 관련 ---
+    class Protocol:
+        """메시지 형식 및 구분자 관련 상수"""
+        MESSAGE_FORMAT = {
+            # 이벤트 메시지 (서버 -> GUI)
+            MessagePrefix.ME_OD: "{prefix}:{object_info}[;{object_info}]*",
+            MessagePrefix.ME_BR: "{prefix}:{risk_level}",
+            MessagePrefix.ME_RA: "{prefix}:{risk_level}",
+            MessagePrefix.ME_RB: "{prefix}:{risk_level}",
+            
+            # 명령 메시지 (GUI -> 서버)
+            MessagePrefix.MC_CA: "{prefix}",
+            MessagePrefix.MC_CB: "{prefix}",
+            MessagePrefix.MC_MP: "{prefix}",
+            MessagePrefix.MC_OD: "{prefix}:{object_id}",
+            
+            # 응답 메시지 (서버 -> GUI)
+            MessagePrefix.MR_CA: "{prefix}:{response}",
+            MessagePrefix.MR_CB: "{prefix}:{response}",
+            MessagePrefix.MR_MP: "{prefix}:{response}",
+            MessagePrefix.MR_OD: "{prefix}:{response}[,{object_info_detail}]"
+        }
         
-        # 명령 메시지 (GUI -> 서버)
-        MessagePrefix.MC_CA: "{prefix}",              # CCTV A 영상 요청
-        MessagePrefix.MC_CB: "{prefix}",              # CCTV B 영상 요청
-        MessagePrefix.MC_CC: "{prefix}",              # CCTV C 영상 요청
-        MessagePrefix.MC_MP: "{prefix}",              # 지도 영상 요청
-        MessagePrefix.MC_OD: "{prefix}:{object_id}",  # 객체 상세보기 요청
-        
-        # 응답 메시지 (서버 -> GUI)
-        MessagePrefix.MR_CA: "{prefix}:{response}",    # CCTV A 응답
-        MessagePrefix.MR_CB: "{prefix}:{response}",    # CCTV B 응답
-        MessagePrefix.MR_CC: "{prefix}:{response}",    # CCTV C 응답
-        MessagePrefix.MR_MP: "{prefix}:{response}",    # 지도 응답
-        MessagePrefix.MR_OD: "{prefix}:{response}[,{object_info_detail}]"  # 객체 상세보기 응답
-    }
+        # 구분자
+        MESSAGE_SEPARATOR = ":"
+        OBJECT_FIELD_SEPARATOR = ","
+        OBJECT_RECORD_SEPARATOR = ";"
+        UDP_DATA_SEPARATOR = ":"
     
-    # 구분자
-    MESSAGE_SEPARATOR = ":"            # 프리픽스와 데이터 구분자
-    OBJECT_FIELD_SEPARATOR = ","        # 필드 구분
-    OBJECT_RECORD_SEPARATOR = ";"       # 객체 간 구분
-    UDP_DATA_SEPARATOR = ":"           # 카메라 ID와 바이너리 이미지 데이터 구분자
-    
-    # 객체 정보 형식
-    OBJECT_INFO = "{object_id},{object_type},{x_coord},{y_coord},{zone},{timestamp}[,{extra_info}]"
-    OBJECT_INFO_DETAIL = "{object_id},{object_type},{x_coord},{y_coord},{zone},{timestamp},{image_data}"
-    
-    # 비디오 관련 상수
-    VIDEO_ENCODING = "utf-8"           # 비디오 데이터 인코딩
-    VIDEO_QUALITY = 80                 # JPEG 압축 품질 (0-100)
-    VIDEO_MAX_SIZE = (1920, 1080)      # 최대 비디오 해상도 
+    # --- 객체 정보 형식 ---
+    class ObjectInfo:
+        """객체 정보 문자열 형식 정의"""
+        OBJECT_INFO = "{object_id},{object_type},{x_coord},{y_coord},{zone},{timestamp}[,{extra_info}]"
+        OBJECT_INFO_DETAIL = "{object_id},{object_type},{x_coord},{y_coord},{zone},{timestamp},{image_data}"
+
+    # --- 비디오 관련 ---
+    class Video:
+        """비디오 인코딩 및 품질 관련 상수"""
+        ENCODING = "utf-8"
+        QUALITY = 80
+        MAX_SIZE = (1920, 1080) 

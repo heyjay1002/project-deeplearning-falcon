@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1280</width>
-    <height>960</height>
+    <width>1320</width>
+    <height>870</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,8 +19,8 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>1271</width>
-      <height>931</height>
+      <width>1321</width>
+      <height>841</height>
      </rect>
     </property>
     <property name="tabShape">

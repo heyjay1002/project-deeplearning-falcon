@@ -6,7 +6,7 @@
 ## 관제사 GUI 디렉토리 구조
 ```plain
 falcon_gui/
-├── requirements.txt 
+├── requirements.txt (생성 예정)
 ├── main.py                      # 실행 진입점
 ├── config/
 │   ├── __init__.py 
@@ -19,15 +19,16 @@ falcon_gui/
 │   ├── log_page.ui              # 이력 조회 페이지
 │   ├── object_detail_dialog.ui  # 객체 상세 보기 다이얼로그
 │   └── alert_popup.ui           # 알림 팝업 UI
-├── pages/                       # 페이지별 UI 로직 클래스
+├── views/                     # 페이지별 UI 로직 클래스
 │   ├── main_page.py
 │   ├── access_page.py
 │   ├── log_page.py
+│   ├── object_detection_dialog.py
 │   └── object_detail_dialog.py
 ├── models/                      # 데이터 모델 정의
 │   ├── detected_object.py
 │   ├── alarm_data.py
-│   ├── restriction_setting.py
+│   ├── access_setting.py
 │   └── log_record.py
 ├── utils/
 │   ├── tcp_client.py
@@ -39,7 +40,7 @@ falcon_gui/
 │   ├── sounds/
 │   └── styles/
 └── tests/
-    ├── test_main.py
-    └── test_tcp_udp_mock.py
+│   └── test_detection_dialog.py
+
  
 ```
