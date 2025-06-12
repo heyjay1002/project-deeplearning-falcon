@@ -8,6 +8,8 @@ from pages.object_detection_dialog import ObjectDetectionDialog
 from models.detected_object import DetectedObject
 from config import BirdRiskLevel, RunwayRiskLevel, Constants, ObjectType, AirportZone
 from utils.tcp_client import TcpClient
+from utils.udp_client import UdpClient
+from utils.interface import MessageInterface
 from widgets.map_marker_widget import MapMarkerWidget
 from utils.logger import logger
 
@@ -21,11 +23,9 @@ class MainPage(QWidget):
         base_dir = os.path.dirname(__file__)
         self.map_path = os.path.join(base_dir, '../resources/images/map.png')
         self.marker_icon_path = os.path.join(base_dir, '../resources/images/bird.png')
-        self.cctv_path = os.path.join(base_dir, '../resources/images/cctv_sample.png')
 
         # 원본 이미지 저장
         self.map_pixmap = QPixmap(self.map_path)
-        self.cctv_pixmap = QPixmap(self.cctv_path)
 
         # 초기 이미지 설정
         self.update_images()
@@ -35,6 +35,9 @@ class MainPage(QWidget):
         
         # TCP 클라이언트 설정
         self.setup_tcp_client()
+        
+        # UDP 클라이언트 설정
+        self.setup_udp_client()
 
         # 마커 오버레이 연동
         self.setup_marker_overlay()
@@ -47,12 +50,6 @@ class MainPage(QWidget):
 
         # 첫 객체 감지 여부를 추적하는 변수
         self.is_first_detection = True
-
-        # # TCP 클라이언트 연결
-        # self.tcp_client.connected.connect(self.on_connected)
-        # self.tcp_client.disconnected.connect(self.on_disconnected)
-        # self.tcp_client.connection_error.connect(self.on_connection_error)
-        # self.tcp_client.connect_to_server()
 
     def setup_table(self):
         """테이블 초기 설정"""
@@ -78,6 +75,12 @@ class MainPage(QWidget):
         self.tcp_client.runway_b_risk_changed.connect(self.update_runway_b_risk)
         self.tcp_client.object_detail_response.connect(self.update_object_detail)
         self.tcp_client.object_detail_error.connect(self.handle_object_detail_error)
+
+    def setup_udp_client(self):
+        """UDP 클라이언트 설정 및 시그널 연결"""
+        self.udp_client = UdpClient()
+        self.udp_client.frame_received.connect(self.update_cctv_frame)
+        self.udp_client.connect()
 
     def setup_marker_overlay(self):
         """마커 오버레이 설정"""
@@ -215,19 +218,6 @@ class MainPage(QWidget):
                 Qt.TransformationMode.SmoothTransformation
             ))
 
-        # CCTV 이미지 업데이트 (CCTV 1에만 샘플 이미지 표시)
-        if not self.cctv_pixmap.isNull():
-            # CCTV 1에만 샘플 이미지 표시
-            self.label_cctv_1.setPixmap(self.cctv_pixmap.scaled(
-                self.label_map.size(),
-                Qt.AspectRatioMode.KeepAspectRatio,
-                Qt.TransformationMode.SmoothTransformation
-            ))
-
-            # CCTV 2, 3는 비워둠
-            self.label_cctv_2.clear()
-            self.label_cctv_3.clear()
-
     def select_table_row(self, row_idx):
         """테이블 행 선택"""
         logger.debug(f"테이블 행 선택: {row_idx}")
@@ -243,6 +233,13 @@ class MainPage(QWidget):
         idx = self.combo_cctv.currentIndex()
         logger.debug(f"CCTV 보기: {idx + 1}")
         self.map_cctv_stack.setCurrentIndex(idx + 1)
+        
+        # TCP 클라이언트를 통해 CCTV 영상 요청
+        if idx == 0:
+            camera_id = "A"
+        elif idx == 1:
+            camera_id = "B"
+        self.tcp_client.send_message(MessageInterface.create_cctv_request(camera_id))
 
     def show_table(self):
         """테이블 보기"""
@@ -260,6 +257,27 @@ class MainPage(QWidget):
         logger.debug(f"객체 상세보기 요청: ID {object_id}")
         self.tcp_client.request_object_detail(object_id)
 
+    def update_cctv_frame(self, frame: QImage):
+        """CCTV 프레임 업데이트"""
+        # 현재 선택된 CCTV 화면에 프레임 표시
+        current_index = self.map_cctv_stack.currentIndex()
+        if current_index == 1:  # CCTV 1
+            self.label_cctv_1.setPixmap(QPixmap.fromImage(frame).scaled(
+                self.label_cctv_1.size(),
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation
+            ))
+        elif current_index == 2:  # CCTV 2
+            self.label_cctv_2.setPixmap(QPixmap.fromImage(frame).scaled(
+                self.label_cctv_2.size(),
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation
+            ))
+
+    def closeEvent(self, event):
+        """위젯 종료 시 처리"""
+        self.udp_client.disconnect()
+        super().closeEvent(event)
 
     # TCP 연결 관련 함수 (ui에 연결/해제 버튼 추가)
 

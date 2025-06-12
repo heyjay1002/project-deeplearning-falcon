@@ -50,6 +50,7 @@ class CameraID(Enum):
     """CCTV 카메라 식별자"""
     A = "A"
     B = "B"
+    C = "C"
 
 class MessagePrefix(Enum):
     """메시지 프리픽스"""
@@ -137,12 +138,14 @@ class Constants:
         # 명령 메시지 (GUI -> 서버)
         MessagePrefix.MC_CA: "{prefix}",              # CCTV A 영상 요청
         MessagePrefix.MC_CB: "{prefix}",              # CCTV B 영상 요청
+        MessagePrefix.MC_CC: "{prefix}",              # CCTV C 영상 요청
         MessagePrefix.MC_MP: "{prefix}",              # 지도 영상 요청
         MessagePrefix.MC_OD: "{prefix}:{object_id}",  # 객체 상세보기 요청
         
         # 응답 메시지 (서버 -> GUI)
         MessagePrefix.MR_CA: "{prefix}:{response}",    # CCTV A 응답
         MessagePrefix.MR_CB: "{prefix}:{response}",    # CCTV B 응답
+        MessagePrefix.MR_CC: "{prefix}:{response}",    # CCTV C 응답
         MessagePrefix.MR_MP: "{prefix}:{response}",    # 지도 응답
         MessagePrefix.MR_OD: "{prefix}:{response}[,{object_info_detail}]"  # 객체 상세보기 응답
     }
@@ -155,4 +158,9 @@ class Constants:
     
     # 객체 정보 형식
     OBJECT_INFO = "{object_id},{object_type},{x_coord},{y_coord},{zone},{timestamp}[,{extra_info}]"
-    OBJECT_INFO_DETAIL = "{object_id},{object_type},{x_coord},{y_coord},{zone},{timestamp},{image_data}" 
+    OBJECT_INFO_DETAIL = "{object_id},{object_type},{x_coord},{y_coord},{zone},{timestamp},{image_data}"
+    
+    # 비디오 관련 상수
+    VIDEO_ENCODING = "utf-8"           # 비디오 데이터 인코딩
+    VIDEO_QUALITY = 80                 # JPEG 압축 품질 (0-100)
+    VIDEO_MAX_SIZE = (1920, 1080)      # 최대 비디오 해상도 

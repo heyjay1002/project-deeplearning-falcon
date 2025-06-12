@@ -4,6 +4,7 @@ from config import Settings, Constants, MessagePrefix, BirdRiskLevel, RunwayRisk
 from .interface import MessageInterface
 from models.detected_object import DetectedObject
 from .logger import logger
+from .udp_client import UdpClient
 
 class TcpClient(QObject):
     # 연결 상태 시그널
@@ -38,6 +39,9 @@ class TcpClient(QObject):
         self.message_interface = MessageInterface()
         self.settings = Settings.get_instance()
         
+        # UDP 클라이언트 초기화
+        self.udp_client = UdpClient()
+        
         # 메시지 버퍼링을 위한 변수
         self.message_buffer = ""
         self.is_connecting = False
@@ -66,6 +70,9 @@ class TcpClient(QObject):
         if self.socket.state() == QTcpSocket.SocketState.ConnectedState:
             logger.info("서버 연결 해제")
             self.socket.disconnectFromHost()
+        # UDP 클라이언트도 연결 해제
+        if self.udp_client.is_running:
+            self.udp_client.disconnect()
     
     def send_command(self, command_text: str) -> bool:
         """명령어 전송"""
@@ -185,10 +192,16 @@ class TcpClient(QObject):
             elif prefix == MessagePrefix.MR_CA:
                 # CCTV A 응답
                 self.cctv_a_response.emit(data)
+                # UDP 스트리밍 시작
+                if not self.udp_client.is_running:
+                    self.udp_client.connect()
                 
             elif prefix == MessagePrefix.MR_CB:
                 # CCTV B 응답
                 self.cctv_b_response.emit(data)
+                # UDP 스트리밍 시작
+                if not self.udp_client.is_running:
+                    self.udp_client.connect()
                 
             elif prefix == MessagePrefix.MR_MP:
                 # 지도 응답
