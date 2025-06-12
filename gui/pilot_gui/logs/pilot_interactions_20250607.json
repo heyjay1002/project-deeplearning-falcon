@@ -1,0 +1,72 @@
+[
+  {
+    "timestamp": "2025-06-06T18:17:52.338392+00:00",
+    "session_id": "pilot-20250606-181732-f7c2ae",
+    "callsign": "UNKNOWN",
+    "stt_text": "Korean 1-2-3. 1-way Alfa status.",
+    "request_code": "RUNWAY_ALPHA_STATUS",
+    "parameters": {
+      "original_text": "Korean 1-2-3. 1-way Alfa status.",
+      "corrected_text": null,
+      "callsign": "Korean 123",
+      "confidence_score": 0.7,
+      "reasoning": "Text-based extraction: RUNWAY_ALPHA_STATUS",
+      "llm_enhanced": true,
+      "classification_method": "llm_primary",
+      "keyword_fallback": [
+        "RUNWAY_ALPHA_STATUS",
+        9
+      ]
+    },
+    "response_text": "Korean one two three, Runway Alfa available for landing.",
+    "processing_time": 19.599443,
+    "confidence_score": 0.7144723279695762
+  },
+  {
+    "timestamp": "2025-06-06T18:21:43.170694+00:00",
+    "session_id": "pilot-20250606-182130-21fc52",
+    "callsign": "UNKNOWN",
+    "stt_text": "Korean Air 1,2,3. runway alpha status.",
+    "request_code": "RUNWAY_ALPHA_STATUS",
+    "parameters": {
+      "original_text": "Korean Air 1,2,3. runway alpha status.",
+      "corrected_text": "korean air 123. runway alpha status.",
+      "confidence_score": 23,
+      "matched_keywords": [
+        "runway alpha",
+        "runway a",
+        "runway alpha status",
+        "alpha status"
+      ],
+      "callsign": "Korean Air 123",
+      "runway": "RWY ALPHA",
+      "classification_method": "keyword_high_confidence"
+    },
+    "response_text": "Korean Air one two three, Runway Alfa available for landing.",
+    "processing_time": 12.99974,
+    "confidence_score": 0.7514083451207946
+  },
+  {
+    "timestamp": "2025-06-06T18:22:16.442908+00:00",
+    "session_id": "pilot-20250606-182200-d75b7e",
+    "callsign": "UNKNOWN",
+    "stt_text": "Korean 123. Rane, alpha. status.",
+    "request_code": "RUNWAY_ALPHA_STATUS",
+    "parameters": {
+      "original_text": "Korean 123. Rane, alpha. status.",
+      "corrected_text": null,
+      "callsign": "Korean 123",
+      "confidence_score": 0.7,
+      "reasoning": "Text-based extraction: RUNWAY_ALPHA_STATUS",
+      "llm_enhanced": true,
+      "classification_method": "llm_primary",
+      "keyword_fallback": [
+        "RUNWAY_ALPHA_STATUS",
+        5
+      ]
+    },
+    "response_text": "Korean one two three, Runway Alfa available for landing.",
+    "processing_time": 15.939543,
+    "confidence_score": 0.6780438732136699
+  }
+]

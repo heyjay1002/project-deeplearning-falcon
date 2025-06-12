@@ -170,7 +170,7 @@ class SystemStatus:
     audio_io_status: str = "UNKNOWN"
     stt_engine_status: str = "UNKNOWN"
     query_parser_status: str = "UNKNOWN"
-    request_executor_status: str = "UNKNOWN"
+
     tts_engine_status: str = "UNKNOWN"
     session_manager_status: str = "UNKNOWN"
     
@@ -196,7 +196,7 @@ class SystemStatus:
             self.audio_io_status,
             self.stt_engine_status,
             self.query_parser_status,
-            self.request_executor_status,
+
             self.tts_engine_status,
             self.session_manager_status
         ]

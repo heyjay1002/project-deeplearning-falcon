@@ -8,7 +8,7 @@ from typing import Optional
 class WhisperSTTEngine:
     def __init__(self, model_name: str = "medium", language: str = "en", device: str = "auto"):
         """
-        Whisper STT 엔진 초기화
+        Whisper STT 엔진 초기화 (활주로 상태 & 조류 위험도 전용)
         
         Args:
             model_name: whisper 모델 크기 (tiny, base, small, medium, large, large-v2, large-v3)
@@ -19,6 +19,8 @@ class WhisperSTTEngine:
         self.language = language
         self.device = self._determine_device(device)
         self.model = None
+        self.aviation_prompt = ""
+        
         self._setup_gpu_memory()
         self._load_model()
     
@@ -78,7 +80,7 @@ class WhisperSTTEngine:
             
             # 모델 로딩 시 장치 지정
             self.model = whisper.load_model(self.model_name, device=self.device)
-            print(f"[WhisperSTT] {self.model_name} 모델 로딩 완료 - 최고 성능 모드 ({self.device})")
+            print(f"[WhisperSTT] {self.model_name} 모델 로딩 완료 - 활주로/조류 요청 최적화 ({self.device})")
             
         except RuntimeError as e:
             if "CUDA out of memory" in str(e):
@@ -125,7 +127,7 @@ class WhisperSTTEngine:
 
     def transcribe(self, audio_bytes: bytes, session_id: str = "") -> str:
         """
-        음성 데이터(WAV 바이트) → 텍스트 반환 (GPU 최적화 버전)
+        음성 데이터(WAV 바이트) → 텍스트 반환 (활주로/조류 요청 최적화)
         """
         if self.model is None:
             print("[WhisperSTT] 모델이 로드되지 않았습니다.")
@@ -143,29 +145,38 @@ class WhisperSTTEngine:
             
             print(f"[WhisperSTT] 음성 인식 시작... (모델: {self.model_name}, 장치: {self.device}, 세션: {session_id})")
             
-            # 모델 크기에 따른 최적화 설정
+            # 모델 크기에 따른 최적화 설정 (환각 방지 강화)
             if "large" in self.model_name:
                 # large 모델용 고품질 설정
                 transcribe_options = {
-                    "language": self.language,
+                    "language": "en",  # 영어로 명시적 고정
+                    "task": "transcribe",  # 번역 방지, 전사만 수행
                     "fp16": self.device == "cuda",  # GPU에서만 fp16 사용
                     "verbose": False,
-                    "temperature": 0.0,
+                    "temperature": 0.0,  # 완전 결정적 출력
                     "beam_size": 5,
                     "best_of": 5,
-                    "no_speech_threshold": 0.6,
-                    "logprob_threshold": -1.0,
-                    "compression_ratio_threshold": 2.4,
-                    "condition_on_previous_text": False
+                    "no_speech_threshold": 0.95,  # 더 높임 (0.9 → 0.95)
+                    "logprob_threshold": -0.3,   # 더 엄격함 (-0.5 → -0.3)
+                    "compression_ratio_threshold": 1.8,  # 더 엄격함 (2.0 → 1.8)
+                    "condition_on_previous_text": False,  # 이전 텍스트 영향 차단
+                    "initial_prompt": "English aviation communication only. No foreign languages.",  # 영어 전용 힌트
+                    "suppress_tokens": [1, 2, 7, 8, 9, 10, 14, 25, 26, 27, 28, 29, 31, 58, 59, 60, 61, 62, 63, 90, 91, 92, 93, 359, 503, 522, 542, 873, 893, 902, 918, 922, 931, 1350, 1853, 1982, 2460, 2627, 3246, 3253, 3268, 3536, 3846, 3961, 4183, 4667, 6585, 6647, 7273, 9061, 9383, 10428, 10929, 11938, 12033, 12331, 12562, 13793, 14157, 14635, 15265, 15618, 16553, 16604, 18362, 18956, 20075, 21675, 22520, 26130, 26161, 26435, 28279, 29464, 31650, 32302, 32470, 36865, 42863, 47425, 49870, 50254, 50258, 50358, 50359, 50360, 50361, 50362]  # 환각 방지 토큰들
                 }
             else:
-                # medium/base 모델용 기본 설정
+                # medium/small 모델용 기본 설정
                 transcribe_options = {
-                    "language": self.language,
+                    "language": "en",  # 영어로 명시적 고정
+                    "task": "transcribe",  # 번역 방지, 전사만 수행
                     "fp16": False,  # 안정성을 위해 fp16 비활성화
                     "verbose": False,
-                    "temperature": 0.0,
-                    "condition_on_previous_text": False
+                    "temperature": 0.0,  # 완전 결정적 출력
+                    "no_speech_threshold": 0.95,  # 더 높임 (0.9 → 0.95)
+                    "logprob_threshold": -0.3,   # 더 엄격함 (-0.5 → -0.3)
+                    "compression_ratio_threshold": 1.8,  # 더 엄격함 (2.0 → 1.8)
+                    "condition_on_previous_text": False,  # 이전 텍스트 영향 차단
+                    "initial_prompt": "English aviation communication only. No foreign languages.",  # 영어 전용 힌트
+                    "suppress_tokens": [1, 2, 7, 8, 9, 10, 14, 25, 26, 27, 28, 29, 31, 58, 59, 60, 61, 62, 63, 90, 91, 92, 93, 359, 503, 522, 542, 873, 893, 902, 918, 922, 931, 1350, 1853, 1982, 2460, 2627, 3246, 3253, 3268, 3536, 3846, 3961, 4183, 4667, 6585, 6647, 7273, 9061, 9383, 10428, 10929, 11938, 12033, 12331, 12562, 13793, 14157, 14635, 15265, 15618, 16553, 16604, 18362, 18956, 20075, 21675, 22520, 26130, 26161, 26435, 28279, 29464, 31650, 32302, 32470, 36865, 42863, 47425, 49870, 50254, 50258, 50358, 50359, 50360, 50361, 50362]  # 환각 방지 토큰들
                 }
             
             # Whisper로 음성 인식
@@ -176,8 +187,11 @@ class WhisperSTTEngine:
             
             transcribed_text = result["text"].strip()
             
-            # 항공 관련 용어 후처리
-            transcribed_text = self._postprocess_aviation_terms(transcribed_text)
+            # 환각 결과 검증 및 필터링
+            transcribed_text = self._validate_transcription_result(transcribed_text)
+            
+            # 2가지 요청에 특화된 후처리
+            transcribed_text = self._postprocess_specialized_terms(transcribed_text)
             
             print(f"[WhisperSTT] 인식 결과: '{transcribed_text}'")
             
@@ -190,186 +204,89 @@ class WhisperSTTEngine:
                 os.unlink(temp_file_path)
             return ""
     
-    def _postprocess_aviation_terms(self, text: str) -> str:
+    def _postprocess_specialized_terms(self, text: str) -> str:
         """
-        영어 항공 관련 용어 정규화 및 후처리
-        """
-        if not text:
-            return text
-        
-        # 영어 항공 용어 정규화 (잘못 인식되기 쉬운 용어들)
-        replacements = {
-            # 콜사인 정규화
-            "폴콘": "FALCON",
-            "팔콘": "FALCON", 
-            "falcon": "FALCON",
-            "Falcon": "FALCON",
-            
-            # 숫자 정규화
-            "seven eight nine": "789",
-            "one two three": "123",
-            "four five six": "456",
-            "one zero one": "101",
-            "two zero two": "202",
-            "three zero three": "303",
-            
-            # 활주로 정규화
-            "runway two five left": "runway 25L",
-            "runway two five right": "runway 25R", 
-            "runway two five": "runway 25",
-            "rwy": "runway",
-            
-            # 항공 용어 정규화
-            "clearence": "clearance",
-            "clearnce": "clearance",
-            "emergancy": "emergency",
-            "emergeny": "emergency",
-            "assesment": "assessment",
-            "assesment": "assessment",
-            
-            # 한국어 제거 (영어로 복원)
-            "허가": "clearance",
-            "활주로": "runway",
-            "착륙": "landing",
-            "이륙": "takeoff",
-            "비상": "emergency",
-            "조류": "bird",
-            "시스템": "system",
-            "상태": "status",
-            "확인": "check",
-            "요청": "request"
-        }
-        
-        # 대소문자 구분 없이 치환
-        for old, new in replacements.items():
-            # 정확한 단어 매칭을 위해 단어 경계 사용
-            import re
-            pattern = r'\b' + re.escape(old) + r'\b'
-            text = re.sub(pattern, new, text, flags=re.IGNORECASE)
-        
-        # 연속된 공백 정리
-        text = re.sub(r'\s+', ' ', text)
-        
-        return text.strip()
-
-    def _postprocess_aviation_terms_enhanced(self, text: str) -> str:
-        """
-        강화된 영어 항공 관련 용어 정규화 및 후처리
+        활주로 상태 & 조류 위험도 요청에 특화된 후처리
         """
         if not text:
             return text
         
+        # 대소문자 정규화
+        processed_text = text.strip()
+        
+        # 콜사인 정규화 (FALCON 우선)
         import re
         
-        # 1단계: 일반적인 오인식 패턴 수정
-        common_mistakes = {
-            # 콜사인 오인식
-            "pack": "FALCON",
-            "falcon": "FALCON", 
-            "falkon": "FALCON",
-            "phalcon": "FALCON",
-            "pack one": "FALCON 1",
-            "pack 1": "FALCON 1",
-            "pack to": "FALCON 2",
-            "pack 2": "FALCON 2",
-            "pack three": "FALCON 3",
-            "pack 3": "FALCON 3",
-            
-            # 숫자 오인식 (더 많은 패턴 추가)
-            "want to see": "123",
-            "one two three": "123",
-            "four five six": "456", 
-            "seven eight nine": "789",
-            "one zero one": "101",
-            "two zero two": "202",
-            "three five six": "356",  # 새로 추가
-            "one": "1",
-            "two": "2", 
-            "three": "3",
-            "four": "4",
-            "five": "5",
-            "six": "6",
-            "seven": "7",
-            "eight": "8", 
-            "nine": "9",
-            "zero": "0",
-            
-            # 항공 용어 오인식
-            "only in": "runway",
-            "run way": "runway",
-            "run away": "runway",
-            "steps": "status",
-            "step": "status",
-            "check": "check",
-            "landing": "landing",
-            "take off": "takeoff",
-            "clearance": "clearance",
-            "clear": "clearance",
-            "bird": "bird",
-            "system": "system",
-            "emergency": "emergency",
-            "i'm going to need": "bird risk",  # 새로 추가
-            "assistants": "assessment",  # 새로 추가
-            "two assistants": "risk assessment",  # 새로 추가
-            
-            # 활주로 번호
-            "25 left": "25L",
-            "25 right": "25R",
-            "two five left": "25L",
-            "two five right": "25R",
-            "runway 25": "runway 25"
-        }
-        
-        # 대소문자 구분 없이 치환
-        for wrong, correct in common_mistakes.items():
-            pattern = r'\b' + re.escape(wrong) + r'\b'
-            text = re.sub(pattern, correct, text, flags=re.IGNORECASE)
-        
-        # 2단계: 항공 통신 패턴 인식 및 복원
-        aviation_patterns = [
-            # "FALCON [숫자] [요청]" 패턴
-            (r'FALCON\s+(\d+)\s+.*?(runway|landing|bird|system|FOD).*?(status|check|clearance|request)', 
-             r'FALCON \1 \2 \3'),
-            
-            # 활주로 상태 확인
-            (r'.*runway.*status.*check.*', 'FALCON runway status check'),
-            
-            # 조류 위험 확인  
-            (r'.*bird.*(risk|check|assessment).*', 'FALCON bird risk assessment'),
-            
-            # 착륙 허가 요청
-            (r'.*(landing|land).*clearance.*', 'FALCON request landing clearance'),
-            
-            # 시스템 상태 확인
-            (r'.*system.*status.*check.*', 'FALCON system status check'),
-            
-            # FOD 확인
-            (r'.*FOD.*check.*', 'FALCON FOD check')
+        # FALCON 콜사인 패턴 강화
+        falcon_patterns = [
+            (r'\b(?:falcon|falkon|faulcon|folcon)\s*(\d{1,4}[a-z]?)\b', r'FALCON \1'),
+            (r'\b(?:f\s*a\s*l\s*c\s*o\s*n)\s*(\d{1,4}[a-z]?)\b', r'FALCON \1'),
         ]
         
-        for pattern, replacement in aviation_patterns:
-            if re.search(pattern, text, re.IGNORECASE):
-                # 숫자 추출 시도
-                numbers = re.findall(r'\d+', text)
-                if numbers:
-                    callsign = numbers[0]
-                    replacement = replacement.replace('FALCON', f'FALCON {callsign}')
-                
-                text = replacement
-                break
+        for pattern, replacement in falcon_patterns:
+            processed_text = re.sub(pattern, replacement, processed_text, flags=re.IGNORECASE)
         
-        # 3단계: 최종 정리
-        # 연속된 공백 정리
-        text = re.sub(r'\s+', ' ', text)
+        # 활주로 번호 정규화 (주요 활주로만)
+        runway_patterns = [
+            (r'\brunway\s*(\d{1,2})\s*([lrc]?)\b', r'runway \1\2'),
+            (r'\brwy\s*(\d{1,2})\s*([lrc]?)\b', r'runway \1\2'),
+            (r'\b(\d{1,2})\s*([lrc]?)\s*runway\b', r'runway \1\2'),
+            # 특정 활주로 번호 강화
+            (r'\b(?:25|twenty.?five)\s*([lrc]?)\b', r'25\1'),
+            (r'\b(?:07|seven|oh.?seven)\s*([lrc]?)\b', r'07\1'),
+        ]
         
-        # 대문자 정규화
-        text = text.upper()
+        for pattern, replacement in runway_patterns:
+            processed_text = re.sub(pattern, replacement, processed_text, flags=re.IGNORECASE)
         
-        return text.strip()
+        # 핵심 키워드 정규화 (2가지 요청에 특화)
+        keyword_corrections = {
+            # 조류 관련
+            r'\b(?:bird|birds|burd|berds|bert)\b': 'bird',
+            r'\b(?:wildlife|wild.?life|wildlive)\b': 'wildlife',
+            r'\b(?:risk|risks|risc)\b': 'risk',
+            r'\b(?:activity|activities|activety)\b': 'activity',
+            r'\b(?:assessment|assesment|asessment)\b': 'assessment',
+            
+            # 활주로 관련
+            r'\b(?:runway|run.?way|runaway)\b': 'runway',
+            r'\b(?:status|state|condition)\b': 'status',
+            r'\b(?:check|chek|cheque)\b': 'check',
+            r'\b(?:clear|cleared|cler)\b': 'clear',
+            r'\b(?:operational|operation|operatinal)\b': 'operational',
+            
+            # 공통
+            r'\b(?:request|reqest|reques)\b': 'request',
+        }
+        
+        for pattern, replacement in keyword_corrections.items():
+            processed_text = re.sub(pattern, replacement, processed_text, flags=re.IGNORECASE)
+        
+        # 숫자 정규화
+        number_corrections = {
+            r'\b(?:one|won)\b': '1',
+            r'\b(?:two|too|to)\b': '2', 
+            r'\b(?:three|tree)\b': '3',
+            r'\b(?:four|for|fore)\b': '4',
+            r'\b(?:five|fiv)\b': '5',
+            r'\b(?:six|siks)\b': '6',
+            r'\b(?:seven|sevn)\b': '7',
+            r'\b(?:eight|ate)\b': '8',
+            r'\b(?:nine|nien)\b': '9',
+            r'\b(?:zero|oh)\b': '0',
+        }
+        
+        for pattern, replacement in number_corrections.items():
+            processed_text = re.sub(pattern, replacement, processed_text, flags=re.IGNORECASE)
+        
+        # 최종 정리
+        processed_text = re.sub(r'\s+', ' ', processed_text).strip()
+        
+        return processed_text
 
     def transcribe_with_confidence(self, audio_bytes: bytes, session_id: str = "") -> tuple[str, float]:
         """
-        음성 인식과 함께 신뢰도 점수 반환 (GPU 최적화 버전)
+        음성 인식과 함께 신뢰도 점수 반환 (활주로/조류 요청 최적화)
         """
         if self.model is None:
             return "", 0.0
@@ -385,22 +302,39 @@ class WhisperSTTEngine:
             
             print(f"[WhisperSTT] 신뢰도 포함 음성 인식... (모델: {self.model_name}, 장치: {self.device})")
             
-            # Medium 모델용 고품질 설정 (인식률 개선)
-            transcribe_options = {
-                "language": self.language,
-                "fp16": False,  # 정확도를 위해 fp32 사용
-                "verbose": False,
-                "temperature": 0.0,  # 가장 확실한 결과만
-                "condition_on_previous_text": False,  # 이전 텍스트 영향 제거
-                "no_speech_threshold": 0.6,  # 음성 감지 임계값
-                "logprob_threshold": -1.0,  # 로그 확률 임계값
-                "compression_ratio_threshold": 2.4,  # 압축 비율 임계값
-                "beam_size": 5,  # 빔 서치로 정확도 향상
-                "best_of": 5,  # 최고 결과 선택
-                "initial_prompt": "Aviation radio communication: FALCON callsign, runway, landing, takeoff, clearance, bird, FOD, system status check",  # 항공 용어 힌트
-                "suppress_tokens": [-1],  # 반복 토큰 억제
-                "word_timestamps": False  # 단어 타임스탬프 비활성화로 안정성 향상
-            }
+            # 모델 크기에 따른 최적화 설정 (환각 방지 강화)
+            if "large" in self.model_name:
+                # large 모델용 고품질 설정
+                transcribe_options = {
+                    "language": "en",  # 영어로 명시적 고정
+                    "task": "transcribe",  # 번역 방지, 전사만 수행
+                    "fp16": self.device == "cuda",  # GPU에서만 fp16 사용
+                    "verbose": False,
+                    "temperature": 0.0,  # 완전 결정적 출력
+                    "beam_size": 5,
+                    "best_of": 5,
+                    "no_speech_threshold": 0.95,  # 더 높임 (0.9 → 0.95)
+                    "logprob_threshold": -0.3,   # 더 엄격함 (-0.5 → -0.3)
+                    "compression_ratio_threshold": 1.8,  # 더 엄격함 (2.0 → 1.8)
+                    "condition_on_previous_text": False,  # 이전 텍스트 영향 차단
+                    "initial_prompt": "English aviation communication only. No foreign languages.",  # 영어 전용 힌트
+                    "suppress_tokens": [1, 2, 7, 8, 9, 10, 14, 25, 26, 27, 28, 29, 31, 58, 59, 60, 61, 62, 63, 90, 91, 92, 93, 359, 503, 522, 542, 873, 893, 902, 918, 922, 931, 1350, 1853, 1982, 2460, 2627, 3246, 3253, 3268, 3536, 3846, 3961, 4183, 4667, 6585, 6647, 7273, 9061, 9383, 10428, 10929, 11938, 12033, 12331, 12562, 13793, 14157, 14635, 15265, 15618, 16553, 16604, 18362, 18956, 20075, 21675, 22520, 26130, 26161, 26435, 28279, 29464, 31650, 32302, 32470, 36865, 42863, 47425, 49870, 50254, 50258, 50358, 50359, 50360, 50361, 50362]  # 환각 방지 토큰들
+                }
+            else:
+                # medium/small 모델용 기본 설정
+                transcribe_options = {
+                    "language": "en",  # 영어로 명시적 고정
+                    "task": "transcribe",  # 번역 방지, 전사만 수행
+                    "fp16": False,  # 안정성을 위해 fp16 비활성화
+                    "verbose": False,
+                    "temperature": 0.0,  # 완전 결정적 출력
+                    "no_speech_threshold": 0.95,  # 더 높임 (0.9 → 0.95)
+                    "logprob_threshold": -0.3,   # 더 엄격함 (-0.5 → -0.3)
+                    "compression_ratio_threshold": 1.8,  # 더 엄격함 (2.0 → 1.8)
+                    "condition_on_previous_text": False,  # 이전 텍스트 영향 차단
+                    "initial_prompt": "English aviation communication only. No foreign languages.",  # 영어 전용 힌트
+                    "suppress_tokens": [1, 2, 7, 8, 9, 10, 14, 25, 26, 27, 28, 29, 31, 58, 59, 60, 61, 62, 63, 90, 91, 92, 93, 359, 503, 522, 542, 873, 893, 902, 918, 922, 931, 1350, 1853, 1982, 2460, 2627, 3246, 3253, 3268, 3536, 3846, 3961, 4183, 4667, 6585, 6647, 7273, 9061, 9383, 10428, 10929, 11938, 12033, 12331, 12562, 13793, 14157, 14635, 15265, 15618, 16553, 16604, 18362, 18956, 20075, 21675, 22520, 26130, 26161, 26435, 28279, 29464, 31650, 32302, 32470, 36865, 42863, 47425, 49870, 50254, 50258, 50358, 50359, 50360, 50361, 50362]  # 환각 방지 토큰들
+                }
             
             result = self.model.transcribe(temp_file_path, **transcribe_options)
             
@@ -408,8 +342,11 @@ class WhisperSTTEngine:
             
             text = result["text"].strip()
             
-            # 강화된 항공 관련 용어 후처리
-            text = self._postprocess_aviation_terms_enhanced(text)
+            # 환각 결과 검증 및 필터링
+            text = self._validate_transcription_result(text)
+            
+            # 2가지 요청에 특화된 후처리
+            text = self._postprocess_specialized_terms(text)
             
             # 신뢰도 계산 (segments 기반)
             avg_confidence = self._calculate_confidence_score(result)
@@ -528,3 +465,165 @@ class WhisperSTTEngine:
         # 새 모델 로딩
         self._setup_gpu_memory()
         self._load_model()
+
+    def _validate_transcription_result(self, text: str) -> str:
+        """
+        환각 결과 검증 및 필터링 - 영어 전용 강화
+        """
+        if not text:
+            return text
+        
+        import re
+        
+        # 1. 의미없는 반복 문자 제거 (~~, ..., ---, 등)
+        if re.match(r'^[~\-_.!@#$%^&*()+=\[\]{}|\\:";\'<>?,./\s]*$', text):
+            print(f"[WhisperSTT] 환각 감지: 의미없는 반복 문자 '{text}'")
+            return ""
+        
+        # 2. 너무 짧은 텍스트 (1-2글자)
+        if len(text.strip()) <= 2:
+            print(f"[WhisperSTT] 환각 감지: 너무 짧은 텍스트 '{text}'")
+            return ""
+        
+        # 3. 비영어 문자 완전 제거 (수정된 패턴)
+        # 각 언어별로 개별 패턴 사용하여 범위 오류 방지
+        korean_pattern = r'[가-힣]'
+        chinese_pattern = r'[一-龯㐀-䶵豈-龎]'
+        japanese_hiragana_pattern = r'[ひらがな]'
+        japanese_katakana_pattern = r'[カタカナァ-ヾ]'
+        fullwidth_pattern = r'[ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ]'
+        special_brackets_pattern = r'[《》「」『』【】〈〉〔〕［］｛｝（）〖〗〘〙〚〛＜＞‹›«»""''‚„‛‟]'
+        greek_pattern = r'[αβγδεζηθικλμνξοπρστυφχψωΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ]'
+        cyrillic_pattern = r'[абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ]'
+        
+        # 각 패턴별로 개별 검사
+        non_english_patterns = [
+            korean_pattern, chinese_pattern, japanese_hiragana_pattern, 
+            japanese_katakana_pattern, fullwidth_pattern, special_brackets_pattern,
+            greek_pattern, cyrillic_pattern
+        ]
+        
+        for pattern in non_english_patterns:
+            if re.search(pattern, text):
+                print(f"[WhisperSTT] 환각 감지: 비영어 문자 포함 '{text}'")
+                return ""
+        
+        # 4. 특수 유니코드 문자 제거 (환각에서 자주 나타나는 문자들)
+        unicode_hallucination_pattern = r'[^\x00-\x7F]'  # ASCII 범위 외 모든 문자
+        if re.search(unicode_hallucination_pattern, text):
+            print(f"[WhisperSTT] 환각 감지: 비ASCII 문자 포함 '{text}'")
+            return ""
+        
+        # 5. 숫자만 있는 경우
+        if re.match(r'^[\d\s]*$', text):
+            print(f"[WhisperSTT] 환각 감지: 숫자만 포함 '{text}'")
+            return ""
+        
+        # 6. 특수문자만 있는 경우
+        if re.match(r'^[^\w\s]*$', text):
+            print(f"[WhisperSTT] 환각 감지: 특수문자만 포함 '{text}'")
+            return ""
+        
+        # 7. 의미없는 단어 반복
+        words = text.split()
+        if len(words) > 1:
+            # 같은 단어가 3번 이상 반복
+            for word in set(words):
+                if words.count(word) >= 3:
+                    print(f"[WhisperSTT] 환각 감지: 단어 반복 '{text}'")
+                    return ""
+        
+        # 8. 알려진 환각 패턴들 (정규식)
+        hallucination_patterns = [
+            r'^[a-z]{1,2}$',  # 단일 알파벳
+            r'^\s*$',         # 공백만
+            r'^[.]{3,}$',     # 점만 반복
+            r'^[-]{3,}$',     # 대시만 반복
+            r'^[~]{2,}$',     # 틸드 반복
+            r'^[*]{2,}$',     # 별표 반복
+            r'^[#]{2,}$',     # 해시 반복
+        ]
+        
+        for pattern in hallucination_patterns:
+            if re.match(pattern, text):
+                print(f"[WhisperSTT] 환각 감지: 패턴 매치 '{text}'")
+                return ""
+        
+        # 9. Whisper 특정 환각 문구들 (대소문자 무관)
+        whisper_hallucinations = [
+            "no foreign languages",
+            "no foreign language",
+            "foreign languages",
+            "foreign language",
+            "thank you for watching",
+            "thanks for watching", 
+            "please subscribe",
+            "like and subscribe",
+            "don't forget to subscribe",
+            "see you next time",
+            "see you later",
+            "goodbye",
+            "bye bye",
+            "music",
+            "applause",
+            "laughter",
+            "silence",
+            "inaudible",
+            "unintelligible",
+            "unclear",
+            "background noise",
+            "static",
+            "beep",
+            "beeping",
+            "uh uh uh",
+            "um um um",
+            "ah ah ah",
+            "oh oh oh",
+            "hmm hmm",
+            "mm mm",
+            "you know",
+            "i mean",
+            "like you know",
+            "so yeah",
+            "okay okay",
+            "alright alright",
+            "test test",
+            "testing testing",
+            "hello hello",
+            "can you hear me",
+            "is this working",
+            "one two three",
+            "check check",
+            "mic check"
+        ]
+        
+        text_lower = text.lower().strip()
+        for hallucination in whisper_hallucinations:
+            if text_lower == hallucination or text_lower.startswith(hallucination + ".") or text_lower.startswith(hallucination + "?"):
+                print(f"[WhisperSTT] 환각 감지: Whisper 특정 환각 문구 '{text}'")
+                return ""
+        
+        # 10. 영어 단어 비율 체크 (간단한 영어 단어 사전)
+        common_english_words = {
+            'the', 'a', 'an', 'and', 'or', 'but', 'in', 'on', 'at', 'to', 'for', 'of', 'with', 'by',
+            'is', 'are', 'was', 'were', 'be', 'been', 'have', 'has', 'had', 'do', 'does', 'did',
+            'will', 'would', 'could', 'should', 'can', 'may', 'might', 'must',
+            'i', 'you', 'he', 'she', 'it', 'we', 'they', 'me', 'him', 'her', 'us', 'them',
+            'this', 'that', 'these', 'those', 'here', 'there', 'where', 'when', 'why', 'how',
+            'falcon', 'runway', 'bird', 'check', 'status', 'risk', 'assessment', 'clear', 'request',
+            'alpha', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot', 'golf', 'hotel', 'india',
+            'juliet', 'kilo', 'lima', 'mike', 'november', 'oscar', 'papa', 'quebec', 'romeo',
+            'sierra', 'tango', 'uniform', 'victor', 'whiskey', 'xray', 'yankee', 'zulu'
+        }
+        
+        words = re.findall(r'\b[a-zA-Z]+\b', text.lower())
+        if words:
+            english_word_count = sum(1 for word in words if word in common_english_words or len(word) >= 3)
+            english_ratio = english_word_count / len(words)
+            
+            if english_ratio < 0.4:  # 영어 단어 비율을 40%로 상향 조정
+                print(f"[WhisperSTT] 환각 감지: 영어 단어 비율 부족 '{text}' (비율: {english_ratio:.2f})")
+                return ""
+        
+        print(f"[WhisperSTT] 유효한 텍스트 검증 통과: '{text}'")
+        return text

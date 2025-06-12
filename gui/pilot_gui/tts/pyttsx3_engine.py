@@ -55,6 +55,10 @@ class TTSEngine:
             text: 변환할 텍스트
             blocking: True면 음성 재생 완료까지 대기, False면 비동기 재생
         """
+        if self.volume == 0.0:
+            print(f"[TTSEngine] 🔇 음소거 상태 - 음성 재생 생략: '{text}'")
+            return
+            
         if not self.engine:
             print(f"[TTSEngine] 엔진이 초기화되지 않음. 텍스트 출력: {text}")
             return
@@ -64,7 +68,7 @@ class TTSEngine:
             return
         
         try:
-            print(f"[TTSEngine] 음성 변환 시작: '{text}'")
+            print(f"[TTSEngine] 음성 변환 시작: '{text}' (볼륨: {self.volume})")
             self.is_speaking = True
             
             if blocking:
@@ -132,8 +136,15 @@ class TTSEngine:
         if self.engine:
             try:
                 self.volume = max(0.0, min(1.0, volume))  # 0.0 ~ 1.0 범위로 제한
-                self.engine.setProperty('volume', self.volume)
-                print(f"[TTSEngine] 음량 변경: {self.volume}")
+                
+                # 🆕 볼륨이 0이면 완전 음소거
+                if self.volume == 0.0:
+                    self.engine.setProperty('volume', 0.0)
+                    print(f"[TTSEngine] 🔇 음소거 설정")
+                else:
+                    self.engine.setProperty('volume', self.volume)
+                    print(f"[TTSEngine] 🔊 음량 변경: {self.volume}")
+                    
             except Exception as e:
                 print(f"[TTSEngine] 음량 변경 오류: {e}")
     

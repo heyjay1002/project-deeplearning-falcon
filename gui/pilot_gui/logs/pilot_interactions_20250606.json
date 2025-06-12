@@ -1,15 +1,26 @@
 [
   {
-    "timestamp": "2025-06-05T16:28:30.142978+00:00",
-    "session_id": "pilot-20250605-162830-601092",
-    "callsign": "TEST123",
-    "stt_text": "테스트 음성 인식",
-    "request_code": "BIRD_RISK_CHECK",
+    "timestamp": "2025-06-06T11:16:47.043477+00:00",
+    "session_id": "pilot-20250606-111630-d7d3af",
+    "callsign": "FALCON 456",
+    "stt_text": "No foreign languages.",
+    "request_code": "RUNWAY_BRAVO_STATUS",
     "parameters": {
-      "runway": "RWY-A"
+      "original_text": "No foreign languages.",
+      "corrected_text": "Runway bravo status check for Korean aircraft KOREAN256.",
+      "callsign": "KOREAN256",
+      "confidence_score": 0.95,
+      "reasoning": "The input text was corrected to 'Runway bravo status check' and matched the keywords of RUNWAY_BRAVO_STATUS category. The callsign, if present in a real-world scenario, would be extracted here.",
+      "llm_enhanced": true,
+      "runway condition": "clear",
+      "classification_method": "llm_primary",
+      "keyword_fallback": [
+        "UNKNOWN_REQUEST",
+        0
+      ]
     },
-    "response_text": "테스트 응답",
-    "processing_time": 1.5,
-    "confidence_score": 0.85
+    "response_text": "KOREAN256, RWY-BRAVO status: Caution advised. Limited operations. Condition wet, wind 270/12KT.",
+    "processing_time": 17.021334,
+    "confidence_score": 0.4895388015678951
   }
 ]

@@ -6,8 +6,9 @@ from datetime import datetime
 from audio_io.mic_speaker_io import AudioIO
 from stt.whisper_engine import WhisperSTTEngine
 from query_parser.request_classifier import RequestClassifier
-from request_router.request_executor import RequestExecutor
-from tts.tts_engine import TTSEngine
+from request_router.server_client import ServerClient
+from request_router.response_processor import ResponseProcessor
+from tts.hybrid_tts_engine import HybridTTSEngine
 from session_utils.session_manager import SessionManager
 from models.request_response_model import (
     VoiceInteraction, AudioData, STTResult, PilotRequest, PilotResponse,
@@ -19,29 +20,62 @@ class VoiceInteractionController:
                  audio_io: Optional[AudioIO] = None,
                  stt_engine: Optional[WhisperSTTEngine] = None,
                  query_parser: Optional[RequestClassifier] = None,
-                 request_executor: Optional[RequestExecutor] = None,
-                 tts_engine: Optional[TTSEngine] = None,
-                 session_manager: Optional[SessionManager] = None):
+                 main_server_client: Optional[ServerClient] = None,
+                 response_processor: Optional[ResponseProcessor] = None,
+                 tts_engine: Optional[HybridTTSEngine] = None,
+                 session_manager: Optional[SessionManager] = None,
+                 use_structured_query: bool = True):
         """
         음성 상호작용 컨트롤러 초기화
         
         Args:
             각 모듈 인스턴스들 (None이면 기본값으로 생성)
+            use_structured_query: 구조화된 질의 시스템 사용 여부
         """
         # 모듈 초기화 (None이면 기본 인스턴스 생성)
         self.audio_io = audio_io or AudioIO()
-        self.stt_engine = stt_engine or WhisperSTTEngine(model_name="base", language="en", device="auto")
+        self.stt_engine = stt_engine or WhisperSTTEngine(model_name="small", language="en", device="auto")
         self.query_parser = query_parser or RequestClassifier()
-        self.request_executor = request_executor or RequestExecutor()
-        self.tts_engine = tts_engine or TTSEngine()
+        
+        # 🆕 새로운 구조화된 질의 시스템
+        self.use_structured_query = use_structured_query
+        self.main_server_client = main_server_client or ServerClient()
+        self.response_processor = response_processor or ResponseProcessor()
+        
+        # 🆕 새로운 하이브리드 TTS 엔진 (Coqui TTS + pyttsx3 fallback)
+        self.tts_engine = tts_engine or HybridTTSEngine(
+            use_coqui=True,
+            coqui_model="tts_models/en/ljspeech/tacotron2-DDC",
+            fallback_to_pyttsx3=True
+        )
         self.session_manager = session_manager or SessionManager()
         
-        print("[VoiceController] 음성 상호작용 컨트롤러 초기화 완료")
-    
+        # ✅ STT 완료 콜백 함수
+        self.stt_callback = None
+        
+        # ✅ TTS 텍스트 생성 완료 콜백 함수 추가
+        self.tts_callback = None
+        
+        # LLM 하이브리드 분류 활성화
+        if hasattr(self.query_parser, 'enable_llm'):
+            llm_success = self.query_parser.enable_llm()
+            if llm_success:
+                print("[VoiceController] ✅ LLM 하이브리드 분류 활성화")
+            else:
+                print("[VoiceController] ⚠️ LLM 비활성화, 키워드 분류만 사용")
+        
+        # TTS 엔진 상태 출력
+        if hasattr(self.tts_engine, 'get_status'):
+            tts_status = self.tts_engine.get_status()
+            print(f"[VoiceController] 🎵 TTS 엔진: {tts_status.get('current_engine', 'Unknown')}")
+        
+        print(f"[VoiceController] 음성 상호작용 컨트롤러 초기화 완료")
+        print(f"  구조화된 질의: {'활성화' if use_structured_query else '비활성화'}")
+
     def handle_voice_interaction(self, callsign: str = "UNKNOWN", 
                                recording_duration: float = 5.0) -> VoiceInteraction:
         """
-        전체 음성 상호작용 처리 (동기 방식)
+        전체 음성 상호작용 처리 (동기 방식) - 구조화된 질의 시스템 통합
         
         Args:
             callsign: 항공기 콜사인
@@ -60,10 +94,10 @@ class VoiceInteractionController:
         )
         
         try:
-            print(f"[VoiceController] 음성 상호작용 시작: {session_id}")
+            print(f"[VoiceController] 🎯 음성 상호작용 시작: {session_id}")
             
             # 1. 음성 녹음
-            print("[VoiceController] 1단계: 음성 녹음")
+            print("[VoiceController] 1️⃣ 음성 녹음")
             audio_data = self._record_audio(recording_duration)
             if not audio_data:
                 interaction.mark_failed("음성 녹음 실패")
@@ -72,7 +106,7 @@ class VoiceInteractionController:
             interaction.audio_input = AudioData(audio_bytes=audio_data)
             
             # 2. STT 처리
-            print("[VoiceController] 2단계: 음성 인식")
+            print("[VoiceController] 2️⃣ 음성 인식")
             stt_result = self._process_stt(audio_data, session_id)
             if not stt_result or not stt_result.text.strip():
                 interaction.mark_failed("음성 인식 실패")
@@ -80,9 +114,14 @@ class VoiceInteractionController:
             
             interaction.stt_result = stt_result
             
-            # 3. 쿼리 분류
-            print("[VoiceController] 3단계: 요청 분류")
-            request_code, parameters = self._classify_request(stt_result.text, session_id)
+            # ✅ STT 완료 즉시 콜백 호출!
+            if self.stt_callback:
+                print("[VoiceController] 🚀 STT 완료 즉시 콜백 호출")
+                self.stt_callback(stt_result)
+            
+            # 3. 쿼리 분류 (하이브리드 방식)
+            print("[VoiceController] 3️⃣ 요청 분류 (하이브리드)")
+            request_code, parameters = self._classify_request_hybrid(stt_result.text, session_id)
             
             # PilotRequest 생성
             pilot_request = create_pilot_request(
@@ -95,8 +134,12 @@ class VoiceInteractionController:
             pilot_request.confidence_score = stt_result.confidence_score
             interaction.pilot_request = pilot_request
             
-            # 4. 요청 처리
-            print("[VoiceController] 4단계: 요청 처리")
+            # 4. 요청 처리 (구조화된 질의 vs 기존 방식)
+            if self.use_structured_query and request_code != "UNKNOWN_REQUEST":
+                print("[VoiceController] 4️⃣ 구조화된 질의 처리")
+                response_text = self._execute_structured_query(request_code, parameters, session_id)
+            else:
+                print("[VoiceController] 4️⃣ 기존 방식 요청 처리")
             response_text = self._execute_request(request_code, parameters, session_id)
             
             # PilotResponse 생성
@@ -108,8 +151,13 @@ class VoiceInteractionController:
             interaction.pilot_response = pilot_response
             interaction.tts_text = response_text
             
+            # ✅ TTS 텍스트 생성 완료 즉시 콜백 호출!
+            if self.tts_callback:
+                print("[VoiceController] 🚀 TTS 텍스트 생성 완료 즉시 콜백 호출")
+                self.tts_callback(response_text)
+            
             # 5. TTS 처리
-            print("[VoiceController] 5단계: 음성 합성 및 재생")
+            print("[VoiceController] 5️⃣ 음성 합성 및 재생")
             self._process_tts(response_text)
             
             # 상호작용 완료
@@ -118,13 +166,86 @@ class VoiceInteractionController:
             # 로그 기록
             self._log_interaction(interaction)
             
-            print(f"[VoiceController] 음성 상호작용 완료: {session_id}")
+            print(f"[VoiceController] ✅ 음성 상호작용 완료: {session_id}")
             return interaction
             
         except Exception as e:
-            print(f"[VoiceController] 음성 상호작용 오류: {e}")
+            print(f"[VoiceController] ❌ 음성 상호작용 오류: {e}")
             interaction.mark_failed(str(e))
             return interaction
+    
+    def _classify_request_hybrid(self, text: str, session_id: str) -> Tuple[str, dict]:
+        """하이브리드 요청 분류 (LLM + 키워드)"""
+        try:
+            if hasattr(self.query_parser, 'classify_hybrid'):
+                return self.query_parser.classify_hybrid(text, session_id)
+            else:
+                return self.query_parser.classify(text, session_id)
+        except Exception as e:
+            print(f"[VoiceController] 분류 오류: {e}")
+            return "UNKNOWN_REQUEST", {"error": str(e), "original_text": text}
+    
+    def _execute_structured_query(self, request_code: str, parameters: dict, session_id: str) -> str:
+        """
+        🆕 구조화된 질의 실행
+        
+        Args:
+            request_code: 요청 코드
+            parameters: 요청 파라미터
+            session_id: 세션 ID
+            
+        Returns:
+            자연어 응답 텍스트
+        """
+        try:
+            # 1. 메인 서버에 구조화된 질의 전송
+            print(f"[VoiceController] 🔄 메인 서버 질의: {request_code}")
+            success, response_data = self.main_server_client.send_query(
+                request_code, parameters, session_id
+            )
+            
+            if not success:
+                print(f"[VoiceController] ❌ 서버 질의 실패: {response_data}")
+                # 폴백: 기존 방식 사용
+                return self._execute_request(request_code, parameters, session_id)
+            
+            # 2. 응답 데이터 유효성 검증
+            is_valid, validation_msg = self.response_processor.validate_response_data(response_data)
+            if not is_valid:
+                print(f"[VoiceController] ⚠️ 응답 데이터 무효: {validation_msg}")
+                # 폴백: 기존 방식 사용
+                return self._execute_request(request_code, parameters, session_id)
+            
+            # 3. 응답 처리 및 자연어 생성
+            print(f"[VoiceController] 🔄 응답 처리: {self.response_processor.get_response_summary(response_data)}")
+            
+            original_text = parameters.get("original_text", "unknown request")
+            
+            # original_request 구성 (ResponseProcessor에서 콜사인 추출용)
+            original_request = {
+                "callsign": parameters.get("callsign", "Aircraft"),
+                "request_text": original_text,
+                "parameters": parameters
+            }
+            
+            print(f"[VoiceController] 📝 original_request 구성: {original_request}")
+            
+            success, response_text = self.response_processor.process_response(
+                response_data, original_request
+            )
+            
+            if success:
+                print(f"[VoiceController] ✅ 구조화된 응답 생성 완료: '{response_text}'")
+                return response_text
+            else:
+                print(f"[VoiceController] ⚠️ 응답 처리 실패, 폴백 사용 (reason: '{response_text}')")
+                # 폴백: 기존 방식 사용
+                return self._execute_request(request_code, parameters, session_id)
+                
+        except Exception as e:
+            print(f"[VoiceController] ❌ 구조화된 질의 오류: {e}")
+            # 폴백: 기존 방식 사용
+            return self._execute_request(request_code, parameters, session_id)
     
     def handle_voice_interaction_async(self, callsign: str = "UNKNOWN",
                                      recording_duration: float = 5.0,
@@ -189,14 +310,15 @@ class VoiceInteractionController:
         """STT 처리"""
         try:
             start_time = time.time()
-            text = self.stt_engine.transcribe(audio_data, session_id)
-            processing_time = time.time() - start_time
             
             # 신뢰도 점수가 있는 경우 사용
             if hasattr(self.stt_engine, 'transcribe_with_confidence'):
                 text, confidence = self.stt_engine.transcribe_with_confidence(audio_data, session_id)
             else:
+                text = self.stt_engine.transcribe(audio_data, session_id)
                 confidence = 0.8  # 기본값
+            
+            processing_time = time.time() - start_time
             
             return STTResult(
                 text=text,
@@ -217,9 +339,34 @@ class VoiceInteractionController:
             return "UNKNOWN_REQUEST", {"error": str(e)}
     
     def _execute_request(self, request_code: str, parameters: dict, session_id: str) -> str:
-        """요청 실행"""
+        """요청 실행 - MockMainServer 기반으로 통합"""
         try:
-            return self.request_executor.process_request(request_code, parameters, session_id)
+            print(f"[VoiceController] 🔄 MockMainServer 기반 요청 처리: {request_code}")
+            success, response_data = self.main_server_client.send_query(
+                request_code, parameters, session_id
+            )
+            
+            if success:
+                # 원본 요청 정보 구성 (ResponseProcessor에서 콜사인 추출용)
+                original_request = {
+                    "request_code": request_code,
+                    "callsign": parameters.get("callsign", "Aircraft"),
+                    "original_text": parameters.get("original_text", "")
+                }
+                
+                # 응답 처리
+                success_processed, final_response = self.response_processor.process_response(
+                    response_data, original_request
+                )
+                
+                if success_processed:
+                    return final_response
+                else:
+                    return "응답 처리 중 오류가 발생했습니다."
+            else:
+                print(f"[VoiceController] ❌ 서버 질의 실패: {response_data}")
+                return "요청 처리에 실패했습니다. 다시 시도해주세요."
+                
         except Exception as e:
             print(f"[VoiceController] 요청 실행 오류: {e}")
             return f"요청 처리 중 오류가 발생했습니다: {str(e)}"
@@ -227,6 +374,7 @@ class VoiceInteractionController:
     def _process_tts(self, text: str):
         """TTS 처리"""
         try:
+            print(f"[VoiceController] 🎵 TTS 처리 텍스트: '{text}'")
             self.tts_engine.speak(text, blocking=True)
         except Exception as e:
             print(f"[VoiceController] TTS 처리 오류: {e}")
@@ -299,28 +447,208 @@ class VoiceInteractionController:
             print(f"[VoiceController] 로그 기록 오류: {e}")
     
     def get_system_status(self) -> dict:
-        """시스템 상태 조회"""
-        return {
+        """시스템 상태 조회 - 구조화된 질의 시스템 포함"""
+        status = {
             "audio_io": "OPERATIONAL" if self.audio_io else "FAILED",
             "stt_engine": "OPERATIONAL" if self.stt_engine.is_model_loaded() else "FAILED",
-            "query_parser": "OPERATIONAL",
-            "request_executor": "OPERATIONAL",
+            "query_parser": "OPERATIONAL" if self.query_parser else "FAILED",
             "tts_engine": "OPERATIONAL" if self.tts_engine.is_engine_ready() else "FAILED",
-            "session_manager": "OPERATIONAL",
-            "active_sessions": len(self.session_manager.get_active_sessions())
+            "session_manager": "OPERATIONAL" if self.session_manager else "FAILED",
+            
+            # 🆕 구조화된 질의 시스템 상태
+            "structured_query_enabled": self.use_structured_query,
+            "main_server_client": "OPERATIONAL" if self.main_server_client else "FAILED",
+            "response_processor": "OPERATIONAL" if self.response_processor else "FAILED",
+        }
+        
+        # LLM 상태 추가
+        if hasattr(self.query_parser, 'get_llm_status'):
+            llm_status = self.query_parser.get_llm_status()
+            status["llm_enabled"] = llm_status.get("enabled", False)
+            status["llm_model"] = llm_status.get("model", "unknown")
+        
+        # 메인 서버 연결 상태 확인
+        if self.main_server_client:
+            if hasattr(self.main_server_client, 'server_available'):
+                status["main_server_available"] = self.main_server_client.server_available
+            else:
+                status["main_server_available"] = "unknown"
+        
+        return status
+    
+    def toggle_structured_query(self, enabled: bool):
+        """
+        구조화된 질의 시스템 활성화/비활성화
+        
+        Args:
+            enabled: 활성화 여부
+        """
+        self.use_structured_query = enabled
+        print(f"[VoiceController] 구조화된 질의 시스템: {'활성화' if enabled else '비활성화'}")
+    
+    def test_main_server_connection(self) -> bool:
+        """
+        메인 서버 연결 테스트
+        
+        Returns:
+            연결 성공 여부
+        """
+        if self.main_server_client:
+            return self.main_server_client.test_connection()
+        return False
+    
+    def get_supported_requests(self) -> list:
+        """
+        지원하는 요청 유형 목록 반환
+        
+        Returns:
+            지원하는 요청 유형 리스트
+        """
+        if self.query_parser:
+            return self.query_parser.get_supported_requests()
+        return []
+    
+    def create_tts_request_payload(self, text: str, session_id: str) -> dict:
+        """
+        TTS 요청 페이로드 생성 (외부 TTS 서비스용)
+        
+        Args:
+            text: 음성으로 변환할 텍스트
+            session_id: 세션 ID
+            
+        Returns:
+            TTS 요청 페이로드
+        """
+        if self.response_processor:
+            return self.response_processor.create_tts_request(text, session_id)
+        else:
+            # 기본 페이로드
+            return {
+                "type": "command",
+                "command": "synthesize_speech",
+                "text": text,
+                "session_id": session_id,
+                "timestamp": datetime.now().isoformat()
         }
     
-    def shutdown(self):
-        """컨트롤러 종료"""
-        try:
-            # 활성 세션들 정리
-            for session_id in list(self.session_manager.get_active_sessions().keys()):
-                self.session_manager.close_session(session_id)
+    def process_external_tts_response(self, tts_response: dict) -> bool:
+        """
+        외부 TTS 서비스 응답 처리
+        
+        Args:
+            tts_response: TTS 서비스 응답 (audio 데이터 포함)
             
-            # TTS 중지
+        Returns:
+            처리 성공 여부
+        """
+        try:
+            if tts_response.get("type") == "response" and "audio" in tts_response:
+                # Base64 오디오 데이터를 디코딩하여 재생
+                import base64
+                audio_data = base64.b64decode(tts_response["audio"])
+                
+                # 오디오 재생 (AudioIO 사용)
+                if hasattr(self.audio_io, 'play_audio'):
+                    self.audio_io.play_audio(audio_data)
+                    return True
+                else:
+                    print("[VoiceController] ⚠️ 오디오 재생 기능 없음")
+                    return False
+            else:
+                print(f"[VoiceController] ❌ 잘못된 TTS 응답 형식: {tts_response}")
+                return False
+                
+        except Exception as e:
+            print(f"[VoiceController] ❌ TTS 응답 처리 오류: {e}")
+            return False
+    
+    def shutdown(self):
+        """
+        시스템 종료 및 리소스 정리
+        """
+        print("[VoiceController] 시스템 종료 중...")
+        
+        try:
+            # TTS 엔진 정지
             if self.tts_engine:
                 self.tts_engine.stop_speaking()
             
-            print("[VoiceController] 컨트롤러 종료 완료")
+            # 오디오 시스템 정리
+            if self.audio_io:
+                # 녹음 중이면 중지
+                if hasattr(self.audio_io, 'stop_recording'):
+                    self.audio_io.stop_recording()
+            
+            # 세션 매니저 정리
+            if self.session_manager:
+                # 현재 세션들 저장
+                if hasattr(self.session_manager, 'save_sessions'):
+                    self.session_manager.save_sessions()
+            
+            # 메인 서버 클라이언트 정리
+            if self.main_server_client and hasattr(self.main_server_client, 'session'):
+                self.main_server_client.session.close()
+            
+            print("[VoiceController] ✅ 시스템 종료 완료")
+            
         except Exception as e:
-            print(f"[VoiceController] 종료 중 오류: {e}")
+            print(f"[VoiceController] ⚠️ 종료 중 오류: {e}")
+
+    def set_stt_callback(self, callback):
+        """STT 완료 콜백 설정"""
+        self.stt_callback = callback
+        print("[VoiceController] ✅ STT 완료 콜백 설정됨")
+
+    def set_tts_callback(self, callback):
+        """TTS 텍스트 생성 완료 콜백 설정"""
+        self.tts_callback = callback
+        print("[VoiceController] ✅ TTS 텍스트 생성 콜백 설정됨")
+
+# 편의 함수들
+def create_voice_controller_with_structured_query(
+    server_url: str = "http://localhost:8000",
+    use_mock_fallback: bool = True,
+    stt_model: str = "small"
+) -> VoiceInteractionController:
+    """
+    구조화된 질의 시스템이 활성화된 VoiceInteractionController 생성
+    
+    Args:
+        server_url: 메인 서버 URL
+        use_mock_fallback: 모의 서버 폴백 사용 여부
+        stt_model: STT 모델 이름
+        
+    Returns:
+        설정된 VoiceInteractionController 인스턴스
+    """
+    from request_router.server_client import ServerClient
+    from request_router.response_processor import ResponseProcessor
+    
+    # 구조화된 질의 시스템 컴포넌트 생성
+    main_server_client = ServerClient(
+        server_url=server_url,
+        use_mock_fallback=use_mock_fallback
+    )
+    response_processor = ResponseProcessor()
+    
+    # STT 엔진 생성
+    stt_engine = WhisperSTTEngine(model_name=stt_model, language="en", device="auto")
+    
+    # VoiceInteractionController 생성
+    controller = VoiceInteractionController(
+        stt_engine=stt_engine,
+        main_server_client=main_server_client,
+        response_processor=response_processor,
+        use_structured_query=True
+    )
+    
+    return controller
+
+def create_voice_controller_legacy() -> VoiceInteractionController:
+    """
+    기존 방식의 VoiceInteractionController 생성 (구조화된 질의 비활성화)
+    
+    Returns:
+        기존 방식 VoiceInteractionController 인스턴스
+    """
+    return VoiceInteractionController(use_structured_query=False)
