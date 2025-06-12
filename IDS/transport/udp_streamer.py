@@ -4,6 +4,7 @@ import socket
 import threading
 import queue
 import cv2
+import time
 from config.config import settings
 
 class UdpStreamer(threading.Thread):
@@ -14,6 +15,8 @@ class UdpStreamer(threading.Thread):
         self.frame_queue = frame_queue
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.stop_event = threading.Event()
+        self.sent_frames = 0
+        self.last_log_time = time.time()
 
     def run(self):
         print(f"[UDP] Streamer started for {self.host}:{self.port}")
@@ -38,9 +41,17 @@ class UdpStreamer(threading.Thread):
 
                 if result and len(message) <= MAX_UDP_PACKET_SIZE:
                     self.sock.sendto(message, (self.host, self.port))
+                    self.sent_frames += 1
                 else:
                     print(f"[UDP] Frame CAM {cam_id} is too large to send. Skipping.")
 
+                current_time = time.time()
+                if current_time - self.last_log_time >= 2.0:
+                    if settings.LOG_FPS_TO_CONSOLE:
+                        fps = self.sent_frames / (current_time - self.last_log_time)
+                        print(f"--- [UDP Stream] Sending FPS: {fps:.2f} ---")
+                    self.sent_frames = 0
+                    self.last_log_time = current_time
             except queue.Empty:
                 continue
             except Exception as e:

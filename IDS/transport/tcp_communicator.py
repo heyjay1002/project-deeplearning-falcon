@@ -21,11 +21,15 @@ class TcpCommunicator(threading.Thread):
             try:
                 print(f"[TCP] Trying to connect to {self.host}:{self.port}")
                 self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-                self.sock.settimeout(5) # 연결 시도 타임아웃
+                self.sock.settimeout(5)
                 self.sock.connect((self.host, self.port))
-                self.sock.settimeout(None) # 연결 후 블로킹 모드로 복귀
-                print(f"[TCP] Connected to server.")
+                self.sock.settimeout(None)
                 
+                # --- 여기가 핵심 수정 부분입니다! ---
+                server_address = self.sock.getpeername()
+                print(f"[TCP] Successfully connected to server at {server_address[0]}:{server_address[1]}")
+                # --- --------------------------- ---
+
                 send_thread = threading.Thread(target=self._send_loop, daemon=True)
                 recv_thread = threading.Thread(target=self._recv_loop, daemon=True)
                 send_thread.start()
@@ -42,7 +46,8 @@ class TcpCommunicator(threading.Thread):
             if not self.stop_event.is_set():
                 time.sleep(5)
         print("[TCP] Communicator stopped.")
-
+        
+    # 이하 _send_loop, _recv_loop, stop 메소드는 이전과 동일합니다.
     def _send_loop(self):
         while not self.stop_event.is_set():
             try:
@@ -71,7 +76,7 @@ class TcpCommunicator(threading.Thread):
     def _handle_command(self, command):
         if command.get("type") == "command":
             cmd_type = command.get("command")
-            if cmd_type == "set_object_detect_mode": 
+            if cmd_type == "set_objet_detect_mode": 
                 settings.DETECTOR_CURRENT_MODE = "object_detect"
                 response = { "type": "response", "command": cmd_type, "result": "ok" }
                 self.send_queue.put(response)

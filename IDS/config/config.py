@@ -7,6 +7,10 @@ import os
 
 class Settings:
     def __init__(self):
+
+        # True: 모든 모델 추론 실행 (정상 모드)
+        # False: 모델 추론을 건너뛰고 순수 프레임 전송 속도 테스트 (디버그 모드)
+        self.ENABLE_INFERENCE = True
         # -----------------------------------------------------------
         # 1. 카메라 설정 (Camera Settings)
         # -----------------------------------------------------------
@@ -16,10 +20,10 @@ class Settings:
             "CAM_B": "/dev/video4"  # <-- 키가 논리적 ID, 값이 실제 경로
         }
         
-        self.CAMERA_RESOLUTION_WIDTH = 1920     # 카메라 캡처 해상도 (너비)
-        self.CAMERA_RESOLUTION_HEIGHT = 1080    # 카메라 캡처 해상도 (높이)
-        self.CAMERA_FPS = 30                    # 카메라 캡처 프레임 속도 (FPS)
-        self.CAMERA_QUEUE_MAX_SIZE = 20          # multiprocessing.Queue의 최대 크기. 너무 커지면 지연 증가, 너무 작으면 프레임 드롭 가능성
+        self.CAMERA_RESOLUTION_WIDTH = 640     # 카메라 캡처 해상도 (너비)
+        self.CAMERA_RESOLUTION_HEIGHT = 640    # 카메라 캡처 해상도 (높이)
+        self.CAMERA_FPS = 60                    # 카메라 캡처 프레임 속도 (FPS)
+        self.CAMERA_QUEUE_MAX_SIZE =5          # multiprocessing.Queue의 최대 크기. 너무 커지면 지연 증가, 너무 작으면 프레임 드롭 가능성
         self.CAMERA_DROP_OLDEST_ON_FULL = True       
         # -----------------------------------------------------------
         # 2. 모델 설정 (Model Settings)
@@ -39,7 +43,7 @@ class Settings:
         # 4. 네트워크 설정 (Network Settings)
         # -----------------------------------------------------------
         # 메인 서버의 IP 주소
-        self.MAIN_SERVER_IP = "127.0.0.8" 
+        self.MAIN_SERVER_IP = "192.168.0.8" 
         # UDP 포트
         self.IDS_UDP_PORT = 4000
         # TCP 포트
@@ -57,7 +61,8 @@ class Settings:
             "CAM_A": "RWY CCTV A",
             "CAM_B": "RWY CCTV B"
         }
-        
+        # 터미널 콘솔에 초당 프레임(FPS) 정보를 로깅할지 여부
+        self.LOG_FPS_TO_CONSOLE = True
         # 화면에 FPS 정보를 표시할지 여부
         self.DISPLAY_FPS = True        
         # 바운딩 박스를 화면에 표시할지 여부

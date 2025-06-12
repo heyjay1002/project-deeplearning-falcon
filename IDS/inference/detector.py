@@ -46,7 +46,7 @@ class Detector:
         
         # 1. 객체 탐지 및 추적, 재분류
         try:
-            track_results = self.detecting_model.track(processed_frame, persist=True, conf=0.15, iou=0.7, verbose=False)
+            track_results = self.detecting_model.track(processed_frame, persist=True, conf=0.3, iou=0.7, verbose=False)
             if track_results and track_results[0].boxes.id is not None:
                 boxes = track_results[0].boxes.xyxy.cpu().numpy()
                 track_ids = track_results[0].boxes.id.cpu().numpy()
