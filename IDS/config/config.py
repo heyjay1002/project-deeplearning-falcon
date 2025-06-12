@@ -20,10 +20,10 @@ class Settings:
             "CAM_B": "/dev/video4"  # <-- 키가 논리적 ID, 값이 실제 경로
         }
         
-        self.CAMERA_RESOLUTION_WIDTH = 640     # 카메라 캡처 해상도 (너비)
-        self.CAMERA_RESOLUTION_HEIGHT = 640    # 카메라 캡처 해상도 (높이)
+        self.CAMERA_RESOLUTION_WIDTH = 960     # 카메라 캡처 해상도 (너비)
+        self.CAMERA_RESOLUTION_HEIGHT = 720    # 카메라 캡처 해상도 (높이)
         self.CAMERA_FPS = 60                    # 카메라 캡처 프레임 속도 (FPS)
-        self.CAMERA_QUEUE_MAX_SIZE =5          # multiprocessing.Queue의 최대 크기. 너무 커지면 지연 증가, 너무 작으면 프레임 드롭 가능성
+        self.CAMERA_QUEUE_MAX_SIZE = 4          # multiprocessing.Queue의 최대 크기. 너무 커지면 지연 증가, 너무 작으면 프레임 드롭 가능성
         self.CAMERA_DROP_OLDEST_ON_FULL = True       
         # -----------------------------------------------------------
         # 2. 모델 설정 (Model Settings)

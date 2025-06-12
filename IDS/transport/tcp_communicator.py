@@ -25,10 +25,8 @@ class TcpCommunicator(threading.Thread):
                 self.sock.connect((self.host, self.port))
                 self.sock.settimeout(None)
                 
-                # --- 여기가 핵심 수정 부분입니다! ---
                 server_address = self.sock.getpeername()
                 print(f"[TCP] Successfully connected to server at {server_address[0]}:{server_address[1]}")
-                # --- --------------------------- ---
 
                 send_thread = threading.Thread(target=self._send_loop, daemon=True)
                 recv_thread = threading.Thread(target=self._recv_loop, daemon=True)
@@ -47,13 +45,21 @@ class TcpCommunicator(threading.Thread):
                 time.sleep(5)
         print("[TCP] Communicator stopped.")
         
-    # 이하 _send_loop, _recv_loop, stop 메소드는 이전과 동일합니다.
     def _send_loop(self):
+        """큐에 메시지가 있으면 JSON 문자열 끝에 '\n'을 붙여 전송합니다."""
         while not self.stop_event.is_set():
             try:
-                message = self.send_queue.get(timeout=1)
-                message_bytes = json.dumps(message).encode('utf-8')
+                message_dict = self.send_queue.get(timeout=1)
+                
+                # --- 여기가 핵심 수정 부분입니다! ---
+                # 1. 메시지를 JSON 문자열로 변환하고, 끝에 줄바꿈(\n)을 추가합니다.
+                json_string = json.dumps(message_dict, ensure_ascii=False) + '\n'
+                
+                # 2. UTF-8 바이트로 인코딩하여 전송합니다.
+                message_bytes = json_string.encode('utf-8')
                 self.sock.sendall(message_bytes)
+                # --- --------------------------- ---
+
             except queue.Empty:
                 continue
             except Exception as e:
@@ -61,22 +67,33 @@ class TcpCommunicator(threading.Thread):
                 break
 
     def _recv_loop(self):
+        """서버로부터 명령을 수신합니다."""
+        buffer = ""
         while not self.stop_event.is_set():
             try:
-                data = self.sock.recv(1024)
+                data = self.sock.recv(4096)
                 if not data:
                     print("[TCP] Server closed connection.")
                     break
-                command = json.loads(data.decode('utf-8'))
-                self._handle_command(command)
+                
+                buffer += data.decode('utf-8')
+                
+                # 수신 버퍼에서도 '\n'을 기준으로 메시지를 나눔
+                while '\n' in buffer:
+                    message_str, buffer = buffer.split('\n', 1)
+                    if message_str:
+                        command = json.loads(message_str)
+                        self._handle_command(command)
+
             except Exception as e:
                 print(f"[TCP] Error receiving, closing connection: {e}")
                 break
 
     def _handle_command(self, command):
+        """수신한 명령을 처리합니다."""
         if command.get("type") == "command":
             cmd_type = command.get("command")
-            if cmd_type == "set_objet_detect_mode": 
+            if cmd_type == "set_object_detect_mode": 
                 settings.DETECTOR_CURRENT_MODE = "object_detect"
                 response = { "type": "response", "command": cmd_type, "result": "ok" }
                 self.send_queue.put(response)
