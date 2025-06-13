@@ -41,7 +41,7 @@ class UdpClient(QObject):
 
             # UDP 소켓 생성
             self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)  # 소켓 재사용 옵션 추가
+            self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
             self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, self.settings.server.udp_buffer_size)
             
             # UDP 서버 주소
@@ -49,8 +49,11 @@ class UdpClient(QObject):
             logger.info(f"UDP 서버 연결 시도: {server_address[0]}:{server_address[1]}")
             
             # UDP는 연결이 필요 없으므로 바로 바인딩
-            self.socket.bind(('0.0.0.0', self.settings.server.udp_port))
-            logger.info(f"UDP 포트 바인딩 성공: {self.settings.server.udp_port} (데이터 수신 대기 중)")
+            self.socket.bind(('0.0.0.0', 0))  # 임의의 포트에 바인딩
+            logger.info(f"UDP 포트 바인딩 성공: {self.socket.getsockname()[1]}")
+            
+            # 서버 주소 설정
+            self.server_address = server_address
             
             # 수신 스레드 시작
             self.is_running = True
@@ -63,7 +66,6 @@ class UdpClient(QObject):
             logger.error(error_msg)
             self.connection_error.emit(error_msg)
             self.disconnected.emit()
-            # 오류 발생 시 소켓 정리
             if self.socket is not None:
                 self.socket.close()
                 self.socket = None
@@ -86,19 +88,17 @@ class UdpClient(QObject):
     
     def _receive_frames(self):
         """프레임 수신 스레드"""
-        logger.info("UDP 프레임 수신 스레드 시작됨")
+        logger.info("UDP 프레임 수신 시작")
         while self.is_running:
             try:
                 # UDP 데이터 수신
                 data, addr = self.socket.recvfrom(self.settings.server.udp_buffer_size)
-                logger.info(f"UDP 데이터 수신: {len(data)} bytes from {addr}")
                 
                 # 첫 번째 데이터 수신 시 연결 성공으로 간주
                 if not self._is_connected:
                     self._is_connected = True
-                    logger.info(f"UDP 서버 연결 성공: 첫 데이터 수신 from {addr}")
+                    logger.info(f"UDP 서버 연결 성공: {addr[0]}:{addr[1]}")
                     self.connected.emit()
-                    # 연결 상태 변경 시그널 발생
                     self.connection_status_changed.emit(True, "UDP 서버에 연결되었습니다.")
                 
                 # 카메라 ID와 이미지 데이터 분리
@@ -106,33 +106,21 @@ class UdpClient(QObject):
                     # 첫 번째 ':' 찾기
                     sep = data.find(b':')
                     if sep == -1:
-                        logger.warning("데이터에 ':' 구분자가 없음")
                         continue
                     
                     # 카메라 ID 추출
                     camera_id = data[:sep].decode('utf-8')
-                    logger.info(f"카메라 ID 추출: {camera_id}")
                     
-                    # 이미지 ID와 이미지 데이터 분리
-                    sep2 = data.find(b':', sep + 1)
-                    if sep2 == -1:
-                        logger.warning("데이터에 두 번째 ':' 구분자가 없음")
-                        continue
-                    
-                    # 이미지 ID 추출
-                    img_id = data[sep+1:sep2].decode('utf-8')
-                    logger.info(f"이미지 ID 추출: {img_id}")
-                    
-                    # 이미지 데이터 추출
-                    image_data = data[sep2 + 1:]
-                    logger.info(f"이미지 데이터 크기: {len(image_data)} bytes")
+                    # 이미지 데이터 추출 (이미지 ID가 있는 경우와 없는 경우 모두 처리)
+                    image_data = data[sep + 1:]
+                    if b':' in image_data:  # 이미지 ID가 있는 경우
+                        img_id, image_data = image_data.split(b':', 1)
                     
                     # 이미지 데이터 디코딩
                     nparr = np.frombuffer(image_data, np.uint8)
                     frame = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
                     
                     if frame is not None:
-                        logger.info(f"프레임 디코딩 성공: {frame.shape}")
                         # OpenCV BGR -> RGB 변환
                         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                         
@@ -143,15 +131,9 @@ class UdpClient(QObject):
                         
                         # 카메라 ID에 따라 적절한 시그널 발생
                         if camera_id == 'A':
-                            logger.info("CCTV A 프레임 전송")
                             self.frame_a_received.emit(q_image)
                         elif camera_id == 'B':
-                            logger.info("CCTV B 프레임 전송")
                             self.frame_b_received.emit(q_image)
-                        else:
-                            logger.warning(f"알 수 없는 카메라 ID: {camera_id}")
-                    else:
-                        logger.error("프레임 디코딩 실패")
                             
                 except Exception as e:
                     logger.error(f"프레임 처리 오류: {e}")
@@ -160,11 +142,10 @@ class UdpClient(QObject):
             except Exception as e:
                 if self.is_running:
                     logger.error(f"프레임 수신 오류: {e}")
-                    # 연결 오류 발생 시 상태 업데이트
                     self._is_connected = False
                     self.connection_status_changed.emit(False, f"UDP 연결 오류: {e}")
                 continue
-        logger.info("UDP 프레임 수신 스레드 종료됨")
+        logger.info("UDP 프레임 수신 종료")
 
     def stop_streaming(self):
         """UDP 스트리밍 중지"""

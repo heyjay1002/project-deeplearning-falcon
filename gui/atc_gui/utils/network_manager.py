@@ -122,7 +122,7 @@ class NetworkManager(QObject):
     def _handle_cctv_a_response(self, response: str):
         """CCTV A 응답 처리"""
         if response == "OK":
-            logger.info("CCTV A 요청 승인됨 - UDP 스트리밍 시작")
+            logger.info("CCTV A 요청 승인됨")
             if not self.udp_client.is_connected():
                 self.udp_client.connect()
             self.udp_client.start_streaming()
@@ -132,7 +132,7 @@ class NetworkManager(QObject):
     def _handle_cctv_b_response(self, response: str):
         """CCTV B 응답 처리"""
         if response == "OK":
-            logger.info("CCTV B 요청 승인됨 - UDP 스트리밍 시작")
+            logger.info("CCTV B 요청 승인됨")
             if not self.udp_client.is_connected():
                 self.udp_client.connect()
             self.udp_client.start_streaming()
@@ -142,14 +142,12 @@ class NetworkManager(QObject):
     # --- UI에서 호출할 요청 메서드들 ---
     def request_cctv_a(self):
         """CCTV A 영상 요청"""
-        if not self.udp_client.is_connected():
-            self.udp_client.connect()
+        logger.info("CCTV A 영상 요청")
         self.tcp_client.request_cctv_a()
 
     def request_cctv_b(self):
         """CCTV B 영상 요청"""
-        if not self.udp_client.is_connected():
-            self.udp_client.connect()
+        logger.info("CCTV B 영상 요청")
         self.tcp_client.request_cctv_b()
 
     def request_object_detail(self, object_id: int):

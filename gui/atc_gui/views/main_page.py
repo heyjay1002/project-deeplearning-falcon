@@ -477,19 +477,51 @@ class MainPage(QWidget):
 
     def update_cctv_a_frame(self, frame: QImage):
         """CCTV A 프레임 업데이트"""
-        self.label_cctv_1.setPixmap(QPixmap.fromImage(frame).scaled(
-            self.label_cctv_1.size(),
-            Qt.AspectRatioMode.KeepAspectRatio,
-            Qt.TransformationMode.SmoothTransformation
-        ))
+        try:
+            if frame.isNull():
+                logger.error("CCTV A 프레임이 유효하지 않음")
+                return
+                
+            # 프레임 크기 로깅
+            logger.debug(f"CCTV A 프레임 크기: {frame.width()}x{frame.height()}")
+            
+            # 라벨 크기에 맞게 이미지 크기 조정
+            scaled_pixmap = QPixmap.fromImage(frame).scaled(
+                self.label_cctv_1.size(),
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation
+            )
+            
+            # 이미지 표시
+            self.label_cctv_1.setPixmap(scaled_pixmap)
+            self.label_cctv_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            
+        except Exception as e:
+            logger.error(f"CCTV A 프레임 업데이트 오류: {e}")
 
     def update_cctv_b_frame(self, frame: QImage):
         """CCTV B 프레임 업데이트"""
-        self.label_cctv_2.setPixmap(QPixmap.fromImage(frame).scaled(
-            self.label_cctv_2.size(),
-            Qt.AspectRatioMode.KeepAspectRatio,
-            Qt.TransformationMode.SmoothTransformation
-        ))
+        try:
+            if frame.isNull():
+                logger.error("CCTV B 프레임이 유효하지 않음")
+                return
+                
+            # 프레임 크기 로깅
+            logger.debug(f"CCTV B 프레임 크기: {frame.width()}x{frame.height()}")
+            
+            # 라벨 크기에 맞게 이미지 크기 조정
+            scaled_pixmap = QPixmap.fromImage(frame).scaled(
+                self.label_cctv_2.size(),
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation
+            )
+            
+            # 이미지 표시
+            self.label_cctv_2.setPixmap(scaled_pixmap)
+            self.label_cctv_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            
+        except Exception as e:
+            logger.error(f"CCTV B 프레임 업데이트 오류: {e}")
 
     def closeEvent(self, event):
         """위젯 종료 시 처리"""
