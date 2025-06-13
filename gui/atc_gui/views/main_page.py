@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QWidget, QTableWidgetItem, QSizePolicy, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QMessageBox
 from PyQt6 import uic
 from PyQt6.QtGui import QPixmap, QColor, QImage
-from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtCore import Qt, QTimer, pyqtSignal
 import os
 from views.object_detail_dialog import ObjectDetailDialog
 from views.object_detection_dialog import ObjectDetectionDialog
@@ -12,6 +12,9 @@ from widgets.map_marker_widget import MapMarkerWidget, MarkerData, MarkerType, M
 from utils.logger import logger
 
 class MainPage(QWidget):
+    # 객체 목록 업데이트 시그널 추가
+    object_list_updated = pyqtSignal(set)
+
     def __init__(self, parent=None):
         super().__init__(parent)
         ui_path = os.path.join(os.path.dirname(__file__), '../ui/main_page.ui')
@@ -165,6 +168,9 @@ class MainPage(QWidget):
         logger.debug(f"객체 목록 업데이트: {len(objects)}개 객체")
         self.table_object_list.setRowCount(len(objects))
         
+        # 현재 처리된 객체 ID 세트 생성
+        current_object_ids = {obj.object_id for obj in objects}
+        
         for row, obj in enumerate(objects):
             # ID
             self.table_object_list.setItem(row, 0, QTableWidgetItem(str(obj.object_id)))
@@ -175,6 +181,9 @@ class MainPage(QWidget):
 
         # 마커 업데이트
         self.update_markers(objects)
+
+        # 처리된 객체 ID 목록을 메인 윈도우에 전달
+        self.object_list_updated.emit(current_object_ids)
 
         # 첫 객체 감지 시 팝업 표시
         if self.is_first_detection and objects:

@@ -7,6 +7,8 @@ import logging
 from views.main_page import MainPage
 from views.access_page import AccessPage
 from views.log_page import LogPage
+from views.object_detection_dialog import ObjectDetectionDialog
+from models.detected_object import DetectedObject
 
 class WindowClass(QMainWindow):
     def __init__(self):
@@ -14,38 +16,20 @@ class WindowClass(QMainWindow):
         uic.loadUi("ui/main_window.ui", self)
         self.setWindowTitle("FALCON")
         
-        # 창 상태를 명시적으로 일반 상태로 설정
-        self.setWindowState(Qt.WindowState.WindowNoState)
-        
-        # 창 크기 설정 (더 명확하게)
+        # 창 크기 설정 
         self.resize(1320, 860)
-        
-        # 최소/최대 크기 제한 (선택사항)
-        self.setMinimumSize(800, 600)
-        self.setMaximumSize(1920, 1080)
-        
-        # 창을 화면 중앙에 배치
-        self.center_window()
         
         # 상태바 설정
         self.setup_status_bar()
         
         # 탭 설정
         self.setup_tabs()
-
-    def center_window(self):
-        """창을 화면 중앙에 배치"""
-        # 현재 화면의 geometry 가져오기
-        screen = QApplication.primaryScreen()
-        screen_geometry = screen.geometry()
         
-        # 창의 geometry 계산
-        window_geometry = self.geometry()
-        x = (screen_geometry.width() - window_geometry.width()) // 2
-        y = (screen_geometry.height() - window_geometry.height()) // 2
+        # 객체 감지 이벤트 처리 설정
+        self.setup_object_detection_handler()
         
-        # 창 위치 설정
-        self.move(x, y)
+        # 처리된 객체 ID 추적을 위한 세트
+        self.processed_object_ids = set()
 
     def setup_status_bar(self):
         """상태바 설정"""
@@ -147,28 +131,31 @@ class WindowClass(QMainWindow):
         tab_bar.setStyleSheet("""
             QTabBar::tab {
                 min-width: 150px;
-                padding: 8px 16px;
             }
         """)
 
-    def showEvent(self, event):
-        """창이 표시될 때 호출되는 이벤트"""
-        super().showEvent(event)
-        # 창이 표시된 후에도 크기와 상태를 다시 확인
-        if self.windowState() != Qt.WindowState.WindowNoState:
-            self.setWindowState(Qt.WindowState.WindowNoState)
-            self.resize(1320, 860)
+    def setup_object_detection_handler(self):
+        """객체 감지 이벤트 핸들러 설정"""
+        if hasattr(self.main_page, 'network_manager'):
+            self.main_page.network_manager.object_detected.connect(self.show_object_detection_dialog)
+            # MainPage의 객체 목록 업데이트 시그널 연결
+            self.main_page.object_list_updated.connect(self.update_processed_objects)
+
+    def update_processed_objects(self, object_ids: set):
+        """처리된 객체 ID 목록 업데이트"""
+        self.processed_object_ids.update(object_ids)
+
+    def show_object_detection_dialog(self, detected_object: DetectedObject):
+        """객체 감지 다이얼로그 표시"""
+        # 이미 처리된 객체인 경우 알림을 표시하지 않음
+        if detected_object.object_id in self.processed_object_ids:
+            return
+            
+        dialog = ObjectDetectionDialog(detected_object, self)
+        dialog.show()
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    
-    # 애플리케이션 레벨에서 창 상태 제어
-    app.setAttribute(Qt.ApplicationAttribute.AA_DontShowIconsInMenus, False)
-    
+    app = QApplication(sys.argv)      
     window = WindowClass()
-    window.show()
-    
-    # 창이 표시된 후 한 번 더 크기 조정 (강제)
-    QTimer.singleShot(100, lambda: window.resize(1320, 860))
-    
+    window.show()       
     sys.exit(app.exec())

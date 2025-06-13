@@ -10,7 +10,7 @@ class NetworkManager(QObject):
     """TCP 및 UDP 통신을 총괄하는 네트워크 관리자"""
 
     # UI가 연결할 시그널들
-    object_detected = pyqtSignal(list)
+    object_detected = pyqtSignal(DetectedObject)
     bird_risk_changed = pyqtSignal(BirdRiskLevel)
     runway_a_risk_changed = pyqtSignal(RunwayRiskLevel)
     runway_b_risk_changed = pyqtSignal(RunwayRiskLevel)
@@ -30,7 +30,7 @@ class NetworkManager(QObject):
     def _connect_signals(self):
         """내부 클라이언트의 시그널을 NetworkManager의 시그널로 전달"""
         # TCP 클라이언트 시그널 연결
-        self.tcp_client.object_detected.connect(self.object_detected)
+        self.tcp_client.object_detected.connect(self._handle_object_detected)
         self.tcp_client.bird_risk_changed.connect(self.bird_risk_changed)
         self.tcp_client.runway_a_risk_changed.connect(self.runway_a_risk_changed)
         self.tcp_client.runway_b_risk_changed.connect(self.runway_b_risk_changed)
@@ -87,6 +87,11 @@ class NetworkManager(QObject):
     def _on_udp_connection_error(self, error_msg: str):
         """UDP 연결 오류 시 상태 전파"""
         self.udp_connection_status_changed.emit(False, f"UDP 연결 오류: {error_msg}")
+
+    def _handle_object_detected(self, objects: list):
+        """객체 감지 이벤트를 개별 객체로 처리"""
+        for obj in objects:
+            self.object_detected.emit(obj)
 
     # --- UI에서 호출할 요청 메서드들 ---
     def request_cctv_a(self):

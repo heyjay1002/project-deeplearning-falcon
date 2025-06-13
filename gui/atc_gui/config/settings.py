@@ -5,9 +5,9 @@ from typing import Optional
 class ServerSettings:
     """서버 연결 설정"""
     tcp_ip: str = "192.168.0.8"
-    tcp_port: int = 4100
+    tcp_port: int = 5100
     udp_ip: str = "192.168.0.8"
-    udp_port: int = 5100
+    udp_port: int = 4100
     connection_timeout: int = 3  # 초 단위
     reconnect_interval: int = 3  # 초 단위
     max_reconnect_attempts: int = 3  # 최대 재연결 시도 횟수
