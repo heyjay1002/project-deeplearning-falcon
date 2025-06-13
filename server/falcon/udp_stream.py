@@ -44,6 +44,25 @@ class VideoCommunicator(QThread):
         
         # Admin GUI 비디오 전송기 초기화 (서버 -> Admin)
         self.admin_video_sender = UDPVideoSender(host=DEFAULT_CLIENT_HOST, port=UDP_PORT_ADMIN_VIDEO)
+        
+        # 영상 송출 상태
+        self.streaming = False
+        self.current_camera = None
+    
+    def start_video_stream(self, camera_id: str):
+        """영상 송출 시작
+        Args:
+            camera_id: 카메라 ID ('A' 또는 'B')
+        """
+        self.streaming = True
+        self.current_camera = camera_id
+        print(f"[INFO] 영상 송출 시작 (카메라: {camera_id})")
+    
+    def stop_video_stream(self):
+        """영상 송출 중지"""
+        self.streaming = False
+        self.current_camera = None
+        print("[INFO] 영상 송출 중지")
     
     def run(self):
         """메인 실행 루프"""
@@ -66,11 +85,13 @@ class VideoCommunicator(QThread):
                 'cam_id': cam_id
             }
             self.frame_received.emit(frame_data)
-            
-            # Admin GUI로 프레임 전송
-            # self.admin_video_sender.send_frame(frame)  # 원본 영상 송출 비활성화
     
     def stop(self):
         """통신 중지"""
         self.video_receiver.close()  # IDS 수신 중지
         self.admin_video_sender.close()  # Admin GUI 전송 중지 
+
+    def send_frame_with_boxes(self, frame, cam_id):
+        """박스가 그려진 프레임을 UDP로 송출"""
+        if self.streaming and cam_id == self.current_camera:
+            self.admin_video_sender.send_frame(frame, cam_id=cam_id) 

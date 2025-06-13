@@ -69,6 +69,9 @@ class MainWindow(QMainWindow):
         self.detection_thread = DetectionCommunicator()
         self.detection_thread.detection_received.connect(self.detection_processor.process_detection)
         
+        # 비디오 통신기 연결
+        self.detection_thread.set_video_communicator(self.video_thread)
+        
         # 스레드 시작
         print("[INFO] 서버 시작")
         self.video_processor.start()
@@ -101,9 +104,8 @@ class MainWindow(QMainWindow):
         scaled_pixmap = pixmap.scaled(self.video_label.size(), Qt.AspectRatioMode.KeepAspectRatio)
         self.video_label.setPixmap(scaled_pixmap)
 
-        # Admin GUI로 박스가 그려진 프레임 송출 (UDP)
-        if hasattr(self.video_thread, 'admin_video_sender'):
-            self.video_thread.admin_video_sender.send_frame(frame_with_boxes, cam_id=cam_id)
+        # 박스가 그려진 프레임을 VideoCommunicator로 전달하여 UDP 송출
+        self.video_thread.send_frame_with_boxes(frame_with_boxes, cam_id)
     
     def _on_detection_processed(self, detection_data):
         """검출 처리 완료 시 호출"""

@@ -10,7 +10,7 @@ import time
 import socket
 import cv2
 import numpy as np
-from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QTextEdit
+from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel, QTextEdit, QPushButton, QHBoxLayout
 from PyQt6.QtCore import Qt, QThread, pyqtSignal
 from PyQt6.QtGui import QImage, QPixmap
 
@@ -110,9 +110,29 @@ class MainWindow(QMainWindow):
         self.video_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         layout.addWidget(self.video_label)
         
+        # 버튼 레이아웃
+        button_layout = QHBoxLayout()
+        
+        # CCTV A 버튼
+        self.cctv_a_button = QPushButton('CCTV A')
+        self.cctv_a_button.clicked.connect(lambda: self._send_command('MC_CA\n'))
+        button_layout.addWidget(self.cctv_a_button)
+        
+        # 지도 보기 버튼
+        self.map_button = QPushButton('지도 보기')
+        self.map_button.clicked.connect(lambda: self._send_command('MC_MP\n'))
+        button_layout.addWidget(self.map_button)
+        
+        layout.addLayout(button_layout)
+        
         # 상태 표시 레이블
         self.status_label = QLabel('상태: 서버 연결 대기 중...')
         layout.addWidget(self.status_label)
+        
+        # 명령어 메시지 레이블
+        self.command_label = QLabel('명령어 메시지:')
+        self.command_label.setStyleSheet("QLabel { background-color: #f0f0f0; padding: 5px; }")
+        layout.addWidget(self.command_label)
         
         # 메시지 표시 영역
         self.message_display = QTextEdit()
@@ -122,7 +142,7 @@ class MainWindow(QMainWindow):
     def _init_tcp(self):
         """TCP 통신 초기화"""
         self.tcp_receiver = TCPReceiver()
-        self.tcp_receiver.message_received.connect(self._on_message_received)
+        self.tcp_receiver.message_received.connect(self._on_tcp_message)
         self.tcp_receiver.start()
 
     def _init_udp(self):
@@ -131,18 +151,17 @@ class MainWindow(QMainWindow):
         self.udp_receiver.frame_received.connect(self._on_frame_received)
         self.udp_receiver.start()
 
-    def _on_message_received(self, message):
-        """메시지 수신 시 호출"""
-        # 상태 업데이트
-        self.status_label.setText('상태: 메시지 수신 중...')
+    def _on_tcp_message(self, message: str):
+        """TCP 메시지 수신 시 호출
+        Args:
+            message: 수신된 메시지
+        """
+        # 명령어 관련 메시지인 경우 command_label에 표시
+        if message.startswith('MC_') or message.startswith('MR_'):
+            self.command_label.setText(f'명령어 메시지: {message.strip()}')
         
-        # 메시지 표시
-        self.message_display.append(message)
-        
-        # 스크롤을 항상 아래로
-        self.message_display.verticalScrollBar().setValue(
-            self.message_display.verticalScrollBar().maximum()
-        )
+        # 모든 메시지는 message_display에도 표시
+        self.message_display.append(f"[수신] {message.strip()}")
     
     def _on_frame_received(self, frame, cam_id):
         """UDP로 영상 수신 시 호출"""
@@ -155,6 +174,19 @@ class MainWindow(QMainWindow):
         self.video_label.setPixmap(scaled_pixmap)
         # 상태 표시
         self.status_label.setText(f'상태: 영상 수신(cam_id={cam_id})')
+
+    def _send_command(self, command: str):
+        """명령 전송
+        Args:
+            command: 전송할 명령 문자열
+        """
+        if hasattr(self, 'tcp_receiver') and self.tcp_receiver.client:
+            try:
+                self.tcp_receiver.client.send_message_binary(command.encode())
+                self.message_display.append(f"[전송] {command.strip()}")
+            except Exception as e:
+                print(f"[ERROR] 명령 전송 실패: {e}")
+                self.status_label.setText('상태: 명령 전송 실패')
 
     def closeEvent(self, event):
         """윈도우 종료 시 호출"""
