@@ -1,0 +1,616 @@
+2025-06-13 00:07:47,032 - ATC_GUI - INFO - 지도 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 00:07:47,032 - ATC_GUI - INFO - 마커 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/bird.png
+2025-06-13 00:07:47,050 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 00:07:47,050 - ATC_GUI - INFO - 지도 이미지 크기: 960x720
+2025-06-13 00:07:47,050 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 00:07:47,052 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 00:07:47,056 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 00:07:47,057 - ATC_GUI - INFO - UDP 서버 연결 성공: 192.168.0.8:5100
+2025-06-13 00:07:47,058 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 00:07:47,058 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 00:07:47,061 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 00:07:47,092 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 00:07:47,093 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 00:07:47,097 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 00:07:47,101 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 00:07:48,057 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 00:07:48,057 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 00:07:48,057 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 00:07:51,181 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 00:07:51,181 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 00:07:51,182 - ATC_GUI - ERROR - 연결 타임아웃 (시도 1/3회)
+2025-06-13 00:07:54,181 - ATC_GUI - INFO - 재연결 시도 중... (2/3회)
+2025-06-13 00:07:54,181 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (2/3회)
+2025-06-13 00:07:54,181 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 00:07:54,182 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 00:07:57,180 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 00:07:57,180 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 00:07:57,181 - ATC_GUI - ERROR - 연결 타임아웃 (시도 2/3회)
+2025-06-13 00:07:58,366 - ATC_GUI - INFO - 지도 보기
+2025-06-13 00:07:58,467 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 00:07:58,473 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 00:08:00,180 - ATC_GUI - INFO - 재연결 시도 중... (3/3회)
+2025-06-13 00:08:00,180 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (3/3회)
+2025-06-13 00:08:00,181 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 00:08:00,181 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 00:08:03,180 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 00:08:03,180 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 00:08:03,180 - ATC_GUI - ERROR - 연결 타임아웃 (시도 3/3회)
+2025-06-13 00:08:03,181 - ATC_GUI - INFO - 최대 연결 시도 횟수(3회) 초과. 6초 후 재시도
+2025-06-13 00:56:48,820 - ATC_GUI - INFO - 지도 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 00:56:48,820 - ATC_GUI - INFO - 마커 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/bird.png
+2025-06-13 00:56:48,847 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 00:56:48,847 - ATC_GUI - INFO - 지도 이미지 크기: 960x720
+2025-06-13 00:56:48,847 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 00:56:48,852 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 00:56:48,860 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 00:56:48,861 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 00:56:48,861 - ATC_GUI - INFO - UDP 서버 연결 성공: 192.168.0.8:5100
+2025-06-13 00:56:48,863 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 00:56:48,863 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 00:56:48,869 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 00:56:48,915 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 00:56:48,917 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 00:56:48,921 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 00:56:48,924 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 00:56:49,864 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 00:56:49,864 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 00:56:49,866 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 00:56:52,714 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 00:56:52,715 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 00:56:52,715 - ATC_GUI - ERROR - 연결 타임아웃 (시도 1/3회)
+2025-06-13 00:56:52,716 - ATC_GUI - INFO - 연결 상태 변경: 연결 오류: 연결 타임아웃 (시도 1/3회)
+2025-06-13 00:56:55,682 - ATC_GUI - INFO - 재연결 시도 중... (2/3회)
+2025-06-13 00:56:55,683 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (2/3회)
+2025-06-13 00:56:55,683 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 00:56:55,684 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 00:56:58,681 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 00:56:58,681 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 00:56:58,681 - ATC_GUI - ERROR - 연결 타임아웃 (시도 2/3회)
+2025-06-13 00:56:58,682 - ATC_GUI - INFO - 연결 상태 변경: 연결 오류: 연결 타임아웃 (시도 2/3회)
+2025-06-13 00:57:01,680 - ATC_GUI - INFO - 재연결 시도 중... (3/3회)
+2025-06-13 00:57:01,681 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (3/3회)
+2025-06-13 00:57:01,681 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 00:57:01,681 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 00:58:42,335 - ATC_GUI - INFO - 지도 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 00:58:42,336 - ATC_GUI - INFO - 마커 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/bird.png
+2025-06-13 00:58:42,354 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 00:58:42,355 - ATC_GUI - INFO - 지도 이미지 크기: 960x720
+2025-06-13 00:58:42,355 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 00:58:42,356 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 00:58:42,359 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 00:58:42,360 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 00:58:42,360 - ATC_GUI - INFO - UDP 서버 연결 성공: 192.168.0.8:5100
+2025-06-13 00:58:42,361 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 00:58:42,362 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 00:58:42,368 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 00:58:42,403 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 00:58:42,405 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 00:58:42,409 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 00:58:42,413 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 00:58:43,362 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 00:58:43,362 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 00:58:43,363 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 00:58:46,212 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 00:58:46,213 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 00:58:46,214 - ATC_GUI - ERROR - 연결 타임아웃 (시도 1/3회)
+2025-06-13 00:58:46,215 - ATC_GUI - INFO - 연결 상태 변경: 연결 오류: 연결 타임아웃 (시도 1/3회)
+2025-06-13 00:58:49,181 - ATC_GUI - INFO - 재연결 시도 중... (2/3회)
+2025-06-13 00:58:49,181 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (2/3회)
+2025-06-13 00:58:49,182 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 00:58:49,184 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 00:58:52,180 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 00:58:52,181 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 00:58:52,182 - ATC_GUI - ERROR - 연결 타임아웃 (시도 2/3회)
+2025-06-13 00:58:52,182 - ATC_GUI - INFO - 연결 상태 변경: 연결 오류: 연결 타임아웃 (시도 2/3회)
+2025-06-13 00:58:55,181 - ATC_GUI - INFO - 재연결 시도 중... (3/3회)
+2025-06-13 00:58:55,182 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (3/3회)
+2025-06-13 00:58:55,182 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 00:58:55,183 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 00:58:58,180 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 00:58:58,180 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 00:58:58,181 - ATC_GUI - ERROR - 연결 타임아웃 (시도 3/3회)
+2025-06-13 00:58:58,181 - ATC_GUI - INFO - 연결 상태 변경: 연결 오류: 연결 타임아웃 (시도 3/3회)
+2025-06-13 00:58:58,182 - ATC_GUI - INFO - 최대 연결 시도 횟수(3회) 초과. 6초 후 재시도
+2025-06-13 00:59:04,182 - ATC_GUI - ERROR - 최대 연결 시도 횟수(3회) 초과. 연결을 포기합니다.
+2025-06-13 00:59:52,099 - ATC_GUI - INFO - 지도 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 00:59:52,100 - ATC_GUI - INFO - 마커 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/bird.png
+2025-06-13 00:59:52,117 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 00:59:52,117 - ATC_GUI - INFO - 지도 이미지 크기: 960x720
+2025-06-13 00:59:52,117 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 00:59:52,119 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 00:59:52,122 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 00:59:52,122 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 00:59:52,122 - ATC_GUI - INFO - UDP 서버 연결 성공: 192.168.0.8:5100
+2025-06-13 00:59:52,123 - ATC_GUI - INFO - UDP 연결 상태 변경: UDP 서버에 연결되었습니다.
+2025-06-13 00:59:52,123 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 00:59:52,123 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 00:59:52,126 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 00:59:52,165 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 00:59:52,169 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 00:59:52,175 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 00:59:52,188 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 00:59:53,124 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 00:59:53,124 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 00:59:53,124 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 00:59:56,180 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 00:59:56,180 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 00:59:56,181 - ATC_GUI - ERROR - 연결 타임아웃 (시도 1/3회)
+2025-06-13 00:59:56,181 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 타임아웃 (시도 1/3회)
+2025-06-13 00:59:59,181 - ATC_GUI - INFO - 재연결 시도 중... (2/3회)
+2025-06-13 00:59:59,181 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (2/3회)
+2025-06-13 00:59:59,181 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 00:59:59,181 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 01:00:02,181 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 01:00:02,181 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 01:00:02,181 - ATC_GUI - ERROR - 연결 타임아웃 (시도 2/3회)
+2025-06-13 01:00:02,181 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 타임아웃 (시도 2/3회)
+2025-06-13 01:00:05,182 - ATC_GUI - INFO - 재연결 시도 중... (3/3회)
+2025-06-13 01:00:05,182 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (3/3회)
+2025-06-13 01:00:05,182 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 01:00:05,182 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 01:00:08,180 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 01:00:08,180 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 01:00:08,180 - ATC_GUI - ERROR - 연결 타임아웃 (시도 3/3회)
+2025-06-13 01:00:08,181 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 타임아웃 (시도 3/3회)
+2025-06-13 01:00:08,181 - ATC_GUI - INFO - 최대 연결 시도 횟수(3회) 초과. 6초 후 재시도
+2025-06-13 01:00:14,181 - ATC_GUI - ERROR - 최대 연결 시도 횟수(3회) 초과. 연결을 포기합니다.
+2025-06-13 01:00:51,726 - ATC_GUI - INFO - 지도 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 01:00:51,727 - ATC_GUI - INFO - 마커 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/bird.png
+2025-06-13 01:00:51,743 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 01:00:51,743 - ATC_GUI - INFO - 지도 이미지 크기: 960x720
+2025-06-13 01:00:51,743 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:00:51,745 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:00:51,748 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 01:00:51,748 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 01:00:51,749 - ATC_GUI - INFO - UDP 서버 연결 성공: 192.168.0.8:5100
+2025-06-13 01:00:51,749 - ATC_GUI - INFO - UDP 연결 상태 변경: UDP 서버에 연결되었습니다.
+2025-06-13 01:00:51,749 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 01:00:51,750 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 01:00:51,752 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 01:00:51,781 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:00:51,783 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:00:51,788 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 01:00:51,791 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 01:00:52,750 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 01:00:52,750 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 01:00:52,750 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 01:00:55,682 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 01:00:55,683 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 01:00:55,683 - ATC_GUI - ERROR - 연결 타임아웃 (시도 1/3회)
+2025-06-13 01:00:55,683 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 타임아웃 (시도 1/3회)
+2025-06-13 01:00:58,683 - ATC_GUI - INFO - 재연결 시도 중... (2/3회)
+2025-06-13 01:00:58,683 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (2/3회)
+2025-06-13 01:00:58,684 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 01:00:58,684 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 01:01:01,683 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 01:01:01,683 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 01:01:01,683 - ATC_GUI - ERROR - 연결 타임아웃 (시도 2/3회)
+2025-06-13 01:01:01,684 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 타임아웃 (시도 2/3회)
+2025-06-13 01:01:04,680 - ATC_GUI - INFO - 재연결 시도 중... (3/3회)
+2025-06-13 01:01:04,681 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (3/3회)
+2025-06-13 01:01:04,681 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 01:01:04,682 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 01:02:08,352 - ATC_GUI - INFO - 지도 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 01:02:08,352 - ATC_GUI - INFO - 마커 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/bird.png
+2025-06-13 01:02:08,369 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 01:02:08,369 - ATC_GUI - INFO - 지도 이미지 크기: 960x720
+2025-06-13 01:02:08,370 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:02:08,372 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:02:08,375 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 01:02:08,376 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 01:02:08,376 - ATC_GUI - INFO - UDP 서버 연결 성공: 192.168.0.8:5100
+2025-06-13 01:02:08,376 - ATC_GUI - INFO - UDP 연결 상태 변경: UDP 서버에 연결되었습니다.
+2025-06-13 01:02:08,377 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 01:02:08,377 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 01:02:08,380 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 01:02:08,410 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:02:08,412 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:02:08,417 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 01:02:08,420 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 01:02:09,378 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 01:02:09,379 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 01:02:09,379 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 01:02:12,232 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 01:02:12,232 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 01:02:12,232 - ATC_GUI - ERROR - 연결 타임아웃 (시도 1/3회)
+2025-06-13 01:02:12,233 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 타임아웃 (시도 1/3회)
+2025-06-13 01:02:15,184 - ATC_GUI - INFO - 재연결 시도 중... (2/3회)
+2025-06-13 01:02:15,184 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (2/3회)
+2025-06-13 01:02:15,184 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 01:02:15,185 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 01:02:18,181 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 01:02:18,181 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 01:02:18,181 - ATC_GUI - ERROR - 연결 타임아웃 (시도 2/3회)
+2025-06-13 01:02:18,182 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 타임아웃 (시도 2/3회)
+2025-06-13 01:05:09,597 - ATC_GUI - INFO - 지도 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 01:05:09,598 - ATC_GUI - INFO - 마커 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/bird.png
+2025-06-13 01:05:09,621 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 01:05:09,622 - ATC_GUI - INFO - 지도 이미지 크기: 960x720
+2025-06-13 01:05:09,622 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:05:09,624 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:05:09,628 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 01:05:09,628 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 01:05:09,629 - ATC_GUI - INFO - UDP 서버 연결 성공: 192.168.0.8:5100
+2025-06-13 01:05:09,629 - ATC_GUI - INFO - UDP 연결 상태 변경: UDP 서버에 연결되었습니다.
+2025-06-13 01:05:09,630 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 01:05:09,630 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 01:05:09,634 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 01:05:09,668 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:05:09,671 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:05:09,676 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 01:05:09,679 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 01:05:10,630 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 01:05:10,631 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 01:05:10,631 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 01:05:13,680 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 01:05:13,680 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 01:05:13,680 - ATC_GUI - ERROR - 연결 타임아웃 (시도 1/3회)
+2025-06-13 01:05:13,681 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 타임아웃 (시도 1/3회)
+2025-06-13 01:06:45,213 - ATC_GUI - INFO - 지도 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 01:06:45,214 - ATC_GUI - INFO - 마커 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/bird.png
+2025-06-13 01:06:45,235 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 01:06:45,236 - ATC_GUI - INFO - 지도 이미지 크기: 960x720
+2025-06-13 01:06:45,236 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:06:45,239 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:06:45,244 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 01:06:45,244 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 01:06:45,246 - ATC_GUI - INFO - UDP 서버 연결 성공: 192.168.0.8:5100
+2025-06-13 01:06:45,246 - ATC_GUI - INFO - UDP 연결 상태 변경: UDP 서버에 연결되었습니다.
+2025-06-13 01:06:45,247 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 01:06:45,247 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 01:06:45,252 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 01:06:45,290 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:06:45,293 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:06:45,299 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 01:06:45,304 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 01:06:46,248 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 01:06:46,248 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 01:06:46,249 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 01:07:24,812 - ATC_GUI - INFO - 지도 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 01:07:24,812 - ATC_GUI - INFO - 마커 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/bird.png
+2025-06-13 01:07:24,830 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 01:07:24,831 - ATC_GUI - INFO - 지도 이미지 크기: 960x720
+2025-06-13 01:07:24,831 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:07:24,833 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:07:24,837 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 01:07:24,837 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 01:07:24,838 - ATC_GUI - INFO - UDP 서버 연결 성공: 192.168.0.8:5100
+2025-06-13 01:07:24,838 - ATC_GUI - INFO - UDP 연결 상태 변경: UDP 서버에 연결되었습니다.
+2025-06-13 01:07:24,838 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 01:07:24,839 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 01:07:24,842 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 01:07:24,873 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:07:24,875 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:07:24,879 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 01:07:24,882 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 01:07:25,840 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 01:07:25,840 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 01:07:25,840 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 01:08:06,534 - ATC_GUI - INFO - 지도 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 01:08:06,534 - ATC_GUI - INFO - 마커 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/bird.png
+2025-06-13 01:08:06,555 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 01:08:06,555 - ATC_GUI - INFO - 지도 이미지 크기: 960x720
+2025-06-13 01:08:06,555 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:08:06,557 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:08:06,562 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 01:08:06,563 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 01:08:06,563 - ATC_GUI - INFO - UDP 서버 연결 성공: 192.168.0.8:5100
+2025-06-13 01:08:06,564 - ATC_GUI - INFO - UDP 연결 상태 변경: UDP 서버에 연결되었습니다.
+2025-06-13 01:08:06,564 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 01:08:06,564 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 01:08:06,568 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 01:08:06,598 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:08:06,600 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:08:06,603 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 01:08:06,606 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 01:08:07,565 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 01:08:07,565 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 01:08:07,565 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 01:08:10,684 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 01:08:10,684 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 01:08:10,685 - ATC_GUI - ERROR - 연결 타임아웃 (시도 1/3회)
+2025-06-13 01:08:10,685 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 타임아웃 (시도 1/3회)
+2025-06-13 01:08:13,680 - ATC_GUI - INFO - 재연결 시도 중... (2/3회)
+2025-06-13 01:08:13,681 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (2/3회)
+2025-06-13 01:08:13,681 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 01:08:13,682 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 01:08:16,681 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 01:08:16,681 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 01:08:16,681 - ATC_GUI - ERROR - 연결 타임아웃 (시도 2/3회)
+2025-06-13 01:08:16,682 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 타임아웃 (시도 2/3회)
+2025-06-13 01:14:10,718 - ATC_GUI - INFO - 지도 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 01:14:10,718 - ATC_GUI - INFO - 마커 이미지 파일 확인됨: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/bird.png
+2025-06-13 01:14:10,735 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map_crop.png
+2025-06-13 01:14:10,735 - ATC_GUI - INFO - 지도 이미지 크기: 960x720
+2025-06-13 01:14:10,736 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:14:10,738 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:14:10,742 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 01:14:10,742 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 01:14:10,743 - ATC_GUI - INFO - UDP 포트 바인딩 성공: 5100 (데이터 수신 대기 중)
+2025-06-13 01:14:10,744 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 01:14:10,744 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 01:14:10,747 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 01:14:10,778 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:14:10,781 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:14:10,786 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 01:14:10,789 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 01:14:11,744 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 01:14:11,745 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 01:14:11,745 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 01:14:14,682 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 01:14:14,682 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 01:14:14,683 - ATC_GUI - ERROR - 연결 타임아웃 (시도 1/3회)
+2025-06-13 01:14:14,683 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 타임아웃 (시도 1/3회)
+2025-06-13 01:18:49,963 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:18:49,965 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:18:49,968 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 01:18:49,968 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 01:18:49,968 - ATC_GUI - INFO - UDP 포트 바인딩 성공: 5100 (데이터 수신 대기 중)
+2025-06-13 01:18:49,968 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 01:18:49,969 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 01:18:49,971 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 01:18:50,000 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:18:50,002 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:18:50,007 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 01:18:50,010 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 01:18:50,970 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 01:18:50,970 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 01:18:50,970 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 01:19:10,012 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:19:10,014 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:19:10,016 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 01:19:10,016 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 01:19:10,017 - ATC_GUI - INFO - UDP 포트 바인딩 성공: 5100 (데이터 수신 대기 중)
+2025-06-13 01:19:10,017 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 01:19:10,017 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 01:19:10,020 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 01:19:10,057 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 01:19:10,059 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 01:19:10,062 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 01:19:10,064 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 01:19:11,018 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 01:19:11,018 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 01:19:11,019 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 01:19:14,170 - ATC_GUI - WARNING - 연결 타임아웃 (3초)
+2025-06-13 01:19:14,170 - ATC_GUI - DEBUG - 현재 소켓 상태: 연결 중
+2025-06-13 01:19:14,171 - ATC_GUI - ERROR - 연결 타임아웃 (시도 1/3회)
+2025-06-13 01:19:14,171 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 타임아웃 (시도 1/3회)
+2025-06-13 15:47:07,701 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 15:47:07,702 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 15:47:07,706 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 15:47:07,706 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 15:47:07,706 - ATC_GUI - INFO - UDP 포트 바인딩 성공: 5100 (데이터 수신 대기 중)
+2025-06-13 15:47:07,707 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 15:47:07,707 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 15:47:07,709 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 15:47:07,725 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 15:47:07,726 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 15:47:07,728 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 15:47:07,730 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 15:47:08,718 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 15:47:08,718 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 15:47:08,719 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 15:47:08,809 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-13 15:47:08,809 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 1/3회)
+2025-06-13 15:47:08,809 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 1/3회)
+2025-06-13 15:47:11,960 - ATC_GUI - INFO - 재연결 시도 중... (2/3회)
+2025-06-13 15:47:11,960 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (2/3회)
+2025-06-13 15:47:11,961 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 15:47:11,961 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 15:47:11,984 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-13 15:47:11,984 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 2/3회)
+2025-06-13 15:47:11,984 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 2/3회)
+2025-06-13 15:47:15,041 - ATC_GUI - INFO - 재연결 시도 중... (3/3회)
+2025-06-13 15:47:15,041 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (3/3회)
+2025-06-13 15:47:15,041 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 15:47:15,041 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 15:47:15,181 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-13 15:47:15,182 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 3/3회)
+2025-06-13 15:47:15,182 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 3/3회)
+2025-06-13 15:47:15,182 - ATC_GUI - INFO - 최대 연결 시도 횟수(3회) 초과. 6초 후 재시도
+2025-06-13 15:47:21,041 - ATC_GUI - ERROR - 최대 연결 시도 횟수(3회) 초과. 연결을 포기합니다.
+2025-06-13 15:47:40,394 - ATC_GUI - INFO - CCTV 보기: 1
+2025-06-13 15:47:40,395 - ATC_GUI - ERROR - 연결되지 않은 상태에서 CCTV A 요청 실패
+2025-06-13 15:48:10,554 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 15:48:10,555 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 15:48:10,556 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 15:48:10,556 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 15:48:10,556 - ATC_GUI - INFO - UDP 포트 바인딩 성공: 5100 (데이터 수신 대기 중)
+2025-06-13 15:48:10,556 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 15:48:10,557 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 15:48:10,558 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 15:48:10,576 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 15:48:10,578 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 15:48:10,581 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 15:48:10,582 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 15:48:11,557 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 15:48:11,558 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 15:48:11,558 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 15:48:11,582 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-13 15:48:11,582 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 1/3회)
+2025-06-13 15:48:11,583 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 1/3회)
+2025-06-13 15:48:49,047 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 15:48:49,048 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 15:48:49,050 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 15:48:49,050 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 15:48:49,050 - ATC_GUI - INFO - UDP 포트 바인딩 성공: 5100 (데이터 수신 대기 중)
+2025-06-13 15:48:49,050 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 15:48:49,050 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 15:48:49,052 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 15:48:49,071 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 15:48:49,072 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 15:48:49,074 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 15:48:49,076 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 15:48:50,052 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 15:48:50,052 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 15:48:50,052 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 15:48:50,172 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-13 15:48:50,172 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 1/3회)
+2025-06-13 15:48:50,172 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 1/3회)
+2025-06-13 15:48:53,041 - ATC_GUI - INFO - 재연결 시도 중... (2/3회)
+2025-06-13 15:48:53,041 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (2/3회)
+2025-06-13 15:48:53,041 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 15:48:53,041 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 15:48:53,062 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-13 15:48:53,062 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 2/3회)
+2025-06-13 15:48:53,062 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 2/3회)
+2025-06-13 15:49:08,006 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 15:49:08,007 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 15:49:08,009 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 15:49:08,009 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 15:49:08,009 - ATC_GUI - INFO - UDP 포트 바인딩 성공: 5100 (데이터 수신 대기 중)
+2025-06-13 15:49:08,009 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 15:49:08,009 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 15:49:08,011 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 15:49:08,029 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 15:49:08,030 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 15:49:08,034 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 15:49:08,035 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 15:49:09,011 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 15:49:09,011 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 15:49:09,011 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 15:49:09,111 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-13 15:49:09,111 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 1/3회)
+2025-06-13 15:49:09,111 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 1/3회)
+2025-06-13 15:49:12,041 - ATC_GUI - INFO - 재연결 시도 중... (2/3회)
+2025-06-13 15:49:12,041 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (2/3회)
+2025-06-13 15:49:12,042 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 15:49:12,043 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 15:49:12,085 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-13 15:49:12,086 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 2/3회)
+2025-06-13 15:49:12,086 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 2/3회)
+2025-06-13 15:50:23,161 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 15:50:23,162 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 15:50:23,164 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 15:50:23,164 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 15:50:23,164 - ATC_GUI - INFO - UDP 포트 바인딩 성공: 5100 (데이터 수신 대기 중)
+2025-06-13 15:50:23,164 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 15:50:23,164 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 15:50:23,166 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 15:50:23,184 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 15:50:23,185 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 15:50:23,188 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 15:50:23,189 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 15:50:24,165 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 15:50:24,166 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 15:50:24,166 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 15:50:24,225 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-13 15:50:24,225 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 1/3회)
+2025-06-13 15:50:24,225 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 1/3회)
+2025-06-13 16:06:27,506 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 16:06:27,507 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 16:06:27,508 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 16:06:27,508 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 16:06:27,508 - ATC_GUI - INFO - UDP 포트 바인딩 성공: 5100 (데이터 수신 대기 중)
+2025-06-13 16:06:27,509 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 16:06:27,509 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 16:06:27,510 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 16:06:27,525 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 16:06:27,525 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 16:06:27,528 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 16:06:27,529 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 16:06:28,510 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 16:06:28,511 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 16:06:28,512 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 16:06:28,710 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-13 16:06:28,710 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 1/3회)
+2025-06-13 16:06:28,710 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 1/3회)
+2025-06-13 16:06:31,561 - ATC_GUI - INFO - 재연결 시도 중... (2/3회)
+2025-06-13 16:06:31,561 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (2/3회)
+2025-06-13 16:06:31,562 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 16:06:31,562 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 16:06:31,666 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-13 16:06:31,667 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 2/3회)
+2025-06-13 16:06:31,668 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 2/3회)
+2025-06-13 16:06:34,541 - ATC_GUI - INFO - 재연결 시도 중... (3/3회)
+2025-06-13 16:06:34,541 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (3/3회)
+2025-06-13 16:06:34,541 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 16:06:34,542 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 16:06:34,635 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-13 16:06:34,635 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 3/3회)
+2025-06-13 16:06:34,635 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 3/3회)
+2025-06-13 16:06:34,635 - ATC_GUI - INFO - 최대 연결 시도 횟수(3회) 초과. 6초 후 재시도
+2025-06-13 16:06:40,936 - ATC_GUI - ERROR - 최대 연결 시도 횟수(3회) 초과. 연결을 포기합니다.
+2025-06-13 16:06:49,963 - ATC_GUI - INFO - CCTV 보기: 1
+2025-06-13 16:06:49,963 - ATC_GUI - ERROR - 연결되지 않은 상태에서 CCTV A 요청 실패
+2025-06-13 16:08:45,528 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 16:08:45,529 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 16:08:45,530 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 16:08:45,530 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:5100
+2025-06-13 16:08:45,530 - ATC_GUI - INFO - UDP 포트 바인딩 성공: 5100 (데이터 수신 대기 중)
+2025-06-13 16:08:45,531 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 16:08:45,531 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 16:08:45,532 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 16:08:45,549 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 16:08:45,550 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 16:08:45,553 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 16:08:45,555 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 16:08:46,532 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (1/3회)
+2025-06-13 16:08:46,532 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 16:08:46,533 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 16:08:46,689 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-13 16:08:46,689 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 1/3회)
+2025-06-13 16:08:46,689 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 1/3회)
+2025-06-13 16:08:49,543 - ATC_GUI - INFO - 재연결 시도 중... (2/3회)
+2025-06-13 16:08:49,543 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (2/3회)
+2025-06-13 16:08:49,544 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 16:08:49,544 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 16:08:49,603 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-13 16:08:49,603 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 2/3회)
+2025-06-13 16:08:49,603 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 2/3회)
+2025-06-13 16:08:52,541 - ATC_GUI - INFO - 재연결 시도 중... (3/3회)
+2025-06-13 16:08:52,542 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:4100 (3/3회)
+2025-06-13 16:08:52,542 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 16:08:52,542 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 16:08:52,673 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-13 16:08:52,674 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 3/3회)
+2025-06-13 16:08:52,674 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 3/3회)
+2025-06-13 16:08:52,675 - ATC_GUI - INFO - 최대 연결 시도 횟수(3회) 초과. 6초 후 재시도
+2025-06-13 16:08:58,976 - ATC_GUI - ERROR - 최대 연결 시도 횟수(3회) 초과. 연결을 포기합니다.
+2025-06-13 16:09:02,692 - ATC_GUI - INFO - CCTV 보기: 1
+2025-06-13 16:09:02,693 - ATC_GUI - ERROR - 연결되지 않은 상태에서 CCTV A 요청 실패
+2025-06-13 16:09:05,660 - ATC_GUI - INFO - 지도 보기
+2025-06-13 16:09:05,762 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 16:09:05,765 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 16:10:23,204 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 16:10:23,205 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 16:10:23,206 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 16:10:23,206 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:4100
+2025-06-13 16:10:23,207 - ATC_GUI - INFO - UDP 포트 바인딩 성공: 4100 (데이터 수신 대기 중)
+2025-06-13 16:10:23,207 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 16:10:23,207 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 16:10:23,209 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 16:10:23,226 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 16:10:23,227 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 16:10:23,230 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 16:10:23,232 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 16:10:24,209 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:5100 (1/3회)
+2025-06-13 16:10:24,209 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 16:10:24,210 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 16:10:24,224 - ATC_GUI - INFO - TCP 서버 연결 성공: 192.168.0.8:5100
+2025-06-13 16:10:24,225 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 서버에 연결되었습니다.
+2025-06-13 16:10:31,419 - ATC_GUI - INFO - CCTV 보기: 1
+2025-06-13 16:10:31,420 - ATC_GUI - ERROR - CCTV A 요청 생성 오류: type object 'Constants' has no attribute 'MESSAGE_FORMAT'
+2025-06-13 16:11:00,435 - ATC_GUI - INFO - 지도 보기
+2025-06-13 16:11:00,537 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 16:11:00,545 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 16:11:35,763 - ATC_GUI - INFO - CCTV 보기: 1
+2025-06-13 16:11:35,764 - ATC_GUI - ERROR - CCTV A 요청 생성 오류: type object 'Constants' has no attribute 'MESSAGE_FORMAT'
+2025-06-13 16:12:30,710 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 16:12:30,711 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 16:12:30,713 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-13 16:12:30,713 - ATC_GUI - INFO - UDP 서버 연결 시도: 192.168.0.8:4100
+2025-06-13 16:12:30,713 - ATC_GUI - INFO - UDP 포트 바인딩 성공: 4100 (데이터 수신 대기 중)
+2025-06-13 16:12:30,713 - ATC_GUI - INFO - 마커 placeholder 제거됨
+2025-06-13 16:12:30,713 - ATC_GUI - INFO - 마커 오버레이 설정 완료
+2025-06-13 16:12:30,715 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-13 16:12:30,731 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-13 16:12:30,732 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-13 16:12:30,735 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-13 16:12:30,736 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-13 16:12:31,714 - ATC_GUI - INFO - TCP 서버 연결 시도: 192.168.0.8:5100 (1/3회)
+2025-06-13 16:12:31,714 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-13 16:12:31,715 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-13 16:12:31,720 - ATC_GUI - INFO - TCP 서버 연결 성공: 192.168.0.8:5100
+2025-06-13 16:12:31,721 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 서버에 연결되었습니다.

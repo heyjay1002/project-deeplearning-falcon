@@ -2,20 +2,27 @@ import logging
 import os
 from datetime import datetime
 from logging.handlers import RotatingFileHandler
+import threading
 
 class Logger:
     _instance = None
+    _lock = threading.Lock()
     _initialized = False
 
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = super(Logger, cls).__new__(cls)
+            with cls._lock:
+                # Double-checked locking
+                if cls._instance is None:
+                    cls._instance = super(Logger, cls).__new__(cls)
         return cls._instance
 
     def __init__(self):
-        if not Logger._initialized:
-            self.setup_logger()
-            Logger._initialized = True
+        if not self._initialized:
+             with self._lock:
+                if not self._initialized:
+                    self.setup_logger()
+                    self._initialized = True
 
     def setup_logger(self):
         """로거 설정"""
@@ -29,6 +36,10 @@ class Logger:
         # 로거 설정
         self.logger = logging.getLogger('ATC_GUI')
         self.logger.setLevel(logging.DEBUG)
+        
+        # 핸들러 중복 추가 방지
+        if self.logger.hasHandlers():
+            self.logger.handlers.clear()
 
         # 파일 핸들러 설정 (최대 10MB, 최대 5개 파일)
         file_handler = RotatingFileHandler(

@@ -5,11 +5,13 @@ from typing import Optional
 class ServerSettings:
     """서버 연결 설정"""
     tcp_ip: str = "192.168.0.8"
-    tcp_port: int = 4100
+    tcp_port: int = 5100
     udp_ip: str = "192.168.0.8"
-    udp_port: int = 5100
-    connection_timeout: int = 5
-    reconnect_interval: int = 3
+    udp_port: int = 4100
+    connection_timeout: int = 3  # 초 단위
+    reconnect_interval: int = 3  # 초 단위
+    max_reconnect_attempts: int = 3  # 최대 재연결 시도 횟수
+    reconnect_backoff_factor: int = 2  # 재연결 간격 증가 배수
     tcp_buffer_size: int = 4096
     udp_buffer_size: int = 65536
     video_fps: int = 30  # 비디오 프레임 레이트
