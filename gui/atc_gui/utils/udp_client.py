@@ -48,9 +48,10 @@ class UdpClient(QObject):
             server_address = (self.settings.server.udp_ip, self.settings.server.udp_port)
             logger.info(f"UDP 서버 연결 시도: {server_address[0]}:{server_address[1]}")
             
-            # UDP는 연결이 필요 없으므로 바로 바인딩
-            self.socket.bind(('0.0.0.0', 0))  # 임의의 포트에 바인딩
-            logger.info(f"UDP 포트 바인딩 성공: {self.socket.getsockname()[1]}")
+            # 서버가 영상을 보내는 포트에서 수신 대기하도록 명시적으로 바인딩
+            listen_address = ('0.0.0.0', self.settings.server.udp_port)
+            self.socket.bind(listen_address)
+            logger.info(f"UDP 포트 바인딩 성공: {listen_address[1]}:{listen_address[1]}")
             
             # 서버 주소 설정
             self.server_address = server_address

@@ -283,10 +283,12 @@ class TcpClient(QObject):
 
     def _handle_cctv_a_response(self, data: str):
         """CCTV A 응답 처리"""
+        logger.info(f"CCTV A 응답 수신: {data}")
         self.cctv_a_response.emit(data)
 
     def _handle_cctv_b_response(self, data: str):
         """CCTV B 응답 처리"""
+        logger.info(f"CCTV B 응답 수신: {data}")
         self.cctv_b_response.emit(data)
 
     def _handle_map_response(self, data: str):
