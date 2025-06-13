@@ -15,6 +15,7 @@ class ServerSettings:
     tcp_buffer_size: int = 4096
     udp_buffer_size: int = 65536
     video_fps: int = 30  # 비디오 프레임 레이트
+    object_detection_fps: int = 10  # 객체 감지 업데이트 주기 (FPS)
 
 @dataclass
 class AlertSettings:
@@ -27,6 +28,10 @@ class DataSettings:
     """데이터 처리 설정"""
     refresh_interval: int = 100  # 데이터 수신 주기 (밀리초)
     video_buffer_size: int = 10  # 비디오 프레임 버퍼 크기
+    object_update_interval: int = 100  # 객체 업데이트 처리 주기 (밀리초)
+    object_update_threshold: int = 5  # 객체 업데이트 임계값 (개수)
+    object_update_force_threshold: int = 10  # 강제 업데이트 임계값 (개수)
+    object_update_min_interval: float = 0.2  # 최소 업데이트 간격 (초)
 
 @dataclass
 class LogSettings:
@@ -44,6 +49,7 @@ class DebugSettings:
     sample_data_interval: int = 2  # 샘플 데이터 생성 간격 (초)
     network_debug: bool = True
     video_debug: bool = True  # 비디오 디버그 모드
+    object_update_debug: bool = True  # 객체 업데이트 디버그 모드
 
 class Settings:
     """설정 관리 클래스"""

@@ -68,9 +68,14 @@ class DetectedObject:
         return self.object_type == ObjectType.VEHICLE
 
     @property
-    def is_fallen_person(self) -> bool:
-        """쓰러진 사람 객체 여부 확인"""
-        return self.object_type == ObjectType.FALLEN_PERSON
+    def is_work_person(self) -> bool:
+        """작업자 객체 여부 확인"""
+        return self.object_type == ObjectType.WORK_PERSON
+
+    @property
+    def is_work_vehicle(self) -> bool:
+        """작업차량 객체 여부 확인"""
+        return self.object_type == ObjectType.WORK_VEHICLE
 
     def to_dict(self) -> Dict[str, Any]:
         """객체 정보를 딕셔너리로 변환"""

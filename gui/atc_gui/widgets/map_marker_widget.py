@@ -13,6 +13,11 @@ class MarkerType(Enum):
     AIRCRAFT = "aircraft"
     VEHICLE = "vehicle"
     DEBRIS = "debris"
+    PERSON = "person"
+    ANIMAL = "animal"
+    FIRE = "fire"
+    WORK_PERSON = "work_person"
+    WORK_VEHICLE = "work_vehicle"
     UNKNOWN = "unknown"
 
 class MarkerState(Enum):

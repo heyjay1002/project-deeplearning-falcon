@@ -113,8 +113,8 @@ class TcpClient(QObject):
                 logger.warning("정상적인 연결 해제 실패, 강제 종료")
 
     def is_connected(self) -> bool:
-        """연결 상태 확인"""
-        return self.socket.state() == QTcpSocket.SocketState.ConnectedState
+        """TCP 연결 상태 확인"""
+        return self.socket and self.socket.state() == QTcpSocket.SocketState.ConnectedState
 
     def get_connection_state(self) -> str:
         """현재 연결 상태 문자열 반환"""

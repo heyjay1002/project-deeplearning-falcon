@@ -3,10 +3,12 @@ from PyQt6 import uic
 from PyQt6.QtGui import QPixmap, QColor, QImage
 from PyQt6.QtCore import Qt, QTimer, pyqtSignal
 import os
+from datetime import datetime
 from views.object_detail_dialog import ObjectDetailDialog
 from views.object_detection_dialog import ObjectDetectionDialog
 from models.detected_object import DetectedObject
 from config import BirdRiskLevel, RunwayRiskLevel, Constants, ObjectType, AirportZone
+from config.settings import Settings
 from utils.network_manager import NetworkManager
 from widgets.map_marker_widget import MapMarkerWidget, MarkerData, MarkerType, MarkerState
 from utils.logger import logger
@@ -19,6 +21,9 @@ class MainPage(QWidget):
         super().__init__(parent)
         ui_path = os.path.join(os.path.dirname(__file__), '../ui/main_page.ui')
         uic.loadUi(ui_path, self)
+
+        # 설정 로드
+        self.settings = Settings.get_instance()
 
         # 이미지 경로 설정 및 검증
         self.setup_image_paths()
@@ -43,6 +48,13 @@ class MainPage(QWidget):
 
         # 첫 객체 감지 여부를 추적하는 변수
         self.is_first_detection = True
+
+        # 객체 업데이트 최적화를 위한 변수들
+        self.pending_objects = []  # 대기 중인 객체 목록
+        self.last_update_time = 0  # 마지막 업데이트 시간
+        self.update_timer = QTimer(self)  # 업데이트 타이머
+        self.update_timer.timeout.connect(self.process_pending_updates)
+        self.update_timer.start(self.settings.data.object_update_interval)  # 설정된 간격으로 업데이트 처리
 
         # 스택 위젯 초기 상태 설정
         self.map_cctv_stack.setCurrentIndex(0)  # 지도 페이지로 시작
@@ -120,12 +132,30 @@ class MainPage(QWidget):
     def update_tcp_connection_status(self, is_connected: bool, message: str):
         """TCP 연결 상태 UI 업데이트"""
         logger.info(f"TCP 연결 상태 변경: {message}")
-        # 부모 윈도우의 상태바 업데이트 (메인 윈도우에서 처리)
+        # 상태바 업데이트
+        if hasattr(self.parent(), 'statusBar'):
+            self.parent().statusBar().showMessage(f"TCP: {message}")
+            # 연결 상태에 따라 색상 변경
+            if is_connected:
+                self.parent().statusBar().setStyleSheet("color: green;")
+            else:
+                self.parent().statusBar().setStyleSheet("color: red;")
 
     def update_udp_connection_status(self, is_connected: bool, message: str):
         """UDP 연결 상태 UI 업데이트"""
         logger.info(f"UDP 연결 상태 변경: {message}")
-        # 부모 윈도우의 상태바 업데이트 (메인 윈도우에서 처리)
+        # 상태바 업데이트
+        if hasattr(self.parent(), 'statusBar'):
+            # 현재 TCP 상태 메시지 유지하면서 UDP 상태 추가
+            current_tcp_status = self.parent().statusBar().currentMessage().split(" | ")[0] if " | " in self.parent().statusBar().currentMessage() else ""
+            new_status = f"{current_tcp_status} | UDP: {message}"
+            self.parent().statusBar().showMessage(new_status)
+            
+            # 연결 상태에 따라 색상 변경
+            if is_connected:
+                self.parent().statusBar().setStyleSheet("color: green;")
+            else:
+                self.parent().statusBar().setStyleSheet("color: red;")
 
     def setup_marker_overlay(self):
         """마커 오버레이 설정"""
@@ -163,8 +193,38 @@ class MainPage(QWidget):
         self.object_area.addWidget(self.object_detail_dialog)
         self.object_detail_dialog.btn_back.clicked.connect(self.show_table)
 
-    def update_object_list(self, objects: list[DetectedObject]):
-        """객체 목록 업데이트"""
+    def process_pending_updates(self):
+        """대기 중인 객체 업데이트 처리"""
+        if not self.pending_objects:
+            return
+
+        current_time = datetime.now().timestamp()
+        # 설정된 조건에 따라 업데이트
+        if (current_time - self.last_update_time >= self.settings.data.object_update_min_interval or 
+            len(self.pending_objects) >= self.settings.data.object_update_threshold):
+            if self.settings.debug.object_update_debug:
+                logger.debug(f"객체 업데이트 처리: {len(self.pending_objects)}개 객체")
+            self._update_object_list(self.pending_objects)
+            self.pending_objects = []
+            self.last_update_time = current_time
+
+    def update_object_list(self, objects: list[DetectedObject] | DetectedObject):
+        """객체 목록 업데이트 (디바운싱 적용)"""
+        # 단일 객체인 경우 리스트로 변환
+        if isinstance(objects, DetectedObject):
+            objects = [objects]
+            
+        # 대기 중인 객체 목록에 추가
+        self.pending_objects.extend(objects)
+        
+        # 대기 중인 객체가 너무 많아지면 강제로 업데이트
+        if len(self.pending_objects) >= self.settings.data.object_update_force_threshold:
+            if self.settings.debug.object_update_debug:
+                logger.debug(f"강제 객체 업데이트: {len(self.pending_objects)}개 객체")
+            self.process_pending_updates()
+
+    def _update_object_list(self, objects: list[DetectedObject]):
+        """실제 객체 목록 업데이트 처리"""
         logger.debug(f"객체 목록 업데이트: {len(objects)}개 객체")
         self.table_object_list.setRowCount(len(objects))
         
@@ -213,11 +273,11 @@ class MainPage(QWidget):
             marker_data = self.create_marker_data_from_object(obj)
             
             if obj.object_id in existing_marker_ids:
-                # 기존 마커 업데이트 (애니메이션과 함께)
-                self.map_marker.update_marker(marker_data, animate=True)
+                # 기존 마커 업데이트
+                self.map_marker.update_marker(marker_data)
             else:
                 # 새 마커 추가
-                self.map_marker.add_marker(marker_data, animate=True)
+                self.map_marker.add_dynamic_marker(marker_data)
                 logger.debug(f"마커 추가: ID {obj.object_id}")
 
     def create_marker_data_from_object(self, obj: DetectedObject) -> MarkerData:
@@ -228,20 +288,24 @@ class MainPage(QWidget):
             ObjectType.AIRPLANE: MarkerType.AIRCRAFT,
             ObjectType.VEHICLE: MarkerType.VEHICLE,
             ObjectType.FOD: MarkerType.DEBRIS,
+            ObjectType.PERSON: MarkerType.PERSON,
+            ObjectType.ANIMAL: MarkerType.ANIMAL,
+            ObjectType.FIRE: MarkerType.FIRE,
+            ObjectType.WORK_PERSON: MarkerType.WORK_PERSON,
+            ObjectType.WORK_VEHICLE: MarkerType.WORK_VEHICLE
         }
         
-        marker_type = object_type_to_marker_type.get(obj.object_type, MarkerType.UNKNOWN)
+        # 기본 마커 상태 설정
+        marker_state = MarkerState.NORMAL
         
-        # 위험도에 따른 마커 상태 결정
-        if hasattr(obj, 'risk_level'):
-            if obj.risk_level >= 3:
+        # 위험도에 따른 마커 상태 설정
+        if obj.risk_level is not None:
+            if obj.risk_level == BirdRiskLevel.HIGH:
                 marker_state = MarkerState.DANGER
-            elif obj.risk_level >= 2:
+            elif obj.risk_level == BirdRiskLevel.MEDIUM:
                 marker_state = MarkerState.WARNING
-            else:
+            elif obj.risk_level == BirdRiskLevel.LOW:
                 marker_state = MarkerState.NORMAL
-        else:
-            marker_state = MarkerState.NORMAL
         
         # 좌표 정규화 (예: 0~100 범위를 0.0~1.0으로)
         # 실제 좌표 시스템에 맞게 조정 필요
@@ -256,7 +320,7 @@ class MainPage(QWidget):
             marker_id=obj.object_id,
             x=normalized_x,
             y=normalized_y,
-            marker_type=marker_type,
+            marker_type=object_type_to_marker_type.get(obj.object_type, MarkerType.UNKNOWN),
             state=marker_state,
             label=str(obj.object_id),
             icon_path=self.marker_icon_path if os.path.exists(self.marker_icon_path) else None,
@@ -375,6 +439,11 @@ class MainPage(QWidget):
         """지도 보기"""
         logger.info("지도 보기")
         self.map_cctv_stack.setCurrentIndex(0)
+        
+        # 서버에 지도 요청
+        if hasattr(self, 'network_manager'):
+            self.network_manager.request_map()
+        
         # 지도 표시 시 이미지 다시 업데이트
         QTimer.singleShot(100, self.update_map_image)
 

@@ -4,12 +4,13 @@ class ObjectType(Enum):
     """지상 위험 요소 타입"""
     BIRD = "조류"
     FOD = "FOD"
-    PERSON = "사람"
+    PERSON = "인간"
     ANIMAL = "동물"
     AIRPLANE = "비행기"
     FIRE = "화재"
     VEHICLE = "차량"
-    FALLEN_PERSON = "쓰러짐"
+    WORK_PERSON = "작업자"
+    WORK_VEHICLE = "작업차량"
 
 class BirdRiskLevel(Enum):
     """조류 위험도 등급"""
@@ -84,7 +85,8 @@ class Constants:
         4: ObjectType.AIRPLANE,
         5: ObjectType.FIRE,
         6: ObjectType.VEHICLE,
-        7: ObjectType.FALLEN_PERSON
+        7: ObjectType.WORK_PERSON,
+        8: ObjectType.WORK_VEHICLE
     }
     
     BIRD_RISK_MAPPING = {

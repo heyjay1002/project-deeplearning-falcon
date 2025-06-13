@@ -147,6 +147,9 @@ class WindowClass(QMainWindow):
 
     def show_object_detection_dialog(self, detected_object: DetectedObject):
         """객체 감지 다이얼로그 표시"""
+        # 팝업 기능 일시 비활성화
+        return
+        
         # 이미 처리된 객체인 경우 알림을 표시하지 않음
         if detected_object.object_id in self.processed_object_ids:
             return

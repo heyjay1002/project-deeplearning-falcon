@@ -9,24 +9,24 @@ class MessageInterface:
     """TCP 메시지 인터페이스 클래스"""
     
     @staticmethod
-    def validate_object_info(object_id: int, object_type: int, x_coord: float, 
-                           y_coord: float, zone: int, timestamp: float) -> bool:
+    def validate_object_info(object_id: int, object_type: ObjectType, x_coord: float, 
+                           y_coord: float, zone: AirportZone, timestamp: float) -> bool:
         """객체 정보 유효성 검증"""
         try:
             # ID 검증
             if not isinstance(object_id, int) or object_id < 0:
                 return False
             
-            # 타입 검증 - Constants 매핑 사용
-            if object_type not in Constants.OBJECT_CLASS_MAPPING:
+            # 타입 검증
+            if not isinstance(object_type, ObjectType):
                 return False
             
             # 좌표 검증
             if not isinstance(x_coord, (int, float)) or not isinstance(y_coord, (int, float)):
                 return False
             
-            # 구역 검증 - Constants 매핑 사용
-            if zone not in Constants.ZONE_MAPPING:
+            # 구역 검증
+            if not isinstance(zone, AirportZone):
                 return False
             
             # 타임스탬프 검증
@@ -51,7 +51,7 @@ class MessageInterface:
     @staticmethod
     def parse_object_info(object_str: str, include_image: bool = False) -> DetectedObject:
         """객체 정보 문자열 파싱"""
-        fields = object_str.split(Constants.OBJECT_FIELD_SEPARATOR)
+        fields = object_str.split(Constants.Protocol.OBJECT_FIELD_SEPARATOR)
         
         if len(fields) < 6:
             raise ValueError("Insufficient object info fields")
@@ -59,32 +59,59 @@ class MessageInterface:
         # 안전한 변환
         try:
             object_id = int(fields[0])
-            object_type_id = int(fields[1])
+            # 객체 타입 처리 (정수 또는 문자열)
+            try:
+                object_type_id = int(fields[1])
+                object_type = Constants.OBJECT_CLASS_MAPPING[object_type_id]
+            except ValueError:
+                # 문자열인 경우 대소문자 구분 없이 ObjectType enum으로 변환
+                type_str = fields[1].lower()  # 소문자로 변환
+                # 특수 케이스 처리
+                if type_str == 'car':
+                    object_type = ObjectType.VEHICLE
+                else:
+                    # ObjectType enum의 value를 소문자로 변환하여 비교
+                    for obj_type in ObjectType:
+                        if obj_type.value.lower() == type_str:
+                            object_type = obj_type
+                            break
+                    else:
+                        # 직접 enum 이름으로도 시도
+                        try:
+                            object_type = ObjectType[type_str.upper()]
+                        except KeyError:
+                            raise ValueError(f"Invalid object type: {fields[1]}")
             x_coord = float(fields[2])
             y_coord = float(fields[3])
-            zone_id = int(fields[4])
-            timestamp_val = float(fields[5])
+            # 구역 처리 (정수 또는 문자열)
+            try:
+                zone_id = int(fields[4])
+                zone = Constants.ZONE_MAPPING[zone_id]
+            except ValueError:
+                # 문자열인 경우 대소문자 구분 없이 AirportZone enum으로 변환
+                zone_str = fields[4].upper()  # 대문자로 변환
+                try:
+                    zone = AirportZone[zone_str]
+                except KeyError:
+                    raise ValueError(f"Invalid zone: {fields[4]}")
+            timestamp_val = fields[5]  # 타임스탬프를 문자열로 받음
         except (ValueError, IndexError) as e:
             raise ValueError(f"Invalid field format: {e}")
         
-        # 매핑을 통한 변환
-        if object_type_id not in Constants.OBJECT_CLASS_MAPPING:
-            raise ValueError(f"Invalid object type: {object_type_id}")
-        if zone_id not in Constants.ZONE_MAPPING:
-            raise ValueError(f"Invalid zone: {zone_id}")
-            
-        object_type = Constants.OBJECT_CLASS_MAPPING[object_type_id]
-        zone = Constants.ZONE_MAPPING[zone_id]
-        
         # 타임스탬프 변환
         try:
-            timestamp = datetime.fromtimestamp(timestamp_val)
+            # ISO 8601 형식 처리
+            if 'T' in timestamp_val:
+                timestamp = datetime.fromisoformat(timestamp_val.replace('Z', '+00:00'))
+            else:
+                # Unix timestamp 처리
+                timestamp = datetime.fromtimestamp(float(timestamp_val))
         except (ValueError, OSError) as e:
             raise ValueError(f"Invalid timestamp: {e}")
         
         # 데이터 검증
         if not MessageInterface.validate_object_info(
-            object_id, object_type_id, x_coord, y_coord, zone_id, timestamp_val
+            object_id, object_type, x_coord, y_coord, zone, timestamp.timestamp()
         ):
             raise ValueError("Invalid object info data")
         
@@ -116,10 +143,10 @@ class MessageInterface:
     @staticmethod
     def parse_message(message: str) -> tuple[MessagePrefix, str]:
         """메시지 파싱"""
-        if not message or Constants.MESSAGE_SEPARATOR not in message:
+        if not message or Constants.Protocol.MESSAGE_SEPARATOR not in message:
             raise ValueError(f"Invalid message format: {message}")
             
-        parts = message.split(Constants.MESSAGE_SEPARATOR, 1)
+        parts = message.split(Constants.Protocol.MESSAGE_SEPARATOR, 1)
         if len(parts) != 2:
             raise ValueError(f"Invalid message format: {message}")
         
@@ -138,7 +165,7 @@ class MessageInterface:
             return []
             
         objects = []
-        object_records = data.split(Constants.OBJECT_RECORD_SEPARATOR)
+        object_records = data.split(Constants.Protocol.OBJECT_RECORD_SEPARATOR)
         
         for record in object_records:
             if record.strip():
@@ -180,7 +207,7 @@ class MessageInterface:
     @staticmethod
     def create_message(prefix: MessagePrefix, **kwargs) -> str:
         """메시지 생성"""
-        format_str = Constants.MESSAGE_FORMAT[prefix]
+        format_str = Constants.Protocol.MESSAGE_FORMAT[prefix]
         return format_str.format(prefix=prefix.value, **kwargs)
 
     @staticmethod
