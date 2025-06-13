@@ -5,6 +5,7 @@ YOLO 객체 검지 서버 메인 윈도우
 
 import sys
 import cv2
+import numpy as np
 from PyQt6.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QImage, QPixmap
@@ -81,9 +82,11 @@ class MainWindow(QMainWindow):
             frame_data (dict): 처리된 프레임 데이터
                 - frame: 원본 프레임
                 - img_id: 이미지 ID
+                - cam_id: 카메라 ID
         """
         frame = frame_data['frame']
         img_id = frame_data['img_id']
+        cam_id = frame_data.get('cam_id', 'A')
         
         # 검출 결과 그리기
         frame_with_boxes = self.detection_processor.draw_detections(frame, img_id)
@@ -97,6 +100,10 @@ class MainWindow(QMainWindow):
         pixmap = QPixmap.fromImage(q_image)
         scaled_pixmap = pixmap.scaled(self.video_label.size(), Qt.AspectRatioMode.KeepAspectRatio)
         self.video_label.setPixmap(scaled_pixmap)
+
+        # Admin GUI로 박스가 그려진 프레임 송출 (UDP)
+        if hasattr(self.video_thread, 'admin_video_sender'):
+            self.video_thread.admin_video_sender.send_frame(frame_with_boxes, cam_id=cam_id)
     
     def _on_detection_processed(self, detection_data):
         """검출 처리 완료 시 호출"""

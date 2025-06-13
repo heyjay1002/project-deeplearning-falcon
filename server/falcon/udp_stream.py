@@ -68,7 +68,7 @@ class VideoCommunicator(QThread):
             self.frame_received.emit(frame_data)
             
             # Admin GUI로 프레임 전송
-            self.admin_video_sender.send_frame(frame)
+            # self.admin_video_sender.send_frame(frame)  # 원본 영상 송출 비활성화
     
     def stop(self):
         """통신 중지"""

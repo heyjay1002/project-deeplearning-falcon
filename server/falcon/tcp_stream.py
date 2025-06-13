@@ -37,7 +37,7 @@ class DetectionCommunicator(QThread):
             # 데이터 수신
             messages = self.detection_server.receive_json()
             if not messages:
-                time.sleep(0.001)  # CPU 사용량 감소
+                time.sleep(0.01)  # CPU 사용량 감소
                 continue
             
             # 메시지 처리
@@ -65,9 +65,9 @@ class DetectionCommunicator(QThread):
             }
         """
         for message in messages:
-            # 디버깅: 수신된 메시지 출력 ########################
-            print("\n[DEBUG] IDS로부터 수신된 TCP 메시지:")
-            print(message)#json.dumps(message, indent=2, ensure_ascii=False))
+            # # 디버깅: 수신된 메시지 출력 ########################
+            # print("\n[DEBUG] IDS로부터 수신된 TCP 메시지:")
+            # print(message)#json.dumps(message, indent=2, ensure_ascii=False))
             
             if not isinstance(message, dict):
                 continue
@@ -115,16 +115,21 @@ class DetectionCommunicator(QThread):
             center_x = (x1 + x2) // 2
             center_y = (y1 + y2) // 2
             
-            # GUI 메시지 형식으로 변환 (ME_OD: 제외)
+            # 기본 메시지 형식
             gui_msg = f"{det['object_id']},{det['class']},{center_x},{center_y},RWY_A,{timestamp}"
+            
+            # 사람인 경우에만 state 정보 추가
+            if det['class'] == 'person':
+                gui_msg += ",none"  # state 정보 추가
+                
             gui_messages.append(gui_msg)
         
         # 모든 메시지를 하나의 문자열로 결합하고 맨 앞에 ME_OD: 추가
         message = "ME_OD:" + ";".join(gui_messages)
         
-        # GUI로 전송
+        # GUI로 전송 (바이너리로 변환)
         try:
-            self.gui_server.send(message.encode())
+            self.gui_server.send_binary_to_client(message.encode())
         except Exception as e:
             print(f"[WARNING] GUI 전송 실패: {e}")
     
