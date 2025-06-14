@@ -4,9 +4,9 @@ from typing import Optional
 @dataclass
 class ServerSettings:
     """서버 연결 설정"""
-    tcp_ip: str = "192.168.0.29"
+    tcp_ip: str = "127.0.0.1"
     tcp_port: int = 5100
-    udp_ip: str = "192.168.0.29"
+    udp_ip: str = "127.0.0.1"
     udp_port: int = 4100
     connection_timeout: int = 3  # 초 단위
     reconnect_interval: int = 3  # 초 단위
@@ -14,20 +14,15 @@ class ServerSettings:
     reconnect_backoff_factor: int = 2  # 재연결 간격 증가 배수
     tcp_buffer_size: int = 4096
     udp_buffer_size: int = 65536
-    video_fps: int = 30  # 비디오 프레임 레이트
-    object_detection_fps: int = 10  # 객체 감지 업데이트 주기 (FPS)
 
 @dataclass
 class AlertSettings:
     """알림 설정"""
     duration: int = 5  # 알림 지속 시간 (초)
-    volume: float = 0.8  # 알림음 볼륨 (0.0 ~ 1.0)
 
 @dataclass
 class DataSettings:
     """데이터 처리 설정"""
-    refresh_interval: int = 100  # 데이터 수신 주기 (밀리초)
-    video_buffer_size: int = 10  # 비디오 프레임 버퍼 크기
     object_update_interval: int = 100  # 객체 업데이트 처리 주기 (밀리초)
     object_update_threshold: int = 5  # 객체 업데이트 임계값 (개수)
     object_update_force_threshold: int = 10  # 강제 업데이트 임계값 (개수)
@@ -40,15 +35,11 @@ class LogSettings:
     level: str = "INFO"
     max_size: int = 10  # MB
     backup_count: int = 5
-    retention_days: int = 30  # 이력 보관 기간 (일)
 
 @dataclass
 class DebugSettings:
     """개발/디버그 설정"""
     debug_mode: bool = True
-    sample_data_interval: int = 2  # 샘플 데이터 생성 간격 (초)
-    network_debug: bool = True
-    video_debug: bool = True  # 비디오 디버그 모드
     object_update_debug: bool = True  # 객체 업데이트 디버그 모드
 
 class Settings:

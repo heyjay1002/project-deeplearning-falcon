@@ -6,6 +6,7 @@ from utils.tcp_client import TcpClient
 from utils.udp_client import UdpClient
 from utils.logger import logger
 from config.settings import Settings
+import cv2
 
 class NetworkManager(QObject):
     """TCP 및 UDP 통신을 총괄하는 네트워크 관리자"""
@@ -17,8 +18,8 @@ class NetworkManager(QObject):
     runway_b_risk_changed = pyqtSignal(RunwayRiskLevel)
     object_detail_response = pyqtSignal(DetectedObject)
     object_detail_error = pyqtSignal(str)
-    frame_a_received = pyqtSignal(QImage)
-    frame_b_received = pyqtSignal(QImage)
+    frame_a_received = pyqtSignal(QImage, int)  # (프레임, 이미지ID)
+    frame_b_received = pyqtSignal(QImage, int)  # (프레임, 이미지ID)
     tcp_connection_status_changed = pyqtSignal(bool, str)
     udp_connection_status_changed = pyqtSignal(bool, str)
 
@@ -55,10 +56,9 @@ class NetworkManager(QObject):
         self.tcp_client.connection_error.connect(self._on_tcp_connection_error)
 
         # UDP 클라이언트 시그널 연결
-        self.udp_client.frame_a_received.connect(self.frame_a_received)
-        self.udp_client.frame_b_received.connect(self.frame_b_received)
+        self.udp_client.frame_received.connect(self._handle_udp_frame)
         
-        # UDP 연결 상태 시그널 연결 - 중복 제거
+        # UDP 연결 상태 시그널 연결
         self.udp_client.connection_status_changed.connect(self.udp_connection_status_changed)
 
     def start_services(self):
@@ -75,21 +75,33 @@ class NetworkManager(QObject):
 
     def _attempt_reconnect(self):
         """재연결 시도"""
-        if self.reconnect_attempts >= self.max_reconnect_attempts:
-            logger.warning("최대 재연결 시도 횟수 초과")
-            self.reconnect_timer.stop()
-            return
-
-        logger.info(f"재연결 시도 중... (시도 {self.reconnect_attempts + 1}/{self.max_reconnect_attempts})")
+        logger.info(f"재연결 시도 중... (시도 {self.reconnect_attempts + 1}회째)")
         self.reconnect_attempts += 1
         
-        # TCP 재연결
-        if not self.tcp_client.is_connected():
-            self.tcp_client.connect_to_server()
-        
-        # UDP 재연결
-        if not self.udp_client.is_connected():
-            self.udp_client.connect()
+        try:
+            # TCP 재연결
+            if self.tcp_client.connect_to_server():
+                logger.info("TCP 재연결 성공")
+                self.tcp_connection_status_changed.emit(True, "TCP 서버에 재연결됨")
+                
+                # UDP 재연결
+                server_host = self.settings.server.tcp_ip
+                server_port = self.settings.server.udp_port
+                self.udp_client.connect(server_host, server_port)
+                logger.info(f"UDP 재연결 시도: {server_host}:{server_port}")
+                
+                self.reconnect_attempts = 0
+                self.reconnect_timer.stop()
+                return True
+            else:
+                logger.error("TCP 재연결 실패")
+                self.tcp_connection_status_changed.emit(False, "TCP 재연결 실패")
+                return False
+                
+        except Exception as e:
+            logger.error(f"재연결 시도 중 오류: {str(e)}")
+            self.tcp_connection_status_changed.emit(False, f"재연결 오류: {str(e)}")
+            return False
 
     def _on_tcp_connected(self):
         """TCP 연결 성공 시 상태 전파 및 재연결 타이머 중지"""
@@ -124,8 +136,11 @@ class NetworkManager(QObject):
         if response == "OK":
             logger.info("CCTV A 요청 승인됨")
             if not self.udp_client.is_connected():
-                self.udp_client.connect()
-            self.udp_client.start_streaming()
+                # 서버 설정에서 호스트와 포트 가져오기
+                host = self.settings.server.tcp_ip
+                port = self.settings.server.udp_port
+                logger.info(f"UDP 연결 시도: {host}:{port}")
+                self.udp_client.connect(host, port)
         else:
             logger.error(f"CCTV A 요청 거부됨: {response}")
 
@@ -134,10 +149,36 @@ class NetworkManager(QObject):
         if response == "OK":
             logger.info("CCTV B 요청 승인됨")
             if not self.udp_client.is_connected():
-                self.udp_client.connect()
-            self.udp_client.start_streaming()
+                # 서버 설정에서 호스트와 포트 가져오기
+                host = self.settings.server.tcp_ip
+                port = self.settings.server.udp_port
+                logger.info(f"UDP 연결 시도: {host}:{port}")
+                self.udp_client.connect(host, port)
         else:
             logger.error(f"CCTV B 요청 거부됨: {response}")
+
+    def _handle_udp_frame(self, cam_id: str, frame, image_id: int = None):
+        """UDP로 수신된 프레임을 카메라 ID에 따라 처리"""
+        try:
+            # OpenCV BGR -> RGB 변환
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            
+            # QImage로 변환
+            height, width, channel = frame.shape
+            bytes_per_line = 3 * width
+            q_image = QImage(frame.data, width, height, bytes_per_line, QImage.Format.Format_RGB888)
+            
+            # 카메라 ID에 따라 적절한 시그널 발생
+            if cam_id == 'A':
+                self.frame_a_received.emit(q_image, image_id)
+            elif cam_id == 'B':
+                self.frame_b_received.emit(q_image, image_id)
+            else:
+                logger.warning(f"알 수 없는 카메라 ID: {cam_id}")
+                
+        except Exception as e:
+            logger.error(f"프레임 처리 중 오류 발생: {str(e)}")
+            logger.error(f"프레임 정보: type={type(frame)}, shape={getattr(frame, 'shape', 'N/A')}")
 
     # --- UI에서 호출할 요청 메서드들 ---
     def request_cctv_a(self):
@@ -155,7 +196,4 @@ class NetworkManager(QObject):
 
     def request_map(self):
         """지도 요청"""
-        self.tcp_client.request_map()
-        # UDP 송출 정지
-        if self.udp_client:
-            self.udp_client.stop_streaming() 
+        self.tcp_client.request_map() 

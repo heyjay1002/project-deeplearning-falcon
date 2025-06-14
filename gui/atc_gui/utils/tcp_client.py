@@ -395,26 +395,16 @@ class TcpClient(QObject):
         if self.reconnect_timer.isActive():
             return
             
-        # 최대 시도 횟수 확인
-        if self.connection_attempts >= self.settings.server.max_reconnect_attempts:
-            interval = self.settings.server.reconnect_interval * self.settings.server.reconnect_backoff_factor
-            logger.info(f"최대 연결 시도 횟수({self.settings.server.max_reconnect_attempts}회) 초과. {interval}초 후 재시도")
-        else:
-            interval = self.settings.server.reconnect_interval
+        # 재연결 간격 계산 (시도 횟수에 따라 증가)
+        interval = self.settings.server.reconnect_interval
+        if self.connection_attempts > 0:
+            interval *= self.settings.server.reconnect_backoff_factor
             
+        logger.info(f"재연결 시도 중... ({self.connection_attempts + 1}회째)")
         self.is_reconnecting = True
         self.reconnect_timer.start(interval * 1000)
 
     def _attempt_reconnect(self):
         """재연결 시도"""
         self.reconnect_timer.stop()
-        
-        # 최대 시도 횟수 확인
-        if self.connection_attempts >= self.settings.server.max_reconnect_attempts:
-            logger.error(f"최대 연결 시도 횟수({self.settings.server.max_reconnect_attempts}회) 초과. 연결을 포기합니다.")
-            self.is_reconnecting = False
-            return
-            
-        logger.info(f"재연결 시도 중... ({self.connection_attempts + 1}/{self.settings.server.max_reconnect_attempts}회)")
-        self.is_reconnecting = True
         self.connect_to_server()

@@ -10,8 +10,12 @@ from models.detected_object import DetectedObject
 from config import BirdRiskLevel, RunwayRiskLevel, Constants, ObjectType, AirportZone
 from config.settings import Settings
 from utils.network_manager import NetworkManager
+from utils.udp_client import UdpClient
 from widgets.map_marker_widget import MapMarkerWidget, MarkerData, MarkerType, MarkerState
 from utils.logger import logger
+import cv2
+import time
+from collections import deque
 
 class MainPage(QWidget):
     # 객체 목록 업데이트 시그널 추가
@@ -25,6 +29,16 @@ class MainPage(QWidget):
         # 설정 로드
         self.settings = Settings.get_instance()
 
+        # 프레임 버퍼 및 디스플레이 타이머 초기화
+        self.frame_buffer = {'A': deque(maxlen=5), 'B': deque(maxlen=5)}
+        self.target_fps = 10  # 필요시 settings에서 가져와도 됨
+        self.frame_display_timer = QTimer(self)
+        self.frame_display_timer.timeout.connect(self.display_latest_frames)
+        self.frame_display_timer.start(int(1000 / self.target_fps))
+        
+        # 마지막으로 표시한 이미지ID 저장
+        self.last_displayed_image_id = {'A': -1, 'B': -1}
+
         # 이미지 경로 설정 및 검증
         self.setup_image_paths()
 
@@ -36,6 +50,9 @@ class MainPage(QWidget):
         
         # 네트워크 관리자 설정
         self.setup_network_manager()
+
+        # UDP 클라이언트 설정
+        self.setup_udp_client()
 
         # 마커 오버레이 연동
         self.setup_marker_overlay()
@@ -129,57 +146,93 @@ class MainPage(QWidget):
         # 네트워크 서비스 시작
         self.network_manager.start_services()
 
+    def setup_status_bar(self):
+        """커스텀 상태바 위젯 설정 (TCP/UDP 상태만)"""
+        main_window = self.window()  # QMainWindow 인스턴스 가져오기
+        if hasattr(main_window, 'statusBar'):
+            status_bar = main_window.statusBar()
+            # 이미 라벨이 있으면 중복 추가 방지
+            if not hasattr(self, 'tcp_status_label'):
+                self.tcp_status_label = QLabel("TCP ●")
+                self.udp_status_label = QLabel("UDP ●")
+                self.tcp_status_label.setStyleSheet("color: red; font-weight: bold; margin-right: 8px;")
+                self.udp_status_label.setStyleSheet("color: red; font-weight: bold; margin-right: 8px;")
+                status_bar.addWidget(self.tcp_status_label)
+                status_bar.addWidget(self.udp_status_label)
+
     def update_tcp_connection_status(self, is_connected: bool, message: str):
-        """TCP 연결 상태 UI 업데이트"""
+        """TCP 연결 상태 UI 업데이트 (메시지 라벨 제거)"""
         logger.info(f"TCP 연결 상태 변경: {message}")
-        # 상태바 업데이트
-        if hasattr(self.parent(), 'statusBar'):
-            self.parent().statusBar().showMessage(f"TCP: {message}")
-            # 연결 상태에 따라 색상 변경
+        if hasattr(self, 'tcp_status_label'):
             if is_connected:
-                self.parent().statusBar().setStyleSheet("color: green;")
+                self.tcp_status_label.setStyleSheet("color: green; font-weight: bold; margin-right: 8px;")
             else:
-                self.parent().statusBar().setStyleSheet("color: red;")
+                self.tcp_status_label.setStyleSheet("color: red; font-weight: bold; margin-right: 8px;")
 
     def update_udp_connection_status(self, is_connected: bool, message: str):
-        """UDP 연결 상태 UI 업데이트"""
+        """UDP 연결 상태 UI 업데이트 (메시지 라벨 제거)"""
         logger.info(f"UDP 연결 상태 변경: {message}")
-        # 상태바 업데이트
-        if hasattr(self.parent(), 'statusBar'):
-            # 현재 TCP 상태 메시지 유지하면서 UDP 상태 추가
-            current_tcp_status = self.parent().statusBar().currentMessage().split(" | ")[0] if " | " in self.parent().statusBar().currentMessage() else ""
-            new_status = f"{current_tcp_status} | UDP: {message}"
-            self.parent().statusBar().showMessage(new_status)
-            
-            # 연결 상태에 따라 색상 변경
+        if hasattr(self, 'udp_status_label'):
             if is_connected:
-                self.parent().statusBar().setStyleSheet("color: green;")
+                self.udp_status_label.setStyleSheet("color: green; font-weight: bold; margin-right: 8px;")
             else:
-                self.parent().statusBar().setStyleSheet("color: red;")
+                self.udp_status_label.setStyleSheet("color: red; font-weight: bold; margin-right: 8px;")
+
+    def setup_udp_client(self):
+        """UDP 클라이언트 설정"""
+        self.udp_client = UdpClient()
+        self.udp_client.set_max_fps(self.target_fps)  # 설정된 FPS 적용
+        self.udp_client.frame_received.connect(self.handle_udp_frame)
+        self.udp_client.connection_status_changed.connect(self.update_udp_connection_status)
+        logger.info("UDP 클라이언트 초기화 완료 (연결은 CCTV 요청 시)")
+
+    def handle_udp_frame(self, cam_id: str, frame, image_id: int = None):
+        """UDP로 수신된 프레임 처리"""
+        try:            
+            self.last_displayed_image_id[cam_id] = image_id
+            
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            height, width, channel = frame.shape
+            bytes_per_line = 3 * width
+            q_image = QImage(frame.data, width, height, bytes_per_line, QImage.Format.Format_RGB888)
+            if q_image.isNull():
+                return
+                
+            # 이미지ID와 함께 저장
+            self.frame_buffer[cam_id].append((image_id, q_image))
+            
+        except Exception as e:
+            logger.error(f"UDP 프레임 처리 오류: {str(e)}")
+
+    def display_latest_frames(self):
+        """가장 최신 프레임 표시"""
+        for cam_id in ['A', 'B']:
+            if self.frame_buffer[cam_id]:
+                # 가장 최신 프레임만 꺼내서 디스플레이
+                _, latest_frame = self.frame_buffer[cam_id][-1]
+                if cam_id == 'A':
+                    self.update_cctv_a_frame(latest_frame)
+                elif cam_id == 'B':
+                    self.update_cctv_b_frame(latest_frame)
+                self.frame_buffer[cam_id].clear()
 
     def setup_marker_overlay(self):
         """마커 오버레이 설정"""
-        try:
-            # 기존 placeholder 제거 및 마커 위젯 추가
-            self.map_marker = MapMarkerWidget(self.map_overlay_frame)
-            layout = self.map_overlay_frame.layout()
-            
-            # placeholder 찾기 및 제거
-            placeholder_index = layout.indexOf(self.marker_overlay_placeholder)
-            if placeholder_index >= 0:
-                layout.removeWidget(self.marker_overlay_placeholder)
-                self.marker_overlay_placeholder.deleteLater()
-                logger.info("마커 placeholder 제거됨")
-            
-            # 마커 위젯을 지도와 같은 위치(row 3)에 추가하여 오버레이 효과
-            layout.addWidget(self.map_marker, 3, 0)
-            logger.info("마커 오버레이 설정 완료")
-            
-            # 마커 클릭 시그널 연결
-            self.map_marker.marker_clicked.connect(self.on_marker_clicked)
-                
-        except Exception as e:
-            logger.error(f"마커 오버레이 설정 오류: {e}")
+        # 기존 placeholder 제거 및 마커 위젯 추가
+        self.map_marker = MapMarkerWidget(self.map_overlay_frame)
+        layout = self.map_overlay_frame.layout()
+        
+        # placeholder 찾기 및 제거
+        placeholder_index = layout.indexOf(self.marker_overlay_placeholder)
+        if placeholder_index >= 0:
+            layout.removeWidget(self.marker_overlay_placeholder)
+            self.marker_overlay_placeholder.deleteLater()
+        
+        # 마커 위젯을 지도와 같은 위치(row 3)에 추가하여 오버레이 효과
+        layout.addWidget(self.map_marker, 3, 0)
+        
+        # 마커 클릭 시그널 연결
+        self.map_marker.marker_clicked.connect(self.on_marker_clicked)
 
     def setup_buttons(self):
         """버튼 시그널 연결"""
@@ -452,8 +505,6 @@ class MainPage(QWidget):
         idx = self.combo_cctv.currentIndex()
         logger.info(f"CCTV 보기: {idx + 1}")
         self.map_cctv_stack.setCurrentIndex(idx + 1)
-        
-        # 네트워크 관리자를 통해 CCTV 영상 요청
         if idx == 0:
             self.network_manager.request_cctv_a()
         elif idx == 1:
@@ -479,12 +530,8 @@ class MainPage(QWidget):
         """CCTV A 프레임 업데이트"""
         try:
             if frame.isNull():
-                logger.error("CCTV A 프레임이 유효하지 않음")
                 return
                 
-            # 프레임 크기 로깅
-            logger.debug(f"CCTV A 프레임 크기: {frame.width()}x{frame.height()}")
-            
             # 라벨 크기에 맞게 이미지 크기 조정
             scaled_pixmap = QPixmap.fromImage(frame).scaled(
                 self.label_cctv_1.size(),
@@ -496,19 +543,18 @@ class MainPage(QWidget):
             self.label_cctv_1.setPixmap(scaled_pixmap)
             self.label_cctv_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
             
+            # 프레임 업데이트 강제
+            self.label_cctv_1.repaint()
+            
         except Exception as e:
-            logger.error(f"CCTV A 프레임 업데이트 오류: {e}")
+            logger.error(f"CCTV A 프레임 업데이트 오류: {str(e)}")
 
     def update_cctv_b_frame(self, frame: QImage):
         """CCTV B 프레임 업데이트"""
         try:
             if frame.isNull():
-                logger.error("CCTV B 프레임이 유효하지 않음")
                 return
                 
-            # 프레임 크기 로깅
-            logger.debug(f"CCTV B 프레임 크기: {frame.width()}x{frame.height()}")
-            
             # 라벨 크기에 맞게 이미지 크기 조정
             scaled_pixmap = QPixmap.fromImage(frame).scaled(
                 self.label_cctv_2.size(),
@@ -520,14 +566,21 @@ class MainPage(QWidget):
             self.label_cctv_2.setPixmap(scaled_pixmap)
             self.label_cctv_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
             
+            # 프레임 업데이트 강제
+            self.label_cctv_2.repaint()
+            
         except Exception as e:
-            logger.error(f"CCTV B 프레임 업데이트 오류: {e}")
+            logger.error(f"CCTV B 프레임 업데이트 오류: {str(e)}")
 
     def closeEvent(self, event):
         """위젯 종료 시 처리"""
         # 네트워크 서비스 중지
         if hasattr(self, 'network_manager'):
             self.network_manager.stop_services()
+
+        # UDP 클라이언트 정리
+        if hasattr(self, 'udp_client'):
+            self.udp_client.cleanup()
 
         # 마커 정리
         if hasattr(self, 'map_marker'):
