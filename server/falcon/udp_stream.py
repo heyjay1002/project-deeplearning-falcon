@@ -85,13 +85,18 @@ class VideoCommunicator(QThread):
                 'cam_id': cam_id
             }
             self.frame_received.emit(frame_data)
-    
+            
     def stop(self):
         """통신 중지"""
         self.video_receiver.close()  # IDS 수신 중지
         self.admin_video_sender.close()  # Admin GUI 전송 중지 
 
-    def send_frame_with_boxes(self, frame, cam_id):
-        """박스가 그려진 프레임을 UDP로 송출"""
+    def send_frame_with_boxes(self, frame, cam_id, img_id):
+        """박스가 그려진 프레임을 UDP로 송출
+        Args:
+            frame: 전송할 프레임
+            cam_id: 카메라 ID
+            img_id: 이미지 ID
+        """
         if self.streaming and cam_id == self.current_camera:
-            self.admin_video_sender.send_frame(frame, cam_id=cam_id) 
+            self.admin_video_sender.send_frame(frame, cam_id=cam_id, img_id=img_id)

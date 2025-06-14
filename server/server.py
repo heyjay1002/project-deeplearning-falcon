@@ -105,7 +105,7 @@ class MainWindow(QMainWindow):
         self.video_label.setPixmap(scaled_pixmap)
 
         # 박스가 그려진 프레임을 VideoCommunicator로 전달하여 UDP 송출
-        self.video_thread.send_frame_with_boxes(frame_with_boxes, cam_id)
+        self.video_thread.send_frame_with_boxes(frame_with_boxes, cam_id, img_id)
     
     def _on_detection_processed(self, detection_data):
         """검출 처리 완료 시 호출"""
