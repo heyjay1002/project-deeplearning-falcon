@@ -4096,3 +4096,204 @@
 2025-06-16 18:39:31,799 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
 2025-06-16 18:39:31,799 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
 2025-06-16 18:39:31,799 - ATC_GUI - INFO - TCP 연결 상태 변경: 서버 연결 실패: 3초 후 재시도합니다.
+2025-06-16 22:10:02,183 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-16 22:10:02,185 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-16 22:10:02,187 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-16 22:10:02,187 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 22:10:02,187 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:02,188 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:02,188 - ATC_GUI - INFO - UDP 클라이언트 초기화 완료 (연결은 CCTV 요청 시)
+2025-06-16 22:10:02,190 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-16 22:10:02,211 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-16 22:10:02,212 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-16 22:10:02,217 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-16 22:10:02,220 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-16 22:10:05,226 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 22:10:05,227 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:05,228 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:05,229 - ATC_GUI - INFO - TCP 연결 상태 변경: 서버 연결 실패: 3초 후 재시도합니다.
+2025-06-16 22:10:06,225 - ATC_GUI - WARNING - 선택된 객체가 없음
+2025-06-16 22:10:08,225 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 22:10:08,226 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:08,226 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:08,227 - ATC_GUI - INFO - TCP 연결 상태 변경: 서버 연결 실패: 3초 후 재시도합니다.
+2025-06-16 22:10:11,226 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 22:10:11,226 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:11,227 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:11,227 - ATC_GUI - INFO - TCP 연결 상태 변경: 서버 연결 실패: 3초 후 재시도합니다.
+2025-06-16 22:10:14,226 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 22:10:14,227 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:14,228 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:14,228 - ATC_GUI - INFO - TCP 연결 상태 변경: 서버 연결 실패: 3초 후 재시도합니다.
+2025-06-16 22:10:17,226 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 22:10:17,227 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:17,227 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:17,228 - ATC_GUI - INFO - TCP 연결 상태 변경: 서버 연결 실패: 3초 후 재시도합니다.
+2025-06-16 22:10:20,226 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 22:10:20,227 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:20,227 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:20,228 - ATC_GUI - INFO - TCP 연결 상태 변경: 서버 연결 실패: 3초 후 재시도합니다.
+2025-06-16 22:10:23,229 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 22:10:23,230 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:23,230 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:23,231 - ATC_GUI - INFO - TCP 연결 상태 변경: 서버 연결 실패: 3초 후 재시도합니다.
+2025-06-16 22:10:26,226 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 22:10:26,227 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:26,227 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 22:10:26,228 - ATC_GUI - INFO - TCP 연결 상태 변경: 서버 연결 실패: 3초 후 재시도합니다.
+2025-06-16 23:38:48,806 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-16 23:38:48,808 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-16 23:38:48,811 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-16 23:38:48,812 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 23:38:48,813 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:38:48,813 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:38:48,814 - ATC_GUI - INFO - UDP 클라이언트 초기화 완료 (연결은 CCTV 요청 시)
+2025-06-16 23:38:48,816 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-16 23:38:48,841 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-16 23:38:48,842 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-16 23:38:48,855 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-16 23:38:48,859 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-16 23:38:51,727 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 23:38:51,729 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:38:51,729 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:38:51,730 - ATC_GUI - INFO - TCP 연결 상태 변경: 서버 연결 실패: 3초 후 재시도합니다.
+2025-06-16 23:38:54,361 - ATC_GUI - INFO - CCTV 보기: 1
+2025-06-16 23:38:54,362 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 해제됨
+2025-06-16 23:38:54,362 - ATC_GUI - INFO - CCTV A 영상 요청
+2025-06-16 23:38:54,363 - ATC_GUI - ERROR - 서버에 연결되어 있지 않습니다
+2025-06-16 23:38:54,363 - ATC_GUI - INFO - UDP 연결 상태 변경: 카메라 A 연결됨
+2025-06-16 23:38:54,363 - ATC_GUI - INFO - UDP 연결 상태 변경: CCTV A 연결됨
+2025-06-16 23:38:54,726 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 23:38:54,727 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:38:54,730 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:38:54,731 - ATC_GUI - INFO - TCP 연결 상태 변경: 서버 연결 실패: 3초 후 재시도합니다.
+2025-06-16 23:38:57,726 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 23:38:57,727 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:38:57,727 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:38:57,728 - ATC_GUI - INFO - TCP 연결 상태 변경: 서버 연결 실패: 3초 후 재시도합니다.
+2025-06-16 23:38:59,589 - ATC_GUI - INFO - 지도 보기
+2025-06-16 23:38:59,589 - ATC_GUI - ERROR - 서버에 연결되어 있지 않습니다
+2025-06-16 23:38:59,690 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-16 23:38:59,696 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-16 23:39:00,726 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 23:39:00,727 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:39:00,728 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:39:00,728 - ATC_GUI - INFO - TCP 연결 상태 변경: 서버 연결 실패: 3초 후 재시도합니다.
+2025-06-16 23:41:08,760 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-16 23:41:08,761 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-16 23:41:08,763 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-16 23:41:08,763 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 23:41:08,763 - ATC_GUI - INFO - TCP 서버 연결 성공: 127.0.0.1:5100
+2025-06-16 23:41:08,763 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 서버에 연결되었습니다.
+2025-06-16 23:41:08,764 - ATC_GUI - INFO - UDP 클라이언트 초기화 완료 (연결은 CCTV 요청 시)
+2025-06-16 23:41:08,766 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-16 23:41:08,790 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-16 23:41:08,791 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-16 23:41:08,794 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-16 23:41:08,797 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-16 23:41:15,389 - ATC_GUI - INFO - CCTV 보기: 1
+2025-06-16 23:41:15,389 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 해제됨
+2025-06-16 23:41:15,389 - ATC_GUI - INFO - CCTV A 영상 요청
+2025-06-16 23:41:15,389 - ATC_GUI - DEBUG - CCTV A 요청 전송 성공
+2025-06-16 23:41:15,390 - ATC_GUI - INFO - UDP 연결 상태 변경: 카메라 A 연결됨
+2025-06-16 23:41:15,390 - ATC_GUI - INFO - UDP 연결 상태 변경: CCTV A 연결됨
+2025-06-16 23:41:15,403 - ATC_GUI - DEBUG - 수신 메시지 - MR_CA: OK
+2025-06-16 23:41:15,404 - ATC_GUI - INFO - CCTV A 응답 수신: OK
+2025-06-16 23:41:15,404 - ATC_GUI - INFO - CCTV A 요청 승인됨
+2025-06-16 23:49:45,252 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-16 23:49:45,254 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-16 23:49:45,255 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-16 23:49:45,256 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 23:49:45,256 - ATC_GUI - INFO - TCP 서버 연결 성공: 127.0.0.1:5100
+2025-06-16 23:49:45,256 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 서버에 연결되었습니다.
+2025-06-16 23:49:45,256 - ATC_GUI - INFO - UDP 클라이언트 초기화 완료 (연결은 CCTV 요청 시)
+2025-06-16 23:49:45,258 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-16 23:49:45,284 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-16 23:49:45,287 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-16 23:49:45,290 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-16 23:49:45,292 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-16 23:49:49,259 - ATC_GUI - INFO - CCTV 보기: 1
+2025-06-16 23:49:49,260 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 해제됨
+2025-06-16 23:49:49,260 - ATC_GUI - INFO - CCTV A 영상 요청
+2025-06-16 23:49:49,260 - ATC_GUI - DEBUG - CCTV A 요청 전송 성공
+2025-06-16 23:49:49,261 - ATC_GUI - INFO - UDP 연결 상태 변경: 카메라 A 연결됨
+2025-06-16 23:49:49,261 - ATC_GUI - INFO - UDP 연결 상태 변경: CCTV A 연결됨
+2025-06-16 23:49:49,266 - ATC_GUI - DEBUG - 수신 메시지 - MR_CA: OK
+2025-06-16 23:49:49,266 - ATC_GUI - INFO - CCTV A 응답 수신: OK
+2025-06-16 23:49:49,266 - ATC_GUI - INFO - CCTV A 요청 승인됨
+2025-06-16 23:51:51,525 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-16 23:51:51,526 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-16 23:51:51,528 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-16 23:51:51,528 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 23:51:51,528 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:51:51,528 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:51:51,529 - ATC_GUI - INFO - UDP 클라이언트 초기화 완료 (연결은 CCTV 요청 시)
+2025-06-16 23:51:51,531 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-16 23:51:51,551 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-16 23:51:51,553 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-16 23:51:51,556 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-16 23:51:51,558 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-16 23:51:53,985 - ATC_GUI - INFO - CCTV 보기: 1
+2025-06-16 23:51:53,986 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 해제됨
+2025-06-16 23:51:53,986 - ATC_GUI - INFO - CCTV A 영상 요청
+2025-06-16 23:51:53,986 - ATC_GUI - ERROR - 서버에 연결되어 있지 않습니다
+2025-06-16 23:51:53,987 - ATC_GUI - INFO - UDP 연결 상태 변경: 카메라 A 연결됨
+2025-06-16 23:51:53,987 - ATC_GUI - INFO - UDP 연결 상태 변경: CCTV A 연결됨
+2025-06-16 23:51:54,679 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 23:51:54,680 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:51:54,681 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:51:54,681 - ATC_GUI - INFO - TCP 연결 상태 변경: 서버 연결 실패: 3초 후 재시도합니다.
+2025-06-16 23:51:57,726 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 23:51:57,727 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:51:57,730 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:51:57,730 - ATC_GUI - INFO - TCP 연결 상태 변경: 서버 연결 실패: 3초 후 재시도합니다.
+2025-06-16 23:52:00,726 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 23:52:00,727 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:52:00,727 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused
+2025-06-16 23:52:00,728 - ATC_GUI - INFO - TCP 연결 상태 변경: 서버 연결 실패: 3초 후 재시도합니다.
+2025-06-16 23:52:01,389 - ATC_GUI - INFO - 지도 보기
+2025-06-16 23:52:01,389 - ATC_GUI - ERROR - 서버에 연결되어 있지 않습니다
+2025-06-16 23:52:01,491 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-16 23:52:01,495 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-16 23:53:59,687 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-16 23:53:59,688 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-16 23:53:59,690 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-16 23:53:59,690 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 23:53:59,691 - ATC_GUI - INFO - TCP 서버 연결 성공: 127.0.0.1:5100
+2025-06-16 23:53:59,691 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 서버에 연결되었습니다.
+2025-06-16 23:53:59,691 - ATC_GUI - INFO - UDP 클라이언트 초기화 완료 (연결은 CCTV 요청 시)
+2025-06-16 23:53:59,693 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-16 23:53:59,712 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-16 23:53:59,713 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-16 23:53:59,716 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-16 23:53:59,719 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-16 23:54:14,653 - ATC_GUI - INFO - CCTV 보기: 1
+2025-06-16 23:54:14,654 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 해제됨
+2025-06-16 23:54:14,654 - ATC_GUI - INFO - CCTV A 영상 요청
+2025-06-16 23:54:14,654 - ATC_GUI - DEBUG - CCTV A 요청 전송 성공
+2025-06-16 23:54:14,655 - ATC_GUI - INFO - UDP 연결 상태 변경: 카메라 A 연결됨
+2025-06-16 23:54:14,655 - ATC_GUI - INFO - UDP 연결 상태 변경: CCTV A 연결됨
+2025-06-16 23:54:14,662 - ATC_GUI - DEBUG - 수신 메시지 - MR_CA: OK
+2025-06-16 23:54:14,662 - ATC_GUI - INFO - CCTV A 응답 수신: OK
+2025-06-16 23:54:14,662 - ATC_GUI - INFO - CCTV A 요청 승인됨
+2025-06-16 23:57:30,976 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-16 23:57:30,977 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-16 23:57:30,979 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-16 23:57:30,980 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100
+2025-06-16 23:57:30,980 - ATC_GUI - INFO - TCP 서버 연결 성공: 127.0.0.1:5100
+2025-06-16 23:57:30,980 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 서버에 연결되었습니다.
+2025-06-16 23:57:30,980 - ATC_GUI - INFO - UDP 클라이언트 초기화 완료 (연결은 CCTV 요청 시)
+2025-06-16 23:57:30,982 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-16 23:57:31,006 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-16 23:57:31,007 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-16 23:57:31,012 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-16 23:57:31,015 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-16 23:57:33,848 - ATC_GUI - INFO - CCTV 보기: 1
+2025-06-16 23:57:33,848 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 해제됨
+2025-06-16 23:57:33,848 - ATC_GUI - INFO - CCTV A 영상 요청
+2025-06-16 23:57:33,849 - ATC_GUI - DEBUG - CCTV A 요청 전송 성공
+2025-06-16 23:57:33,849 - ATC_GUI - INFO - UDP 연결 상태 변경: 카메라 A 연결됨
+2025-06-16 23:57:33,849 - ATC_GUI - INFO - UDP 연결 상태 변경: CCTV A 연결됨
+2025-06-16 23:57:33,853 - ATC_GUI - DEBUG - 수신 메시지 - MR_CA: OK
+2025-06-16 23:57:33,853 - ATC_GUI - INFO - CCTV A 응답 수신: OK
+2025-06-16 23:57:33,853 - ATC_GUI - INFO - CCTV A 요청 승인됨

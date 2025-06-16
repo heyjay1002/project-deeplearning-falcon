@@ -1,15 +1,15 @@
-from PyQt6.QtWidgets import QWidget, QTableWidgetItem, QSizePolicy, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QMessageBox
+from PyQt6.QtWidgets import *
 from PyQt6 import uic
 from PyQt6.QtGui import QPixmap, QColor, QImage
 from PyQt6.QtCore import Qt, QTimer, pyqtSignal
 from datetime import datetime
 from views.object_detail_dialog import ObjectDetailDialog
 from views.notification_dialog import NotificationDialog
-from models.detected_object import DetectedObject
 from config.constants import BirdRiskLevel, RunwayRiskLevel, ObjectType, AirportZone
 from config.settings import Settings
 from utils.network_manager import NetworkManager
 from utils.udp_client import UdpClient
+from utils.interface import DetectedObject, BirdRisk, RunwayRisk
 from utils.logger import logger
 from widgets.map_marker_widget import MapMarkerWidget, MarkerData, MarkerType, MarkerState
 import time
@@ -77,7 +77,6 @@ class MainPage(QWidget):
 
         # 스택 위젯 초기 상태 설정
         self.map_cctv_stack.setCurrentIndex(0)  # 지도 페이지로 시작
-        logger.info("MainPage 초기화 완료")
 
     def setup_image_paths(self):
         """이미지 경로 설정"""
@@ -521,17 +520,15 @@ class MainPage(QWidget):
         if idx == 0:
             self.network_manager.request_cctv_a()
             # UDP 연결 시도
-            if self.udp_client.connect_to_camera('A'):
-                self.update_udp_connection_status(True, "CCTV A 연결됨")
-            else:
+            if not self.udp_client.connect(self.settings.server.udp_ip, self.settings.server.udp_port):
                 self.update_udp_connection_status(False, "CCTV A 연결 실패")
+                logger.error("CCTV A UDP 연결 실패")
         elif idx == 1:
             self.network_manager.request_cctv_b()
             # UDP 연결 시도
-            if self.udp_client.connect_to_camera('B'):
-                self.update_udp_connection_status(True, "CCTV B 연결됨")
-            else:
+            if not self.udp_client.connect(self.settings.server.udp_ip, self.settings.server.udp_port):
                 self.update_udp_connection_status(False, "CCTV B 연결 실패")
+                logger.error("CCTV B UDP 연결 실패")
 
     def show_table(self):
         """테이블 보기"""

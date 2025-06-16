@@ -8,7 +8,7 @@ from views.main_page import MainPage
 from views.access_page import AccessPage
 from views.log_page import LogPage
 from views.notification_dialog import NotificationDialog
-from models.detected_object import DetectedObject
+from utils.interface import DetectedObject
 
 class WindowClass(QMainWindow):
     def __init__(self):

@@ -1,0 +1,130 @@
+2025-06-15 19:18:08,831 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-15 19:18:08,834 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-15 19:18:08,840 - ATC_GUI - INFO - 네트워크 서비스 시작
+2025-06-15 19:18:08,840 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100 (1/3회)
+2025-06-15 19:18:08,840 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-15 19:18:08,842 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-15 19:18:08,842 - ATC_GUI - INFO - UDP 클라이언트 초기화 완료 (연결은 CCTV 요청 시)
+2025-06-15 19:18:08,845 - ATC_GUI - INFO - MainPage 초기화 완료
+2025-06-15 19:18:08,885 - ATC_GUI - DEBUG - label_map 크기: 622x400
+2025-06-15 19:18:08,887 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 533x400
+2025-06-15 19:18:08,903 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-15 19:18:08,906 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-15 19:18:08,914 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-15 19:18:08,915 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 1/3회)
+2025-06-15 19:18:08,915 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 1/3회)
+2025-06-15 19:18:08,915 - ATC_GUI - INFO - 재연결 시도 중... (2회째)
+2025-06-15 19:18:11,896 - ATC_GUI - INFO - 재연결 시도 중... (시도 1회째)
+2025-06-15 19:18:11,897 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100 (2/3회)
+2025-06-15 19:18:11,897 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-15 19:18:11,898 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-15 19:18:11,898 - ATC_GUI - INFO - TCP 재연결 성공
+2025-06-15 19:18:11,898 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 서버에 재연결됨
+2025-06-15 19:18:11,899 - ATC_GUI - INFO - UDP 연결 상태 변경: UDP 서버에 연결됨 (127.0.0.1:4100)
+2025-06-15 19:18:11,901 - ATC_GUI - INFO - UDP 재연결 시도: 127.0.0.1:4100
+2025-06-15 19:18:11,902 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-15 19:18:11,903 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 2/3회)
+2025-06-15 19:18:11,903 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 2/3회)
+2025-06-15 19:18:14,897 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100 (3/3회)
+2025-06-15 19:18:14,897 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-15 19:18:14,898 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-15 19:18:14,901 - ATC_GUI - INFO - 재연결 시도 중... (시도 1회째)
+2025-06-15 19:18:14,901 - ATC_GUI - WARNING - 이미 연결을 시도하고 있습니다
+2025-06-15 19:18:14,901 - ATC_GUI - INFO - TCP 재연결 성공
+2025-06-15 19:18:14,901 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 서버에 재연결됨
+2025-06-15 19:18:14,903 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 종료됨
+2025-06-15 19:18:14,904 - ATC_GUI - INFO - UDP 연결 상태 변경: UDP 서버에 연결됨 (127.0.0.1:4100)
+2025-06-15 19:18:14,904 - ATC_GUI - INFO - UDP 재연결 시도: 127.0.0.1:4100
+2025-06-15 19:18:14,906 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-15 19:18:14,906 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 3/3회)
+2025-06-15 19:18:14,906 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 3/3회)
+2025-06-15 19:18:14,907 - ATC_GUI - INFO - 재연결 시도 중... (4회째)
+2025-06-15 19:18:17,896 - ATC_GUI - INFO - 재연결 시도 중... (시도 1회째)
+2025-06-15 19:18:17,897 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100 (4/3회)
+2025-06-15 19:18:17,897 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-15 19:18:17,898 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-15 19:18:17,898 - ATC_GUI - INFO - TCP 재연결 성공
+2025-06-15 19:18:17,898 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 서버에 재연결됨
+2025-06-15 19:18:17,908 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 종료됨
+2025-06-15 19:18:17,909 - ATC_GUI - INFO - UDP 연결 상태 변경: UDP 서버에 연결됨 (127.0.0.1:4100)
+2025-06-15 19:18:17,910 - ATC_GUI - INFO - UDP 재연결 시도: 127.0.0.1:4100
+2025-06-15 19:18:17,912 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-15 19:18:17,913 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 4/3회)
+2025-06-15 19:18:17,914 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 4/3회)
+2025-06-15 19:18:20,897 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100 (5/3회)
+2025-06-15 19:18:20,897 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-15 19:18:20,898 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-15 19:18:20,900 - ATC_GUI - INFO - 재연결 시도 중... (시도 1회째)
+2025-06-15 19:18:20,901 - ATC_GUI - WARNING - 이미 연결을 시도하고 있습니다
+2025-06-15 19:18:20,901 - ATC_GUI - INFO - TCP 재연결 성공
+2025-06-15 19:18:20,901 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 서버에 재연결됨
+2025-06-15 19:18:20,913 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 종료됨
+2025-06-15 19:18:20,914 - ATC_GUI - INFO - UDP 연결 상태 변경: UDP 서버에 연결됨 (127.0.0.1:4100)
+2025-06-15 19:18:20,916 - ATC_GUI - INFO - UDP 재연결 시도: 127.0.0.1:4100
+2025-06-15 19:18:20,919 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-15 19:18:20,920 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 5/3회)
+2025-06-15 19:18:20,921 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 5/3회)
+2025-06-15 19:18:20,922 - ATC_GUI - INFO - 재연결 시도 중... (6회째)
+2025-06-15 19:18:23,896 - ATC_GUI - INFO - 재연결 시도 중... (시도 1회째)
+2025-06-15 19:18:23,896 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100 (6/3회)
+2025-06-15 19:18:23,896 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-15 19:18:23,897 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-15 19:18:23,897 - ATC_GUI - INFO - TCP 재연결 성공
+2025-06-15 19:18:23,897 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 서버에 재연결됨
+2025-06-15 19:18:23,918 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 종료됨
+2025-06-15 19:18:23,919 - ATC_GUI - INFO - UDP 연결 상태 변경: UDP 서버에 연결됨 (127.0.0.1:4100)
+2025-06-15 19:18:23,920 - ATC_GUI - INFO - UDP 재연결 시도: 127.0.0.1:4100
+2025-06-15 19:18:23,921 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-15 19:18:23,922 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 6/3회)
+2025-06-15 19:18:23,922 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 6/3회)
+2025-06-15 19:18:26,896 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100 (7/3회)
+2025-06-15 19:18:26,897 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-15 19:18:26,897 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-15 19:18:26,897 - ATC_GUI - INFO - 재연결 시도 중... (시도 1회째)
+2025-06-15 19:18:26,897 - ATC_GUI - WARNING - 이미 연결을 시도하고 있습니다
+2025-06-15 19:18:26,897 - ATC_GUI - INFO - TCP 재연결 성공
+2025-06-15 19:18:26,898 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 서버에 재연결됨
+2025-06-15 19:18:26,922 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 종료됨
+2025-06-15 19:18:26,924 - ATC_GUI - INFO - UDP 연결 상태 변경: UDP 서버에 연결됨 (127.0.0.1:4100)
+2025-06-15 19:18:26,924 - ATC_GUI - INFO - UDP 재연결 시도: 127.0.0.1:4100
+2025-06-15 19:18:26,925 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-15 19:18:26,925 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 7/3회)
+2025-06-15 19:18:26,925 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 7/3회)
+2025-06-15 19:18:26,926 - ATC_GUI - INFO - 재연결 시도 중... (8회째)
+2025-06-15 19:18:27,129 - ATC_GUI - INFO - 지도 보기
+2025-06-15 19:18:27,129 - ATC_GUI - ERROR - 연결되지 않은 상태에서 지도 요청 실패
+2025-06-15 19:18:27,230 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-15 19:18:27,235 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713
+2025-06-15 19:18:28,969 - ATC_GUI - INFO - CCTV 보기: 1
+2025-06-15 19:18:28,969 - ATC_GUI - INFO - CCTV A 영상 요청
+2025-06-15 19:18:28,969 - ATC_GUI - ERROR - 연결되지 않은 상태에서 CCTV A 요청 실패
+2025-06-15 19:18:29,897 - ATC_GUI - INFO - 재연결 시도 중... (시도 1회째)
+2025-06-15 19:18:29,897 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100 (8/3회)
+2025-06-15 19:18:29,897 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-15 19:18:29,898 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-15 19:18:29,898 - ATC_GUI - INFO - TCP 재연결 성공
+2025-06-15 19:18:29,898 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 서버에 재연결됨
+2025-06-15 19:18:29,928 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 종료됨
+2025-06-15 19:18:29,930 - ATC_GUI - INFO - UDP 연결 상태 변경: UDP 서버에 연결됨 (127.0.0.1:4100)
+2025-06-15 19:18:29,931 - ATC_GUI - INFO - UDP 재연결 시도: 127.0.0.1:4100
+2025-06-15 19:18:29,933 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-15 19:18:29,933 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 8/3회)
+2025-06-15 19:18:29,933 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 8/3회)
+2025-06-15 19:18:32,897 - ATC_GUI - INFO - TCP 서버 연결 시도: 127.0.0.1:5100 (9/3회)
+2025-06-15 19:18:32,897 - ATC_GUI - DEBUG - 연결 타임아웃 타이머 시작: 3초
+2025-06-15 19:18:32,898 - ATC_GUI - DEBUG - connectToHost() 호출 완료, 연결 대기 중...
+2025-06-15 19:18:32,898 - ATC_GUI - INFO - 재연결 시도 중... (시도 1회째)
+2025-06-15 19:18:32,898 - ATC_GUI - WARNING - 이미 연결을 시도하고 있습니다
+2025-06-15 19:18:32,898 - ATC_GUI - INFO - TCP 재연결 성공
+2025-06-15 19:18:32,898 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 서버에 재연결됨
+2025-06-15 19:18:32,935 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 종료됨
+2025-06-15 19:18:32,936 - ATC_GUI - INFO - UDP 연결 상태 변경: UDP 서버에 연결됨 (127.0.0.1:4100)
+2025-06-15 19:18:32,937 - ATC_GUI - INFO - UDP 재연결 시도: 127.0.0.1:4100
+2025-06-15 19:18:32,938 - ATC_GUI - ERROR - 소켓 상태: 연결 안됨
+2025-06-15 19:18:32,938 - ATC_GUI - ERROR - 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 9/3회)
+2025-06-15 19:18:32,939 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 소켓 오류 (SocketError.ConnectionRefusedError): Connection refused (시도 9/3회)
+2025-06-15 19:18:32,939 - ATC_GUI - INFO - 재연결 시도 중... (10회째)
+2025-06-15 19:18:33,323 - ATC_GUI - INFO - 지도 보기
+2025-06-15 19:18:33,324 - ATC_GUI - ERROR - 연결되지 않은 상태에서 지도 요청 실패
+2025-06-15 19:18:33,425 - ATC_GUI - DEBUG - label_map 크기: 953x713
+2025-06-15 19:18:33,431 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 950x713

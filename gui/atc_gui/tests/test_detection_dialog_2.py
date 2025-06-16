@@ -19,18 +19,12 @@ def test_detection_dialog():
         y_coord=200,
         timestamp=datetime.now()
     )
-    
-    # 테스트용 이미지 데이터 생성 (더미 데이터)
-    test_data = {
-        'image_data': b'dummy_image_data',
-        'timestamp': datetime.now().isoformat()
-    }
-    
+ 
     # QApplication 인스턴스 생성
     app = QApplication(sys.argv)
     
     # 다이얼로그 생성 및 표시
-    dialog = NotificationDialog(notification_type='object', data=test_obj)
+    dialog = NotificationDialog(notification_type='bird', data=test_obj)
     dialog.show()
     
     # 이벤트 루프 실행
