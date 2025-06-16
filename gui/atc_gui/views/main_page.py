@@ -26,6 +26,9 @@ class MainPage(QWidget):
         ui_path = os.path.join(os.path.dirname(__file__), '../ui/main_page.ui')
         uic.loadUi(ui_path, self)
 
+        # 현재 처리된 객체 ID 저장
+        self.current_object_ids = set()
+
         # 설정 로드
         self.settings = Settings.get_instance()
 
@@ -279,12 +282,18 @@ class MainPage(QWidget):
     def _update_object_list(self, objects: list[DetectedObject]):
         """실제 객체 목록 업데이트 처리"""
         logger.debug(f"객체 목록 업데이트: {len(objects)}개 객체")
-        self.table_object_list.setRowCount(len(objects))
         
-        # 현재 처리된 객체 ID 세트 생성
-        current_object_ids = {obj.object_id for obj in objects}
+        # 중복 제거: 이미 처리된 객체는 제외
+        new_objects = [obj for obj in objects if obj.object_id not in self.current_object_ids]
+            
+        # 현재 처리된 객체 ID 업데이트
+        self.current_object_ids.update(obj.object_id for obj in new_objects)
         
-        for row, obj in enumerate(objects):
+        # 테이블 업데이트
+        self.table_object_list.setRowCount(len(self.current_object_ids))
+        
+        # 모든 객체 정보 업데이트
+        for row, obj in enumerate(new_objects):
             # ID
             self.table_object_list.setItem(row, 0, QTableWidgetItem(str(obj.object_id)))
             # 위치
@@ -293,16 +302,16 @@ class MainPage(QWidget):
             self.table_object_list.setItem(row, 2, QTableWidgetItem(obj.object_type.value))
 
         # 마커 업데이트
-        self.update_markers(objects)
+        self.update_markers(new_objects)
 
         # 처리된 객체 ID 목록을 메인 윈도우에 전달
-        self.object_list_updated.emit(current_object_ids)
+        self.object_list_updated.emit(self.current_object_ids)
 
         # 첫 객체 감지 시 팝업 표시
-        if self.is_first_detection and objects:
+        if self.is_first_detection and new_objects:
             self.is_first_detection = False
             logger.info("첫 번째 객체 감지")
-            dialog = ObjectDetectionDialog(objects[0], self)
+            dialog = ObjectDetectionDialog(new_objects[0], self)
             dialog.exec()
 
     def update_markers(self, objects: list[DetectedObject]):
