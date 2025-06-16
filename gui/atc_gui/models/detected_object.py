@@ -87,7 +87,8 @@ class DetectedObject:
             'zone': self.zone.value,
             'timestamp': self.timestamp.isoformat(),
             'risk_level': self.risk_level.value if self.risk_level else None,
-            'extra_info': self.extra_info
+            'extra_info': self.extra_info,
+            'image_data': self.image_data
         }
 
     @classmethod
@@ -101,7 +102,8 @@ class DetectedObject:
             zone=AirportZone(data['zone']),
             timestamp=datetime.fromisoformat(data['timestamp']),
             risk_level=BirdRiskLevel(data['risk_level']) if data.get('risk_level') else None,
-            extra_info=data.get('extra_info')
+            extra_info=data.get('extra_info'),
+            image_data=data.get('image_data')
         )
 
     def __str__(self) -> str:

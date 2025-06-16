@@ -2,20 +2,19 @@ from PyQt6.QtWidgets import QWidget, QTableWidgetItem, QSizePolicy, QVBoxLayout,
 from PyQt6 import uic
 from PyQt6.QtGui import QPixmap, QColor, QImage
 from PyQt6.QtCore import Qt, QTimer, pyqtSignal
-import os
 from datetime import datetime
 from views.object_detail_dialog import ObjectDetailDialog
-from views.object_detection_dialog import ObjectDetectionDialog
+from views.notification_dialog import NotificationDialog
 from models.detected_object import DetectedObject
-from config import BirdRiskLevel, RunwayRiskLevel, Constants, ObjectType, AirportZone
+from config.constants import BirdRiskLevel, RunwayRiskLevel, ObjectType, AirportZone
 from config.settings import Settings
 from utils.network_manager import NetworkManager
 from utils.udp_client import UdpClient
-from widgets.map_marker_widget import MapMarkerWidget, MarkerData, MarkerType, MarkerState
 from utils.logger import logger
-import cv2
+from widgets.map_marker_widget import MapMarkerWidget, MarkerData, MarkerType, MarkerState
 import time
 from collections import deque
+import os
 
 class MainPage(QWidget):
     # 객체 목록 업데이트 시그널 추가
@@ -311,7 +310,7 @@ class MainPage(QWidget):
         if self.is_first_detection and new_objects:
             self.is_first_detection = False
             logger.info("첫 번째 객체 감지")
-            dialog = ObjectDetectionDialog(new_objects[0], self)
+            dialog = NotificationDialog(new_objects[0], self)
             dialog.exec()
 
     def update_markers(self, objects: list[DetectedObject]):
@@ -514,10 +513,25 @@ class MainPage(QWidget):
         idx = self.combo_cctv.currentIndex()
         logger.info(f"CCTV 보기: {idx + 1}")
         self.map_cctv_stack.setCurrentIndex(idx + 1)
+        
+        # 이전 CCTV 연결 해제
+        if hasattr(self, 'udp_client'):
+            self.udp_client.disconnect()
+            
         if idx == 0:
             self.network_manager.request_cctv_a()
+            # UDP 연결 시도
+            if self.udp_client.connect_to_camera('A'):
+                self.update_udp_connection_status(True, "CCTV A 연결됨")
+            else:
+                self.update_udp_connection_status(False, "CCTV A 연결 실패")
         elif idx == 1:
             self.network_manager.request_cctv_b()
+            # UDP 연결 시도
+            if self.udp_client.connect_to_camera('B'):
+                self.update_udp_connection_status(True, "CCTV B 연결됨")
+            else:
+                self.update_udp_connection_status(False, "CCTV B 연결 실패")
 
     def show_table(self):
         """테이블 보기"""

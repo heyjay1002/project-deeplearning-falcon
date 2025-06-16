@@ -163,7 +163,7 @@ class Constants:
     # --- 객체 정보 형식 ---
     class ObjectInfo:
         """객체 정보 문자열 형식 정의"""
-        OBJECT_INFO = "{object_id},{object_type},{x_coord},{y_coord},{zone},{timestamp}[,{extra_info}]"
+        OBJECT_INFO = "{object_id},{object_type},{x_coord},{y_coord},{zone},{timestamp}[,{extra_info}],{image_data}"
         OBJECT_INFO_DETAIL = "{object_id},{object_type},{x_coord},{y_coord},{zone},{timestamp},{image_data}"
 
     # --- 비디오 관련 ---

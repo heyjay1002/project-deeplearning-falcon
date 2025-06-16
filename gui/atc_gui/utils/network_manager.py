@@ -1,12 +1,14 @@
 from PyQt6.QtCore import QObject, pyqtSignal, QTimer
 from PyQt6.QtGui import QImage
 from models.detected_object import DetectedObject
-from config import BirdRiskLevel, RunwayRiskLevel
+from config.constants import ObjectType, AirportZone, BirdRiskLevel, RunwayRiskLevel
 from utils.tcp_client import TcpClient
 from utils.udp_client import UdpClient
 from utils.logger import logger
 from config.settings import Settings
 import cv2
+from datetime import datetime
+import base64
 
 class NetworkManager(QObject):
     """TCP 및 UDP 통신을 총괄하는 네트워크 관리자"""
@@ -96,8 +98,95 @@ class NetworkManager(QObject):
 
     def _handle_object_detected(self, objects: list):
         """객체 감지 이벤트를 개별 객체로 처리"""
-        for obj in objects:
-            self.object_detected.emit(obj)
+        for obj_data in objects:
+            try:
+                # 객체 정보 파싱
+                fields = obj_data.split(',')
+                if len(fields) < 5:  # 최소 필수 필드 수 확인 (timestamp와 이미지 제외)
+                    logger.error(f"잘못된 객체 데이터 형식: {obj_data}")
+                    continue
+
+                object_id = int(fields[0])
+                object_type = ObjectType(fields[1])
+                x_coord = float(fields[2])
+                y_coord = float(fields[3])
+                zone = AirportZone(fields[4])
+                
+                # timestamp와 extra_info, image_data 처리
+                timestamp = None
+                extra_info = None
+                image_data = None
+                
+                # 필드 분석
+                remaining_fields = fields[5:] if len(fields) > 5 else []
+                
+                # 이미지 데이터 찾기
+                for i, field in enumerate(remaining_fields):
+                    if field.startswith('data:image/'):
+                        try:
+                            # Base64 데이터 유효성 검사
+                            if ',' not in field:
+                                logger.warning("잘못된 이미지 데이터 형식: 콤마(,)가 없습니다.")
+                                continue
+                            
+                            mime_type, base64_data = field.split(',', 1)
+                            # Base64 디코딩 테스트
+                            try:
+                                base64.b64decode(base64_data)
+                                image_data = field
+                            except Exception as e:
+                                logger.error(f"잘못된 Base64 이미지 데이터: {str(e)}")
+                                continue
+                            
+                            # 이미지 데이터 이전의 필드들을 처리
+                            if i > 0:
+                                # 첫 번째 필드가 timestamp 형식인지 확인
+                                try:
+                                    timestamp = datetime.fromisoformat(remaining_fields[0])
+                                    # 나머지 필드들은 extra_info
+                                    if i > 1:
+                                        extra_info = remaining_fields[1]
+                                except ValueError:
+                                    # timestamp가 아닌 경우 extra_info로 처리
+                                    extra_info = remaining_fields[0]
+                            break
+                        except Exception as e:
+                            logger.error(f"이미지 데이터 처리 중 오류 발생: {str(e)}")
+                            continue
+                else:
+                    # 이미지 데이터가 없는 경우
+                    if remaining_fields:
+                        # 첫 번째 필드가 timestamp 형식인지 확인
+                        try:
+                            timestamp = datetime.fromisoformat(remaining_fields[0])
+                            # 나머지 필드는 extra_info
+                            if len(remaining_fields) > 1:
+                                extra_info = remaining_fields[1]
+                        except ValueError:
+                            # timestamp가 아닌 경우 extra_info로 처리
+                            extra_info = remaining_fields[0]
+
+                # timestamp가 없는 경우 현재 시간 사용
+                if timestamp is None:
+                    timestamp = datetime.now()
+
+                # DetectedObject 생성
+                obj = DetectedObject(
+                    object_id=object_id,
+                    object_type=object_type,
+                    x_coord=x_coord,
+                    y_coord=y_coord,
+                    zone=zone,
+                    timestamp=timestamp,
+                    extra_info=extra_info,
+                    image_data=image_data
+                )
+                
+                self.object_detected.emit(obj)
+                
+            except Exception as e:
+                logger.error(f"객체 데이터 처리 중 오류 발생: {str(e)}")
+                continue
 
     def _handle_map_response(self, response: str):
         """지도 응답 처리"""

@@ -6,7 +6,7 @@ from datetime import datetime
 # 프로젝트 루트 디렉토리를 Python 경로에 추가
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from views.object_detection_dialog import ObjectDetectionDialog
+from views.notification_dialog import NotificationDialog
 from models.detected_object import DetectedObject, ObjectType, AirportZone
 
 def test_detection_dialog():
@@ -20,11 +20,17 @@ def test_detection_dialog():
         timestamp=datetime.now()
     )
     
+    # 테스트용 이미지 데이터 생성 (더미 데이터)
+    test_data = {
+        'image_data': b'dummy_image_data',
+        'timestamp': datetime.now().isoformat()
+    }
+    
     # QApplication 인스턴스 생성
     app = QApplication(sys.argv)
     
     # 다이얼로그 생성 및 표시
-    dialog = ObjectDetectionDialog(test_obj)
+    dialog = NotificationDialog(notification_type='object', data=test_obj)
     dialog.show()
     
     # 이벤트 루프 실행
