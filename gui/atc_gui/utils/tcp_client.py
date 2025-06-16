@@ -41,46 +41,31 @@ class TcpClient(QObject):
         self.socket = QTcpSocket(self)
         self._setup_socket_signals()
         
-        # 재연결 타이머
-        self.reconnect_timer = QTimer(self)
-        self.reconnect_timer.timeout.connect(self._attempt_reconnect)
-        
         # 연결 타임아웃 타이머
         self.connection_timeout_timer = QTimer(self)
         self.connection_timeout_timer.setSingleShot(True)
         self.connection_timeout_timer.timeout.connect(self._on_connection_timeout)
         
-        # UDP 클라이언트 (외부에서 주입받도록 변경)
-        self.udp_client = None
-        
         # 상태 관리
         self.message_buffer = ""
         self.connection_attempts = 0
-        self.is_reconnecting = False
-
-    # === 연결 관리 메서드 ===
-    def set_udp_client(self, udp_client):
-        """UDP 클라이언트 설정 (의존성 주입)"""
-        self.udp_client = udp_client
 
     def connect_to_server(self) -> bool:
         """서버에 연결 시도"""
         if self.is_connected():
-            logger.warning("이미 서버에 연결되어 있습니다")
             return True
             
         if self.socket.state() == QTcpSocket.SocketState.ConnectingState:
-            logger.warning("이미 연결을 시도하고 있습니다")
-            return True
+            return False
             
-        # 연결 시도 횟수 증가 (재연결이 아닌 경우에만)
-        if not self.is_reconnecting:
-            self.connection_attempts = 0
-        self.connection_attempts += 1
-        
-        logger.info(f"TCP 서버 연결 시도: {self.settings.server.tcp_ip}:{self.settings.server.tcp_port} ({self.connection_attempts}/{self.settings.server.max_reconnect_attempts}회)")
+        logger.info(f"TCP 서버 연결 시도: {self.settings.server.tcp_ip}:{self.settings.server.tcp_port}")
         
         try:
+            # 이전 연결 시도가 있다면 중단
+            if self.socket.state() != QTcpSocket.SocketState.UnconnectedState:
+                self.socket.abort()
+                self.socket.waitForDisconnected(1000)
+            
             # 연결 타임아웃 설정
             self._start_connection_timeout()
             
@@ -90,8 +75,11 @@ class TcpClient(QObject):
                 self.settings.server.tcp_port
             )
             
-            logger.debug("connectToHost() 호출 완료, 연결 대기 중...")
-            return True
+            # 연결 성공 대기
+            if not self.socket.waitForConnected(3000):  # 3초 대기
+                return False
+                
+            return self.is_connected()
             
         except Exception as e:
             self._handle_connection_error(f"연결 시도 중 오류: {e}")
@@ -101,10 +89,8 @@ class TcpClient(QObject):
         """서버 연결 해제"""
         logger.info("서버 연결 해제 중...")
         
-        # 재연결 타이머 중지
-        self.reconnect_timer.stop()
+        # 연결 타임아웃 타이머 중지
         self.connection_timeout_timer.stop()
-        self.is_reconnecting = False
         
         # TCP 소켓 연결 해제
         if self.socket.state() == QTcpSocket.SocketState.ConnectedState:
@@ -168,7 +154,6 @@ class TcpClient(QObject):
         # 연결 타임아웃 타이머 중지
         self.connection_timeout_timer.stop()
         
-        self._reset_connection_state()
         self.message_buffer = ""
         self.connected.emit()
 
@@ -180,10 +165,6 @@ class TcpClient(QObject):
         self.connection_timeout_timer.stop()
         
         self.disconnected.emit()
-        
-        # 의도적인 연결 해제가 아니라면 재연결 시도
-        if not self.is_reconnecting:
-            self._start_reconnect()
 
     def _on_data_ready(self):
         """데이터 수신 처리"""
@@ -208,19 +189,21 @@ class TcpClient(QObject):
         self.connection_timeout_timer.stop()
         
         error_msg = f"소켓 오류 ({error}): {self.socket.errorString()}"
-        logger.error(f"소켓 상태: {self.get_connection_state()}")
         self._handle_connection_error(error_msg)
 
     def _on_connection_timeout(self):
         """연결 타임아웃 처리"""
         logger.warning(f"연결 타임아웃 ({self.settings.server.connection_timeout}초)")
-        logger.debug(f"현재 소켓 상태: {self.get_connection_state()}")
         
-        # 연결 시도 중단
+        # 연결 시도 중단 및 소켓 초기화
         if self.socket.state() == QTcpSocket.SocketState.ConnectingState:
             self.socket.abort()
+            self.socket.waitForDisconnected(1000)
             
-        # connection_attempts는 여기서 증가하지 않음 (_handle_connection_error에서 처리)
+        # 소켓 재초기화
+        self.socket = QTcpSocket(self)
+        self._setup_socket_signals()
+            
         self._handle_connection_error("연결 타임아웃")
 
     # === 메시지 처리 메서드 ===
@@ -254,11 +237,56 @@ class TcpClient(QObject):
             if handler:
                 handler(data)
             else:
-                logger.warning(f"알 수 없는 메시지 타입: {prefix}")
+                logger.warning(f"처리되지 않은 메시지 타입: {prefix.value}")
                 
         except Exception as e:
-            logger.error(f"메시지 처리 오류: {e}")
-            logger.error(f"원본 메시지: {message}")
+            logger.error(f"메시지 처리 중 오류: {e}")
+
+    def _handle_connection_error(self, error_msg: str):
+        """연결 오류 처리"""
+        logger.error(error_msg)
+        self.connection_error.emit(error_msg)
+
+    def _start_connection_timeout(self):
+        """연결 타임아웃 타이머 시작"""
+        self.connection_timeout_timer.start(self.settings.server.connection_timeout * 1000)
+
+    def _setup_socket_signals(self):
+        """소켓 시그널 연결"""
+        self.socket.connected.connect(self._on_connected)
+        self.socket.disconnected.connect(self._on_disconnected)
+        self.socket.readyRead.connect(self._on_data_ready)
+        self.socket.errorOccurred.connect(self._on_socket_error)
+
+    def _send_request(self, create_func, param, description: str) -> bool:
+        """요청 메시지 전송"""
+        if not self.is_connected():
+            logger.error("서버에 연결되어 있지 않습니다")
+            return False
+            
+        try:
+            message = create_func(param) if param is not None else create_func()
+            return self._send_command(message, description)
+        except Exception as e:
+            logger.error(f"{description} 메시지 생성 중 오류: {e}")
+            return False
+
+    def _send_command(self, command: str, description: str) -> bool:
+        """명령어 전송"""
+        try:
+            data = (command + '\n').encode('utf-8')
+            bytes_written = self.socket.write(data)
+            
+            if bytes_written == len(data):
+                logger.debug(f"{description} 전송 성공")
+                return True
+            else:
+                logger.error(f"{description} 전송 실패 (부분 전송)")
+                return False
+                
+        except Exception as e:
+            logger.error(f"{description} 전송 중 오류: {e}")
+            return False
 
     # === 개별 메시지 핸들러 ===
     def _handle_object_detection(self, data: str):
@@ -328,83 +356,3 @@ class TcpClient(QObject):
             
         logger.error(f"객체 상세보기 오류: {error_msg}")
         self.object_detail_error.emit(error_msg)
-
-    # === 내부 헬퍼 메서드 ===
-    def _setup_socket_signals(self):
-        """소켓 시그널 연결 설정"""
-        self.socket.connected.connect(self._on_connected)
-        self.socket.disconnected.connect(self._on_disconnected)
-        self.socket.readyRead.connect(self._on_data_ready)
-        self.socket.errorOccurred.connect(self._on_socket_error)
-
-    def _send_request(self, create_func, param, description: str) -> bool:
-        """요청 전송 공통 로직"""
-        if not self.is_connected():
-            logger.error(f"연결되지 않은 상태에서 {description} 실패")
-            return False
-            
-        try:
-            if param is not None:
-                command = create_func(param)
-            else:
-                command = create_func()
-                
-            return self._send_command(command, description)
-        except Exception as e:
-            logger.error(f"{description} 생성 오류: {e}")
-            return False
-
-    def _send_command(self, command: str, description: str) -> bool:
-        """명령어 전송"""
-        try:
-            data = (command + '\n').encode('utf-8')
-            bytes_written = self.socket.write(data)
-            
-            if bytes_written == -1:
-                logger.error(f"{description} 전송 실패")
-                return False
-                
-            logger.debug(f"{description} 전송 성공: {command}")
-            return True
-        except Exception as e:
-            logger.error(f"{description} 전송 중 오류: {e}")
-            return False
-
-    def _start_connection_timeout(self):
-        """연결 타임아웃 타이머 시작"""
-        timeout_ms = self.settings.server.connection_timeout * 1000
-        self.connection_timeout_timer.start(timeout_ms)
-        logger.debug(f"연결 타임아웃 타이머 시작: {self.settings.server.connection_timeout}초")
-
-    def _reset_connection_state(self):
-        """연결 상태 초기화 (연결 성공 시에만 호출)"""
-        self.connection_attempts = 0
-        self.reconnect_timer.stop()
-        self.connection_timeout_timer.stop()
-        self.is_reconnecting = False
-
-    def _handle_connection_error(self, error_msg: str):
-        """연결 오류 처리"""
-        full_error = f"{error_msg} (시도 {self.connection_attempts}/{self.settings.server.max_reconnect_attempts}회)"
-        logger.error(full_error)
-        self.connection_error.emit(full_error)
-        self._start_reconnect()
-
-    def _start_reconnect(self):
-        """재연결 프로세스 시작"""
-        if self.reconnect_timer.isActive():
-            return
-            
-        # 재연결 간격 계산 (시도 횟수에 따라 증가)
-        interval = self.settings.server.reconnect_interval
-        if self.connection_attempts > 0:
-            interval *= self.settings.server.reconnect_backoff_factor
-            
-        logger.info(f"재연결 시도 중... ({self.connection_attempts + 1}회째)")
-        self.is_reconnecting = True
-        self.reconnect_timer.start(interval * 1000)
-
-    def _attempt_reconnect(self):
-        """재연결 시도"""
-        self.reconnect_timer.stop()
-        self.connect_to_server()
