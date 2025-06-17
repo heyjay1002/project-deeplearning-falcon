@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QWidget
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QImage, QPixmap, QColor, QIcon
-from utils.interface import DetectedObject, ObjectType, AirportZone
+from utils.interface import DetectedObject, BirdRisk, RunwayRisk, ExtraInfo
 from typing import Optional, Dict, Any
 import base64
 from io import BytesIO
@@ -16,7 +16,9 @@ class NotificationDialog(QDialog):
         titles = {
             'object': "이상 객체 감지",
             'bird': "조류 충돌 위험 변화",
-            'fallen_person': "쓰러진 인원 발생"
+            'fallen_person': "쓰러진 인원 발생",
+            'runway_a_risk': "활주로 A 위험 변화",
+            'runway_b_risk': "활주로 B 위험 변화"
         }
         self.setWindowTitle("알림")
         
@@ -98,6 +100,7 @@ class NotificationDialog(QDialog):
                 error_label.setFixedSize(120, 120)
                 content_layout.addWidget(error_label)
         
+
         # 정보 표시 (우측)
         info_layout = QVBoxLayout()
         info_layout.setSpacing(1)  # 위젯 간 간격 최소화
@@ -142,19 +145,20 @@ class NotificationDialog(QDialog):
     def _get_info_text(self, notification_type: str, data: Dict[str, Any]) -> str:
         """알림 타입에 따른 정보 텍스트 생성"""
         if notification_type == 'object' and isinstance(data, DetectedObject):
-            timestamp = data.timestamp if hasattr(data, 'timestamp') else datetime.now()
             return (f"객체 ID: {data.object_id}\n"
                    f"종류: {data.object_type.value}\n"
                    f"위치: {data.zone.value}\n"
-                   f"발견 시각: {timestamp.strftime('%Y-%m-%d %H:%M:%S')}")
+                   f"발견 시각: {data.timestamp}")
         
-        elif notification_type == 'bird':
-            return (f"위험도: {data.get('risk_level', '알 수 없음')}")
+        elif notification_type == 'bird' and isinstance(data, BirdRisk):
+            return f"조류 위험도: {data}"
         
-        elif notification_type == 'fallen_person':
-            return (f"위치: {data.get('location', '알 수 없음')}\n"
-                   f"발견 시각: {data.get('timestamp', datetime.now()).strftime('%Y-%m-%d %H:%M:%S')}\n"
-                   f"상태: {data.get('condition', '알 수 없음')}\n"
-                   f"응급 연락처: {data.get('emergency_contact', '알 수 없음')}")
+        elif notification_type == 'fallen_person' and isinstance(data, DetectedObject):
+            if data.extra_info == ExtraInfo.RESCUE:
+                return (f"객체 ID: {data.object_id}\n"
+                        f"쓰러진 인원 위치: {data.zone.value}")
+        
+        elif notification_type in ['runway_a_risk', 'runway_b_risk'] and isinstance(data, RunwayRisk):
+            return f"활주로 {data.runway_id} 위험도: {data.enum.value}"
         
         return "알 수 없는 알림 유형입니다."

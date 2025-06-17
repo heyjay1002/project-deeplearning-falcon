@@ -4,7 +4,7 @@ import base64
 import asyncio
 from dataclasses import dataclass, field
 from enum import Enum
-from config import ObjectType, BirdRiskLevel, RunwayRiskLevel, AirportZone, MessagePrefix, Constants
+from config import ObjectType, BirdRiskLevel, RunwayRiskLevel, AirportZone, ExtraInfo, MessagePrefix, Constants
 from utils.logger import logger
 
 
@@ -46,7 +46,6 @@ class ProcessedFrame:
     timestamp: datetime = field(default_factory=datetime.now)
     quality_score: Optional[float] = None
 
-
 @dataclass
 class DetectedObject:
     """개선된 감지 객체 정보를 저장하는 데이터 클래스"""
@@ -56,9 +55,8 @@ class DetectedObject:
     y_coord: float
     zone: AirportZone
     timestamp: datetime
-    extra_info: Optional[Dict[str, Any]] = None
+    extra_info: Optional[ExtraInfo] = None
     image_data: Optional[bytes] = None  # bytes로 통일
-    confidence: Optional[float] = None  # 신뢰도 추가
     
     def __post_init__(self):
         """데이터 유효성 검증"""
@@ -69,8 +67,7 @@ class DetectedObject:
         validators = [
             self._validate_object_id,
             self._validate_coordinates,
-            self._validate_timestamp,
-            self._validate_confidence
+            self._validate_timestamp
         ]
         for validator in validators:
             validator()
@@ -90,12 +87,6 @@ class DetectedObject:
         if not isinstance(self.timestamp, datetime):
             raise ValueError(f"Invalid timestamp: {self.timestamp}")
     
-    def _validate_confidence(self):
-        """신뢰도 유효성 검증"""
-        if self.confidence is not None:
-            if not isinstance(self.confidence, (int, float)) or not (0.0 <= self.confidence <= 1.0):
-                raise ValueError(f"Invalid confidence: {self.confidence}")
-
     @property
     def position(self) -> tuple[float, float]:
         """객체의 위치 좌표 반환"""
@@ -125,11 +116,6 @@ class DetectedObject:
     def is_airplane(self) -> bool:
         """비행기 객체 여부 확인"""
         return self.object_type == ObjectType.AIRPLANE
-
-    @property
-    def is_fire(self) -> bool:
-        """화재 객체 여부 확인"""
-        return self.object_type == ObjectType.FIRE
 
     @property
     def is_vehicle(self) -> bool:
@@ -162,9 +148,8 @@ class DetectedObject:
             'y_coord': self.y_coord,
             'zone': self.zone.value,
             'timestamp': self.timestamp.isoformat(),
-            'extra_info': self.extra_info,
-            'image_data': self.image_base64,
-            'confidence': self.confidence
+            'extra_info': self.extra_info.value,
+            'image_data': self.image_base64
         }
 
     @classmethod
@@ -184,52 +169,46 @@ class DetectedObject:
             y_coord=data['y_coord'],
             zone=AirportZone(data['zone']),
             timestamp=datetime.fromisoformat(data['timestamp']),
-            extra_info=data.get('extra_info'),
+            extra_info=ExtraInfo(data['extra_info']),
             image_data=image_data,
-            confidence=data.get('confidence')
         )
-
-    def __str__(self) -> str:
-        """객체의 문자열 표현"""
-        confidence_str = f", 신뢰도: {self.confidence:.2f}" if self.confidence else ""
-        return (f"Object {self.object_id} ({self.object_type.value}) "
-                f"at ({self.x_coord}, {self.y_coord}) in {self.zone.value}{confidence_str}")
-
 
 @dataclass(frozen=True)
 class BirdRisk:
-    value: int
+    bird_risk_level: int
 
     def __post_init__(self):
-        if self.value not in Constants.BIRD_RISK_MAPPING:
-            raise ValueError(f"유효하지 않은 조류 위험도 값: {self.value}")
+        if self.bird_risk_level not in Constants.BIRD_RISK_MAPPING:
+            raise ValueError(f"유효하지 않은 조류 위험도 값: {self.bird_risk_level}")
 
     @property
     def enum(self) -> BirdRiskLevel:
-        return Constants.BIRD_RISK_MAPPING[self.value]
+        return Constants.BIRD_RISK_MAPPING[self.bird_risk_level]
 
     def __str__(self):
-        return f"조류 위험도: {self.enum.value}({self.value})"
-
+        return self.enum.value
 
 @dataclass(frozen=True)
 class RunwayRisk:
     runway_id: str  # "A" 또는 "B"
-    value: int
+    runway_risk_level: int
 
     def __post_init__(self):
         if self.runway_id not in ("A", "B"):
             raise ValueError(f"유효하지 않은 활주로 ID: {self.runway_id}")
-        if self.value not in Constants.RUNWAY_RISK_MAPPING:
-            raise ValueError(f"유효하지 않은 활주로 위험도 값: {self.value}")
+        if self.runway_risk_level not in Constants.RUNWAY_RISK_MAPPING:
+            raise ValueError(f"유효하지 않은 활주로 위험도 값: {self.runway_risk_level}")
 
     @property
-    def enum(self) -> RunwayRiskLevel:
-        return Constants.RUNWAY_RISK_MAPPING[self.value]
+    def enum(self) -> RunwayRiskLevel:        
+        return Constants.RUNWAY_RISK_MAPPING[self.runway_risk_level]
 
-    def __str__(self):
-        return f"활주로 {self.runway_id} 위험도: {self.enum.value}({self.value})"
-
+    def to_dict(self) -> Dict[str, Any]:
+        """객체 정보를 딕셔너리로 변환"""
+        return {
+            'runway_id': self.runway_id,
+            'runway_risk_level': self.enum.value
+        }
 
 class MessageParser:
     """메시지 파싱 전용 클래스"""
@@ -273,19 +252,13 @@ class MessageParser:
         """선택적 필드 파싱"""
         result = {
             'extra_info': None,
-            'image_data': None,
-            'confidence': None
+            'image_data': None
         }
         
         if not fields:
             return result
         
-        try:
-            # 신뢰도가 있는 경우 (숫자로 시작하는 첫 번째 필드)
-            if fields and MessageParser._is_confidence_field(fields[0]):
-                result['confidence'] = float(fields[0])
-                fields = fields[1:]
-            
+        try:          
             # 이미지 데이터 처리
             if include_image and fields:
                 for i, field in enumerate(fields):
@@ -317,11 +290,7 @@ class MessageParser:
         except ValueError:
             # 문자열인 경우
             type_str_lower = type_str.lower()
-            
-            # 특수 케이스 처리
-            if type_str_lower == 'car':
-                return ObjectType.VEHICLE
-            
+                      
             # ObjectType enum과 매칭
             for obj_type in ObjectType:
                 if obj_type.value.lower() == type_str_lower:
@@ -331,7 +300,7 @@ class MessageParser:
             try:
                 return ObjectType[type_str.upper()]
             except KeyError:
-                raise ValueError(f"Invalid object type: {type_str}")
+                raise ValueError(f"객체 타입 오류: {type_str}")
     
     @staticmethod
     def _parse_zone(zone_str: str) -> AirportZone:
@@ -345,7 +314,7 @@ class MessageParser:
             try:
                 return AirportZone[zone_str.upper()]
             except KeyError:
-                raise ValueError(f"Invalid zone: {zone_str}")
+                raise ValueError(f"구역 이름 오류: {zone_str}")
     
     @staticmethod
     def _parse_timestamp(timestamp_str: str) -> datetime:
@@ -358,17 +327,8 @@ class MessageParser:
                 # Unix timestamp 처리
                 return datetime.fromtimestamp(float(timestamp_str))
         except (ValueError, OSError) as e:
-            raise ValueError(f"Invalid timestamp: {timestamp_str}") from e
-    
-    @staticmethod
-    def _is_confidence_field(field: str) -> bool:
-        """신뢰도 필드인지 확인"""
-        try:
-            value = float(field)
-            return 0.0 <= value <= 1.0
-        except ValueError:
-            return False
-    
+            raise ValueError(f"타임스탬프 형식 오류: {timestamp_str}") from e
+       
     @staticmethod
     def _is_base64_image(field: str) -> bool:
         """Base64 이미지 데이터인지 확인"""
@@ -429,17 +389,17 @@ class MessageInterface:
     def parse_message(message: str) -> tuple[MessagePrefix, str]:
         """메시지 파싱"""
         if not message or Constants.Protocol.MESSAGE_SEPARATOR not in message:
-            raise ParseError(f"Invalid message format: {message}")
+            raise ParseError(f"메시지 포맷 오류: {message}")
             
         parts = message.split(Constants.Protocol.MESSAGE_SEPARATOR, 1)
         if len(parts) != 2:
-            raise ParseError(f"Invalid message format: {message}")
+            raise ParseError(f"메시지 포맷 오류: {message}")
         
         prefix_str, data = parts
         try:
             prefix = MessagePrefix(prefix_str)
         except ValueError:
-            raise ParseError(f"Unknown message prefix: {prefix_str}")
+            raise ParseError(f"알 수 없는 메시지 프리픽스: {prefix_str}")
         
         return prefix, data
     
@@ -469,10 +429,10 @@ class MessageInterface:
         try:
             risk_level = int(data.strip())
         except ValueError:
-            raise ParseError(f"Invalid bird risk level format: {data}")
+            raise ParseError(f"조류 위험도 값 오류: {data}")
             
         if not MessageInterface.validate_bird_risk_level(risk_level):
-            raise ParseError(f"Invalid bird risk level value: {risk_level}")
+            raise ParseError(f"조류 위험도 값 오류: {risk_level}")
             
         return Constants.BIRD_RISK_MAPPING[risk_level]
     
@@ -482,10 +442,10 @@ class MessageInterface:
         try:
             risk_level = int(data.strip())
         except ValueError:
-            raise ParseError(f"Invalid runway risk level format: {data}")
+            raise ParseError(f"활주로 위험도 값 오류: {data}")
             
         if not MessageInterface.validate_runway_risk_level(risk_level):
-            raise ParseError(f"Invalid runway risk level value: {risk_level}")
+            raise ParseError(f"활주로 위험도 값 오류: {risk_level}")
             
         return Constants.RUNWAY_RISK_MAPPING[risk_level]
     
@@ -496,9 +456,9 @@ class MessageInterface:
             format_str = Constants.Protocol.MESSAGE_FORMAT[prefix]
             return format_str.format(prefix=prefix.value, **kwargs)
         except KeyError as e:
-            raise ProtocolError(f"Unknown message prefix: {prefix}") from e
+            raise ProtocolError(f"알 수 없는 메시지 프리픽스: {prefix}") from e
         except Exception as e:
-            raise ProtocolError(f"Message creation failed: {e}") from e
+            raise ProtocolError(f"메시지 생성 실패: {e}") from e
 
     @staticmethod
     def create_object_detail_request(object_id: int) -> str:
@@ -511,7 +471,7 @@ class MessageInterface:
     def create_cctv_request(camera_id: str) -> str:
         """CCTV 영상 요청 메시지 생성"""
         if camera_id not in ["A", "B"]:
-            raise ValueError("Invalid camera ID")
+            raise ValueError("Invalid CCTV ID")
         
         prefix = MessagePrefix.MC_CA if camera_id == "A" else MessagePrefix.MC_CB
         return MessageInterface.create_message(prefix)

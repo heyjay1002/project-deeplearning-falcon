@@ -7,7 +7,6 @@ class ObjectType(Enum):
     PERSON = "인간"
     ANIMAL = "동물"
     AIRPLANE = "비행기"
-    FIRE = "화재"
     VEHICLE = "차량"
     WORK_PERSON = "작업자"
     WORK_VEHICLE = "작업차량"
@@ -47,11 +46,20 @@ class AccessTarget(Enum):
     VEHICLE = "차량"
     PERSON = "인원"
 
+class RunwayID(Enum):
+    """활주로 식별자"""
+    A = "A"
+    B = "B"
+
+class ExtraInfo(Enum):
+    """추가 정보"""
+    NONE = "없음"
+    RESCUE = "쓰러짐"
+
 class CameraID(Enum):
     """CCTV 카메라 식별자"""
     A = "A"
     B = "B"
-    C = "C"
 
 class MessagePrefix(Enum):
     """메시지 프리픽스"""
@@ -83,10 +91,9 @@ class Constants:
         2: ObjectType.PERSON,
         3: ObjectType.ANIMAL,
         4: ObjectType.AIRPLANE,
-        5: ObjectType.FIRE,
-        6: ObjectType.VEHICLE,
-        7: ObjectType.WORK_PERSON,
-        8: ObjectType.WORK_VEHICLE
+        5: ObjectType.VEHICLE,
+        6: ObjectType.WORK_PERSON,
+        7: ObjectType.WORK_VEHICLE
     }
     
     BIRD_RISK_MAPPING = {
