@@ -7,8 +7,8 @@ import logging
 from views.main_page import MainPage
 from views.access_page import AccessPage
 from views.log_page import LogPage
-from views.object_detection_dialog import ObjectDetectionDialog
-from models.detected_object import DetectedObject
+from views.notification_dialog import NotificationDialog
+from utils.interface import DetectedObject
 
 class WindowClass(QMainWindow):
     def __init__(self):
@@ -154,7 +154,7 @@ class WindowClass(QMainWindow):
         if detected_object.object_id in self.processed_object_ids:
             return
             
-        dialog = ObjectDetectionDialog(detected_object, self)
+        dialog = NotificationDialog('object', detected_object, self)
         dialog.show()
 
 if __name__ == "__main__":

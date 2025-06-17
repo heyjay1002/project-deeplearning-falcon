@@ -1,21 +1,20 @@
-from PyQt6.QtWidgets import QWidget, QTableWidgetItem, QSizePolicy, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QMessageBox
+from PyQt6.QtWidgets import *
 from PyQt6 import uic
 from PyQt6.QtGui import QPixmap, QColor, QImage
 from PyQt6.QtCore import Qt, QTimer, pyqtSignal
-import os
 from datetime import datetime
 from views.object_detail_dialog import ObjectDetailDialog
-from views.object_detection_dialog import ObjectDetectionDialog
-from models.detected_object import DetectedObject
-from config import BirdRiskLevel, RunwayRiskLevel, Constants, ObjectType, AirportZone
+from views.notification_dialog import NotificationDialog
+from config.constants import BirdRiskLevel, RunwayRiskLevel, ObjectType, AirportZone
 from config.settings import Settings
 from utils.network_manager import NetworkManager
 from utils.udp_client import UdpClient
-from widgets.map_marker_widget import MapMarkerWidget, MarkerData, MarkerType, MarkerState
+from utils.interface import DetectedObject, BirdRisk, RunwayRisk
 from utils.logger import logger
-import cv2
+from widgets.map_marker_widget import MapMarkerWidget, MarkerData, MarkerType, MarkerState
 import time
 from collections import deque
+import os
 
 class MainPage(QWidget):
     # 객체 목록 업데이트 시그널 추가
@@ -25,6 +24,9 @@ class MainPage(QWidget):
         super().__init__(parent)
         ui_path = os.path.join(os.path.dirname(__file__), '../ui/main_page.ui')
         uic.loadUi(ui_path, self)
+
+        # 현재 처리된 객체 ID 저장
+        self.current_object_ids = set()
 
         # 설정 로드
         self.settings = Settings.get_instance()
@@ -75,7 +77,6 @@ class MainPage(QWidget):
 
         # 스택 위젯 초기 상태 설정
         self.map_cctv_stack.setCurrentIndex(0)  # 지도 페이지로 시작
-        logger.info("MainPage 초기화 완료")
 
     def setup_image_paths(self):
         """이미지 경로 설정"""
@@ -279,12 +280,18 @@ class MainPage(QWidget):
     def _update_object_list(self, objects: list[DetectedObject]):
         """실제 객체 목록 업데이트 처리"""
         logger.debug(f"객체 목록 업데이트: {len(objects)}개 객체")
-        self.table_object_list.setRowCount(len(objects))
         
-        # 현재 처리된 객체 ID 세트 생성
-        current_object_ids = {obj.object_id for obj in objects}
+        # 중복 제거: 이미 처리된 객체는 제외
+        new_objects = [obj for obj in objects if obj.object_id not in self.current_object_ids]
+            
+        # 현재 처리된 객체 ID 업데이트
+        self.current_object_ids.update(obj.object_id for obj in new_objects)
         
-        for row, obj in enumerate(objects):
+        # 테이블 업데이트
+        self.table_object_list.setRowCount(len(self.current_object_ids))
+        
+        # 모든 객체 정보 업데이트
+        for row, obj in enumerate(new_objects):
             # ID
             self.table_object_list.setItem(row, 0, QTableWidgetItem(str(obj.object_id)))
             # 위치
@@ -293,16 +300,16 @@ class MainPage(QWidget):
             self.table_object_list.setItem(row, 2, QTableWidgetItem(obj.object_type.value))
 
         # 마커 업데이트
-        self.update_markers(objects)
+        self.update_markers(new_objects)
 
         # 처리된 객체 ID 목록을 메인 윈도우에 전달
-        self.object_list_updated.emit(current_object_ids)
+        self.object_list_updated.emit(self.current_object_ids)
 
         # 첫 객체 감지 시 팝업 표시
-        if self.is_first_detection and objects:
+        if self.is_first_detection and new_objects:
             self.is_first_detection = False
             logger.info("첫 번째 객체 감지")
-            dialog = ObjectDetectionDialog(objects[0], self)
+            dialog = NotificationDialog(new_objects[0], self)
             dialog.exec()
 
     def update_markers(self, objects: list[DetectedObject]):
@@ -505,10 +512,23 @@ class MainPage(QWidget):
         idx = self.combo_cctv.currentIndex()
         logger.info(f"CCTV 보기: {idx + 1}")
         self.map_cctv_stack.setCurrentIndex(idx + 1)
+        
+        # 이전 CCTV 연결 해제
+        if hasattr(self, 'udp_client'):
+            self.udp_client.disconnect()
+            
         if idx == 0:
             self.network_manager.request_cctv_a()
+            # UDP 연결 시도
+            if not self.udp_client.connect(self.settings.server.udp_ip, self.settings.server.udp_port):
+                self.update_udp_connection_status(False, "CCTV A 연결 실패")
+                logger.error("CCTV A UDP 연결 실패")
         elif idx == 1:
             self.network_manager.request_cctv_b()
+            # UDP 연결 시도
+            if not self.udp_client.connect(self.settings.server.udp_ip, self.settings.server.udp_port):
+                self.update_udp_connection_status(False, "CCTV B 연결 실패")
+                logger.error("CCTV B UDP 연결 실패")
 
     def show_table(self):
         """테이블 보기"""
