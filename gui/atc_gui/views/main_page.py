@@ -11,10 +11,11 @@ from utils.network_manager import NetworkManager
 from utils.udp_client import UdpClient
 from utils.interface import DetectedObject, BirdRisk, RunwayRisk
 from utils.logger import logger
-from widgets.map_marker_widget import MapMarkerWidget, MarkerData, MarkerType, MarkerState
+from widgets.map_marker_widget import MapMarkerWidget
 import time
 from collections import deque
 import os
+from typing import Optional
 
 class MainPage(QWidget):
     # 객체 목록 업데이트 시그널 추가
@@ -78,42 +79,12 @@ class MainPage(QWidget):
         # 스택 위젯 초기 상태 설정
         self.map_cctv_stack.setCurrentIndex(0)  # 지도 페이지로 시작
 
-    def setup_image_paths(self):
-        """이미지 경로 설정"""
-        base_dir = os.path.dirname(__file__)
-        self.map_path = os.path.join(base_dir, '../resources/images/map_crop.png')
-        self.marker_icon_path = os.path.join(base_dir, '../resources/images/bird.png')
+        # 초기 조류 위험도 설정
+        self.update_bird_risk(None)  # 기본값(안전)으로 설정
 
-    def setup_map_display(self):
-        """지도 표시 설정"""
-        # 지도 이미지 로드
-        self.map_pixmap = QPixmap()
-        
-        if os.path.exists(self.map_path):
-            if self.map_pixmap.load(self.map_path):
-                pass  # 로드 성공
-            else:
-                # 임시 이미지 생성
-                self.create_placeholder_map()
-        else:
-            # 임시 이미지 생성
-            self.create_placeholder_map()
-
-        # 초기 이미지 표시
-        self.update_map_image()
-
-    def create_placeholder_map(self):
-        """임시 지도 이미지 생성"""
-        self.map_pixmap = QPixmap(800, 600)
-        self.map_pixmap.fill(Qt.GlobalColor.lightGray)
-        
-        # 텍스트 추가
-        from PyQt6.QtGui import QPainter, QPen
-        painter = QPainter(self.map_pixmap)
-        painter.setPen(QPen(Qt.GlobalColor.black, 2))
-        painter.drawText(self.map_pixmap.rect(), Qt.AlignmentFlag.AlignCenter, 
-                        "지도 이미지를 로드할 수 없습니다\n경로를 확인하세요")
-        painter.end()
+        # 초기 활주로 위험도 설정
+        self.update_runway_a_risk(None)
+        self.update_runway_b_risk(None)
 
     def setup_table(self):
         """테이블 초기 설정"""
@@ -185,7 +156,6 @@ class MainPage(QWidget):
         self.udp_client.set_max_fps(self.target_fps)  # 설정된 FPS 적용
         self.udp_client.frame_received.connect(self.handle_udp_frame)
         self.udp_client.connection_status_changed.connect(self.update_udp_connection_status)
-        logger.info("UDP 클라이언트 초기화 완료 (연결은 CCTV 요청 시)")
 
     def handle_udp_frame(self, cam_id: str, frame, image_id: int = None):
         """UDP로 수신된 프레임 처리"""
@@ -313,79 +283,40 @@ class MainPage(QWidget):
             dialog.exec()
 
     def update_markers(self, objects: list[DetectedObject]):
-        """마커 업데이트 - 새로운 마커 시스템 사용"""
+        """마커 업데이트"""
         logger.debug(f"마커 업데이트: {len(objects)}개 객체")
         
         if not hasattr(self, 'map_marker'):
             logger.warning("map_marker가 초기화되지 않음")
             return
 
-        # 기존 마커들 중 더 이상 존재하지 않는 객체들 제거
+        # 현재 객체 ID 목록
         current_object_ids = {obj.object_id for obj in objects}
-        existing_marker_ids = set(self.map_marker.markers.keys())
         
+        # 더 이상 존재하지 않는 객체의 마커 제거
+        existing_marker_ids = set(self.map_marker.markers.keys())
         for marker_id in existing_marker_ids - current_object_ids:
             self.map_marker.remove_marker(marker_id)
             logger.debug(f"마커 제거: ID {marker_id}")
 
         # 새로운 객체들 또는 업데이트된 객체들 처리
         for obj in objects:
-            marker_data = self.create_marker_data_from_object(obj)
-            
-            if obj.object_id in existing_marker_ids:
-                # 기존 마커 업데이트
-                self.map_marker.update_marker(marker_data)
-            else:
-                # 새 마커 추가
-                self.map_marker.add_dynamic_marker(marker_data)
-                logger.debug(f"마커 추가: ID {obj.object_id}")
-
-    def create_marker_data_from_object(self, obj: DetectedObject) -> MarkerData:
-        """DetectedObject를 MarkerData로 변환"""
-        # 객체 타입을 마커 타입으로 매핑
-        object_type_to_marker_type = {
-            ObjectType.BIRD: MarkerType.BIRD,
-            ObjectType.AIRPLANE: MarkerType.AIRCRAFT,
-            ObjectType.VEHICLE: MarkerType.VEHICLE,
-            ObjectType.FOD: MarkerType.DEBRIS,
-            ObjectType.PERSON: MarkerType.PERSON,
-            ObjectType.ANIMAL: MarkerType.ANIMAL,
-            ObjectType.FIRE: MarkerType.FIRE,
-            ObjectType.WORK_PERSON: MarkerType.WORK_PERSON,
-            ObjectType.WORK_VEHICLE: MarkerType.WORK_VEHICLE
-        }
-        
-        # 기본 마커 상태 설정
-        marker_state = MarkerState.NORMAL
-        
-        # 위험도에 따른 마커 상태 설정
-        if obj.risk_level is not None:
-            if obj.risk_level == BirdRiskLevel.HIGH:
-                marker_state = MarkerState.DANGER
-            elif obj.risk_level == BirdRiskLevel.MEDIUM:
-                marker_state = MarkerState.WARNING
-            elif obj.risk_level == BirdRiskLevel.LOW:
-                marker_state = MarkerState.NORMAL
-        
-        # 좌표 정규화 (예: 0~100 범위를 0.0~1.0으로)
-        # 실제 좌표 시스템에 맞게 조정 필요
-        normalized_x = obj.x_coord / 100.0 if hasattr(obj, 'x_coord') else 0.5
-        normalized_y = obj.y_coord / 100.0 if hasattr(obj, 'y_coord') else 0.5
-        
-        # 범위 제한
-        normalized_x = max(0.0, min(1.0, normalized_x))
-        normalized_y = max(0.0, min(1.0, normalized_y))
-        
-        return MarkerData(
-            marker_id=obj.object_id,
-            x=normalized_x,
-            y=normalized_y,
-            marker_type=object_type_to_marker_type.get(obj.object_type, MarkerType.UNKNOWN),
-            state=marker_state,
-            label=str(obj.object_id),
-            icon_path=self.marker_icon_path if os.path.exists(self.marker_icon_path) else None,
-            size=32 if marker_state in [MarkerState.WARNING, MarkerState.DANGER] else 24
-        )
+            try:
+                # 마커 데이터 생성
+                marker_data = self.map_marker.create_marker_data(obj)
+                
+                if obj.object_id in existing_marker_ids:
+                    # 기존 마커 업데이트
+                    self.map_marker.update_marker(marker_data)
+                    logger.debug(f"마커 업데이트: ID {obj.object_id}")
+                else:
+                    # 새 마커 추가
+                    self.map_marker.add_dynamic_marker(marker_data)
+                    logger.debug(f"마커 추가: ID {obj.object_id}")
+                    
+            except Exception as e:
+                logger.error(f"마커 처리 중 오류 발생 (ID: {obj.object_id}): {str(e)}")
+                continue    
 
     def on_marker_clicked(self, marker_id: int):
         """마커 클릭 처리"""
@@ -406,35 +337,103 @@ class MainPage(QWidget):
                 logger.debug(f"테이블 행 선택: {row} (ID: {object_id})")
                 break
 
-    def update_bird_risk(self, risk_level: BirdRiskLevel):
+    def update_bird_risk(self, risk_level: Optional[BirdRiskLevel] = None):
         """조류 위험도 업데이트"""
-        logger.info(f"조류 위험도 변경: {risk_level.value}")
+        # risk_level이 None이면 기본값으로 LOW(안전) 설정
+        if risk_level is None:
+            risk_level = BirdRiskLevel.LOW
+            logger.info("조류 위험도 값이 없어 기본값(안전)으로 설정됨")
+        else:
+            logger.info(f"조류 위험도 변경: {risk_level.value}")
+            
         self.label_bird_risk_status.setText(risk_level.value)
-        self.label_bird_risk_status.setStyleSheet(
-            f"background-color: {Constants.Display.RISK_COLORS[risk_level]}; "
-            f"color: {'#000000' if risk_level == BirdRiskLevel.MEDIUM else '#FFFFFF'}; "
-            "font-weight: bold;"
-        )
+        
+        # 위험도에 따른 스타일 설정
+        if risk_level == BirdRiskLevel.LOW:  # 안전 (0)
+            self.label_bird_risk_status.setStyleSheet(
+                "background-color: #00FF00; "  # 녹색
+                "color: #000000; "
+                "font-weight: bold; "
+                "border: 1px solid #008000; "  # 진한 녹색 테두리
+                "border-radius: 5px; "
+                "padding: 5px;"
+            )
+        elif risk_level == BirdRiskLevel.MEDIUM:  # 주의 (1)
+            self.label_bird_risk_status.setStyleSheet(
+                "background-color: #FFFF00; "  # 노란색
+                "color: #000000; "
+                "font-weight: bold; "
+                "border: 1px solid #FFA500; "  # 주황색 테두리
+                "border-radius: 5px; "
+                "padding: 5px;"
+            )
+        else:  # 경고 (2)
+            self.label_bird_risk_status.setStyleSheet(
+                "background-color: #FF0000; "  # 빨간색
+                "color: #FFFFFF; "
+                "font-weight: bold; "
+                "border: 1px solid #8B0000; "  # 진한 빨간색 테두리
+                "border-radius: 5px; "
+                "padding: 5px;"
+            )
 
-    def update_runway_a_risk(self, risk_level: RunwayRiskLevel):
+    def update_runway_a_risk(self, risk_level: Optional[RunwayRiskLevel] = None):
         """활주로 A 위험도 업데이트"""
-        logger.info(f"활주로 A 위험도 변경: {risk_level.value}")
-        self.label_rwy1_status.setText(risk_level.value)
-        self.label_rwy1_status.setStyleSheet(
-            f"background-color: {Constants.Display.RISK_COLORS[risk_level]}; "
-            f"color: {'#000000' if risk_level == RunwayRiskLevel.MEDIUM else '#FFFFFF'}; "
-            "font-weight: bold;"
-        )
+        # risk_level이 None이면 기본값으로 LOW(안전) 설정
+        if risk_level is None:
+            risk_level = RunwayRiskLevel.LOW
+            logger.info("활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨")
+        else:
+            logger.info(f"활주로 A 위험도 변경: {risk_level.value}")
 
-    def update_runway_b_risk(self, risk_level: RunwayRiskLevel):
+        self.label_rwy1_status.setText(risk_level.value)
+        if risk_level == RunwayRiskLevel.LOW:
+            self.label_rwy1_status.setStyleSheet(
+                    "background-color: #00FF00; "  # 녹색
+                    "color: #000000; "
+                    "font-weight: bold; "
+                    "border: 1px solid #008000; "  # 진한 녹색 테두리
+                    "border-radius: 5px; "
+                    "padding: 5px;"
+            )
+        else:
+            self.label_rwy1_status.setStyleSheet(
+                "background-color: #FF0000; "  # 빨간색
+                "color: #FFFFFF; "
+                "font-weight: bold; "
+                "border: 1px solid #8B0000; "  # 진한 빨간색 테두리
+                "border-radius: 5px; "
+                "padding: 5px;"
+            )
+
+    def update_runway_b_risk(self, risk_level: Optional[RunwayRiskLevel] = None):
         """활주로 B 위험도 업데이트"""
-        logger.info(f"활주로 B 위험도 변경: {risk_level.value}")
+        # risk_level이 None이면 기본값으로 LOW(안전) 설정
+        if risk_level is None:
+            risk_level = RunwayRiskLevel.LOW
+            logger.info("활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨")
+        else:
+            logger.info(f"활주로 B 위험도 변경: {risk_level.value}")
+
         self.label_rwy2_status.setText(risk_level.value)
-        self.label_rwy2_status.setStyleSheet(
-            f"background-color: {Constants.Display.RISK_COLORS[risk_level]}; "
-            f"color: {'#000000' if risk_level == RunwayRiskLevel.MEDIUM else '#FFFFFF'}; "
-            "font-weight: bold;"
-        )
+        if risk_level == RunwayRiskLevel.LOW:
+            self.label_rwy2_status.setStyleSheet(
+                "background-color: #00FF00; "  # 녹색
+                "color: #000000; "
+                "font-weight: bold; "
+                "border: 1px solid #008000; "  # 진한 녹색 테두리
+                "border-radius: 5px; "
+                "padding: 5px;"
+            )
+        else:
+            self.label_rwy2_status.setStyleSheet(
+                "background-color: #FF0000; "  # 빨간색
+                "color: #FFFFFF; "
+                "font-weight: bold; "
+                "border: 1px solid #8B0000; "  # 진한 빨간색 테두리
+                "border-radius: 5px; "
+                "padding: 5px;"
+            )
 
     def update_object_detail(self, obj: DetectedObject):
         """객체 상세 정보 업데이트"""
@@ -467,29 +466,6 @@ class MainPage(QWidget):
         logger.error(f"객체 상세보기 오류: {error_msg}")
         QMessageBox.critical(self, "오류", f"객체 상세보기 오류: {error_msg}")
 
-    def resizeEvent(self, event):
-        """창 크기 변경 시 이미지 업데이트"""
-        super().resizeEvent(event)
-        self.update_map_image()
-
-    def update_map_image(self):
-        """지도 이미지 업데이트"""
-        if not self.map_pixmap.isNull():
-            # label_map의 현재 크기 가져오기
-            label_size = self.label_map.size()
-            logger.debug(f"label_map 크기: {label_size.width()}x{label_size.height()}")
-            
-            # 이미지 스케일링 및 설정
-            scaled_pixmap = self.map_pixmap.scaled(
-                label_size,
-                Qt.AspectRatioMode.KeepAspectRatio,
-                Qt.TransformationMode.SmoothTransformation
-            )
-            self.label_map.setPixmap(scaled_pixmap)
-            logger.debug(f"지도 이미지 업데이트 완료: {scaled_pixmap.width()}x{scaled_pixmap.height()}")
-        else:
-            logger.warning("지도 이미지가 null임")
-
     def select_table_row(self, row_idx):
         """테이블 행 선택 (기존 메서드 유지)"""
         logger.debug(f"테이블 행 선택: {row_idx}")
@@ -502,10 +478,7 @@ class MainPage(QWidget):
         
         # 서버에 지도 요청
         if hasattr(self, 'network_manager'):
-            self.network_manager.request_map()
-        
-        # 지도 표시 시 이미지 다시 업데이트
-        QTimer.singleShot(100, self.update_map_image)
+            self.network_manager.request_map()   
 
     def show_cctv(self):
         """CCTV 보기"""

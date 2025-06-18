@@ -20,7 +20,6 @@ class BirdRiskLevel(Enum):
 class RunwayRiskLevel(Enum):
     """활주로 위험도 등급"""
     LOW = "안전"
-    MEDIUM = "주의"
     HIGH = "경고"
 
 class AirportZone(Enum):
@@ -104,8 +103,7 @@ class Constants:
     
     RUNWAY_RISK_MAPPING = {
         0: RunwayRiskLevel.LOW,
-        1: RunwayRiskLevel.MEDIUM,
-        2: RunwayRiskLevel.HIGH
+        1: RunwayRiskLevel.HIGH
     }
     
     ZONE_MAPPING = {    
@@ -125,18 +123,6 @@ class Constants:
         1: SecurityLevel.LEVEL_2,
         2: SecurityLevel.LEVEL_3,
     }
-    
-    # --- UI/표시 관련 ---
-    class Display:
-        """위험도별 색상 등 UI 표시 관련 상수"""
-        RISK_COLORS = {
-            BirdRiskLevel.LOW: "#00FF00",      # 녹색
-            BirdRiskLevel.MEDIUM: "#FFFF00",   # 노란색
-            BirdRiskLevel.HIGH: "#FF0000",     # 빨간색
-            RunwayRiskLevel.LOW: "#00FF00",    # 녹색
-            RunwayRiskLevel.MEDIUM: "#FFFF00", # 노란색
-            RunwayRiskLevel.HIGH: "#FF0000"    # 빨간색
-        }
 
     # --- 통신 프로토콜 관련 ---
     class Protocol:
