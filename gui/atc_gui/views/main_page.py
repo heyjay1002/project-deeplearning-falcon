@@ -3,6 +3,15 @@ from PyQt6 import uic
 from PyQt6.QtGui import QPixmap, QColor, QImage
 from PyQt6.QtCore import Qt, QTimer, pyqtSignal
 from datetime import datetime
+import sys
+import os
+
+# 상위 디렉토리를 파이썬 경로에 추가
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)  # atc_gui 디렉토리
+if parent_dir not in sys.path:
+    sys.path.append(parent_dir)
+
 from views.object_detail_dialog import ObjectDetailDialog
 from views.notification_dialog import NotificationDialog
 from config.constants import BirdRiskLevel, RunwayRiskLevel, ObjectType, AirportZone
@@ -14,7 +23,7 @@ from utils.logger import logger
 from widgets.map_marker_widget import MapMarkerWidget
 import time
 from collections import deque
-import os
+import cv2
 from typing import Optional
 
 class MainPage(QWidget):
@@ -41,12 +50,6 @@ class MainPage(QWidget):
         
         # 마지막으로 표시한 이미지ID 저장
         self.last_displayed_image_id = {'A': -1, 'B': -1}
-
-        # 이미지 경로 설정 및 검증
-        self.setup_image_paths()
-
-        # 초기 이미지 설정
-        self.setup_map_display()
 
         # 테이블 설정
         self.setup_table()
@@ -279,7 +282,7 @@ class MainPage(QWidget):
         if self.is_first_detection and new_objects:
             self.is_first_detection = False
             logger.info("첫 번째 객체 감지")
-            dialog = NotificationDialog(new_objects[0], self)
+            dialog = NotificationDialog('object', new_objects[0], self)
             dialog.exec()
 
     def update_markers(self, objects: list[DetectedObject]):
@@ -294,10 +297,10 @@ class MainPage(QWidget):
         current_object_ids = {obj.object_id for obj in objects}
         
         # 더 이상 존재하지 않는 객체의 마커 제거
-        existing_marker_ids = set(self.map_marker.markers.keys())
-        for marker_id in existing_marker_ids - current_object_ids:
-            self.map_marker.remove_marker(marker_id)
-            logger.debug(f"마커 제거: ID {marker_id}")
+        existing_object_ids = set(self.map_marker.markers.keys())
+        for object_id in existing_object_ids - current_object_ids:
+            self.map_marker.remove_marker(object_id)
+            logger.debug(f"마커 제거: ID {object_id}")
 
         # 새로운 객체들 또는 업데이트된 객체들 처리
         for obj in objects:
@@ -305,7 +308,7 @@ class MainPage(QWidget):
                 # 마커 데이터 생성
                 marker_data = self.map_marker.create_marker_data(obj)
                 
-                if obj.object_id in existing_marker_ids:
+                if obj.object_id in existing_object_ids:
                     # 기존 마커 업데이트
                     self.map_marker.update_marker(marker_data)
                     logger.debug(f"마커 업데이트: ID {obj.object_id}")
@@ -318,15 +321,15 @@ class MainPage(QWidget):
                 logger.error(f"마커 처리 중 오류 발생 (ID: {obj.object_id}): {str(e)}")
                 continue    
 
-    def on_marker_clicked(self, marker_id: int):
+    def on_marker_clicked(self, object_id: int):
         """마커 클릭 처리"""
-        logger.debug(f"마커 클릭: ID {marker_id}")
+        logger.debug(f"마커 클릭: ID {object_id}")
         
         # 마커 선택 상태 업데이트
-        self.map_marker.select_marker(marker_id)
+        self.map_marker.select_marker(object_id)
         
         # 테이블에서 해당 행 선택
-        self.select_table_row_by_id(marker_id)
+        self.select_table_row_by_id(object_id)
 
     def select_table_row_by_id(self, object_id: int):
         """객체 ID로 테이블 행 선택"""
@@ -376,6 +379,11 @@ class MainPage(QWidget):
                 "border-radius: 5px; "
                 "padding: 5px;"
             )
+            
+        # 위험도 변경 시 알림 표시
+        if risk_level != BirdRiskLevel.LOW:
+            dialog = NotificationDialog('bird', BirdRisk(risk_level.value), self)
+            dialog.exec()
 
     def update_runway_a_risk(self, risk_level: Optional[RunwayRiskLevel] = None):
         """활주로 A 위험도 업데이트"""
@@ -405,6 +413,11 @@ class MainPage(QWidget):
                 "border-radius: 5px; "
                 "padding: 5px;"
             )
+            
+        # 위험도 변경 시 알림 표시
+        if risk_level != RunwayRiskLevel.LOW:
+            dialog = NotificationDialog('runway_a_risk', RunwayRisk('A', risk_level.value), self)
+            dialog.exec()
 
     def update_runway_b_risk(self, risk_level: Optional[RunwayRiskLevel] = None):
         """활주로 B 위험도 업데이트"""
@@ -434,6 +447,11 @@ class MainPage(QWidget):
                 "border-radius: 5px; "
                 "padding: 5px;"
             )
+            
+        # 위험도 변경 시 알림 표시
+        if risk_level != RunwayRiskLevel.LOW:
+            dialog = NotificationDialog('runway_b_risk', RunwayRisk('B', risk_level.value), self)
+            dialog.exec()
 
     def update_object_detail(self, obj: DetectedObject):
         """객체 상세 정보 업데이트"""

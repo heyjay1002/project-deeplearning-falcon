@@ -1,0 +1,227 @@
+2025-06-19 00:38:24,392 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-19 00:38:24,406 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-19 00:38:24,406 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-19 00:38:24,409 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 00:38:24,409 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 00:38:24,410 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 00:38:24,455 - ATC_GUI - WARNING - TCP 연결 실패 (127.0.0.1:5100): 서버 응답 없음
+2025-06-19 00:38:24,455 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 00:38:27,307 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-19 00:38:27,308 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 00:38:30,219 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 00:58:55,478 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-19 00:58:55,489 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-19 00:58:55,490 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-19 00:58:55,492 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 00:58:55,492 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 00:58:55,492 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 00:58:55,506 - ATC_GUI - WARNING - TCP 연결 실패 (127.0.0.1:5100): 서버 응답 없음
+2025-06-19 00:58:55,506 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 00:58:56,500 - ATC_GUI - INFO - TCP 연결 상태 변경: 연결됨
+2025-06-19 00:58:56,618 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-19 00:58:56,618 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-19 00:58:56,619 - ATC_GUI - DEBUG - 마커 업데이트: 1개 객체
+2025-06-19 00:58:56,619 - ATC_GUI - ERROR - 마커 처리 중 오류 발생 (ID: 1): 'MapMarkerWidget' object has no attribute 'add_dynamic_marker'
+2025-06-19 00:58:56,619 - ATC_GUI - INFO - 첫 번째 객체 감지
+2025-06-19 01:05:52,392 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-19 01:05:52,406 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-19 01:05:52,407 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-19 01:05:52,409 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 01:05:52,409 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 01:05:52,409 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 01:05:52,427 - ATC_GUI - WARNING - TCP 연결 실패 (127.0.0.1:5100): 서버 응답 없음
+2025-06-19 01:05:52,428 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:05:53,417 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-19 01:05:53,418 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-19 01:05:53,418 - ATC_GUI - DEBUG - 마커 업데이트: 1개 객체
+2025-06-19 01:05:53,418 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:05:53,418 - ATC_GUI - DEBUG - 마커 추가: ID 1
+2025-06-19 01:05:53,419 - ATC_GUI - INFO - 첫 번째 객체 감지
+2025-06-19 01:05:53,441 - ATC_GUI - INFO - TCP 연결 상태 변경: 연결됨
+2025-06-19 01:05:54,320 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결됨
+2025-06-19 01:05:55,270 - ATC_GUI - INFO - 조류 위험도 변경: 주의
+2025-06-19 01:14:29,593 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-19 01:14:29,606 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-19 01:14:29,607 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-19 01:14:29,610 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 01:14:29,610 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 01:14:29,610 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 01:14:29,624 - ATC_GUI - WARNING - TCP 연결 실패 (127.0.0.1:5100): 서버 응답 없음
+2025-06-19 01:14:29,624 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:14:30,621 - ATC_GUI - INFO - TCP 연결 상태 변경: 연결됨
+2025-06-19 01:14:31,718 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결됨
+2025-06-19 01:14:31,719 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-19 01:14:31,719 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-19 01:14:31,719 - ATC_GUI - DEBUG - 마커 업데이트: 1개 객체
+2025-06-19 01:14:31,719 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:14:31,720 - ATC_GUI - DEBUG - 마커 추가: ID 1
+2025-06-19 01:14:31,720 - ATC_GUI - INFO - 첫 번째 객체 감지
+2025-06-19 01:14:32,718 - ATC_GUI - INFO - 조류 위험도 변경: 주의
+2025-06-19 01:14:32,727 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-19 01:14:32,730 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:14:34,371 - ATC_GUI - INFO - 활주로 A 위험도 변경: 경고
+2025-06-19 01:16:56,536 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-19 01:16:56,550 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-19 01:16:56,550 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-19 01:16:56,553 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 01:16:56,553 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 01:16:56,553 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 01:16:56,567 - ATC_GUI - WARNING - TCP 연결 실패 (127.0.0.1:5100): 서버 응답 없음
+2025-06-19 01:16:56,567 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:16:57,563 - ATC_GUI - INFO - TCP 연결 상태 변경: 연결됨
+2025-06-19 01:16:58,663 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결됨
+2025-06-19 01:16:58,717 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-19 01:16:58,718 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-19 01:16:58,718 - ATC_GUI - DEBUG - 마커 업데이트: 1개 객체
+2025-06-19 01:16:58,718 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:16:58,718 - ATC_GUI - DEBUG - 마커 추가: ID 1
+2025-06-19 01:16:58,718 - ATC_GUI - INFO - 첫 번째 객체 감지
+2025-06-19 01:16:59,713 - ATC_GUI - INFO - 조류 위험도 변경: 주의
+2025-06-19 01:16:59,719 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-19 01:16:59,721 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:01,313 - ATC_GUI - INFO - 활주로 A 위험도 변경: 경고
+2025-06-19 01:17:02,719 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:05,720 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:08,719 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:11,718 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 5회)
+2025-06-19 01:17:11,720 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:14,719 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:16,718 - ATC_GUI - DEBUG - 강제 객체 업데이트: 10개 객체
+2025-06-19 01:17:16,718 - ATC_GUI - DEBUG - 객체 업데이트 처리: 10개 객체
+2025-06-19 01:17:16,718 - ATC_GUI - DEBUG - 객체 목록 업데이트: 10개 객체
+2025-06-19 01:17:16,719 - ATC_GUI - DEBUG - 마커 업데이트: 9개 객체
+2025-06-19 01:17:16,719 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:16,720 - ATC_GUI - DEBUG - 마커 추가: ID 2
+2025-06-19 01:17:16,720 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:16,720 - ATC_GUI - DEBUG - 마커 추가: ID 3
+2025-06-19 01:17:16,721 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:16,721 - ATC_GUI - DEBUG - 마커 추가: ID 4
+2025-06-19 01:17:16,721 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:16,722 - ATC_GUI - DEBUG - 마커 추가: ID 5
+2025-06-19 01:17:16,722 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:16,722 - ATC_GUI - DEBUG - 마커 추가: ID 6
+2025-06-19 01:17:16,722 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:16,723 - ATC_GUI - DEBUG - 마커 추가: ID 7
+2025-06-19 01:17:16,723 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:16,723 - ATC_GUI - DEBUG - 마커 추가: ID 8
+2025-06-19 01:17:16,723 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:16,723 - ATC_GUI - DEBUG - 마커 추가: ID 9
+2025-06-19 01:17:16,723 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:16,723 - ATC_GUI - DEBUG - 마커 추가: ID 10
+2025-06-19 01:17:17,719 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:20,719 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:23,719 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:25,000 - ATC_GUI - DEBUG - 객체 상세보기 요청: ID 9
+2025-06-19 01:17:26,717 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 10회)
+2025-06-19 01:17:26,719 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:27,058 - ATC_GUI - DEBUG - 객체 상세보기 요청: ID 9
+2025-06-19 01:17:28,502 - ATC_GUI - DEBUG - 객체 상세보기 요청: ID 9
+2025-06-19 01:17:28,782 - ATC_GUI - DEBUG - 객체 상세보기 요청: ID 9
+2025-06-19 01:17:28,944 - ATC_GUI - DEBUG - 객체 상세보기 요청: ID 9
+2025-06-19 01:17:29,105 - ATC_GUI - DEBUG - 객체 상세보기 요청: ID 9
+2025-06-19 01:17:29,260 - ATC_GUI - DEBUG - 객체 상세보기 요청: ID 9
+2025-06-19 01:17:29,427 - ATC_GUI - DEBUG - 객체 상세보기 요청: ID 9
+2025-06-19 01:17:29,607 - ATC_GUI - DEBUG - 객체 상세보기 요청: ID 9
+2025-06-19 01:17:29,719 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:31,760 - ATC_GUI - INFO - CCTV 보기: 1
+2025-06-19 01:17:31,760 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 해제됨
+2025-06-19 01:17:31,760 - ATC_GUI - INFO - UDP 연결 상태 변경: 서버 127.0.0.1:4100 연결됨
+2025-06-19 01:17:32,724 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:35,393 - ATC_GUI - INFO - 지도 보기
+2025-06-19 01:17:35,723 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:36,718 - ATC_GUI - DEBUG - 강제 객체 업데이트: 10개 객체
+2025-06-19 01:17:36,718 - ATC_GUI - DEBUG - 객체 업데이트 처리: 10개 객체
+2025-06-19 01:17:36,718 - ATC_GUI - DEBUG - 객체 목록 업데이트: 10개 객체
+2025-06-19 01:17:36,719 - ATC_GUI - DEBUG - 마커 업데이트: 10개 객체
+2025-06-19 01:17:36,719 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:36,719 - ATC_GUI - DEBUG - 마커 추가: ID 11
+2025-06-19 01:17:36,719 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:36,719 - ATC_GUI - DEBUG - 마커 추가: ID 12
+2025-06-19 01:17:36,720 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:36,720 - ATC_GUI - DEBUG - 마커 추가: ID 13
+2025-06-19 01:17:36,720 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:36,720 - ATC_GUI - DEBUG - 마커 추가: ID 14
+2025-06-19 01:17:36,720 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:36,720 - ATC_GUI - DEBUG - 마커 추가: ID 15
+2025-06-19 01:17:36,720 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:36,720 - ATC_GUI - DEBUG - 마커 추가: ID 16
+2025-06-19 01:17:36,721 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:36,721 - ATC_GUI - DEBUG - 마커 추가: ID 17
+2025-06-19 01:17:36,721 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:36,721 - ATC_GUI - DEBUG - 마커 추가: ID 18
+2025-06-19 01:17:36,721 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:36,721 - ATC_GUI - DEBUG - 마커 추가: ID 19
+2025-06-19 01:17:36,721 - ATC_GUI - ERROR - 마커 추가 실패: 'MarkerData' object is not subscriptable
+2025-06-19 01:17:36,721 - ATC_GUI - DEBUG - 마커 추가: ID 20
+2025-06-19 01:17:38,720 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:39,975 - ATC_GUI - DEBUG - 객체 상세보기 요청: ID 18
+2025-06-19 01:17:41,718 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 15회)
+2025-06-19 01:17:41,723 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:43,471 - ATC_GUI - DEBUG - 객체 상세보기 요청: ID 15
+2025-06-19 01:17:44,722 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:47,722 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:50,722 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:17:52,229 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 해제됨
+2025-06-19 01:17:52,230 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 해제됨
+2025-06-19 01:17:52,230 - ATC_GUI - DEBUG - 모든 마커 제거
+2025-06-19 01:17:52,231 - ATC_GUI - INFO - 활주로 B 위험도 변경: 경고
+2025-06-19 01:29:56,342 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-19 01:29:56,358 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-19 01:29:56,358 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-19 01:29:56,361 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 01:29:56,361 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 01:29:56,361 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-19 01:29:56,381 - ATC_GUI - WARNING - TCP 연결 실패 (127.0.0.1:5100): 서버 응답 없음
+2025-06-19 01:29:56,381 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:29:57,375 - ATC_GUI - INFO - TCP 연결 상태 변경: 연결됨
+2025-06-19 01:29:58,275 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결됨
+2025-06-19 01:29:58,319 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-19 01:29:58,319 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-19 01:29:58,319 - ATC_GUI - DEBUG - 마커 업데이트: 1개 객체
+2025-06-19 01:29:58,332 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1
+2025-06-19 01:29:58,332 - ATC_GUI - DEBUG - 마커 추가: ID 1
+2025-06-19 01:29:58,332 - ATC_GUI - INFO - 첫 번째 객체 감지
+2025-06-19 01:29:59,224 - ATC_GUI - INFO - 조류 위험도 변경: 주의
+2025-06-19 01:29:59,232 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-19 01:29:59,233 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:30:01,218 - ATC_GUI - INFO - 활주로 A 위험도 변경: 경고
+2025-06-19 01:30:02,220 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:30:05,220 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:30:08,220 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:30:10,024 - ATC_GUI - DEBUG - 객체 상세보기 요청: ID 1
+2025-06-19 01:30:10,908 - ATC_GUI - DEBUG - 객체 상세보기 요청: ID 1
+2025-06-19 01:30:11,218 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 5회)
+2025-06-19 01:30:11,221 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:30:12,543 - ATC_GUI - DEBUG - 객체 상세보기 요청: ID 1
+2025-06-19 01:30:14,221 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:30:16,218 - ATC_GUI - DEBUG - 강제 객체 업데이트: 10개 객체
+2025-06-19 01:30:16,218 - ATC_GUI - DEBUG - 객체 업데이트 처리: 10개 객체
+2025-06-19 01:30:16,219 - ATC_GUI - DEBUG - 객체 목록 업데이트: 10개 객체
+2025-06-19 01:30:16,219 - ATC_GUI - DEBUG - 마커 업데이트: 9개 객체
+2025-06-19 01:30:16,219 - ATC_GUI - DEBUG - 마커 제거 성공: ID 1
+2025-06-19 01:30:16,219 - ATC_GUI - DEBUG - 마커 제거: ID 1
+2025-06-19 01:30:16,221 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2
+2025-06-19 01:30:16,221 - ATC_GUI - DEBUG - 마커 추가: ID 2
+2025-06-19 01:30:16,222 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3
+2025-06-19 01:30:16,222 - ATC_GUI - DEBUG - 마커 추가: ID 3
+2025-06-19 01:30:16,223 - ATC_GUI - DEBUG - 마커 추가 성공: ID 4
+2025-06-19 01:30:16,223 - ATC_GUI - DEBUG - 마커 추가: ID 4
+2025-06-19 01:30:16,224 - ATC_GUI - DEBUG - 마커 추가 성공: ID 5
+2025-06-19 01:30:16,224 - ATC_GUI - DEBUG - 마커 추가: ID 5
+2025-06-19 01:30:16,224 - ATC_GUI - DEBUG - 마커 추가 성공: ID 6
+2025-06-19 01:30:16,225 - ATC_GUI - DEBUG - 마커 추가: ID 6
+2025-06-19 01:30:16,225 - ATC_GUI - DEBUG - 마커 추가 성공: ID 7
+2025-06-19 01:30:16,225 - ATC_GUI - DEBUG - 마커 추가: ID 7
+2025-06-19 01:30:16,226 - ATC_GUI - DEBUG - 마커 추가 성공: ID 8
+2025-06-19 01:30:16,226 - ATC_GUI - DEBUG - 마커 추가: ID 8
+2025-06-19 01:30:16,227 - ATC_GUI - DEBUG - 마커 추가 성공: ID 9
+2025-06-19 01:30:16,227 - ATC_GUI - DEBUG - 마커 추가: ID 9
+2025-06-19 01:30:16,228 - ATC_GUI - DEBUG - 마커 추가 성공: ID 10
+2025-06-19 01:30:16,228 - ATC_GUI - DEBUG - 마커 추가: ID 10
+2025-06-19 01:30:17,220 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:30:18,150 - ATC_GUI - DEBUG - 객체 상세보기 요청: ID 2
+2025-06-19 01:30:20,220 - ATC_GUI - INFO - TCP 연결 상태 변경: TCP 연결 오류: 연결 실패
+2025-06-19 01:30:22,701 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 해제됨
+2025-06-19 01:30:22,702 - ATC_GUI - INFO - UDP 연결 상태 변경: 연결 해제됨
+2025-06-19 01:30:22,702 - ATC_GUI - DEBUG - 모든 마커 제거 완료
+2025-06-19 01:30:22,704 - ATC_GUI - INFO - 활주로 B 위험도 변경: 경고

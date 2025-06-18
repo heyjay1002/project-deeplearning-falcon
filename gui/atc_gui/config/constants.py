@@ -45,11 +45,6 @@ class AccessTarget(Enum):
     VEHICLE = "차량"
     PERSON = "인원"
 
-class RunwayID(Enum):
-    """활주로 식별자"""
-    A = "A"
-    B = "B"
-
 class ExtraInfo(Enum):
     """추가 정보"""
     NONE = "없음"

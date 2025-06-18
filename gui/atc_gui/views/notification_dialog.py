@@ -1,164 +1,140 @@
 from PyQt6.QtWidgets import QDialog, QVBoxLayout, QHBoxLayout, QLabel, QPushButton, QWidget
 from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QImage, QPixmap, QColor, QIcon
-from utils.interface import DetectedObject, BirdRisk, RunwayRisk, ExtraInfo
-from typing import Optional, Dict, Any
-import base64
-from io import BytesIO
-from datetime import datetime
+from PyQt6.QtGui import QPixmap, QImage
+import cv2
+import numpy as np
+from utils.logger import logger
 
 class NotificationDialog(QDialog):
-    def __init__(self, notification_type: str, data: Dict[str, Any], parent: Optional[QDialog] = None) -> None:
+    """알림 다이얼로그"""
+    
+    def __init__(self, notification_type: str, data: any, parent=None):
         super().__init__(parent)
-        self.setModal(True)
+        self.notification_type = notification_type
+        self.data = data
         
-        # 알림 타입에 따른 제목 설정
-        titles = {
-            'object': "이상 객체 감지",
-            'bird': "조류 충돌 위험 변화",
-            'fallen_person': "쓰러진 인원 발생",
-            'runway_a_risk': "활주로 A 위험 변화",
-            'runway_b_risk': "활주로 B 위험 변화"
-        }
-        self.setWindowTitle("알림")
+        # 창 설정
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
+        self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
         
-        # 메인 레이아웃 (수직)
-        main_layout = QVBoxLayout()
-        main_layout.setSpacing(1)  # 위젯 간 간격 더 줄임
-        main_layout.setContentsMargins(2, 1, 2, 2)  # 상단 여백 줄임
+        # 레이아웃 설정
+        self.setup_ui()
         
-        # 제목 (상단 중앙)
-        title_layout = QHBoxLayout()
-        title_layout.setSpacing(4)
-        title_layout.setContentsMargins(0, 0, 0, 0)
-        title_layout.setAlignment(Qt.AlignmentFlag.AlignVCenter)  # 레이아웃 자체를 수직 중앙 정렬
-
-        warning_icon = QLabel()
-        warning_icon.setPixmap(QIcon.fromTheme("dialog-warning").pixmap(18, 18))
-        warning_icon.setStyleSheet("margin: 0px; padding: 0px;")
-        title_layout.addWidget(warning_icon)
-
-        title = QLabel(titles.get(notification_type, "알림"))
-        title.setStyleSheet("font-size: 12.5pt; font-weight: bold; margin: 0px; padding: 0px;")
-        title.setAlignment(Qt.AlignmentFlag.AlignVCenter)
-        title.setFixedHeight(20)
-        title_layout.addWidget(title)
-
-        title_row_widget = QWidget()
-        title_row_widget.setLayout(title_layout)
-        title_row_widget.setFixedHeight(22)
-        title_row_widget.setContentsMargins(0, 0, 0, 0)
-        main_layout.addWidget(title_row_widget, alignment=Qt.AlignmentFlag.AlignHCenter)
+        # 위치 조정
+        self.adjust_position()
         
-        # 컨텐츠 레이아웃 (수평)
-        content_layout = QHBoxLayout()
-        content_layout.setSpacing(2)  # 위젯 간 간격 최소화
+    def setup_ui(self):
+        """UI 설정"""
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(10, 10, 10, 10)
         
-        # 이미지 표시 (좌측)
-        if notification_type == 'object':
-            try:
-                if isinstance(data, DetectedObject):
-                    # 이미지 데이터 처리
-                    if hasattr(data, 'image_data') and data.image_data:
-                        if isinstance(data.image_data, str) and data.image_data.startswith('data:image'):
-                            # Base64 이미지 데이터 디코딩
-                            image_data = base64.b64decode(data.image_data.split(',')[1])
-                        elif isinstance(data.image_data, bytes):
-                            # 바이트 데이터 직접 사용
-                            image_data = data.image_data
-                        else:
-                            raise ValueError("지원하지 않는 이미지 데이터 형식입니다.")
-                        
-                        image = QImage.fromData(image_data)
-                    else:
-                        # 이미지가 없는 경우 회색 pixmap 생성
-                        image = QImage(120, 120, QImage.Format.Format_RGB32)
-                        image.fill(QColor(200, 200, 200))
-                else:
-                    # DetectedObject가 아닌 경우 회색 pixmap 생성
-                    image = QImage(120, 120, QImage.Format.Format_RGB32)
-                    image.fill(QColor(200, 200, 200))
-                
-                if not image.isNull():
-                    pixmap = QPixmap.fromImage(image)
-                    image_label = QLabel()
-                    image_label.setPixmap(pixmap)
-                    image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                    image_label.setStyleSheet("background-color: #C8C8C8;")
-                    image_label.setFixedSize(120, 120)  # 이미지 크기 조정
-                    content_layout.addWidget(image_label)
-            except Exception as e:
-                print(f"이미지 처리 중 오류 발생: {str(e)}")
-                # 오류 발생 시 회색 이미지 표시
-                error_image = QImage(120, 120, QImage.Format.Format_RGB32)
-                error_image.fill(QColor(200, 200, 200))
-                error_pixmap = QPixmap.fromImage(error_image)
-                error_label = QLabel()
-                error_label.setPixmap(error_pixmap)
-                error_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                error_label.setStyleSheet("background-color: #C8C8C8;")
-                error_label.setFixedSize(120, 120)
-                content_layout.addWidget(error_label)
+        # 제목 설정
+        title = self.get_title()
+        title_label = QLabel(title)
+        title_label.setStyleSheet("""
+            QLabel {
+                color: #FFFFFF;
+                font-size: 14px;
+                font-weight: bold;
+                padding: 5px;
+            }
+        """)
         
-
-        # 정보 표시 (우측)
-        info_layout = QVBoxLayout()
-        info_layout.setSpacing(1)  # 위젯 간 간격 최소화
+        # 내용 설정
+        content = self.get_content()
+        content_label = QLabel(content)
+        content_label.setStyleSheet("""
+            QLabel {
+                color: #FFFFFF;
+                font-size: 12px;
+                padding: 5px;
+            }
+        """)
         
-        # 알림 타입에 따른 정보 표시
-        info_text = self._get_info_text(notification_type, data)
-        info_label = QLabel(info_text)
-        info_label.setStyleSheet("font-size: 12pt;")
-        info_label.setAlignment(Qt.AlignmentFlag.AlignLeft | Qt.AlignmentFlag.AlignVCenter)  # 좌우 정렬은 유지하면서 상하 중앙 정렬 추가
-        info_layout.addWidget(info_label)
-        
-        content_layout.addLayout(info_layout)
-        main_layout.addLayout(content_layout)
-        
-        # 확인 버튼 (하단 중앙)
-        button_layout = QHBoxLayout()
-        button_layout.setContentsMargins(10, 0, 10, 0)  # 좌우 여백 추가
-        ok_button = QPushButton("확인")
-        ok_button.clicked.connect(self.accept)
-        ok_button.setStyleSheet("""
+        # 확인 버튼
+        close_button = QPushButton("확인")
+        close_button.setStyleSheet("""
             QPushButton {
                 background-color: #4CAF50;
                 color: white;
                 border: none;
-                padding: 2px 6px;
-                font-size: 12pt;
-                border-radius: 4px;
-                min-width: 200px;  /* 버튼 최소 너비 증가 */
+                padding: 5px 15px;
+                border-radius: 3px;
             }
             QPushButton:hover {
                 background-color: #45a049;
             }
         """)
-        button_layout.addWidget(ok_button)
-        main_layout.addLayout(button_layout)
+        close_button.clicked.connect(self.close)
         
-        self.setLayout(main_layout)
+        # 레이아웃에 위젯 추가
+        layout.addWidget(title_label)
+        layout.addWidget(content_label)
         
-        # 다이얼로그 크기 설정
-        self.setFixedSize(280, 250)  # 크기를 280x250으로 고정
-    
-    def _get_info_text(self, notification_type: str, data: Dict[str, Any]) -> str:
-        """알림 타입에 따른 정보 텍스트 생성"""
-        if notification_type == 'object' and isinstance(data, DetectedObject):
-            return (f"객체 ID: {data.object_id}\n"
-                   f"종류: {data.object_type.value}\n"
-                   f"위치: {data.zone.value}\n"
-                   f"발견 시각: {data.timestamp}")
+        # 이미지가 있는 경우 추가
+        if hasattr(self.data, 'image_data') and self.data.image_data:
+            try:
+                # 바이트 데이터를 QImage로 변환
+                image = QImage.fromData(self.data.image_data)
+                if not image.isNull():
+                    pixmap = QPixmap.fromImage(image)
+                    image_label = QLabel()
+                    image_label.setPixmap(pixmap.scaled(200, 200, Qt.AspectRatioMode.KeepAspectRatio))
+                    layout.addWidget(image_label)
+            except Exception as e:
+                logger.error(f"이미지 처리 중 오류 발생: {str(e)}")
         
-        elif notification_type == 'bird' and isinstance(data, BirdRisk):
-            return f"조류 위험도: {data}"
+        layout.addWidget(close_button)
         
-        elif notification_type == 'fallen_person' and isinstance(data, DetectedObject):
-            if data.extra_info == ExtraInfo.RESCUE:
-                return (f"객체 ID: {data.object_id}\n"
-                        f"쓰러진 인원 위치: {data.zone.value}")
+        # 스타일 설정
+        self.setStyleSheet("""
+            QDialog {
+                background-color: #2C3E50;
+                border-radius: 10px;
+                border: 1px solid #34495E;
+            }
+        """)
         
-        elif notification_type in ['runway_a_risk', 'runway_b_risk'] and isinstance(data, RunwayRisk):
-            return f"활주로 {data.runway_id} 위험도: {data.enum.value}"
+    def get_title(self) -> str:
+        """알림 제목 반환"""
+        titles = {
+            'object': '이상 객체 감지',
+            'bird': '조류 충돌 위험 변화',
+            'runway_a_risk': '활주로 A 위험도 변화',
+            'runway_b_risk': '활주로 B 위험도 변화'
+        }
+        return titles.get(self.notification_type, '알림')
         
-        return "알 수 없는 알림 유형입니다."
+    def get_content(self) -> str:
+        """알림 내용 반환"""
+        if self.notification_type == 'object':
+            return f"객체 ID: {self.data.object_id}\n종류: {self.data.object_type.value}\n위치: {self.data.zone.value}"
+        elif self.notification_type == 'bird':
+            return f"조류 위험도: {self.data.bird_risk_level}"
+        elif self.notification_type in ['runway_a_risk', 'runway_b_risk']:
+            return f"활주로 {self.data.runway_id} 위험도: {self.data.runway_risk_level}"
+        return str(self.data)
+        
+    def adjust_position(self):
+        """다이얼로그 위치 조정"""
+        if self.parent():
+            # 부모 위젯의 우측 하단 위치 계산
+            parent_rect = self.parent().geometry()
+            x = parent_rect.right() - self.width() - 20  # 우측에서 20px 여백
+            y = parent_rect.bottom() - self.height() - 20  # 하단에서 20px 여백
+            
+            # 화면 밖으로 나가지 않도록 조정
+            screen_geometry = self.parent().screen().geometry()
+            x = min(x, screen_geometry.right() - self.width() - 20)
+            y = min(y, screen_geometry.bottom() - self.height() - 20)
+            
+            self.move(x, y)
+            
+    def mousePressEvent(self, event):
+        """마우스 클릭 시 다이얼로그 닫기"""
+        self.close()
+        
+    def showEvent(self, event):
+        """다이얼로그 표시 시 위치 조정"""
+        super().showEvent(event)
+        self.adjust_position()

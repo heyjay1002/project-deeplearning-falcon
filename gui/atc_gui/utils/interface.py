@@ -173,41 +173,40 @@ class DetectedObject:
             image_data=image_data,
         )
 
-@dataclass(frozen=True)
+@dataclass
 class BirdRisk:
-    bird_risk_level: int
-
+    """조류 위험도 정보"""
+    bird_risk_level: str  # 조류 위험도 레벨 (안전, 주의, 경고)
+    
     def __post_init__(self):
-        if self.bird_risk_level not in Constants.BIRD_RISK_MAPPING:
+        """위험도 값 검증"""
+        valid_levels = [level.value for level in BirdRiskLevel]
+        if self.bird_risk_level not in valid_levels:
             raise ValueError(f"유효하지 않은 조류 위험도 값: {self.bird_risk_level}")
 
-    @property
-    def enum(self) -> BirdRiskLevel:
-        return Constants.BIRD_RISK_MAPPING[self.bird_risk_level]
-
-    def __str__(self):
-        return self.enum.value
-
-@dataclass(frozen=True)
+@dataclass
 class RunwayRisk:
-    runway_id: str  # "A" 또는 "B"
-    runway_risk_level: int
-
+    """활주로 위험도 정보"""
+    runway_id: str  # 활주로 ID (A 또는 B)
+    runway_risk_level: str  # 활주로 위험도 레벨 (안전, 경고)
+    
     def __post_init__(self):
-        if self.runway_id not in ("A", "B"):
-            raise ValueError(f"유효하지 않은 활주로 ID: {self.runway_id}")
-        if self.runway_risk_level not in Constants.RUNWAY_RISK_MAPPING:
+        """위험도 값 검증"""
+        valid_levels = [level.value for level in RunwayRiskLevel]
+        if self.runway_risk_level not in valid_levels:
             raise ValueError(f"유효하지 않은 활주로 위험도 값: {self.runway_risk_level}")
+        if self.runway_id not in ['A', 'B']:
+            raise ValueError(f"유효하지 않은 활주로 ID: {self.runway_id}")
 
     @property
     def enum(self) -> RunwayRiskLevel:        
-        return Constants.RUNWAY_RISK_MAPPING[self.runway_risk_level]
+        return next(level for level in RunwayRiskLevel if level.value == self.runway_risk_level)
 
     def to_dict(self) -> Dict[str, Any]:
         """객체 정보를 딕셔너리로 변환"""
         return {
             'runway_id': self.runway_id,
-            'runway_risk_level': self.enum.value
+            'runway_risk_level': self.runway_risk_level
         }
 
 class MessageParser:
@@ -215,19 +214,28 @@ class MessageParser:
     
     @staticmethod
     def parse_object_info(data: str, include_image: bool = False) -> DetectedObject:
-        """개선된 객체 정보 파싱"""
+        """객체 정보 파싱"""
         try:
-            fields = data.split(Constants.Protocol.OBJECT_FIELD_SEPARATOR)
-            if len(fields) < 6:
-                raise ValueError(f"필드 수 부족: {len(fields)} < 6")
+            # MR_OD:OK,{object_id},{object_type},{zone},{timestamp},{image_data} 형식 파싱
+            if not data.startswith(f"{MessagePrefix.MR_OD.value}:OK,"):
+                raise ValueError(f"잘못된 메시지 형식: {data}")
+                
+            fields = data.replace(f"{MessagePrefix.MR_OD.value}:OK,", '').split(Constants.Protocol.OBJECT_FIELD_SEPARATOR)
+            if len(fields) != 5:  # MR_OD:OK, 제외하고 5개 필드
+                raise ValueError(f"필드 수 오류: {len(fields)} != 5")
             
             # 필수 필드 파싱
-            parsed_data = MessageParser._parse_required_fields(fields[:6])
+            parsed_data = {
+                'object_id': int(fields[0]),
+                'object_type': MessageParser._parse_object_type(fields[1]),
+                'zone': MessageParser._parse_zone(fields[2]),
+                'timestamp': MessageParser._parse_timestamp(fields[3]),
+                'image_data': MessageParser._parse_image_data(fields[4]) if include_image else None,
+                'x_coord': 0.0,  # 기본값 설정
+                'y_coord': 0.0   # 기본값 설정
+            }
             
-            # 선택적 필드 파싱
-            optional_data = MessageParser._parse_optional_fields(fields[6:], include_image)
-            
-            return DetectedObject(**{**parsed_data, **optional_data})
+            return DetectedObject(**parsed_data)
             
         except Exception as e:
             raise ParseError(f"객체 정보 파싱 실패: {e}") from e

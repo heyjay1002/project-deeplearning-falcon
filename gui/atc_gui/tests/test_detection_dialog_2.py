@@ -28,7 +28,7 @@ def test_detection_dialog():
 
     test_runway_risk = RunwayRisk(
         runway_id='A',
-        runway_risk_level=2
+        runway_risk_level=1
     )
 
     test_fallen_person = DetectedObject(
