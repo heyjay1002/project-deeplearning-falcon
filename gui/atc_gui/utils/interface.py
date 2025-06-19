@@ -176,44 +176,42 @@ class DetectedObject:
 @dataclass
 class BirdRisk:
     """조류 위험도 정보"""
-    bird_risk_level: str  # 조류 위험도 레벨 (안전, 주의, 경고)
+    bird_risk_level: BirdRiskLevel  # enum 객체로 받음
     
     def __post_init__(self):
-        """위험도 값 검증"""
-        valid_levels = [level.value for level in BirdRiskLevel]
-        if self.bird_risk_level not in valid_levels:
-            raise ValueError(f"유효하지 않은 조류 위험도 값: {self.bird_risk_level}")
+        if not isinstance(self.bird_risk_level, BirdRiskLevel):
+            raise ValueError(f"bird_risk_level은 BirdRiskLevel enum이어야 합니다: {self.bird_risk_level}")
+
+    def to_dict(self) -> dict:
+        return {"bird_risk_level": self.bird_risk_level.value}
 
 @dataclass
 class RunwayRisk:
     """활주로 위험도 정보"""
     runway_id: str  # 활주로 ID (A 또는 B)
-    runway_risk_level: str  # 활주로 위험도 레벨 (안전, 경고)
+    runway_risk_level: RunwayRiskLevel  # enum 객체로 받음
     
     def __post_init__(self):
-        """위험도 값 검증"""
-        valid_levels = [level.value for level in RunwayRiskLevel]
-        if self.runway_risk_level not in valid_levels:
-            raise ValueError(f"유효하지 않은 활주로 위험도 값: {self.runway_risk_level}")
+        if not isinstance(self.runway_risk_level, RunwayRiskLevel):
+            raise ValueError(f"runway_risk_level은 RunwayRiskLevel enum이어야 합니다: {self.runway_risk_level}")
         if self.runway_id not in ['A', 'B']:
             raise ValueError(f"유효하지 않은 활주로 ID: {self.runway_id}")
 
     @property
     def enum(self) -> RunwayRiskLevel:        
-        return next(level for level in RunwayRiskLevel if level.value == self.runway_risk_level)
+        return self.runway_risk_level
 
-    def to_dict(self) -> Dict[str, Any]:
-        """객체 정보를 딕셔너리로 변환"""
+    def to_dict(self) -> dict:
         return {
             'runway_id': self.runway_id,
-            'runway_risk_level': self.runway_risk_level
+            'runway_risk_level': self.runway_risk_level.value
         }
 
 class MessageParser:
     """메시지 파싱 전용 클래스"""
     
     @staticmethod
-    def parse_object_info(data: str, include_image: bool = False) -> DetectedObject:
+    def parse_object_detail_info(data: str, include_image: bool = False) -> DetectedObject:
         """객체 정보 파싱"""
         try:
             # MR_OD:OK,{object_id},{object_type},{zone},{timestamp},{image_data} 형식 파싱
@@ -356,6 +354,27 @@ class MessageParser:
         except Exception as e:
             raise ValueError(f"이미지 데이터 파싱 실패: {e}") from e
 
+    @staticmethod
+    def parse_object_info_for_event(data: str) -> DetectedObject:
+        """
+        객체 감지 이벤트(ME_OD:)용 파서
+        포맷: {object_id},{object_type},{x_coord},{y_coord},{zone},{timestamp}
+        """
+        try:
+            fields = data.split(Constants.Protocol.OBJECT_FIELD_SEPARATOR)
+            if len(fields) < 6:
+                raise ValueError(f"필드 수 오류: {len(fields)} < 6")
+            return DetectedObject(
+                object_id=int(fields[0]),
+                object_type=MessageParser._parse_object_type(fields[1]),
+                x_coord=float(fields[2]),
+                y_coord=float(fields[3]),
+                zone=MessageParser._parse_zone(fields[4]),
+                timestamp=MessageParser._parse_timestamp(fields[5])
+            )
+        except Exception as e:
+            raise ParseError(f"객체 감지 이벤트 파싱 실패: {e}") from e
+
 
 class MessageInterface:
     """개선된 TCP 메시지 인터페이스 클래스"""
@@ -389,9 +408,9 @@ class MessageInterface:
         return risk_level in Constants.RUNWAY_RISK_MAPPING
     
     @staticmethod
-    def parse_object_info(object_str: str, include_image: bool = False) -> DetectedObject:
+    def parse_object_detail_info(object_str: str, include_image: bool = False) -> DetectedObject:
         """객체 정보 문자열 파싱 (호환성 유지)"""
-        return MessageParser.parse_object_info(object_str, include_image)
+        return MessageParser.parse_object_detail_info(object_str, include_image)
     
     @staticmethod
     def parse_message(message: str) -> tuple[MessagePrefix, str]:
@@ -416,19 +435,16 @@ class MessageInterface:
         """객체 감지 이벤트 메시지 파싱"""
         if not data.strip():
             return []
-            
         objects = []
         object_records = data.split(Constants.Protocol.OBJECT_RECORD_SEPARATOR)
-        
         for record in object_records:
             if record.strip():
                 try:
-                    obj_info = MessageParser.parse_object_info(record.strip())
+                    obj_info = MessageParser.parse_object_info_for_event(record.strip())
                     objects.append(obj_info)
                 except Exception as e:
                     logger.error(f"객체 정보 파싱 오류: {e}")
                     continue
-        
         return objects
     
     @staticmethod

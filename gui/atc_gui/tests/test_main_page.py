@@ -102,6 +102,7 @@ class MockServer:
             self.object_id_counter += 1
             
             # 객체 감지 이벤트 전송
+            print(f"emit: {obj}")
             if hasattr(self.main_page, 'network_manager'):
                 self.main_page.network_manager.object_detected.emit(obj)
         except Exception as e:
@@ -114,12 +115,12 @@ class MockServer:
             
         try:
             # 위험도 순환 (LOW -> MEDIUM -> HIGH -> LOW)
-            current_risk = self.main_page.label_bird_risk_status.text()
-            if current_risk == BirdRiskLevel.LOW.value:
+            current_risk = self.main_page.network_manager.current_bird_risk  # 예시: 실제 위험도 상태를 가져옴
+            if current_risk == BirdRiskLevel.LOW:
                 self.main_page.network_manager.bird_risk_changed.emit(BirdRiskLevel.MEDIUM)
-            elif current_risk == BirdRiskLevel.MEDIUM.value:
+            elif current_risk == BirdRiskLevel.MEDIUM:
                 self.main_page.network_manager.bird_risk_changed.emit(BirdRiskLevel.HIGH)
-            else:
+            elif current_risk == BirdRiskLevel.HIGH:
                 self.main_page.network_manager.bird_risk_changed.emit(BirdRiskLevel.LOW)
         except Exception as e:
             print(f"조류 위험도 변경 오류: {e}")

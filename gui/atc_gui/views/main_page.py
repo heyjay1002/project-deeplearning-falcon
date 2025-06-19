@@ -28,7 +28,10 @@ from typing import Optional
 
 class MainPage(QWidget):
     # 객체 목록 업데이트 시그널 추가
-    object_list_updated = pyqtSignal(set)
+    object_list_updated = pyqtSignal(set)   
+    object_detected = pyqtSignal(DetectedObject)
+    bird_risk_alerted = pyqtSignal(BirdRisk)
+    runway_risk_alerted = pyqtSignal(RunwayRisk)
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -278,12 +281,11 @@ class MainPage(QWidget):
         # 처리된 객체 ID 목록을 메인 윈도우에 전달
         self.object_list_updated.emit(self.current_object_ids)
 
-        # 첫 객체 감지 시 팝업 표시
+        # 첫 객체 감지 시 시그널로 전달
         if self.is_first_detection and new_objects:
             self.is_first_detection = False
             logger.info("첫 번째 객체 감지")
-            dialog = NotificationDialog('object', new_objects[0], self)
-            dialog.exec()
+            self.object_detected.emit(new_objects[0])  # 시그널로만 전달
 
     def update_markers(self, objects: list[DetectedObject]):
         """마커 업데이트"""
@@ -380,10 +382,9 @@ class MainPage(QWidget):
                 "padding: 5px;"
             )
             
-        # 위험도 변경 시 알림 표시
+        # 위험도 변경 시 시그널로 전달
         if risk_level != BirdRiskLevel.LOW:
-            dialog = NotificationDialog('bird', BirdRisk(risk_level.value), self)
-            dialog.exec()
+            self.bird_risk_alerted.emit(BirdRisk(risk_level))
 
     def update_runway_a_risk(self, risk_level: Optional[RunwayRiskLevel] = None):
         """활주로 A 위험도 업데이트"""
@@ -414,10 +415,9 @@ class MainPage(QWidget):
                 "padding: 5px;"
             )
             
-        # 위험도 변경 시 알림 표시
+        # 위험도 변경 시 시그널로 전달
         if risk_level != RunwayRiskLevel.LOW:
-            dialog = NotificationDialog('runway_a_risk', RunwayRisk('A', risk_level.value), self)
-            dialog.exec()
+            self.runway_risk_alerted.emit(RunwayRisk('A', risk_level))
 
     def update_runway_b_risk(self, risk_level: Optional[RunwayRiskLevel] = None):
         """활주로 B 위험도 업데이트"""
@@ -448,10 +448,9 @@ class MainPage(QWidget):
                 "padding: 5px;"
             )
             
-        # 위험도 변경 시 알림 표시
+        # 위험도 변경 시 시그널로 전달
         if risk_level != RunwayRiskLevel.LOW:
-            dialog = NotificationDialog('runway_b_risk', RunwayRisk('B', risk_level.value), self)
-            dialog.exec()
+            self.runway_risk_alerted.emit(RunwayRisk('B', risk_level))
 
     def update_object_detail(self, obj: DetectedObject):
         """객체 상세 정보 업데이트"""

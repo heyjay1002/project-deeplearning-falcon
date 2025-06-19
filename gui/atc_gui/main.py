@@ -8,7 +8,7 @@ from views.main_page import MainPage
 from views.access_page import AccessPage
 from views.log_page import LogPage
 from views.notification_dialog import NotificationDialog
-from utils.interface import DetectedObject
+from utils.interface import DetectedObject, BirdRisk, RunwayRisk
 
 class WindowClass(QMainWindow):
     def __init__(self):
@@ -27,9 +27,6 @@ class WindowClass(QMainWindow):
         
         # 객체 감지 이벤트 처리 설정
         self.setup_object_detection_handler()
-        
-        # 처리된 객체 ID 추적을 위한 세트
-        self.processed_object_ids = set()
 
     def setup_status_bar(self):
         """상태바 설정"""
@@ -135,27 +132,22 @@ class WindowClass(QMainWindow):
         """)
 
     def setup_object_detection_handler(self):
-        """객체 감지 이벤트 핸들러 설정"""
-        if hasattr(self.main_page, 'network_manager'):
-            self.main_page.network_manager.object_detected.connect(self.show_object_detection_dialog)
-            # MainPage의 객체 목록 업데이트 시그널 연결
-            self.main_page.object_list_updated.connect(self.update_processed_objects)
+        """객체 감지 및 위험도 알림 이벤트 핸들러 설정"""
+        if hasattr(self.main_page, 'object_detected'):
+            self.main_page.object_detected.connect(lambda obj: self.show_notification_dialog('object', obj))
+        if hasattr(self.main_page, 'bird_risk_alerted'):
+            self.main_page.bird_risk_alerted.connect(lambda risk: self.show_notification_dialog('bird', risk))
+        if hasattr(self.main_page, 'runway_risk_alerted'):
+            self.main_page.runway_risk_alerted.connect(self._handle_runway_risk_alerted)
 
-    def update_processed_objects(self, object_ids: set):
-        """처리된 객체 ID 목록 업데이트"""
-        self.processed_object_ids.update(object_ids)
+    def _handle_runway_risk_alerted(self, risk):
+        dialog_type = 'runway_a_risk' if getattr(risk, 'runway_id', None) == 'A' else 'runway_b_risk'
+        self.show_notification_dialog(dialog_type, risk)
 
-    def show_object_detection_dialog(self, detected_object: DetectedObject):
-        """객체 감지 다이얼로그 표시"""
-        # 팝업 기능 일시 비활성화
-        return
-        
-        # 이미 처리된 객체인 경우 알림을 표시하지 않음
-        if detected_object.object_id in self.processed_object_ids:
-            return
-            
-        dialog = NotificationDialog('object', detected_object, self)
-        dialog.show()
+    def show_notification_dialog(self, dialog_type, data):
+        """알림 다이얼로그 표시"""
+        dialog = NotificationDialog(dialog_type, data, self)
+        dialog.exec()
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)      

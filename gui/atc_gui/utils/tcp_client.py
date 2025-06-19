@@ -534,7 +534,7 @@ class ImprovedTcpClient(QObject):
                 raise ValueError("잘못된 응답 형식")
                 
             _, object_info_str = data.split(Constants.Protocol.MESSAGE_SEPARATOR, 1)
-            obj_info = MessageParser.parse_object_info(object_info_str, include_image=True)
+            obj_info = MessageParser.parse_object_detail_info(object_info_str, include_image=True)
             self.object_detail_response.emit(obj_info)
             
         except Exception as e:
