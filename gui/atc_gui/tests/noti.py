@@ -11,7 +11,7 @@ class NotificationDialog(QDialog):
         self.notification_type = notification_type
         self.data = data
 
-        self.setWindowFlags(self.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
+        self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
         self.setAttribute(Qt.WidgetAttribute.WA_TranslucentBackground)
 
         self.init_ui()
@@ -53,7 +53,7 @@ class NotificationDialog(QDialog):
         content_layout = QHBoxLayout()
         content_layout.setSpacing(15)
 
-        # 이미지 (이미지 데이터가 있을 때만 표시)
+        # 이미지
         if hasattr(self.data, 'image_data') and self.data.image_data:
             try:
                 image = QImage.fromData(self.data.image_data)

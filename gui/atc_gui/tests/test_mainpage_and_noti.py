@@ -1,9 +1,13 @@
 import sys
+import os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import socket
 from PyQt6.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget
-from PyQt6.QtCore import QThread, pyqtSignal
+from PyQt6.QtCore import QThread, pyqtSignal, Qt
 from main import WindowClass
 from utils.interface import MessageInterface, MessagePrefix
+from views.notification_dialog import NotificationDialog
+
 
 # 테스트 이벤트 서버 (TCP)
 class TestEventServer(QThread):
@@ -80,6 +84,20 @@ def handle_test_event(window, prefix, payload):
             window.main_page.network_manager.runway_b_risk_changed.emit(risk_level)
     except Exception as e:
         print(f"[테스트 이벤트 핸들러 오류] {e}")
+
+# monkey patch는 반드시 여기!
+origin_show_notification_dialog = WindowClass.show_notification_dialog
+
+def debug_show_notification_dialog(self, dialog_type, data):
+    print(f"[DEBUG] 알림 다이얼로그 호출됨: {dialog_type}, {data}")
+    if not hasattr(self, '_test_dialogs'):
+        self._test_dialogs = []
+    dialog = NotificationDialog(dialog_type, data, self)
+    dialog.setWindowFlags(dialog.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)  # 항상 맨 위에 표시
+    self._test_dialogs.append(dialog)  # 참조 유지!
+    dialog.show()  # exec() 대신 show() 사용
+
+WindowClass.show_notification_dialog = debug_show_notification_dialog
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

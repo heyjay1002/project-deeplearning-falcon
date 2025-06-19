@@ -6,7 +6,7 @@ from typing import Dict, Tuple, Optional
 from dataclasses import dataclass
 from enum import Enum
 from utils.logger import logger
-from config import ObjectType
+from config.constants import ObjectType
 from utils.interface import DetectedObject
 
 class MarkerState(Enum):
@@ -24,7 +24,7 @@ class MarkerData:
     object_type: str
     zone: str
     is_selected: bool = False
-    size: int = 24
+    size: int = 50
     icon_path: Optional[str] = None
     state: str = 'NORMAL'  # NORMAL, WARNING, SELECTED
 
@@ -85,23 +85,29 @@ class DynamicMarker(QLabel):
         painter = QPainter(pixmap)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         
-        # 객체 타입별 아이콘 경로 매핑
+        # 객체 타입별 아이콘 경로 매핑 (ObjectType Enum의 value 사용)
+        base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         icon_paths = {
-            ObjectType.BIRD: "gui/atc_gui/resources/images/bird.png",
-            ObjectType.FOD: "gui/atc_gui/resources/images/fod.png",
-            ObjectType.PERSON: "gui/atc_gui/resources/images/person.png",
-            ObjectType.ANIMAL: "gui/atc_gui/resources/images/animal.png",
-            ObjectType.AIRPLANE: "gui/atc_gui/resources/images/airplane.png",
-            ObjectType.VEHICLE: "gui/atc_gui/resources/images/vehicle.png",
-            ObjectType.WORK_PERSON: "gui/atc_gui/resources/images/worker.png",
-            ObjectType.WORK_VEHICLE: "gui/atc_gui/resources/images/vehicle_work.png"
+            ObjectType.BIRD.value: os.path.join(base_path, 'resources/images/bird.png'),
+            ObjectType.FOD.value: os.path.join(base_path, 'resources/images/fod.png'),
+            ObjectType.PERSON.value: os.path.join(base_path, 'resources/images/person.png'),
+            ObjectType.ANIMAL.value: os.path.join(base_path, 'resources/images/animal.png'),
+            ObjectType.AIRPLANE.value: os.path.join(base_path, 'resources/images/airplane.png'),
+            ObjectType.VEHICLE.value: os.path.join(base_path, 'resources/images/vehicle.png'),
+            ObjectType.WORK_PERSON.value: os.path.join(base_path, 'resources/images/worker.png'),
+            ObjectType.WORK_VEHICLE.value: os.path.join(base_path, 'resources/images/vehicle_work.png')
         }
+        # Enum이 들어오면 value, 아니면 그대로
+        obj_type_key = self.data.object_type.value if hasattr(self.data.object_type, 'value') else str(self.data.object_type)
+        icon_path = icon_paths.get(obj_type_key)
+        logger.debug(f"마커 아이콘 로드 시도: base_path={base_path}, object_type={obj_type_key}, icon_path={icon_path}")
+        logger.debug(f"사용 가능한 icon_paths 키들: {list(icon_paths.keys())}")
         
-        # 아이콘 로드 시도
-        icon_path = icon_paths.get(self.data.object_type)
         if icon_path and os.path.exists(icon_path):
+            logger.debug(f"아이콘 파일 존재 확인: {icon_path}")
             icon_pixmap = QPixmap(icon_path)
             if not icon_pixmap.isNull():
+                logger.debug(f"아이콘 로드 성공: {icon_path}")
                 # 아이콘 크기 조정
                 scaled_icon = icon_pixmap.scaled(
                     size - 4, size - 4,  # 마진 2px
@@ -124,19 +130,15 @@ class DynamicMarker(QLabel):
                 painter.setBrush(Qt.BrushStyle.NoBrush)
                 painter.drawRoundedRect(2, 2, size - 4, size - 4, 8, 8)
                 
-                # 객체 ID가 있으면 텍스트 추가
-                if self.data.object_id:
-                    painter.setPen(QPen(Qt.GlobalColor.white))
-                    font = QFont()
-                    font.setPixelSize(max(8, size // 3))
-                    font.setBold(True)
-                    painter.setFont(font)
-                    painter.drawText(pixmap.rect(), Qt.AlignmentFlag.AlignCenter, str(self.data.object_id))
-                
                 painter.end()
                 return pixmap
+            else:
+                logger.warning(f"아이콘 로드 실패 (null): {icon_path}")
+        else:
+            logger.warning(f"아이콘 파일을 찾을 수 없음: {icon_path}")
         
         # 아이콘 로드 실패 시 기본 마커 생성
+        logger.debug("기본 파란색 마커 생성")
         default_color = QColor("#4A90E2")  # 기본 파란색
         
         # 기본 마커 그리기
@@ -145,15 +147,6 @@ class DynamicMarker(QLabel):
         
         # 둥근 모서리 사각형 그리기
         painter.drawRoundedRect(2, 2, size - 4, size - 4, 8, 8)
-        
-        # 객체 ID 텍스트 추가
-        if self.data.object_id:
-            painter.setPen(QPen(Qt.GlobalColor.white))
-            font = QFont()
-            font.setPixelSize(max(8, size // 3))
-            font.setBold(True)
-            painter.setFont(font)
-            painter.drawText(pixmap.rect(), Qt.AlignmentFlag.AlignCenter, str(self.data.object_id))
         
         painter.end()
         return pixmap
@@ -248,6 +241,7 @@ class MapMarkerWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.markers: Dict[int, DynamicMarker] = {}
+        self.marker_labels: Dict[int, QLabel] = {}  # 추가
         self.selected_marker_id: Optional[int] = None
         self.set_map_size(960, 720)  # 기본 지도 크기
         
@@ -353,6 +347,24 @@ class MapMarkerWidget(QWidget):
             self.markers[marker_data.object_id] = marker
             logger.debug(f"마커 추가 성공: ID {marker_data.object_id}")
             
+            # ID 라벨 추가
+            id_label = QLabel(f"ID:{marker_data.object_id}", self)
+            id_label.setStyleSheet("""
+                background: rgba(0,0,0,0.7);
+                color: white;
+                border-radius: 6px;
+                padding: 2px 6px;
+                font-weight: bold;
+                font-size: 12px;
+            """)
+            id_label.adjustSize()
+            # 마커 중앙 상단에 위치 (마커 크기 50px 고려)
+            label_x = x + 25 - id_label.width()//2  # 마커 중앙에서 라벨 중앙 정렬
+            label_y = y - id_label.height() - 2     # 마커 상단에서 2px 위
+            id_label.move(label_x, label_y)
+            id_label.show()
+            self.marker_labels[marker_data.object_id] = id_label
+            
         except Exception as e:
             logger.error(f"마커 추가 실패: {str(e)}")
             
@@ -366,6 +378,13 @@ class MapMarkerWidget(QWidget):
                 # 위치가 변경되었으면 이동
                 x, y = self.calculate_marker_position(marker_data.x, marker_data.y)
                 marker.animate_to_position(x, y)
+                
+                # 라벨 위치도 업데이트
+                label = self.marker_labels.get(marker_data.object_id)
+                if label:
+                    label_x = x + 25 - label.width()//2  # 마커 중앙에서 라벨 중앙 정렬
+                    label_y = y - label.height() - 2     # 마커 상단에서 2px 위
+                    label.move(label_x, label_y)
                 
                 # 외관 업데이트
                 marker.update_appearance()
@@ -385,6 +404,12 @@ class MapMarkerWidget(QWidget):
                 
                 if self.selected_marker_id == object_id:
                     self.selected_marker_id = None
+                    
+                # 라벨 제거
+                if object_id in self.marker_labels:
+                    self.marker_labels[object_id].hide()
+                    self.marker_labels[object_id].deleteLater()
+                    del self.marker_labels[object_id]
                     
                 logger.debug(f"마커 제거 성공: ID {object_id}")
         except Exception as e:
@@ -414,6 +439,13 @@ class MapMarkerWidget(QWidget):
                 marker.hide()
                 marker.deleteLater()
             self.markers.clear()
+            
+            # 라벨도 함께 제거
+            for label in self.marker_labels.values():
+                label.hide()
+                label.deleteLater()
+            self.marker_labels.clear()
+            
             self.selected_marker_id = None
             logger.debug("모든 마커 제거 완료")
         except Exception as e:
@@ -431,6 +463,12 @@ class MapMarkerWidget(QWidget):
             x, y = self.calculate_marker_position(marker.data.x, marker.data.y)
             if not marker.is_animating:
                 marker.move(x, y)
+            # 라벨도 같이 이동 (마커 중앙 상단에 위치)
+            label = self.marker_labels.get(marker.data.object_id)
+            if label:
+                label_x = x + 25 - label.width()//2  # 마커 중앙에서 라벨 중앙 정렬
+                label_y = y - label.height() - 2     # 마커 상단에서 2px 위
+                label.move(label_x, label_y)
                 
     def resizeEvent(self, event):
         """위젯 크기 변경 시 처리"""

@@ -13,7 +13,6 @@ if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
 from views.object_detail_dialog import ObjectDetailDialog
-from views.notification_dialog import NotificationDialog
 from config.constants import BirdRiskLevel, RunwayRiskLevel, ObjectType, AirportZone
 from config.settings import Settings
 from utils.network_manager import NetworkManager
@@ -33,8 +32,9 @@ class MainPage(QWidget):
     bird_risk_alerted = pyqtSignal(BirdRisk)
     runway_risk_alerted = pyqtSignal(RunwayRisk)
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, network_manager=None):
         super().__init__(parent)
+
         ui_path = os.path.join(os.path.dirname(__file__), '../ui/main_page.ui')
         uic.loadUi(ui_path, self)
 
@@ -58,6 +58,7 @@ class MainPage(QWidget):
         self.setup_table()
         
         # 네트워크 관리자 설정
+        self.network_manager = network_manager
         self.setup_network_manager()
 
         # UDP 클라이언트 설정
@@ -106,10 +107,10 @@ class MainPage(QWidget):
         self.table_object_list.setRowCount(0)
 
     def setup_network_manager(self):
-        """네트워크 관리자 설정 및 시그널 연결"""
-        self.network_manager = NetworkManager(self)
-        
-        # 네트워크 관리자의 시그널을 UI 메서드에 연결
+        """네트워크 관리자 시그널만 연결, 서비스 시작/중지는 WindowClass에서 관리"""
+        if self.network_manager is None:
+            raise ValueError("network_manager가 필요합니다.")
+        # 시그널 연결만 수행
         self.network_manager.object_detected.connect(self.update_object_list)
         self.network_manager.bird_risk_changed.connect(self.update_bird_risk)
         self.network_manager.runway_a_risk_changed.connect(self.update_runway_a_risk)
@@ -120,9 +121,7 @@ class MainPage(QWidget):
         self.network_manager.frame_b_received.connect(self.update_cctv_b_frame)
         self.network_manager.tcp_connection_status_changed.connect(self.update_tcp_connection_status)
         self.network_manager.udp_connection_status_changed.connect(self.update_udp_connection_status)
-
-        # 네트워크 서비스 시작
-        self.network_manager.start_services()
+        # 서비스 시작/중지는 WindowClass에서만!
 
     def setup_status_bar(self):
         """커스텀 상태바 위젯 설정 (TCP/UDP 상태만)"""
@@ -139,7 +138,7 @@ class MainPage(QWidget):
                 status_bar.addWidget(self.udp_status_label)
 
     def update_tcp_connection_status(self, is_connected: bool, message: str):
-        """TCP 연결 상태 UI 업데이트 (메시지 라벨 제거)"""
+        """TCP 연결 상태 UI 업데이트"""
         logger.info(f"TCP 연결 상태 변경: {message}")
         if hasattr(self, 'tcp_status_label'):
             if is_connected:
@@ -148,7 +147,7 @@ class MainPage(QWidget):
                 self.tcp_status_label.setStyleSheet("color: red; font-weight: bold; margin-right: 8px;")
 
     def update_udp_connection_status(self, is_connected: bool, message: str):
-        """UDP 연결 상태 UI 업데이트 (메시지 라벨 제거)"""
+        """UDP 연결 상태 UI 업데이트"""
         logger.info(f"UDP 연결 상태 변경: {message}")
         if hasattr(self, 'udp_status_label'):
             if is_connected:
@@ -239,7 +238,7 @@ class MainPage(QWidget):
             self.last_update_time = current_time
 
     def update_object_list(self, objects: list[DetectedObject] | DetectedObject):
-        """객체 목록 업데이트 (디바운싱 적용)"""
+        """객체 목록 업데이트"""
         # 단일 객체인 경우 리스트로 변환
         if isinstance(objects, DetectedObject):
             objects = [objects]
@@ -494,8 +493,8 @@ class MainPage(QWidget):
         self.map_cctv_stack.setCurrentIndex(0)
         
         # 서버에 지도 요청
-        if hasattr(self, 'network_manager'):
-            self.network_manager.request_map()   
+        if self.network_manager:
+            self.network_manager.request_map()
 
     def show_cctv(self):
         """CCTV 보기"""
@@ -584,10 +583,6 @@ class MainPage(QWidget):
 
     def closeEvent(self, event):
         """위젯 종료 시 처리"""
-        # 네트워크 서비스 중지
-        if hasattr(self, 'network_manager'):
-            self.network_manager.stop_services()
-
         # UDP 클라이언트 정리
         if hasattr(self, 'udp_client'):
             self.udp_client.cleanup()

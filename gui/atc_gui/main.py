@@ -9,6 +9,7 @@ from views.access_page import AccessPage
 from views.log_page import LogPage
 from views.notification_dialog import NotificationDialog
 from utils.interface import DetectedObject, BirdRisk, RunwayRisk
+from utils.network_manager import NetworkManager
 
 class WindowClass(QMainWindow):
     def __init__(self):
@@ -19,14 +20,26 @@ class WindowClass(QMainWindow):
         # 창 크기 설정 
         self.resize(1320, 860)
         
+        # 네트워크 매니저 생성
+        self.network_manager = NetworkManager()
+        
         # 상태바 설정
         self.setup_status_bar()
         
         # 탭 설정
         self.setup_tabs()
         
-        # 객체 감지 이벤트 처리 설정
-        self.setup_object_detection_handler()
+        # 네트워크 시그널 연결
+        self._connect_network_signals()
+
+    def _connect_network_signals(self):
+        nm = self.network_manager
+        nm.object_detected.connect(lambda obj: self.show_notification_dialog('object', obj))
+        nm.bird_risk_changed.connect(lambda risk: self.show_notification_dialog('bird', risk))
+        nm.runway_a_risk_changed.connect(lambda risk: self.show_notification_dialog('runway_a_risk', risk))
+        nm.runway_b_risk_changed.connect(lambda risk: self.show_notification_dialog('runway_b_risk', risk))
+        nm.tcp_connection_status_changed.connect(lambda connected, msg: self.update_connection_status(connected, msg, "TCP"))
+        nm.udp_connection_status_changed.connect(lambda connected, msg: self.update_connection_status(connected, msg, "UDP"))
 
     def setup_status_bar(self):
         """상태바 설정"""
@@ -34,7 +47,7 @@ class WindowClass(QMainWindow):
         self.tcp_connected = False
         self.udp_connected = False
         
-        # TCP 연결 상태 표시기
+        # TCP 연결 상태 표시기창
         self.tcp_indicator = QLabel("●")
         self.tcp_indicator.setToolTip("TCP 연결 상태")
         self.tcp_indicator.setStyleSheet("color: #ccc; font-size: 16px;")
@@ -46,7 +59,6 @@ class WindowClass(QMainWindow):
         
         # 상태바에 위젯 추가
         self.statusbar.addWidget(QLabel("TCP:"))
-        self.statusbar.addWidget(self.tcp_indicator)
         self.statusbar.addWidget(QLabel("UDP:"))
         self.statusbar.addWidget(self.udp_indicator)
 
@@ -75,8 +87,8 @@ class WindowClass(QMainWindow):
 
     def setup_tabs(self):
         """탭 설정 및 페이지 추가"""
-        # MainPage 인스턴스 생성 및 셋팅
-        self.main_page = MainPage(self)
+        # MainPage 인스턴스 생성 시 network_manager를 전달
+        self.main_page = MainPage(self, network_manager=self.network_manager)
         self._setup_tab_widget(0, self.main_page)
 
         # AccessPage 인스턴스 생성 및 셋팅
@@ -94,15 +106,6 @@ class WindowClass(QMainWindow):
         
         # 탭 스타일 설정
         self._setup_tab_style()
-        
-        # MainPage의 연결 상태 시그널을 상태바와 연결
-        if hasattr(self.main_page, 'network_manager'):
-            self.main_page.network_manager.tcp_connection_status_changed.connect(
-                lambda connected, msg: self.update_connection_status(connected, msg, "TCP")
-            )
-            self.main_page.network_manager.udp_connection_status_changed.connect(
-                lambda connected, msg: self.update_connection_status(connected, msg, "UDP")
-            )
 
     def _setup_tab_widget(self, tab_index: int, widget: QWidget):
         """개별 탭 위젯 설정"""
@@ -131,26 +134,24 @@ class WindowClass(QMainWindow):
             }
         """)
 
-    def setup_object_detection_handler(self):
-        """객체 감지 및 위험도 알림 이벤트 핸들러 설정"""
-        if hasattr(self.main_page, 'object_detected'):
-            self.main_page.object_detected.connect(lambda obj: self.show_notification_dialog('object', obj))
-        if hasattr(self.main_page, 'bird_risk_alerted'):
-            self.main_page.bird_risk_alerted.connect(lambda risk: self.show_notification_dialog('bird', risk))
-        if hasattr(self.main_page, 'runway_risk_alerted'):
-            self.main_page.runway_risk_alerted.connect(self._handle_runway_risk_alerted)
-
-    def _handle_runway_risk_alerted(self, risk):
-        dialog_type = 'runway_a_risk' if getattr(risk, 'runway_id', None) == 'A' else 'runway_b_risk'
-        self.show_notification_dialog(dialog_type, risk)
-
     def show_notification_dialog(self, dialog_type, data):
         """알림 다이얼로그 표시"""
+        if not hasattr(self, '_test_dialogs'):
+            self._test_dialogs = []
         dialog = NotificationDialog(dialog_type, data, self)
-        dialog.exec()
+        self._test_dialogs.append(dialog)
+        dialog.show()
+
+    def debug_show_notification_dialog(self, dialog_type, data):
+        print(f"[DEBUG] 알림 다이얼로그 호출됨: {dialog_type}, {data}")
+        if not hasattr(self, '_test_dialogs'):
+            self._test_dialogs = []
+        dialog = NotificationDialog(dialog_type, data, self)
+        self._test_dialogs.append(dialog)
+        dialog.show()
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)      
+    app = QApplication(sys.argv)
     window = WindowClass()
     window.show()       
     sys.exit(app.exec())

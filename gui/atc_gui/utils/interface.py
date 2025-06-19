@@ -152,27 +152,6 @@ class DetectedObject:
             'image_data': self.image_base64
         }
 
-    @classmethod
-    def from_dict(cls, data: Dict[str, Any]) -> 'DetectedObject':
-        """딕셔너리로부터 객체 생성"""
-        image_data = None
-        if data.get('image_data'):
-            try:
-                image_data = base64.b64decode(data['image_data'])
-            except Exception as e:
-                logger.error(f"이미지 데이터 디코딩 실패: {e}")
-        
-        return cls(
-            object_id=data['object_id'],
-            object_type=ObjectType(data['object_type']),
-            x_coord=data['x_coord'],
-            y_coord=data['y_coord'],
-            zone=AirportZone(data['zone']),
-            timestamp=datetime.fromisoformat(data['timestamp']),
-            extra_info=ExtraInfo(data['extra_info']),
-            image_data=image_data,
-        )
-
 @dataclass
 class BirdRisk:
     """조류 위험도 정보"""
