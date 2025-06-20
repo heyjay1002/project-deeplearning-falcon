@@ -47,8 +47,8 @@ class AccessTarget(Enum):
 
 class ExtraInfo(Enum):
     """추가 정보"""
-    NONE = "없음"
-    RESCUE = "쓰러짐"
+    N = "없음"
+    R = "쓰러짐"
 
 class CameraID(Enum):
     """CCTV 카메라 식별자"""

@@ -1,0 +1,178 @@
+2025-06-20 00:18:31,735 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 00:18:31,735 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 00:18:31,738 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:18:31,738 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:18:31,738 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:21:46,301 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 00:21:46,302 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 00:21:46,304 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:21:46,304 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:21:46,304 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:22:03,542 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 00:22:03,543 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 00:22:03,545 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:22:03,545 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:22:03,545 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:24:27,377 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 00:24:27,378 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 00:24:27,380 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:24:27,380 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:24:27,380 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:25:10,021 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 00:25:10,022 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 00:25:10,024 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:25:10,024 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:25:10,024 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:43:53,298 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 00:43:53,298 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 00:43:53,301 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:43:53,301 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:43:53,301 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:44:51,763 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 00:44:51,763 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 00:44:51,765 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:44:51,765 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:44:51,765 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:44:53,658 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-20 00:44:53,659 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-20 00:44:53,659 - ATC_GUI - DEBUG - 마커 업데이트: 1개 객체
+2025-06-20 00:44:53,674 - ATC_GUI - DEBUG - 마커 추가 성공: ID 123
+2025-06-20 00:44:53,674 - ATC_GUI - DEBUG - 마커 추가: ID 123
+2025-06-20 00:44:53,674 - ATC_GUI - INFO - 첫 번째 객체 감지
+2025-06-20 00:44:55,799 - ATC_GUI - INFO - 조류 위험도 변경: 경고
+2025-06-20 00:44:57,228 - ATC_GUI - INFO - 활주로 A 위험도 변경: 경고
+2025-06-20 00:45:02,555 - ATC_GUI - INFO - 활주로 B 위험도 변경: 경고
+2025-06-20 00:46:07,603 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 00:46:07,603 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 00:46:07,606 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:46:07,606 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:46:07,606 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:47:16,525 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 00:47:16,526 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 00:47:16,528 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:47:16,528 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:47:16,528 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:47:18,459 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-20 00:47:18,459 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-20 00:47:18,460 - ATC_GUI - DEBUG - 마커 업데이트: 1개 객체
+2025-06-20 00:47:18,470 - ATC_GUI - DEBUG - 마커 추가 성공: ID 123
+2025-06-20 00:47:18,470 - ATC_GUI - DEBUG - 마커 추가: ID 123
+2025-06-20 00:47:18,470 - ATC_GUI - INFO - 첫 번째 객체 감지
+2025-06-20 00:47:21,076 - ATC_GUI - INFO - 조류 위험도 변경: 경고
+2025-06-20 00:47:22,894 - ATC_GUI - INFO - 활주로 A 위험도 변경: 경고
+2025-06-20 00:47:25,141 - ATC_GUI - INFO - 활주로 B 위험도 변경: 경고
+2025-06-20 00:48:27,569 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 00:48:27,569 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 00:48:27,572 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:48:27,572 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:48:27,572 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:51:36,902 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 00:51:36,902 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 00:51:36,904 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:51:36,904 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:51:36,905 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:51:38,459 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-20 00:51:38,459 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-20 00:51:38,459 - ATC_GUI - DEBUG - 마커 업데이트: 1개 객체
+2025-06-20 00:51:38,463 - ATC_GUI - DEBUG - 마커 추가 성공: ID 123
+2025-06-20 00:51:38,463 - ATC_GUI - DEBUG - 마커 추가: ID 123
+2025-06-20 00:51:38,463 - ATC_GUI - INFO - 첫 번째 객체 감지
+2025-06-20 00:51:42,519 - ATC_GUI - DEBUG - 마커 클릭: ID 123
+2025-06-20 00:51:42,520 - ATC_GUI - DEBUG - 마커 선택 성공: ID 123
+2025-06-20 00:51:42,522 - ATC_GUI - DEBUG - 테이블 행 선택: 0 (ID: 123)
+2025-06-20 00:55:34,647 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 00:55:34,647 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 00:55:34,649 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:55:34,649 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:55:34,650 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:55:36,359 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-20 00:55:36,360 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-20 00:55:36,361 - ATC_GUI - DEBUG - 마커 업데이트: 1개 객체
+2025-06-20 00:55:36,365 - ATC_GUI - DEBUG - 마커 추가 성공: ID 123
+2025-06-20 00:55:36,370 - ATC_GUI - DEBUG - 마커 추가: ID 123
+2025-06-20 00:55:36,370 - ATC_GUI - INFO - 첫 번째 객체 감지
+2025-06-20 00:57:16,197 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 00:57:16,198 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 00:57:16,201 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:57:16,201 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:57:16,201 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:57:17,558 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-20 00:57:17,559 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-20 00:57:17,559 - ATC_GUI - DEBUG - 마커 업데이트: 1개 객체
+2025-06-20 00:57:17,561 - ATC_GUI - DEBUG - 마커 추가 성공: ID 123
+2025-06-20 00:57:17,563 - ATC_GUI - DEBUG - 마커 추가: ID 123
+2025-06-20 00:57:17,563 - ATC_GUI - INFO - 첫 번째 객체 감지
+2025-06-20 00:58:10,123 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 00:58:10,124 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 00:58:10,128 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:58:10,128 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:58:10,128 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 00:58:11,159 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-20 00:58:11,159 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-20 00:58:11,159 - ATC_GUI - DEBUG - 마커 업데이트: 1개 객체
+2025-06-20 00:58:11,162 - ATC_GUI - DEBUG - 마커 추가 성공: ID 123
+2025-06-20 00:58:11,164 - ATC_GUI - DEBUG - 마커 추가: ID 123
+2025-06-20 00:58:11,164 - ATC_GUI - INFO - 첫 번째 객체 감지
+2025-06-20 01:03:25,646 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 01:03:25,646 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 01:03:25,648 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 01:03:25,648 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 01:03:25,649 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 01:03:27,450 - ATC_GUI - WARNING - 아이콘 파일을 찾을 수 없음: None
+2025-06-20 01:03:27,459 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-20 01:03:27,460 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-20 01:03:27,460 - ATC_GUI - DEBUG - 마커 업데이트: 1개 객체
+2025-06-20 01:03:27,464 - ATC_GUI - DEBUG - 마커 추가 성공: ID 123
+2025-06-20 01:03:27,466 - ATC_GUI - DEBUG - 마커 추가: ID 123
+2025-06-20 01:03:27,467 - ATC_GUI - INFO - 첫 번째 객체 감지
+2025-06-20 01:03:30,222 - ATC_GUI - INFO - 조류 위험도 변경: 경고
+2025-06-20 01:03:30,224 - ATC_GUI - WARNING - 아이콘 파일을 찾을 수 없음: None
+2025-06-20 01:03:31,079 - ATC_GUI - INFO - 활주로 A 위험도 변경: 경고
+2025-06-20 01:03:31,080 - ATC_GUI - WARNING - 아이콘 파일을 찾을 수 없음: None
+2025-06-20 01:04:48,671 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 01:04:48,671 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 01:04:48,673 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 01:04:48,674 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 01:04:48,674 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 01:04:50,126 - ATC_GUI - WARNING - 아이콘 파일을 찾을 수 없음: None
+2025-06-20 01:04:50,158 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-20 01:04:50,159 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-20 01:04:50,159 - ATC_GUI - DEBUG - 마커 업데이트: 1개 객체
+2025-06-20 01:04:50,161 - ATC_GUI - DEBUG - 마커 아이콘 로드 시도: object_type=조류, icon_path=None
+2025-06-20 01:04:50,162 - ATC_GUI - WARNING - 아이콘 파일을 찾을 수 없음: None
+2025-06-20 01:04:50,162 - ATC_GUI - DEBUG - 기본 파란색 마커 생성
+2025-06-20 01:04:50,163 - ATC_GUI - DEBUG - 마커 추가 성공: ID 123
+2025-06-20 01:04:50,166 - ATC_GUI - DEBUG - 마커 추가: ID 123
+2025-06-20 01:04:50,167 - ATC_GUI - INFO - 첫 번째 객체 감지
+2025-06-20 01:04:53,644 - ATC_GUI - INFO - 조류 위험도 변경: 경고
+2025-06-20 01:04:53,646 - ATC_GUI - WARNING - 아이콘 파일을 찾을 수 없음: None
+2025-06-20 01:06:19,935 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 01:06:19,935 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 01:06:19,937 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 01:06:19,937 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 01:06:19,937 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 01:06:22,254 - ATC_GUI - WARNING - 아이콘 파일을 찾을 수 없음: None
+2025-06-20 01:06:22,273 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-20 01:06:22,273 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-20 01:06:22,274 - ATC_GUI - DEBUG - 마커 업데이트: 1개 객체
+2025-06-20 01:06:22,280 - ATC_GUI - DEBUG - 마커 아이콘 로드 시도: base_path=/home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui, object_type=조류, icon_path=None
+2025-06-20 01:06:22,281 - ATC_GUI - WARNING - 아이콘 파일을 찾을 수 없음: None
+2025-06-20 01:06:22,281 - ATC_GUI - DEBUG - 기본 파란색 마커 생성
+2025-06-20 01:06:22,284 - ATC_GUI - DEBUG - 마커 추가 성공: ID 123
+2025-06-20 01:06:22,288 - ATC_GUI - DEBUG - 마커 추가: ID 123
+2025-06-20 01:06:22,289 - ATC_GUI - INFO - 첫 번째 객체 감지
+2025-06-20 01:10:16,649 - ATC_GUI - INFO - 지도 이미지 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/widgets/../resources/images/map_crop.png
+2025-06-20 01:10:16,650 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 960x720
+2025-06-20 01:10:16,652 - ATC_GUI - INFO - 조류 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 01:10:16,652 - ATC_GUI - INFO - 활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 01:10:16,652 - ATC_GUI - INFO - 활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨
+2025-06-20 01:10:18,759 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-20 01:10:18,759 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-20 01:10:18,759 - ATC_GUI - DEBUG - 마커 업데이트: 1개 객체
+2025-06-20 01:10:18,763 - ATC_GUI - DEBUG - 마커 아이콘 로드 시도: base_path=/home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui, object_type=조류, icon_path=/home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/resources/images/bird.png
+2025-06-20 01:10:18,763 - ATC_GUI - DEBUG - 사용 가능한 icon_paths 키들: ['조류', 'FOD', '인간', '동물', '비행기', '차량', '작업자', '작업차량']
+2025-06-20 01:10:18,763 - ATC_GUI - DEBUG - 아이콘 파일 존재 확인: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/resources/images/bird.png
+2025-06-20 01:10:18,767 - ATC_GUI - DEBUG - 아이콘 로드 성공: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/resources/images/bird.png
+2025-06-20 01:10:18,768 - ATC_GUI - DEBUG - 마커 추가 성공: ID 123
+2025-06-20 01:10:18,770 - ATC_GUI - DEBUG - 마커 추가: ID 123
+2025-06-20 01:10:18,770 - ATC_GUI - INFO - 첫 번째 객체 감지

@@ -6,9 +6,10 @@ from datetime import datetime
 # 프로젝트 루트 디렉토리를 Python 경로에 추가
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from views.notification_dialog import NotificationDialog
+from gui.atc_gui.trash.notification_dialog_old import NotificationDialog
 from utils.interface import DetectedObject, BirdRisk, RunwayRisk
 from config import ObjectType, AirportZone, ExtraInfo
+from config.constants import BirdRiskLevel, RunwayRiskLevel
 
 
 def test_detection_dialog():
@@ -23,12 +24,12 @@ def test_detection_dialog():
     )
 
     test_bird_risk = BirdRisk(
-        bird_risk_level=1
+        bird_risk_level=BirdRiskLevel.HIGH
     )
 
     test_runway_risk = RunwayRisk(
         runway_id='A',
-        runway_risk_level=1
+        runway_risk_level=RunwayRiskLevel.HIGH
     )
 
     test_fallen_person = DetectedObject(
@@ -38,7 +39,7 @@ def test_detection_dialog():
         x_coord=100,
         y_coord=200,
         timestamp=datetime.now(),
-        extra_info=ExtraInfo.RESCUE
+        extra_info=ExtraInfo.R
     )
  
     # QApplication 인스턴스 생성
