@@ -16,22 +16,22 @@ class Settings:
         # -----------------------------------------------------------
         # 실행 전 `ls -l /dev/video*`로 현재 할당된 이름을 확인하고 업데이트
         self.CAMERA_DEVICES = {
-            "CAM_A": "/dev/video2", # <-- 키가 논리적 ID, 값이 실제 경로
-            "CAM_B": "/dev/video4"  # <-- 키가 논리적 ID, 값이 실제 경로
+            "CAM_A": "/dev/video4", # <-- 키가 논리적 ID, 값이 실제 경로
+              # <-- 키가 논리적 ID, 값이 실제 경로
         }
         
-        self.CAMERA_RESOLUTION_WIDTH = 960     # 카메라 캡처 해상도 (너비)
-        self.CAMERA_RESOLUTION_HEIGHT = 720    # 카메라 캡처 해상도 (높이)
+        self.CAMERA_RESOLUTION_WIDTH = 1280     # 카메라 캡처 해상도 (너비)
+        self.CAMERA_RESOLUTION_HEIGHT = 1280    # 카메라 캡처 해상도 (높이)
         self.CAMERA_FPS = 60                    # 카메라 캡처 프레임 속도 (FPS)
-        self.CAMERA_QUEUE_MAX_SIZE = 4          # multiprocessing.Queue의 최대 크기. 너무 커지면 지연 증가, 너무 작으면 프레임 드롭 가능성
+        self.CAMERA_QUEUE_MAX_SIZE = 20          # multiprocessing.Queue의 최대 크기. 너무 커지면 지연 증가, 너무 작으면 프레임 드롭 가능성
         self.CAMERA_DROP_OLDEST_ON_FULL = True       
         # -----------------------------------------------------------
         # 2. 모델 설정 (Model Settings)
 
         # `config.py` 파일이 있는 디렉토리를 기준으로 `models` 폴더의 경로를 설정
         self.MODELS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "models")
-        self.YOLO_DETECTING_MODEL_PATH = os.path.join(self.MODELS_DIR, "all_fine_fune_v1.pt")
-        self.YOLO_POSE_MODEL_PATH = os.path.join(self.MODELS_DIR, "yolo11n-pose.pt")
+        self.YOLO_DETECTING_MODEL_PATH = os.path.join(self.MODELS_DIR, "yolo8s_box_v2.pt")
+        self.YOLO_POSE_MODEL_PATH = os.path.join(self.MODELS_DIR, "pose_model_v1.pt")
         self.DETECTOR_CURRENT_MODE = "object_detect" 
 
         # -----------------------------------------------------------
