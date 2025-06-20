@@ -345,10 +345,10 @@ class MessageParser:
                 raise ValueError(f"필드 수 오류: {len(fields)} < 6")
             return DetectedObject(
                 object_id=int(fields[0]),
-                object_type=MessageParser._parse_object_type(fields[1]),
+                object_type=ObjectType[fields[1]],
                 x_coord=float(fields[2]),
                 y_coord=float(fields[3]),
-                zone=MessageParser._parse_zone(fields[4]),
+                zone=AirportZone(fields[4]),
                 timestamp=MessageParser._parse_timestamp(fields[5])
             )
         except Exception as e:
@@ -410,20 +410,115 @@ class MessageInterface:
         return prefix, data
     
     @staticmethod
-    def parse_object_detection_event(data: str) -> List[DetectedObject]:
-        """객체 감지 이벤트 메시지 파싱"""
-        if not data.strip():
-            return []
+    def parse_object_detection_event(payload: str) -> List[DetectedObject]:
+        """객체 감지 이벤트 파싱 - 여러 객체 지원"""
         objects = []
-        object_records = data.split(Constants.Protocol.OBJECT_RECORD_SEPARATOR)
-        for record in object_records:
-            if record.strip():
-                try:
-                    obj_info = MessageParser.parse_object_info_for_event(record.strip())
-                    objects.append(obj_info)
-                except Exception as e:
-                    logger.error(f"객체 정보 파싱 오류: {e}")
+        
+        logger.debug(f"객체 감지 이벤트 파싱 시작: {payload[:200]}...")
+        
+        # 여러 객체가 ;로 구분된 경우 처리
+        object_records = payload.split(';')
+        logger.debug(f"분리된 객체 레코드 수: {len(object_records)}")
+        
+        for i, record in enumerate(object_records):
+            if not record.strip():
+                logger.debug(f"빈 레코드 건너뜀: 인덱스 {i}")
+                continue
+                
+            logger.debug(f"객체 레코드 {i+1} 처리: {record}")
+            
+            try:
+                parts = record.split(',')
+                if len(parts) < 5:  # 최소 필수 필드: id, type, x, y, zone
+                    logger.warning(f"객체 레코드 필드 수 부족: {len(parts)} < 5, 레코드: {record}")
                     continue
+                
+                # 기본 필드 파싱 (필수)
+                object_id = int(parts[0])
+                object_type_str = parts[1]
+                x_coord = float(parts[2])
+                y_coord = float(parts[3])
+                zone_str = parts[4]
+                
+                logger.debug(f"기본 필드 파싱: ID={object_id}, Type={object_type_str}, Pos=({x_coord},{y_coord}), Zone={zone_str}")
+                
+                # ObjectType 파싱 - 한글 value와 영문 key 모두 처리
+                try:
+                    object_type = ObjectType[object_type_str]
+                    logger.debug(f"ObjectType 영문 key로 파싱 성공: {object_type.value}")
+                except KeyError:
+                    # 한글 value로 시도
+                    for obj_type in ObjectType:
+                        if obj_type.value == object_type_str:
+                            object_type = obj_type
+                            logger.debug(f"ObjectType 한글 value로 파싱 성공: {object_type.value}")
+                            break
+                    else:
+                        logger.warning(f"알 수 없는 객체 타입: {object_type_str}")
+                        continue
+                
+                # AirportZone 파싱 - 한글 value와 영문 key 모두 처리
+                try:
+                    zone = AirportZone[zone_str]
+                    logger.debug(f"AirportZone 영문 key로 파싱 성공: {zone.value}")
+                except KeyError:
+                    # 한글 value로 시도
+                    for zone_type in AirportZone:
+                        if zone_type.value == zone_str:
+                            zone = zone_type
+                            logger.debug(f"AirportZone 한글 value로 파싱 성공: {zone.value}")
+                            break
+                    else:
+                        logger.warning(f"알 수 없는 구역: {zone_str}")
+                        continue
+                
+                # 타임스탬프 처리 (선택적)
+                timestamp = datetime.now()  # 기본값
+                if len(parts) > 5 and parts[5].strip():
+                    try:
+                        timestamp_str = parts[5].strip()
+                        if 'T' in timestamp_str:
+                            timestamp = datetime.fromisoformat(timestamp_str)
+                        else:
+                            timestamp = datetime.fromtimestamp(float(timestamp_str))
+                        logger.debug(f"타임스탬프 파싱 성공: {timestamp}")
+                    except (ValueError, OSError):
+                        logger.warning(f"타임스탬프 파싱 실패, 현재 시간 사용: {parts[5]}")
+                
+                # 이미지 데이터 처리 (선택적)
+                image_data = None
+                if len(parts) > 6 and parts[6].strip():
+                    try:
+                        image_b64 = parts[6].strip()
+                        # Base64 패딩 추가
+                        missing_padding = len(image_b64) % 4
+                        if missing_padding:
+                            image_b64 += '=' * (4 - missing_padding)
+                        image_data = base64.b64decode(image_b64)
+                        logger.debug(f"이미지 데이터 파싱 성공: {len(image_data)} bytes")
+                    except Exception as e:
+                        logger.warning(f"이미지 데이터 파싱 실패: {e}")
+                        image_data = None
+                
+                # DetectedObject 생성
+                obj = DetectedObject(
+                    object_id=object_id,
+                    object_type=object_type,
+                    x_coord=x_coord,
+                    y_coord=y_coord,
+                    zone=zone,
+                    timestamp=timestamp,
+                    extra_info=None,
+                    image_data=image_data
+                )
+                objects.append(obj)
+                logger.debug(f"객체 {i+1} 생성 완료: ID {object_id}")
+                
+            except Exception as e:
+                logger.error(f"객체 레코드 {i+1} 파싱 실패: {e}, 레코드: {record}")
+                continue
+        
+        logger.info(f"객체 감지 이벤트 파싱 완료: {len(objects)}개 객체")
         return objects
     
     @staticmethod

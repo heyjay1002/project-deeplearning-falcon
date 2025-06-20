@@ -192,6 +192,8 @@ class OptimizedUdpClient(QObject):
             if self._connected:
                 self.disconnect()
             
+            logger.info(f"UDP 연결 시도: {host}:{port}")
+            
             # 소켓 바인딩
             if not self.socket.bind():
                 if not self._connection_logged:
@@ -204,6 +206,8 @@ class OptimizedUdpClient(QObject):
             self.server_port = port
             self._connected = True
             self._connection_logged = True
+            
+            logger.info(f"UDP 소켓 바인딩 성공, 연결 대기 중...")
             
             # 상태 업데이트
             self.connection_status_changed.emit(True, f"서버 {host}:{port} 연결됨")
@@ -264,11 +268,15 @@ class OptimizedUdpClient(QObject):
                 datagram_size = self.socket.pendingDatagramSize()
                 data, host, port = self.socket.readDatagram(datagram_size)
                 
+                logger.info(f"UDP 데이터 수신: {len(data)} bytes from {host}:{port}")
+                
                 if data:
                     self._process_received_data(data)
                     
-        except Exception:
-            pass  # 데이터 수신 오류는 로그 안함
+        except Exception as e:
+            logger.error(f"UDP 데이터 수신 오류: {str(e)}")
+            import traceback
+            logger.error(f"상세 오류: {traceback.format_exc()}")
 
     def _process_received_data(self, data: bytes):
         """수신된 데이터 처리"""

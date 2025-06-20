@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import *
 from PyQt6 import uic
-from PyQt6.QtGui import QPixmap, QColor, QImage
+from PyQt6.QtGui import QPixmap, QColor, QImage, QPainter, QPen
 from PyQt6.QtCore import Qt, QTimer, pyqtSignal
 from datetime import datetime
 import sys
@@ -46,10 +46,11 @@ class MainPage(QWidget):
 
         # 프레임 버퍼 및 디스플레이 타이머 초기화
         self.frame_buffer = {'A': deque(maxlen=5), 'B': deque(maxlen=5)}
-        self.target_fps = 10  # 필요시 settings에서 가져와도 됨
+        self.target_fps = 30  # FPS를 30으로 증가
         self.frame_display_timer = QTimer(self)
         self.frame_display_timer.timeout.connect(self.display_latest_frames)
-        self.frame_display_timer.start(int(1000 / self.target_fps))
+        self.frame_display_timer.start(int(1000 / self.target_fps))  # 약 33ms 간격
+        logger.info(f"프레임 디스플레이 타이머 시작됨 (FPS: {self.target_fps}, 간격: {int(1000 / self.target_fps)}ms)")
         
         # 마지막으로 표시한 이미지ID 저장
         self.last_displayed_image_id = {'A': -1, 'B': -1}
@@ -106,6 +107,17 @@ class MainPage(QWidget):
         # 초기 데이터 클리어
         self.table_object_list.setRowCount(0)
 
+        # 테이블 클릭 시 마커 선택 효과 적용
+        self.table_object_list.cellClicked.connect(self.on_table_object_clicked)
+
+    def on_table_object_clicked(self, row, column):
+        """테이블에서 객체 클릭 시 마커 선택 효과 적용"""
+        item = self.table_object_list.item(row, 0)  # 0번 컬럼: object_id
+        if item is not None:
+            object_id = int(item.text())
+            self.map_marker.select_marker(object_id)
+            logger.debug(f"테이블 클릭: ID {object_id}")
+
     def setup_network_manager(self):
         """네트워크 관리자 시그널만 연결, 서비스 시작/중지는 WindowClass에서 관리"""
         if self.network_manager is None:
@@ -117,8 +129,9 @@ class MainPage(QWidget):
         self.network_manager.runway_b_risk_changed.connect(self.update_runway_b_risk)
         self.network_manager.object_detail_response.connect(self.update_object_detail)
         self.network_manager.object_detail_error.connect(self.handle_object_detail_error)
-        self.network_manager.frame_a_received.connect(self.update_cctv_a_frame)
-        self.network_manager.frame_b_received.connect(self.update_cctv_b_frame)
+        # CCTV 프레임은 UDP 클라이언트에서 직접 처리하므로 NetworkManager 시그널 연결 제거
+        # self.network_manager.frame_a_received.connect(self.update_cctv_a_frame)
+        # self.network_manager.frame_b_received.connect(self.update_cctv_b_frame)
         self.network_manager.tcp_connection_status_changed.connect(self.update_tcp_connection_status)
         self.network_manager.udp_connection_status_changed.connect(self.update_udp_connection_status)
         # 서비스 시작/중지는 WindowClass에서만!
@@ -165,6 +178,7 @@ class MainPage(QWidget):
     def handle_udp_frame(self, cam_id: str, frame, image_id: int = None):
         """UDP로 수신된 프레임 처리"""
         try:            
+            logger.info(f"UDP 프레임 수신: 카메라={cam_id}, 이미지ID={image_id}")
             self.last_displayed_image_id[cam_id] = image_id
             
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -172,25 +186,38 @@ class MainPage(QWidget):
             bytes_per_line = 3 * width
             q_image = QImage(frame.data, width, height, bytes_per_line, QImage.Format.Format_RGB888)
             if q_image.isNull():
+                logger.warning(f"CCTV {cam_id} QImage 변환 실패")
                 return
                 
             # 이미지ID와 함께 저장
             self.frame_buffer[cam_id].append((image_id, q_image))
+            logger.info(f"CCTV {cam_id} 프레임 버퍼에 저장됨 (총 {len(self.frame_buffer[cam_id])}개)")
             
         except Exception as e:
             logger.error(f"UDP 프레임 처리 오류: {str(e)}")
+            import traceback
+            logger.error(f"상세 오류: {traceback.format_exc()}")
 
     def display_latest_frames(self):
         """가장 최신 프레임 표시"""
+        logger.info("프레임 디스플레이 타이머 실행")
+        total_frames = 0
         for cam_id in ['A', 'B']:
             if self.frame_buffer[cam_id]:
                 # 가장 최신 프레임만 꺼내서 디스플레이
                 _, latest_frame = self.frame_buffer[cam_id][-1]
+                logger.info(f"CCTV {cam_id} 프레임 표시 중 (버퍼 크기: {len(self.frame_buffer[cam_id])})")
                 if cam_id == 'A':
                     self.update_cctv_a_frame(latest_frame)
                 elif cam_id == 'B':
                     self.update_cctv_b_frame(latest_frame)
                 self.frame_buffer[cam_id].clear()
+                total_frames += 1
+            else:
+                logger.debug(f"CCTV {cam_id} 프레임 버퍼가 비어있음")
+        
+        if total_frames > 0:
+            logger.debug(f"총 {total_frames}개 프레임 표시 완료")
 
     def setup_marker_overlay(self):
         """마커 오버레이 설정"""
@@ -394,9 +421,9 @@ class MainPage(QWidget):
         else:
             logger.info(f"활주로 A 위험도 변경: {risk_level.value}")
 
-        self.label_rwy1_status.setText(risk_level.value)
+        self.label_rwy_a_status.setText(risk_level.value)
         if risk_level == RunwayRiskLevel.LOW:
-            self.label_rwy1_status.setStyleSheet(
+            self.label_rwy_a_status.setStyleSheet(
                     "background-color: #00FF00; "  # 녹색
                     "color: #000000; "
                     "font-weight: bold; "
@@ -405,7 +432,7 @@ class MainPage(QWidget):
                     "padding: 5px;"
             )
         else:
-            self.label_rwy1_status.setStyleSheet(
+            self.label_rwy_a_status.setStyleSheet(
                 "background-color: #FF0000; "  # 빨간색
                 "color: #FFFFFF; "
                 "font-weight: bold; "
@@ -427,9 +454,9 @@ class MainPage(QWidget):
         else:
             logger.info(f"활주로 B 위험도 변경: {risk_level.value}")
 
-        self.label_rwy2_status.setText(risk_level.value)
+        self.label_rwy_b_status.setText(risk_level.value)
         if risk_level == RunwayRiskLevel.LOW:
-            self.label_rwy2_status.setStyleSheet(
+            self.label_rwy_b_status.setStyleSheet(
                 "background-color: #00FF00; "  # 녹색
                 "color: #000000; "
                 "font-weight: bold; "
@@ -438,7 +465,7 @@ class MainPage(QWidget):
                 "padding: 5px;"
             )
         else:
-            self.label_rwy2_status.setStyleSheet(
+            self.label_rwy_b_status.setStyleSheet(
                 "background-color: #FF0000; "  # 빨간색
                 "color: #FFFFFF; "
                 "font-weight: bold; "
@@ -453,7 +480,7 @@ class MainPage(QWidget):
 
     def update_object_detail(self, obj: DetectedObject):
         """객체 상세 정보 업데이트"""
-        logger.debug(f"객체 상세 정보 업데이트: ID {obj.object_id}")
+        logger.info(f"객체 상세 정보 수신 완료. ID: {obj.object_id}. 상세 보기로 전환합니다.")
         info = f"객체 ID: {obj.object_id}\n"
         info += f"종류: {obj.object_type.value}\n"
         info += f"위치: {obj.zone.value}\n"
@@ -474,7 +501,23 @@ class MainPage(QWidget):
                     Qt.TransformationMode.SmoothTransformation
                 )
             )
-        
+        else:
+            # 이미지가 없을 경우, 회색 배경에 텍스트가 있는 플레이스홀더 생성
+            img_label = self.object_detail_dialog.detail_img
+            pixmap = QPixmap(img_label.size())
+            pixmap.fill(QColor('lightgray'))
+            
+            painter = QPainter(pixmap)
+            painter.setPen(QPen(QColor('black')))
+            font = painter.font()
+            font.setPointSize(12)
+            painter.setFont(font)
+            
+            painter.drawText(pixmap.rect(), Qt.AlignmentFlag.AlignCenter, "이미지 없음")
+            painter.end()
+            
+            img_label.setPixmap(pixmap)
+
         self.object_area.setCurrentIndex(2)
 
     def handle_object_detail_error(self, error_msg: str):
@@ -502,17 +545,32 @@ class MainPage(QWidget):
         logger.info(f"CCTV 보기: {idx + 1}")
         self.map_cctv_stack.setCurrentIndex(idx + 1)
         
+        # 타이머 상태 확인
+        if self.frame_display_timer.isActive():
+            logger.info(f"프레임 디스플레이 타이머 활성화됨 (간격: {self.frame_display_timer.interval()}ms)")
+        else:
+            logger.warning("프레임 디스플레이 타이머가 비활성화됨 - 재시작")
+            self.frame_display_timer.start(int(1000 / self.target_fps))
+        
         # 이전 CCTV 연결 해제
         if hasattr(self, 'udp_client'):
             self.udp_client.disconnect()
             
         if idx == 0:
+            logger.info("CCTV A 선택됨 - 요청 전송")
             self.network_manager.request_cctv_a()
             # UDP 연결 시도
+            logger.info(f"CCTV A UDP 연결 시도: {self.settings.server.udp_ip}:{self.settings.server.udp_port}")
             if not self.udp_client.connect(self.settings.server.udp_ip, self.settings.server.udp_port):
                 self.update_udp_connection_status(False, "CCTV A 연결 실패")
                 logger.error("CCTV A UDP 연결 실패")
+            else:
+                logger.info("CCTV A UDP 연결 성공")
+                
+            # 테스트용 더미 프레임 생성 (서버에서 프레임이 오지 않을 경우)
+            self.create_test_frame()
         elif idx == 1:
+            logger.info("CCTV B 선택됨 - 요청 전송")
             self.network_manager.request_cctv_b()
             # UDP 연결 시도
             if not self.udp_client.connect(self.settings.server.udp_ip, self.settings.server.udp_port):
@@ -532,21 +590,28 @@ class MainPage(QWidget):
             return
             
         object_id = int(self.table_object_list.item(row, 0).text())
-        logger.debug(f"객체 상세보기 요청: ID {object_id}")
+        logger.info(f"객체 상세보기 요청 시작: ID {object_id}")
         self.network_manager.request_object_detail(object_id)
 
     def update_cctv_a_frame(self, frame: QImage):
         """CCTV A 프레임 업데이트"""
         try:
+            logger.debug(f"CCTV A 프레임 업데이트 시작 - 프레임 크기: {frame.size() if not frame.isNull() else 'Null'}")
             if frame.isNull():
+                logger.warning("CCTV A 프레임이 Null입니다")
                 return
                 
             # 라벨 크기에 맞게 이미지 크기 조정
+            label_size = self.label_cctv_1.size()
+            logger.debug(f"CCTV A 라벨 크기: {label_size}")
+            
             scaled_pixmap = QPixmap.fromImage(frame).scaled(
-                self.label_cctv_1.size(),
+                label_size,
                 Qt.AspectRatioMode.KeepAspectRatio,
                 Qt.TransformationMode.SmoothTransformation
             )
+            
+            logger.debug(f"CCTV A 스케일된 이미지 크기: {scaled_pixmap.size()}")
             
             # 이미지 표시
             self.label_cctv_1.setPixmap(scaled_pixmap)
@@ -554,9 +619,12 @@ class MainPage(QWidget):
             
             # 프레임 업데이트 강제
             self.label_cctv_1.repaint()
+            logger.info("CCTV A 프레임 업데이트 완료 - 화면에 표시됨")
             
         except Exception as e:
             logger.error(f"CCTV A 프레임 업데이트 오류: {str(e)}")
+            import traceback
+            logger.error(f"상세 오류: {traceback.format_exc()}")
 
     def update_cctv_b_frame(self, frame: QImage):
         """CCTV B 프레임 업데이트"""

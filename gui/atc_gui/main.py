@@ -31,6 +31,9 @@ class WindowClass(QMainWindow):
         
         # 네트워크 시그널 연결
         self._connect_network_signals()
+        
+        # 네트워크 서비스 시작
+        self.network_manager.start_services()
 
     def _connect_network_signals(self):
         nm = self.network_manager
@@ -59,6 +62,7 @@ class WindowClass(QMainWindow):
         
         # 상태바에 위젯 추가
         self.statusbar.addWidget(QLabel("TCP:"))
+        self.statusbar.addWidget(self.tcp_indicator)
         self.statusbar.addWidget(QLabel("UDP:"))
         self.statusbar.addWidget(self.udp_indicator)
 

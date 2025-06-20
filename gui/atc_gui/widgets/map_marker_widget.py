@@ -108,6 +108,11 @@ class DynamicMarker(QLabel):
             icon_pixmap = QPixmap(icon_path)
             if not icon_pixmap.isNull():
                 logger.debug(f"아이콘 로드 성공: {icon_path}")
+                # 흰색 배경 그리기
+                painter.setBrush(QBrush(QColor("white")))
+                painter.setPen(Qt.PenStyle.NoPen)
+                painter.drawRoundedRect(2, 2, size - 4, size - 4, 8, 8)
+                
                 # 아이콘 크기 조정
                 scaled_icon = icon_pixmap.scaled(
                     size - 4, size - 4,  # 마진 2px

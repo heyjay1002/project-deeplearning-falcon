@@ -250,13 +250,18 @@ class NetworkManager(QObject):
     def _handle_udp_frame(self, camera_id: str, frame, image_id: Optional[int]):
         """UDP 프레임 처리"""
         try:
+            logger.debug(f"NetworkManager: UDP 프레임 수신 (카메라: {camera_id}, 이미지ID: {image_id})")
             # QImage로 변환
             qimage = self._convert_to_qimage(frame)
             if qimage:
                 if camera_id == "A":
+                    logger.debug("CCTV A 프레임 전송")
                     self.frame_a_received.emit(qimage, image_id or 0)
                 elif camera_id == "B":
+                    logger.debug("CCTV B 프레임 전송")
                     self.frame_b_received.emit(qimage, image_id or 0)
+                else:
+                    logger.warning(f"알 수 없는 카메라 ID: {camera_id}")
                     
         except Exception as e:
             logger.error(f"프레임 처리 실패 ({camera_id}): {e}")
@@ -287,11 +292,35 @@ class NetworkManager(QObject):
 
     def _handle_cctv_a_response(self, response: str):
         """CCTV A 응답 처리"""
-        pass  # 로그 없이 처리
+        logger.info(f"CCTV A 응답 수신: {response}")
+        if response == "OK":
+            logger.info("CCTV A 요청 승인됨 - UDP 연결 시도")
+            # UDP 연결 시도
+            if not self.udp_client.is_connected():
+                host = self.settings.server.udp_ip
+                port = self.settings.server.udp_port
+                if self.udp_client.connect(host, port):
+                    logger.info(f"CCTV A용 UDP 연결 성공: {host}:{port}")
+                else:
+                    logger.error(f"CCTV A용 UDP 연결 실패: {host}:{port}")
+        else:
+            logger.error(f"CCTV A 요청 거부됨: {response}")
 
     def _handle_cctv_b_response(self, response: str):
         """CCTV B 응답 처리"""
-        pass  # 로그 없이 처리
+        logger.info(f"CCTV B 응답 수신: {response}")
+        if response == "OK":
+            logger.info("CCTV B 요청 승인됨 - UDP 연결 시도")
+            # UDP 연결 시도
+            if not self.udp_client.is_connected():
+                host = self.settings.server.udp_ip
+                port = self.settings.server.udp_port
+                if self.udp_client.connect(host, port):
+                    logger.info(f"CCTV B용 UDP 연결 성공: {host}:{port}")
+                else:
+                    logger.error(f"CCTV B용 UDP 연결 실패: {host}:{port}")
+        else:
+            logger.error(f"CCTV B 요청 거부됨: {response}")
 
     # === 공개 인터페이스 메서드 ===
     def request_cctv_a(self):
@@ -312,6 +341,7 @@ class NetworkManager(QObject):
     def request_cctv_b(self):
         """CCTV B 영상 요청"""
         try:
+            logger.info("CCTV B 영상 요청 시작")
             start_time = datetime.now()
             success = self.tcp_client.request_cctv_b()
             
@@ -319,9 +349,11 @@ class NetworkManager(QObject):
             latency = (datetime.now() - start_time).total_seconds() * 1000
             self.metrics.record_message_latency("cctv_b_request", latency)
             
+            logger.info(f"CCTV B 영상 요청 결과: {success}")
             return success
             
-        except Exception:
+        except Exception as e:
+            logger.error(f"CCTV B 영상 요청 실패: {e}")
             return False
 
     def request_object_detail(self, object_id: int):
