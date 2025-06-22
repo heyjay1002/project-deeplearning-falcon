@@ -1,15 +1,22 @@
+"""
+개선된 UDP 클라이언트 모듈
+"""
+
+import socket
 import cv2
 import numpy as np
-from PyQt6.QtCore import QObject, pyqtSignal, QTimer
+from PyQt6.QtCore import QObject, pyqtSignal, QTimer, QThread
 from PyQt6.QtNetwork import QUdpSocket, QHostAddress
 import time
+import threading
 import logging
 from collections import deque
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, Tuple
 from datetime import datetime
 from dataclasses import dataclass
 
 from config.settings import Settings
+from utils.interface import ErrorHandler, ConnectionState, ProcessedFrame
 
 logger = logging.getLogger(__name__)
 
@@ -61,8 +68,69 @@ class FrameProcessor:
         return None
 
 
-class UdpClient(QObject):
-    """최적화된 UDP 클라이언트 클래스 - 포트 및 지연 문제 수정"""
+class FrameStabilizer:
+    """프레임 안정화 클래스"""
+    
+    def __init__(self, buffer_size: int = 3):
+        self.buffer_size = buffer_size
+        self.frame_buffers = {}
+        self.target_fps = 15
+        self.frame_interval = 1.0 / self.target_fps
+        self.last_frame_time = {}
+        
+    def should_process_frame(self, camera_id: str) -> bool:
+        """프레임 처리 여부 결정"""
+        current_time = time.time()
+        
+        if camera_id not in self.last_frame_time:
+            self.last_frame_time[camera_id] = 0
+        
+        if current_time - self.last_frame_time[camera_id] >= self.frame_interval:
+            self.last_frame_time[camera_id] = current_time
+            return True
+        
+        return False
+    
+    def add_frame(self, camera_id: str, frame: np.ndarray, image_id: Optional[int]) -> bool:
+        """프레임 버퍼에 추가"""
+        if camera_id not in self.frame_buffers:
+            self.frame_buffers[camera_id] = deque(maxlen=self.buffer_size)
+        
+        # 프레임 품질 체크
+        if self._check_frame_quality(frame):
+            self.frame_buffers[camera_id].append((frame, image_id, time.time()))
+            return True
+        
+        return False
+    
+    def get_stable_frame(self, camera_id: str) -> Optional[Tuple[np.ndarray, Optional[int]]]:
+        """안정화된 프레임 반환"""
+        if camera_id not in self.frame_buffers or not self.frame_buffers[camera_id]:
+            return None
+        
+        # 버퍼가 충분히 찼을 때만 프레임 반환
+        if len(self.frame_buffers[camera_id]) >= self.buffer_size // 2:
+            frame, image_id, _ = self.frame_buffers[camera_id].popleft()
+            return frame, image_id
+        
+        return None
+    
+    def _check_frame_quality(self, frame: np.ndarray) -> bool:
+        """프레임 품질 체크"""
+        try:
+            if frame is None or frame.size == 0:
+                return False
+            
+            # 기본적인 품질 체크 (너무 어둡거나 밝지 않은지)
+            mean_brightness = np.mean(frame)
+            return 10 < mean_brightness < 245
+            
+        except Exception:
+            return False
+
+
+class OptimizedUdpClient(QObject):
+    """최적화된 UDP 클라이언트 클래스"""
     
     # 시그널 정의
     frame_received = pyqtSignal(str, np.ndarray, int)  # (카메라 ID, 프레임, 이미지ID)
@@ -85,6 +153,7 @@ class UdpClient(QObject):
         
         # 프레임 처리 관련
         self.frame_processor = FrameProcessor()
+        self.frame_stabilizer = FrameStabilizer()
         
         # 성능 관련 설정
         self.max_fps = 15
@@ -117,7 +186,7 @@ class UdpClient(QObject):
         self.performance_timer.start(5000)  # 5초마다
 
     def connect(self, host: str, port: int) -> bool:
-        """UDP 연결 - PyQt6 호환성 개선"""
+        """UDP 연결"""
         try:
             # 이전 연결 정리
             if self._connected:
@@ -125,27 +194,22 @@ class UdpClient(QObject):
             
             logger.info(f"UDP 연결 시도: {host}:{port}")
             
-            # **수정**: QHostAddress 문제 해결 - LocalHost 사용
-            local_host = QHostAddress(QHostAddress.SpecialAddress.LocalHost)
-            if not self.socket.bind(local_host, port):
-                # 포트가 이미 사용 중인 경우 다른 포트 시도
-                for attempt_port in range(port, port + 100):
-                    if self.socket.bind(local_host, attempt_port):
-                        logger.info(f"대체 포트 사용: {attempt_port}")
-                        break
-                else:
-                    if not self._connection_logged:
-                        logger.error(f"UDP 소켓 바인딩 실패 (포트: {port})")
-                    self._connected = False
-                    self.connection_status_changed.emit(False, "소켓 바인딩 실패")
-                    return False
+            # UDP 클라이언트는 로컬 포트에 바인딩하여 데이터 수신
+            # 서버 포트와 다른 포트를 사용하여 충돌 방지
+            local_port = port + 1000  # 서버 포트 + 1000
+            if not self.socket.bind(QHostAddress.Any, local_port):
+                if not self._connection_logged:
+                    logger.error(f"UDP 소켓 바인딩 실패 (포트: {local_port})")
+                self._connected = False
+                self.connection_status_changed.emit(False, "소켓 바인딩 실패")
+                return False
             
             self.server_address = host
             self.server_port = port
             self._connected = True
             self._connection_logged = True
             
-            logger.info(f"UDP 클라이언트 바인딩 성공 (포트: {self.socket.localPort()}), 데이터 수신 대기 중...")
+            logger.info(f"UDP 클라이언트 바인딩 성공 (포트: {local_port}), 데이터 수신 대기 중...")
             
             # 상태 업데이트
             self.connection_status_changed.emit(True, f"서버 {host}:{port} 연결됨")
@@ -172,6 +236,7 @@ class UdpClient(QObject):
             self._connection_logged = False
             
             # 버퍼 정리
+            self.frame_stabilizer.frame_buffers.clear()
             self.frame_processor.frame_cache.clear()
             
             self.connection_status_changed.emit(False, "연결 해제됨")
@@ -186,13 +251,16 @@ class UdpClient(QObject):
     def set_max_fps(self, fps: int):
         """최대 FPS 설정"""
         self.max_fps = max(5, min(60, fps))
+        self.frame_stabilizer.target_fps = min(self.max_fps, 15)
+        self.frame_stabilizer.frame_interval = 1.0 / self.frame_stabilizer.target_fps
 
     def get_statistics(self) -> Dict[str, Any]:
         """통계 정보 반환"""
         return {
             **self.stats,
             'is_connected': self.is_connected(),
-            'max_fps': self.max_fps
+            'max_fps': self.max_fps,
+            'buffer_sizes': {cam: len(buf) for cam, buf in self.frame_stabilizer.frame_buffers.items()}
         }
 
     def _on_data_ready(self):
@@ -202,14 +270,24 @@ class UdpClient(QObject):
                 datagram_size = self.socket.pendingDatagramSize()
                 data, host, port = self.socket.readDatagram(datagram_size)
                 
+                logger.info(f"UDP 데이터 수신: {len(data)} bytes from {host}:{port}")
+                
                 if data:
+                    # 데이터 내용 일부 로그 (디버깅용)
+                    if len(data) > 20:
+                        logger.info(f"데이터 헤더: {data[:20]}")
+                    else:
+                        logger.info(f"전체 데이터: {data}")
+                    
                     self._process_received_data(data)
                     
         except Exception as e:
             logger.error(f"UDP 데이터 수신 오류: {str(e)}")
+            import traceback
+            logger.error(f"상세 오류: {traceback.format_exc()}")
 
     def _process_received_data(self, data: bytes):
-        """수신된 데이터 처리 - 지연 없이 즉시 처리"""
+        """수신된 데이터 처리"""
         try:
             # 통계 업데이트
             self.stats['bytes_received'] += len(data)
@@ -219,23 +297,20 @@ class UdpClient(QObject):
             if not header:
                 return
             
+            # 프레임 처리 여부 결정
+            if not self.frame_stabilizer.should_process_frame(header.camera_id):
+                self.stats['frames_dropped'] += 1
+                return
+            
             # 프레임 디코딩
             frame_data = data[header.data_offset:]
             frame = self.frame_processor.decode_frame(frame_data, header.camera_id)
             
             if frame is not None:
-                # 즉시 시그널 발생 - 지연 없음
-                self.frame_received.emit(header.camera_id, frame, header.image_id or 0)
-                
-                # 통계 업데이트
-                self.stats['frames_received'] += 1
-                self.stats['frames_processed'] += 1
-                self._update_fps_stats(header.camera_id)
-            else:
-                self.stats['frames_dropped'] += 1
+                self._handle_decoded_frame(header.camera_id, frame, header.image_id)
             
-        except Exception as e:
-            logger.error(f"데이터 처리 오류: {e}")
+        except Exception:
+            pass  # 데이터 처리 오류는 로그 안함
 
     def _parse_frame_header(self, data: bytes) -> Optional[FrameHeader]:
         """프레임 헤더 파싱"""
@@ -272,9 +347,31 @@ class UdpClient(QObject):
                 data_offset=data_offset
             )
             
-        except Exception as e:
-            logger.error(f"헤더 파싱 오류: {e}")
+        except Exception:
             return None
+
+    def _handle_decoded_frame(self, camera_id: str, frame: np.ndarray, image_id: Optional[int]):
+        """디코딩된 프레임 처리"""
+        try:
+            self.stats['frames_received'] += 1
+            
+            # 프레임 안정화 버퍼에 추가
+            if self.frame_stabilizer.add_frame(camera_id, frame, image_id):
+                # 안정화된 프레임 가져오기
+                stable_frame_data = self.frame_stabilizer.get_stable_frame(camera_id)
+                
+                if stable_frame_data:
+                    stable_frame, stable_image_id = stable_frame_data
+                    
+                    # 시그널 발생
+                    self.frame_received.emit(camera_id, stable_frame, stable_image_id or 0)
+                    
+                    # 통계 업데이트
+                    self.stats['frames_processed'] += 1
+                    self._update_fps_stats(camera_id)
+            
+        except Exception:
+            pass  # 프레임 처리 오류는 로그 안함
 
     def _update_fps_stats(self, camera_id: str):
         """FPS 통계 업데이트"""
@@ -299,6 +396,7 @@ class UdpClient(QObject):
             performance_data = {
                 'timestamp': datetime.now().isoformat(),
                 'frames_per_sec': {},
+                'buffer_health': {},
                 'overall_health': self._calculate_overall_health()
             }
             
@@ -309,6 +407,11 @@ class UdpClient(QObject):
                     fps_values = list(self.stats['fps_history'][camera_id])
                     avg_fps = sum(fps_values) / len(fps_values)
                     performance_data['frames_per_sec'][camera_id] = avg_fps
+                
+                # 버퍼 상태
+                buffer_size = len(self.frame_stabilizer.frame_buffers.get(camera_id, []))
+                buffer_health = min(1.0, buffer_size / self.frame_stabilizer.buffer_size)
+                performance_data['buffer_health'][camera_id] = buffer_health
             
             self.performance_updated.emit(performance_data)
             
@@ -325,10 +428,17 @@ class UdpClient(QObject):
             
             for camera_id in self.current_fps.keys():
                 # FPS 건강도 (목표 FPS 대비)
-                target_fps = self.max_fps
+                target_fps = self.frame_stabilizer.target_fps
                 actual_fps = self.current_fps.get(camera_id, 0)
                 fps_health = min(1.0, actual_fps / target_fps) if target_fps > 0 else 0.0
-                health_scores.append(fps_health)
+                
+                # 버퍼 건강도
+                buffer_size = len(self.frame_stabilizer.frame_buffers.get(camera_id, []))
+                buffer_health = min(1.0, buffer_size / max(1, self.frame_stabilizer.buffer_size))
+                
+                # 전체 점수
+                camera_health = (fps_health + buffer_health) / 2
+                health_scores.append(camera_health)
             
             return sum(health_scores) / len(health_scores) if health_scores else 0.0
             
@@ -354,10 +464,39 @@ class UdpClient(QObject):
             self.disconnect()
             
             # 버퍼 정리
+            self.frame_stabilizer.frame_buffers.clear()
             self.frame_processor.frame_cache.clear()
             
         except Exception:
             pass  # 정리 중 오류는 로그 안함
+
+    def get_frame_quality_info(self, camera_id: str) -> Dict[str, Any]:
+        """프레임 품질 정보 반환"""
+        try:
+            cached_frame = self.frame_processor.get_cached_frame(camera_id)
+            
+            if cached_frame is None:
+                return {'quality': 'unknown', 'details': 'No cached frame'}
+            
+            # 기본 품질 분석
+            mean_brightness = np.mean(cached_frame)
+            std_brightness = np.std(cached_frame)
+            
+            # 품질 점수 계산 (0-1)
+            brightness_score = 1.0 - abs(mean_brightness - 127.5) / 127.5
+            contrast_score = min(1.0, std_brightness / 50.0)
+            overall_quality = (brightness_score + contrast_score) / 2
+            
+            return {
+                'quality': 'good' if overall_quality > 0.7 else 'fair' if overall_quality > 0.4 else 'poor',
+                'quality_score': overall_quality,
+                'brightness': mean_brightness,
+                'contrast': std_brightness,
+                'resolution': f"{cached_frame.shape[1]}x{cached_frame.shape[0]}"
+            }
+            
+        except Exception as e:
+            return {'quality': 'error', 'details': str(e)}
 
     def force_reconnect(self):
         """강제 재연결"""
@@ -370,3 +509,6 @@ class UdpClient(QObject):
             
         except Exception:
             return False
+
+# OptimizedUdpClient를 UdpClient로도 사용할 수 있도록 별칭 추가
+UdpClient = OptimizedUdpClient

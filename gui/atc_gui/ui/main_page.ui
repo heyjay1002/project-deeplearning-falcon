@@ -230,12 +230,12 @@
    </property>
    <item>
     <property name="text">
-     <string>CCTV 1</string>
+     <string>CCTV A</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>CCTV 2</string>
+     <string>CCTV B</string>
     </property>
    </item>
   </widget>

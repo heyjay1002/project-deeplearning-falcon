@@ -1,12 +1,10 @@
 from datetime import datetime
-from typing import Optional, List, Dict, Any, Union
+from typing import Optional, List, Dict, Any
 import base64
-import asyncio
 from dataclasses import dataclass, field
 from enum import Enum
-from config import ObjectType, BirdRiskLevel, RunwayRiskLevel, AirportZone, ExtraInfo, MessagePrefix, Constants
+from config.constants import ObjectType, BirdRiskLevel, RunwayRiskLevel, AirportZone, MessagePrefix, Constants
 from utils.logger import logger
-
 
 class ConnectionState(Enum):
     """연결 상태 열거형"""
@@ -15,27 +13,6 @@ class ConnectionState(Enum):
     CONNECTED = "connected"
     RECONNECTING = "reconnecting"
     ERROR = "error"
-
-
-class NetworkException(Exception):
-    """네트워크 관련 예외 기본 클래스"""
-    pass
-
-
-class ConnectionError(NetworkException):
-    """연결 오류"""
-    pass
-
-
-class ParseError(NetworkException):
-    """파싱 오류"""
-    pass
-
-
-class ProtocolError(NetworkException):
-    """프로토콜 오류"""
-    pass
-
 
 @dataclass
 class ProcessedFrame:
@@ -55,7 +32,7 @@ class DetectedObject:
     y_coord: float
     zone: AirportZone
     timestamp: datetime
-    extra_info: Optional[ExtraInfo] = None
+    extra_info: Optional[str] = None  # str로 변경
     image_data: Optional[bytes] = None  # bytes로 통일
     
     def __post_init__(self):
@@ -148,7 +125,7 @@ class DetectedObject:
             'y_coord': self.y_coord,
             'zone': self.zone.value,
             'timestamp': self.timestamp.isoformat(),
-            'extra_info': self.extra_info.value,
+            'extra_info': self.extra_info,
             'image_data': self.image_base64
         }
 
@@ -215,7 +192,7 @@ class MessageParser:
             return DetectedObject(**parsed_data)
             
         except Exception as e:
-            raise ParseError(f"객체 정보 파싱 실패: {e}") from e
+            raise Exception(f"객체 정보 파싱 실패: {e}") from e
     
     @staticmethod
     def _parse_required_fields(fields: List[str]) -> Dict[str, Any]:
@@ -230,7 +207,7 @@ class MessageParser:
                 'timestamp': MessageParser._parse_timestamp(fields[5])
             }
         except (ValueError, IndexError) as e:
-            raise ParseError(f"필수 필드 파싱 실패: {e}") from e
+            raise Exception(f"필수 필드 파싱 실패: {e}") from e
     
     @staticmethod
     def _parse_optional_fields(fields: List[str], include_image: bool) -> Dict[str, Any]:
@@ -352,7 +329,7 @@ class MessageParser:
                 timestamp=MessageParser._parse_timestamp(fields[5])
             )
         except Exception as e:
-            raise ParseError(f"객체 감지 이벤트 파싱 실패: {e}") from e
+            raise Exception(f"객체 감지 이벤트 파싱 실패: {e}") from e
 
 
 class MessageInterface:
@@ -395,17 +372,17 @@ class MessageInterface:
     def parse_message(message: str) -> tuple[MessagePrefix, str]:
         """메시지 파싱"""
         if not message or Constants.Protocol.MESSAGE_SEPARATOR not in message:
-            raise ParseError(f"메시지 포맷 오류: {message}")
+            raise Exception(f"메시지 포맷 오류: {message}")
             
         parts = message.split(Constants.Protocol.MESSAGE_SEPARATOR, 1)
         if len(parts) != 2:
-            raise ParseError(f"메시지 포맷 오류: {message}")
+            raise Exception(f"메시지 포맷 오류: {message}")    
         
         prefix_str, data = parts
         try:
             prefix = MessagePrefix(prefix_str)
         except ValueError:
-            raise ParseError(f"알 수 없는 메시지 프리픽스: {prefix_str}")
+            raise Exception(f"알 수 없는 메시지 프리픽스: {prefix_str}")
         
         return prefix, data
     
@@ -527,10 +504,10 @@ class MessageInterface:
         try:
             risk_level = int(data.strip())
         except ValueError:
-            raise ParseError(f"조류 위험도 값 오류: {data}")
+            raise Exception(f"조류 위험도 값 오류: {data}")
             
         if not MessageInterface.validate_bird_risk_level(risk_level):
-            raise ParseError(f"조류 위험도 값 오류: {risk_level}")
+            raise Exception(f"조류 위험도 값 오류: {risk_level}")
             
         return Constants.BIRD_RISK_MAPPING[risk_level]
     
@@ -540,10 +517,10 @@ class MessageInterface:
         try:
             risk_level = int(data.strip())
         except ValueError:
-            raise ParseError(f"활주로 위험도 값 오류: {data}")
+            raise Exception(f"활주로 위험도 값 오류: {data}")
             
         if not MessageInterface.validate_runway_risk_level(risk_level):
-            raise ParseError(f"활주로 위험도 값 오류: {risk_level}")
+            raise Exception(f"활주로 위험도 값 오류: {risk_level}")
             
         return Constants.RUNWAY_RISK_MAPPING[risk_level]
     
@@ -554,9 +531,9 @@ class MessageInterface:
             format_str = Constants.Protocol.MESSAGE_FORMAT[prefix]
             return format_str.format(prefix=prefix.value, **kwargs)
         except KeyError as e:
-            raise ProtocolError(f"알 수 없는 메시지 프리픽스: {prefix}") from e
+            raise Exception(f"알 수 없는 메시지 프리픽스: {prefix}") from e
         except Exception as e:
-            raise ProtocolError(f"메시지 생성 실패: {e}") from e
+            raise Exception(f"메시지 생성 실패: {e}") from e
 
     @staticmethod
     def create_object_detail_request(object_id: int) -> str:
@@ -586,35 +563,10 @@ class ErrorHandler:
     @staticmethod
     def handle_network_error(error: Exception, context: str) -> None:
         """네트워크 에러 처리"""
-        if isinstance(error, ConnectionError):
-            ErrorHandler._handle_connection_error(error, context)
-        elif isinstance(error, ParseError):
-            ErrorHandler._handle_parse_error(error, context)
-        elif isinstance(error, ProtocolError):
-            ErrorHandler._handle_protocol_error(error, context)
+        if isinstance(error, Exception):
+            logger.error(f"연결 오류 [{context}]: {error}")
         else:
-            ErrorHandler._handle_generic_error(error, context)
-    
-    @staticmethod
-    def _handle_connection_error(error: ConnectionError, context: str) -> None:
-        """연결 에러 처리"""
-        logger.error(f"연결 오류 [{context}]: {error}")
-    
-    @staticmethod
-    def _handle_parse_error(error: ParseError, context: str) -> None:
-        """파싱 에러 처리"""
-        logger.error(f"파싱 오류 [{context}]: {error}")
-    
-    @staticmethod
-    def _handle_protocol_error(error: ProtocolError, context: str) -> None:
-        """프로토콜 에러 처리"""
-        logger.error(f"프로토콜 오류 [{context}]: {error}")
-    
-    @staticmethod
-    def _handle_generic_error(error: Exception, context: str) -> None:
-        """일반 에러 처리"""
-        logger.error(f"일반 오류 [{context}]: {error}")
-
+            logger.error(f"알 수 없는 오류 [{context}]: {error}")
 
 class ConnectionManager:
     """연결 상태 통합 관리"""
@@ -638,15 +590,9 @@ class ConnectionManager:
         return {
             'tcp': self.tcp_state.value,
             'udp': self.udp_state.value,
-            'is_healthy': self._is_system_healthy(),
             'reconnect_attempts': self.reconnect_attempts
         }
-    
-    def _is_system_healthy(self) -> bool:
-        """시스템 건강 상태 확인"""
-        return (self.tcp_state == ConnectionState.CONNECTED and 
-                self.udp_state == ConnectionState.CONNECTED)
-    
+       
     def reset_reconnect_attempts(self):
         """재연결 시도 횟수 리셋"""
         self.reconnect_attempts = 0

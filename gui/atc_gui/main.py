@@ -1,4 +1,5 @@
 import sys
+import os
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
@@ -14,7 +15,9 @@ from utils.network_manager import NetworkManager
 class WindowClass(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi("ui/main_window.ui", self)
+        # UI 파일 경로를 절대 경로로 설정
+        ui_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ui/main_window.ui")
+        uic.loadUi(ui_file_path, self)
         self.setWindowTitle("FALCON")
         
         # 창 크기 설정 
