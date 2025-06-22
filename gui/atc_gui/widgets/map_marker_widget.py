@@ -1,53 +1,44 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QPushButton
-from PyQt6.QtCore import Qt, QTimer, QPropertyAnimation, QRect, pyqtSignal, QEasingCurve
+from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout
+from PyQt6.QtCore import Qt, QTimer, QPropertyAnimation, QRect, pyqtSignal, QEasingCurve, QPoint
 from PyQt6.QtGui import QPixmap, QPainter, QPen, QBrush, QColor, QFont
 import os
-from typing import Dict, List, Tuple, Optional, Callable
+from typing import Dict, Tuple, Optional
 from dataclasses import dataclass
 from enum import Enum
 from utils.logger import logger
-
-class MarkerType(Enum):
-    """마커 타입"""
-    BIRD = "bird"
-    AIRCRAFT = "aircraft"
-    VEHICLE = "vehicle"
-    DEBRIS = "debris"
-    PERSON = "person"
-    ANIMAL = "animal"
-    FIRE = "fire"
-    WORK_PERSON = "work_person"
-    WORK_VEHICLE = "work_vehicle"
-    UNKNOWN = "unknown"
+from config.constants import ObjectType
+from utils.interface import DetectedObject
 
 class MarkerState(Enum):
     """마커 상태"""
-    NORMAL = "normal"
-    WARNING = "warning"
-    DANGER = "danger"
-    SELECTED = "selected"
+    NORMAL = "normal"    # 일반적인 객체 감지 상태
+    WARNING = "warning"  # 구조가 필요한 사람 감지 상태
+    SELECTED = "selected"  # 사용자가 선택한 상태
 
 @dataclass
 class MarkerData:
     """마커 데이터"""
-    marker_id: int
-    x: float  # 지도 좌표 (0.0 ~ 1.0)
-    y: float  # 지도 좌표 (0.0 ~ 1.0)
-    marker_type: MarkerType
-    state: MarkerState = MarkerState.NORMAL
-    label: str = ""
+    object_id: int
+    x: float
+    y: float
+    object_type: str
+    zone: str
+    is_selected: bool = False
+    size: int = 50
     icon_path: Optional[str] = None
-    size: int = 24
-    
+    state: str = 'NORMAL'  # NORMAL, WARNING, SELECTED
+
 class DynamicMarker(QLabel):
     """동적 마커 위젯"""
-    clicked = pyqtSignal(int)  # marker_id 전달
+    clicked = pyqtSignal(int)   # object_id 전달
     
     def __init__(self, data: MarkerData, parent=None):
         super().__init__(parent)
         self.data = data
         self.is_animating = False
-        self.animation = None
+        self.animation = QPropertyAnimation(self, b"pos")
+        self.animation.setEasingCurve(QEasingCurve.Type.OutCubic)
+        self.animation.finished.connect(self._animation_finished)
         
         # 마커 설정
         self.setup_marker()
@@ -73,7 +64,7 @@ class DynamicMarker(QLabel):
             pixmap = self.create_default_marker()
             
         # 상태에 따른 효과 추가
-        if self.data.state != MarkerState.NORMAL:
+        if self.data.state != 'NORMAL':
             pixmap = self.add_state_effect(pixmap)
             
         # 스케일링
@@ -94,78 +85,134 @@ class DynamicMarker(QLabel):
         painter = QPainter(pixmap)
         painter.setRenderHint(QPainter.RenderHint.Antialiasing)
         
-        # 마커 타입별 색상
-        color_map = {
-            MarkerType.BIRD: QColor("#FF6B6B"),
-            MarkerType.AIRCRAFT: QColor("#4ECDC4"),
-            MarkerType.VEHICLE: QColor("#45B7D1"),
-            MarkerType.DEBRIS: QColor("#FFA07A"),
-            MarkerType.UNKNOWN: QColor("#95A5A6")
+        # 객체 타입별 아이콘 경로 매핑 (ObjectType Enum의 value 사용)
+        base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        icon_paths = {
+            ObjectType.BIRD.value: os.path.join(base_path, 'resources/images/bird.png'),
+            ObjectType.FOD.value: os.path.join(base_path, 'resources/images/fod.png'),
+            ObjectType.PERSON.value: os.path.join(base_path, 'resources/images/person.png'),
+            ObjectType.ANIMAL.value: os.path.join(base_path, 'resources/images/animal.png'),
+            ObjectType.AIRPLANE.value: os.path.join(base_path, 'resources/images/airplane.png'),
+            ObjectType.VEHICLE.value: os.path.join(base_path, 'resources/images/vehicle.png'),
+            ObjectType.WORK_PERSON.value: os.path.join(base_path, 'resources/images/worker.png'),
+            ObjectType.WORK_VEHICLE.value: os.path.join(base_path, 'resources/images/vehicle_work.png')
         }
+        # Enum이 들어오면 value, 아니면 그대로
+        obj_type_key = self.data.object_type.value if hasattr(self.data.object_type, 'value') else str(self.data.object_type)
+        icon_path = icon_paths.get(obj_type_key)
+        logger.debug(f"마커 아이콘 로드 시도: base_path={base_path}, object_type={obj_type_key}, icon_path={icon_path}")
+        logger.debug(f"사용 가능한 icon_paths 키들: {list(icon_paths.keys())}")
         
-        color = color_map.get(self.data.marker_type, QColor("#95A5A6"))
+        if icon_path and os.path.exists(icon_path):
+            logger.debug(f"아이콘 파일 존재 확인: {icon_path}")
+            icon_pixmap = QPixmap(icon_path)
+            if not icon_pixmap.isNull():
+                logger.debug(f"아이콘 로드 성공: {icon_path}")
+                # 흰색 배경 그리기
+                painter.setBrush(QBrush(QColor("white")))
+                painter.setPen(Qt.PenStyle.NoPen)
+                painter.drawRoundedRect(2, 2, size - 4, size - 4, 8, 8)
+                
+                # 아이콘 크기 조정
+                scaled_icon = icon_pixmap.scaled(
+                    size - 4, size - 4,  # 마진 2px
+                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.TransformationMode.SmoothTransformation
+                )
+                # 아이콘 중앙에 그리기
+                x = (size - scaled_icon.width()) // 2
+                y = (size - scaled_icon.height()) // 2
+                painter.drawPixmap(x, y, scaled_icon)
+                
+                # 상태에 따른 테두리 추가
+                if self.data.state == 'WARNING':
+                    painter.setPen(QPen(QColor("#FFA500"), 2))  # 주황색
+                elif self.data.state == 'SELECTED':
+                    painter.setPen(QPen(QColor("#FFD700"), 2))  # 금색
+                else:
+                    painter.setPen(QPen(QColor("#FFFFFF"), 2))  # 흰색
+                    
+                painter.setBrush(Qt.BrushStyle.NoBrush)
+                painter.drawRoundedRect(2, 2, size - 4, size - 4, 8, 8)
+                
+                painter.end()
+                return pixmap
+            else:
+                logger.warning(f"아이콘 로드 실패 (null): {icon_path}")
+        else:
+            logger.warning(f"아이콘 파일을 찾을 수 없음: {icon_path}")
         
-        # 원형 마커 그리기
-        painter.setBrush(QBrush(color))
+        # 아이콘 로드 실패 시 기본 마커 생성
+        logger.debug("기본 파란색 마커 생성")
+        default_color = QColor("#4A90E2")  # 기본 파란색
+        
+        # 기본 마커 그리기
+        painter.setBrush(QBrush(default_color))
         painter.setPen(QPen(Qt.GlobalColor.white, 2))
         
-        margin = 2
-        painter.drawEllipse(margin, margin, size - 2*margin, size - 2*margin)
-        
-        # 라벨이 있으면 텍스트 추가
-        if self.data.label:
-            painter.setPen(QPen(Qt.GlobalColor.white))
-            font = QFont()
-            font.setPixelSize(max(8, size // 3))
-            font.setBold(True)
-            painter.setFont(font)
-            painter.drawText(pixmap.rect(), Qt.AlignmentFlag.AlignCenter, self.data.label)
+        # 둥근 모서리 사각형 그리기
+        painter.drawRoundedRect(2, 2, size - 4, size - 4, 8, 8)
         
         painter.end()
         return pixmap
         
     def add_state_effect(self, pixmap: QPixmap) -> QPixmap:
         """상태 효과 추가"""
-        if self.data.state == MarkerState.SELECTED:
-            # 선택된 마커는 테두리 강조
+        if self.data.state == 'SELECTED':
+            # 강조 효과 생성
             enhanced = QPixmap(pixmap.size())
             enhanced.fill(Qt.GlobalColor.transparent)
             
             painter = QPainter(enhanced)
             painter.setRenderHint(QPainter.RenderHint.Antialiasing)
             
-            # 글로우 효과
-            painter.setPen(QPen(QColor("#FFD700"), 4))
+            # 원본 마커 그리기
+            painter.drawPixmap(0, 0, pixmap)
+            
+            # 선택된 마커 테두리 강조
+            painter.setPen(QPen(QColor("#FFD700"), 3))  # 금색, 3px 두께
             painter.setBrush(Qt.BrushStyle.NoBrush)
-            painter.drawEllipse(2, 2, pixmap.width() - 4, pixmap.height() - 4)
+            painter.drawRoundedRect(1, 1, pixmap.width() - 2, pixmap.height() - 2, 8, 8)
+            
+            painter.end()
+            return enhanced
+            
+        elif self.data.state == 'WARNING':
+            # 경고/위험 상태는 깜빡임 효과
+            enhanced = QPixmap(pixmap.size())
+            enhanced.fill(Qt.GlobalColor.transparent)
+            
+            painter = QPainter(enhanced)
+            painter.setRenderHint(QPainter.RenderHint.Antialiasing)
             
             # 원본 마커 그리기
             painter.drawPixmap(0, 0, pixmap)
+            
+            # 깜빡임 효과를 위한 반투명 오버레이
+            if hasattr(self, 'blink_visible') and self.blink_visible:
+                overlay_color = QColor("#FFA500")
+                overlay_color.setAlpha(128)  # 50% 투명도
+                painter.setBrush(QBrush(overlay_color))
+                painter.setPen(Qt.PenStyle.NoPen)
+                painter.drawRoundedRect(0, 0, pixmap.width(), pixmap.height(), 8, 8)
+            
             painter.end()
-            
             return enhanced
-            
-        elif self.data.state in [MarkerState.WARNING, MarkerState.DANGER]:
-            # 경고/위험 상태는 깜빡임 효과 (애니메이션에서 처리)
-            pass
             
         return pixmap
     
-    def animate_to_position(self, x: int, y: int, duration: int = 1000):
-        """위치로 애니메이션 이동"""
-        if self.animation:
-            self.animation.stop()
-            
-        self.animation = QPropertyAnimation(self, b"geometry")
-        self.animation.setDuration(duration)
-        self.animation.setStartValue(self.geometry())
-        self.animation.setEndValue(QRect(x, y, self.width(), self.height()))
-        self.animation.setEasingCurve(QEasingCurve.Type.OutCubic)
-        
+    def animate_to_position(self, x: int, y: int):
+        """위치로 애니메이션"""
         self.is_animating = True
-        self.animation.finished.connect(lambda: setattr(self, 'is_animating', False))
+        self.animation.setStartValue(self.pos())
+        self.animation.setEndValue(QPoint(x, y))
+        self.animation.setDuration(300)
         self.animation.start()
-    
+        
+    def _animation_finished(self):
+        """애니메이션 완료 처리"""
+        self.is_animating = False
+        
     def start_blinking(self):
         """깜빡임 효과 시작"""
         if not hasattr(self, 'blink_timer'):
@@ -184,198 +231,251 @@ class DynamicMarker(QLabel):
     def toggle_visibility(self):
         """가시성 토글 (깜빡임 용)"""
         self.blink_visible = not self.blink_visible
-        self.setVisible(self.blink_visible)
+        self.update_appearance()  # 마커 외관 업데이트
     
     def mousePressEvent(self, event):
         """마우스 클릭 이벤트"""
         if event.button() == Qt.MouseButton.LeftButton:
-            self.clicked.emit(self.data.marker_id)
+            self.clicked.emit(self.data.object_id)
         super().mousePressEvent(event)
 
 class MapMarkerWidget(QWidget):
-    """향상된 지도 마커 위젯"""
-    marker_clicked = pyqtSignal(int)  # marker_id 전달
+    """지도 마커 위젯"""
+    marker_clicked = pyqtSignal(int)  # object_id 전달
     
     def __init__(self, parent=None):
         super().__init__(parent)
         self.markers: Dict[int, DynamicMarker] = {}
-        self.map_size = (800, 600)  # 기본 지도 크기
-        self.widget_size = (800, 600)  # 위젯 크기
+        self.marker_labels: Dict[int, QLabel] = {}  # 추가
+        self.selected_marker_id: Optional[int] = None
+        self.set_map_size(960, 720)  # 기본 지도 크기
+        
+        # 지도 이미지를 표시할 레이블 생성
+        self.label_map = QLabel(self)
+        self.label_map.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        
+        # 레이아웃 설정
+        layout = QVBoxLayout(self)
+        layout.setContentsMargins(0, 0, 0, 0)
+        layout.addWidget(self.label_map)
+        
+        # 지도 이미지 설정
+        self.set_map_image()
         
     def set_map_size(self, width: int, height: int):
         """지도 크기 설정"""
-        self.map_size = (width, height)
+        self.map_width = width
+        self.map_height = height
         self.update_marker_positions()
         
-    def set_map_image(self, image_path: str):
-        """지도 이미지 설정 (호환성을 위한 메서드)"""
-        # 기존 인터페이스와의 호환성을 위해 유지
-        # 실제로는 배경 지도는 다른 레이어에서 처리됨
-        pass
+    def set_map_image(self):
+        """지도 이미지 설정"""
+        # 지도 이미지 경로 설정
+        self.map_path = os.path.join(os.path.dirname(__file__), '../resources/images/map_crop.png')
+        self.map_pixmap = QPixmap()
         
-    def resizeEvent(self, event):
-        """위젯 크기 변경 시"""
-        super().resizeEvent(event)
-        self.widget_size = (event.size().width(), event.size().height())
+        if os.path.exists(self.map_path):
+            if self.map_pixmap.load(self.map_path):
+                logger.info(f"지도 이미지 로드 성공: {self.map_path}")
+            else:
+                logger.warning(f"지도 이미지 로드 실패: {self.map_path}")
+                self.create_placeholder_map()
+        else:
+            logger.warning(f"지도 이미지를 찾을 수 없습니다: {self.map_path}")
+            self.create_placeholder_map()
+
+        # 지도 이미지 표시
+        self.update_map_image()
+        
+        # 마커 위치 업데이트
         self.update_marker_positions()
-    
-    def add_marker(self, x: float, y: float, icon_path: str, row_idx: int, 
-                  callback: Callable, icon_size: int = 24) -> bool:
-        """기존 인터페이스와 호환성을 위한 마커 추가 메서드"""
-        # 기존 파라미터를 새로운 형식으로 변환
-        marker_data = MarkerData(
-            marker_id=row_idx,
-            x=x,
-            y=y,
-            marker_type=MarkerType.UNKNOWN,
-            state=MarkerState.NORMAL,
-            label=str(row_idx),
-            icon_path=icon_path,
-            size=icon_size
+
+    def create_placeholder_map(self):
+        """임시 지도 이미지 생성"""
+        self.map_pixmap = QPixmap(960, 720)
+        self.map_pixmap.fill(Qt.GlobalColor.lightGray)
+        
+        # 텍스트 추가
+        painter = QPainter(self.map_pixmap)
+        painter.setPen(QPen(Qt.GlobalColor.black, 2))
+        painter.drawText(self.map_pixmap.rect(), Qt.AlignmentFlag.AlignCenter, 
+                        "지도 이미지를 로드할 수 없습니다\n경로를 확인하세요")
+        painter.end()
+        
+        # 임시 이미지 저장
+        try:
+            self.map_pixmap.save(self.map_path)
+            logger.info(f"임시 지도 이미지가 생성되었습니다: {self.map_path}")
+        except Exception as e:
+            logger.error(f"임시 지도 이미지 저장 실패: {str(e)}")
+
+    def update_map_image(self):
+        """지도 이미지 업데이트"""
+        if not self.map_pixmap.isNull():
+            # 이미지 스케일링 및 설정
+            scaled_pixmap = self.map_pixmap.scaled(
+                self.map_width, self.map_height,
+                Qt.AspectRatioMode.KeepAspectRatio,
+                Qt.TransformationMode.SmoothTransformation
+            )
+            self.label_map.setPixmap(scaled_pixmap)
+            logger.debug(f"지도 이미지 업데이트 완료: {scaled_pixmap.width()}x{scaled_pixmap.height()}")
+        else:
+            logger.warning("지도 이미지가 null임")
+        
+    def create_marker_data(self, obj: DetectedObject) -> MarkerData:
+        """DetectedObject로부터 MarkerData 생성"""
+        return MarkerData(
+            object_id=obj.object_id,
+            x=obj.x_coord,
+            y=obj.y_coord,
+            object_type=obj.object_type.value,
+            zone=obj.zone.value
         )
         
-        return self.add_dynamic_marker(marker_data, animate=True)
-    
-    def add_dynamic_marker(self, data: MarkerData, animate: bool = True) -> bool:
-        """새로운 동적 마커 추가"""
+    def add_dynamic_marker(self, marker_data: MarkerData):
+        """동적 마커 추가"""
         try:
             # 기존 마커가 있으면 제거
-            if data.marker_id in self.markers:
-                self.remove_marker(data.marker_id)
+            if marker_data.object_id in self.markers:
+                self.remove_marker(marker_data.object_id)
                 
             # 새 마커 생성
-            marker = DynamicMarker(data, self)
-            marker.clicked.connect(self.marker_clicked.emit)
+            marker = DynamicMarker(marker_data, self)
+            marker.clicked.connect(lambda: self.marker_clicked.emit(marker_data.object_id))
             
             # 위치 계산 및 설정
-            x, y = self.calculate_marker_position(data.x, data.y)
+            x, y = self.calculate_marker_position(marker_data.x, marker_data.y)
+            marker.move(x, y)
+            marker.show()
             
-            if animate and data.marker_id in self.markers:
-                # 기존 마커가 있었다면 애니메이션으로 이동
-                marker.move(self.markers[data.marker_id].x(), self.markers[data.marker_id].y())
-                marker.show()
-                marker.animate_to_position(x, y)
-            else:
-                # 새 마커는 바로 위치 설정
-                marker.move(x, y)
-                marker.show()
+            self.markers[marker_data.object_id] = marker
+            logger.debug(f"마커 추가 성공: ID {marker_data.object_id}")
             
-            # 상태에 따른 효과 적용
-            if data.state in [MarkerState.WARNING, MarkerState.DANGER]:
-                marker.start_blinking()
-            
-            self.markers[data.marker_id] = marker
-            return True
+            # ID 라벨 추가
+            id_label = QLabel(f"ID:{marker_data.object_id}", self)
+            id_label.setStyleSheet("""
+                background: rgba(0,0,0,0.7);
+                color: white;
+                border-radius: 6px;
+                padding: 2px 6px;
+                font-weight: bold;
+                font-size: 12px;
+            """)
+            id_label.adjustSize()
+            # 마커 중앙 상단에 위치 (마커 크기 50px 고려)
+            label_x = x + 25 - id_label.width()//2  # 마커 중앙에서 라벨 중앙 정렬
+            label_y = y - id_label.height() - 2     # 마커 상단에서 2px 위
+            id_label.move(label_x, label_y)
+            id_label.show()
+            self.marker_labels[marker_data.object_id] = id_label
             
         except Exception as e:
-            logger.error(f"마커 추가 오류: {e}")
-            return False
-    
-    def update_marker(self, data: MarkerData, animate: bool = True) -> bool:
+            logger.error(f"마커 추가 실패: {str(e)}")
+            
+    def update_marker(self, marker_data: MarkerData):
         """마커 업데이트"""
-        if data.marker_id not in self.markers:
-            return self.add_dynamic_marker(data, animate)
-            
-        marker = self.markers[data.marker_id]
-        old_data = marker.data
-        marker.data = data
-        
-        # 위치가 변경되었으면 이동
-        if old_data.x != data.x or old_data.y != data.y:
-            x, y = self.calculate_marker_position(data.x, data.y)
-            if animate:
-                marker.animate_to_position(x, y)
-            else:
-                marker.move(x, y)
-        
-        # 외관이 변경되었으면 업데이트
-        if (old_data.marker_type != data.marker_type or 
-            old_data.state != data.state or 
-            old_data.icon_path != data.icon_path):
-            marker.update_appearance()
-            
-            # 깜빡임 효과 관리
-            if data.state in [MarkerState.WARNING, MarkerState.DANGER]:
-                marker.start_blinking()
-            else:
-                marker.stop_blinking()
+        try:
+            if marker_data.object_id in self.markers:
+                marker = self.markers[marker_data.object_id]
+                marker.data = marker_data
                 
-        return True
-    
-    def remove_marker(self, marker_id: int) -> bool:
+                # 위치가 변경되었으면 이동
+                x, y = self.calculate_marker_position(marker_data.x, marker_data.y)
+                marker.animate_to_position(x, y)
+                
+                # 라벨 위치도 업데이트
+                label = self.marker_labels.get(marker_data.object_id)
+                if label:
+                    label_x = x + 25 - label.width()//2  # 마커 중앙에서 라벨 중앙 정렬
+                    label_y = y - label.height() - 2     # 마커 상단에서 2px 위
+                    label.move(label_x, label_y)
+                
+                # 외관 업데이트
+                marker.update_appearance()
+                
+                logger.debug(f"마커 업데이트 성공: ID {marker_data.object_id}")
+        except Exception as e:
+            logger.error(f"마커 업데이트 실패: {str(e)}")
+            
+    def remove_marker(self, object_id: int):
         """마커 제거"""
-        if marker_id in self.markers:
-            marker = self.markers[marker_id]
-            marker.stop_blinking()
-            marker.hide()
-            marker.deleteLater()
-            del self.markers[marker_id]
-            return True
-        return False
-    
+        try:
+            if object_id in self.markers:
+                marker = self.markers[object_id]
+                marker.hide()
+                marker.deleteLater()
+                del self.markers[object_id]
+                
+                if self.selected_marker_id == object_id:
+                    self.selected_marker_id = None
+                    
+                # 라벨 제거
+                if object_id in self.marker_labels:
+                    self.marker_labels[object_id].hide()
+                    self.marker_labels[object_id].deleteLater()
+                    del self.marker_labels[object_id]
+                    
+                logger.debug(f"마커 제거 성공: ID {object_id}")
+        except Exception as e:
+            logger.error(f"마커 제거 실패: {str(e)}")
+            
+    def select_marker(self, object_id: int):
+        """마커 선택"""
+        try:
+            # 이전 선택 해제
+            if self.selected_marker_id is not None and self.selected_marker_id in self.markers:
+                self.markers[self.selected_marker_id].data.state = 'NORMAL'
+                self.markers[self.selected_marker_id].update_appearance()
+            
+            # 새로운 마커 선택
+            if object_id in self.markers:
+                self.selected_marker_id = object_id
+                self.markers[object_id].data.state = 'SELECTED'
+                self.markers[object_id].update_appearance()
+                logger.debug(f"마커 선택 성공: ID {object_id}")
+        except Exception as e:
+            logger.error(f"마커 선택 실패: {str(e)}")
+            
     def clear_markers(self):
         """모든 마커 제거"""
-        for marker_id in list(self.markers.keys()):
-            self.remove_marker(marker_id)
-    
+        try:
+            for marker in self.markers.values():
+                marker.hide()
+                marker.deleteLater()
+            self.markers.clear()
+            
+            # 라벨도 함께 제거
+            for label in self.marker_labels.values():
+                label.hide()
+                label.deleteLater()
+            self.marker_labels.clear()
+            
+            self.selected_marker_id = None
+            logger.debug("모든 마커 제거 완료")
+        except Exception as e:
+            logger.error(f"마커 제거 실패: {str(e)}")
+            
     def calculate_marker_position(self, map_x: float, map_y: float) -> Tuple[int, int]:
         """지도 좌표를 위젯 좌표로 변환"""
-        # 지도 좌표 (0.0~1.0)를 위젯 좌표로 변환
-        widget_x = int(map_x * self.widget_size[0])
-        widget_y = int(map_y * self.widget_size[1])
+        x = int(map_x * self.width() / self.map_width)
+        y = int(map_y * self.height() / self.map_height)
+        return x - 12, y - 12  # 마커 크기의 절반만큼 조정
         
-        # 마커가 위젯 경계를 벗어나지 않도록 조정
-        marker_size = 24  # 기본 마커 크기
-        widget_x = max(0, min(widget_x - marker_size // 2, self.widget_size[0] - marker_size))
-        widget_y = max(0, min(widget_y - marker_size // 2, self.widget_size[1] - marker_size))
-        
-        return widget_x, widget_y
-    
     def update_marker_positions(self):
         """모든 마커 위치 업데이트 (위젯 크기 변경 시)"""
         for marker in self.markers.values():
             x, y = self.calculate_marker_position(marker.data.x, marker.data.y)
-            if not marker.is_animating:  # 애니메이션 중이 아닐 때만
+            if not marker.is_animating:
                 marker.move(x, y)
-    
-    def select_marker(self, marker_id: int):
-        """마커 선택"""
-        # 모든 마커 선택 해제
-        for marker in self.markers.values():
-            if marker.data.state == MarkerState.SELECTED:
-                marker.data.state = MarkerState.NORMAL
-                marker.update_appearance()
-        
-        # 해당 마커 선택
-        if marker_id in self.markers:
-            marker = self.markers[marker_id]
-            marker.data.state = MarkerState.SELECTED
-            marker.update_appearance()
-    
-    def get_marker_count_by_type(self) -> Dict[MarkerType, int]:
-        """타입별 마커 개수 반환"""
-        count = {}
-        for marker in self.markers.values():
-            marker_type = marker.data.marker_type
-            count[marker_type] = count.get(marker_type, 0) + 1
-        return count
-    
-    # 기존 인터페이스와의 호환성을 위한 메서드들
-    def move_marker(self, marker_idx: int, new_x: float, new_y: float) -> bool:
-        """마커 이동 (기존 인터페이스 호환)"""
-        if marker_idx in self.markers:
-            marker = self.markers[marker_idx]
-            marker.data.x = new_x
-            marker.data.y = new_y
-            x, y = self.calculate_marker_position(new_x, new_y)
-            marker.animate_to_position(x, y)
-            return True
-        return False
-    
-    def get_marker(self, marker_idx: int):
-        """마커 정보 조회 (기존 인터페이스 호환)"""
-        return self.markers.get(marker_idx)
-    
-    def get_marker_count(self) -> int:
-        """마커 개수 반환 (기존 인터페이스 호환)"""
-        return len(self.markers)
+            # 라벨도 같이 이동 (마커 중앙 상단에 위치)
+            label = self.marker_labels.get(marker.data.object_id)
+            if label:
+                label_x = x + 25 - label.width()//2  # 마커 중앙에서 라벨 중앙 정렬
+                label_y = y - label.height() - 2     # 마커 상단에서 2px 위
+                label.move(label_x, label_y)
+                
+    def resizeEvent(self, event):
+        """위젯 크기 변경 시 처리"""
+        super().resizeEvent(event)
+        self.update_marker_positions()

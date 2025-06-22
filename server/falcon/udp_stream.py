@@ -12,6 +12,7 @@ from PyQt6.QtCore import QThread, pyqtSignal
 
 from network.udp import UDPVideoReceiver, UDPVideoSender
 from config import *
+import config
 
 class FPSCalculator:
     """FPS 계산을 위한 유틸리티 클래스"""
@@ -77,6 +78,11 @@ class VideoCommunicator(QThread):
             if frame is None:
                 time.sleep(0.001)  # CPU 사용량 감소
                 continue
+            
+            # 프레임 크기 최초 1회만 업데이트
+            if config.frame_width is None or config.frame_height is None:
+                config.frame_width = frame.shape[1]
+                config.frame_height = frame.shape[0]
             
             # 프레임 전달
             frame_data = {

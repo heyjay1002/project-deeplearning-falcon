@@ -9,6 +9,10 @@ import cv2
 import numpy as np
 from PyQt6.QtCore import QThread, pyqtSignal
 import time
+from datetime import datetime
+from db.repository import DetectionRepository
+from config import DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME
+import os
 
 from config import *
 
@@ -37,7 +41,7 @@ class DetectionProcessor(QThread):
     detection_processed = pyqtSignal(dict)  # 처리된 검출 결과 전달용 시그널
     stats_ready = pyqtSignal(dict)  # 통계 전달용 시그널
     
-    def __init__(self):
+    def __init__(self, video_processor=None):
         super().__init__()
         # 검출 결과 버퍼
         self.detection_buffer = {}
@@ -48,6 +52,21 @@ class DetectionProcessor(QThread):
         # 마지막 처리 결과 저장
         self.last_detection = None
         self.last_detection_img_id = None
+        
+        # 데이터베이스 리포지토리 초기화
+        self.repository = DetectionRepository(
+            host=DB_HOST,
+            port=DB_PORT,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            database=DB_NAME
+        )
+        
+        # VideoProcessor 참조 저장
+        self.video_processor = video_processor
+        
+        # 실행 상태
+        self.running = True
     
     def process_detection(self, detection_data):
         """검출 결과 처리
@@ -83,6 +102,45 @@ class DetectionProcessor(QThread):
                 'fps': round(self.fps_calc.current_fps, 1)
             }
             self.stats_ready.emit(stats)
+        
+        try:
+            # 데이터베이스에 저장
+            if detections:
+                # 최초 감지된 객체들만 필터링 (max_object_id보다 큰 ID만)
+                new_detections = []
+                max_id = self.repository.max_object_id
+                for detection in detections:
+                    object_id = detection['object_id']
+                    if max_id is None or object_id > max_id:
+                        new_detections.append(detection)
+                
+                # 최초 감지된 객체들에 대해서만 이미지 생성 및 DB 저장
+                if new_detections and self.video_processor:
+                    frame = self.video_processor.get_frame(img_id)
+                    if frame is not None:
+                        saved_detections = []
+                        crop_imgs = []
+                        for detection in new_detections:
+                            if self.save_cropped_frame(frame, detection, img_id):
+                                bbox = detection.get('bbox', [])
+                                if bbox and len(bbox) == 4:
+                                    x1, y1, x2, y2 = map(int, bbox)
+                                    crop = frame[y1:y2, x1:x2]
+                                    _, img_encoded = cv2.imencode('.jpg', crop)
+                                    crop_imgs.append(img_encoded.tobytes())
+                                    saved_detections.append(detection)
+                        if saved_detections:
+                            success = self.repository.save_detection_event(
+                                camera_id='A',
+                                img_id=img_id,
+                                detections=saved_detections,
+                                crop_imgs=crop_imgs
+                            )
+                            if success:
+                                print(f"[INFO] ME_FD 저장 완료: {len(saved_detections)}개 객체")
+            
+        except Exception as e:
+            print(f"[ERROR] 감지 결과 처리 중 오류: {e}")
     
     def draw_detections(self, frame, img_id):
         """검출 결과를 프레임에 시각화
@@ -139,4 +197,38 @@ class DetectionProcessor(QThread):
         """버퍼 초기화"""
         self.detection_buffer.clear()
         self.last_detection = None
-        self.last_detection_img_id = None 
+        self.last_detection_img_id = None
+    
+    def stop(self):
+        """처리 중지"""
+        self.running = False
+        self.repository.close()
+
+    def crop_frame(self, frame, detection):
+        """bbox로 프레임을 crop하여 이미지로 저장
+        Args:
+            frame (np.ndarray): 원본 프레임
+            detection (dict): 검출 결과
+        Returns:
+            np.ndarray: 저장된 이미지
+        """
+        bbox = detection.get('bbox', [])
+        if not bbox or len(bbox) != 4:
+            return None
+        
+        x1, y1, x2, y2 = map(int, bbox)
+        cropped_frame = frame[y1:y2, x1:x2]
+        return cropped_frame
+
+    def save_cropped_frame(self, frame, detection, img_id):
+        cropped_frame = self.crop_frame(frame, detection)
+        if cropped_frame is None:
+            print(f"[ERROR] Crop 실패: object_id={detection.get('object_id')}, bbox={detection.get('bbox')}")
+            return False
+        img_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'img')
+        os.makedirs(img_dir, exist_ok=True)
+        filename = f"img_{detection['object_id']}.jpg"
+        filepath = os.path.join(img_dir, filename)
+        result = cv2.imwrite(filepath, cropped_frame)
+        print(f"[INFO] 이미지 저장: {filepath}, 성공={result}")
+        return result 

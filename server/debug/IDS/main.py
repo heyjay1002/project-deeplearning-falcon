@@ -168,6 +168,22 @@ class YOLOClient:
             print("[ERROR] 서버 연결 실패")
             return False
         
+        # 서버로부터 'set_mode_object' 명령을 받을 때까지 대기
+        print("[INFO] 'set_mode_object' 명령 대기 중...")
+        while self.running:
+            try:
+                message = self.detection_client.receive_json()
+                if message:
+                    print(f"[RECV] {message}")
+                    if message.get('type') == 'command' and message.get('command') == 'set_mode_object':
+                        print("[INFO] 'set_mode_object' 명령 수신. 감지 및 전송을 시작합니다.")
+                        break
+                time.sleep(0.1)
+            except Exception as e:
+                print(f"[ERROR] 명령 수신 중 오류: {e}")
+                self.stop()
+                return False
+
         try:
             # 스레드 시작
             self.capture_thread = threading.Thread(target=self.capture_and_send)

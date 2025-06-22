@@ -38,13 +38,11 @@ class ColorClassifier:
     def is_work_vehicle(self, frame: np.ndarray, car_bbox: list) -> bool:
         x1, y1, x2, y2 = map(int, car_bbox)
         car_roi = frame[y1:y2, x1:x2]
-        if car_roi.size == 0: return False
-        
+        if car_roi.size == 0:
+            return False
+
         hsv_car = cv2.cvtColor(car_roi, cv2.COLOR_BGR2HSV)
         yellow_mask = cv2.inRange(hsv_car, self.LOWER_VEHICLE_YELLOW, self.UPPER_VEHICLE_YELLOW)
-        black_mask = cv2.inRange(hsv_car, self.LOWER_VEHICLE_BLACK, self.UPPER_VEHICLE_BLACK)
-        
         yellow_ratio = np.sum(yellow_mask > 0) / (car_roi.size / 3)
-        black_ratio = np.sum(black_mask > 0) / (car_roi.size / 3)
         
-        return yellow_ratio > 0.1 and black_ratio > 0.1
+        return yellow_ratio > 0.1

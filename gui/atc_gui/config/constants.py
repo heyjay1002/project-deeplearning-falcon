@@ -7,7 +7,6 @@ class ObjectType(Enum):
     PERSON = "인간"
     ANIMAL = "동물"
     AIRPLANE = "비행기"
-    FIRE = "화재"
     VEHICLE = "차량"
     WORK_PERSON = "작업자"
     WORK_VEHICLE = "작업차량"
@@ -21,7 +20,6 @@ class BirdRiskLevel(Enum):
 class RunwayRiskLevel(Enum):
     """활주로 위험도 등급"""
     LOW = "안전"
-    MEDIUM = "주의"
     HIGH = "경고"
 
 class AirportZone(Enum):
@@ -47,11 +45,15 @@ class AccessTarget(Enum):
     VEHICLE = "차량"
     PERSON = "인원"
 
+class ExtraInfo(Enum):
+    """추가 정보"""
+    N = "없음"
+    R = "쓰러짐"
+
 class CameraID(Enum):
     """CCTV 카메라 식별자"""
     A = "A"
     B = "B"
-    C = "C"
 
 class MessagePrefix(Enum):
     """메시지 프리픽스"""
@@ -83,10 +85,9 @@ class Constants:
         2: ObjectType.PERSON,
         3: ObjectType.ANIMAL,
         4: ObjectType.AIRPLANE,
-        5: ObjectType.FIRE,
-        6: ObjectType.VEHICLE,
-        7: ObjectType.WORK_PERSON,
-        8: ObjectType.WORK_VEHICLE
+        5: ObjectType.VEHICLE,
+        6: ObjectType.WORK_PERSON,
+        7: ObjectType.WORK_VEHICLE
     }
     
     BIRD_RISK_MAPPING = {
@@ -97,8 +98,7 @@ class Constants:
     
     RUNWAY_RISK_MAPPING = {
         0: RunwayRiskLevel.LOW,
-        1: RunwayRiskLevel.MEDIUM,
-        2: RunwayRiskLevel.HIGH
+        1: RunwayRiskLevel.HIGH
     }
     
     ZONE_MAPPING = {    
@@ -118,18 +118,6 @@ class Constants:
         1: SecurityLevel.LEVEL_2,
         2: SecurityLevel.LEVEL_3,
     }
-    
-    # --- UI/표시 관련 ---
-    class Display:
-        """위험도별 색상 등 UI 표시 관련 상수"""
-        RISK_COLORS = {
-            BirdRiskLevel.LOW: "#00FF00",      # 녹색
-            BirdRiskLevel.MEDIUM: "#FFFF00",   # 노란색
-            BirdRiskLevel.HIGH: "#FF0000",     # 빨간색
-            RunwayRiskLevel.LOW: "#00FF00",    # 녹색
-            RunwayRiskLevel.MEDIUM: "#FFFF00", # 노란색
-            RunwayRiskLevel.HIGH: "#FF0000"    # 빨간색
-        }
 
     # --- 통신 프로토콜 관련 ---
     class Protocol:
@@ -163,7 +151,7 @@ class Constants:
     # --- 객체 정보 형식 ---
     class ObjectInfo:
         """객체 정보 문자열 형식 정의"""
-        OBJECT_INFO = "{object_id},{object_type},{x_coord},{y_coord},{zone},{timestamp}[,{extra_info}]"
+        OBJECT_INFO = "{object_id},{object_type},{x_coord},{y_coord},{zone},{timestamp}[,{extra_info}],{image_data}"
         OBJECT_INFO_DETAIL = "{object_id},{object_type},{x_coord},{y_coord},{zone},{timestamp},{image_data}"
 
     # --- 비디오 관련 ---
