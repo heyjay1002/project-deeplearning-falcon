@@ -14,6 +14,7 @@ from falcon.udp_stream import VideoCommunicator
 from falcon.video_processor import VideoProcessor
 from falcon.detection_processor import DetectionProcessor
 from falcon.tcp_stream import DetectionCommunicator
+import config
 
 class MainWindow(QMainWindow):
     """메인 윈도우 클래스"""
@@ -47,6 +48,10 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.video_stats_label)
         layout.addWidget(self.detection_stats_label)
         layout.addWidget(self.buffer_status_label)
+        
+        # 프레임 크기 표시 레이블 추가
+        self.frame_size_label = QLabel('프레임 크기: - x -')
+        layout.addWidget(self.frame_size_label)
     
     def _init_threads(self):
         """스레드 초기화"""
@@ -57,7 +62,7 @@ class MainWindow(QMainWindow):
         self.video_processor.buffer_status_ready.connect(self.update_buffer_status)
         
         # 검출 프로세서 스레드
-        self.detection_processor = DetectionProcessor()
+        self.detection_processor = DetectionProcessor(video_processor=self.video_processor)
         self.detection_processor.detection_processed.connect(self._on_detection_processed)
         self.detection_processor.stats_ready.connect(self.update_detection_stats)
         
@@ -66,7 +71,7 @@ class MainWindow(QMainWindow):
         self.video_thread.frame_received.connect(self.video_processor.process_frame)
         
         # IDS 통신 스레드
-        self.detection_thread = DetectionCommunicator()
+        self.detection_thread = DetectionCommunicator(repository=self.detection_processor.repository)
         self.detection_thread.detection_received.connect(self.detection_processor.process_detection)
         
         # 비디오 통신기 연결
@@ -106,6 +111,10 @@ class MainWindow(QMainWindow):
 
         # 박스가 그려진 프레임을 VideoCommunicator로 전달하여 UDP 송출
         self.video_thread.send_frame_with_boxes(frame_with_boxes, cam_id, img_id)
+        
+        # 프레임 크기 표시 갱신
+        if config.frame_width and config.frame_height:
+            self.frame_size_label.setText(f'프레임 크기: {config.frame_width} x {config.frame_height}')
     
     def _on_detection_processed(self, detection_data):
         """검출 처리 완료 시 호출"""

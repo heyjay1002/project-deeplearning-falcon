@@ -5,41 +5,23 @@ from datetime import datetime
 import base64
 
 from config.constants import ObjectType, AirportZone, BirdRiskLevel, RunwayRiskLevel
-from utils.tcp_client import ImprovedTcpClient
-from utils.udp_client import OptimizedUdpClient
+from utils.tcp_client import TcpClient
+from utils.udp_client import UdpClient
 from utils.interface import DetectedObject
 from utils.logger import logger
 from config.settings import Settings
-from utils.interface import ConnectionManager, ConnectionState, ErrorHandler, NetworkException
-
-
-class NetworkMetrics:
-    """네트워크 성능 메트릭 수집"""
-    
-    def __init__(self):
-        self.tcp_metrics = TcpMetrics()
-        
-    def record_message_latency(self, message_type: str, latency: float):
-        """메시지 지연시간 기록"""
-        self.tcp_metrics.add_latency(message_type, latency)
-
-
-class TcpMetrics:
-    """TCP 메트릭"""
-    
-    def __init__(self):
-        self.latencies = {}
-        self.message_counts = {}
-        
-    def add_latency(self, message_type: str, latency: float):
-        """지연시간 추가"""
-        if message_type not in self.latencies:
-            self.latencies[message_type] = []
-        self.latencies[message_type].append(latency)
-
+from utils.interface import ConnectionManager, ConnectionState
 
 class NetworkManager(QObject):
-    """개선된 TCP 및 UDP 통신을 총괄하는 네트워크 관리자"""
+    """네트워크 매니저 - 전체 네트워크 서비스 조율
+    
+    역할:
+    - TCP/UDP 클라이언트 관리
+    - 비즈니스 로직 처리 (CCTV 요청/응답)
+    - UI와의 인터페이스
+    - 연결 상태 통합 관리
+    - 데이터 변환 및 전달
+    """
 
     # UI가 연결할 시그널들
     object_detected = pyqtSignal(DetectedObject)
@@ -60,11 +42,10 @@ class NetworkManager(QObject):
         
         # 연결 관리자 및 메트릭
         self.connection_manager = ConnectionManager()
-        self.metrics = NetworkMetrics()
         
         # 클라이언트 초기화
-        self.tcp_client = ImprovedTcpClient()
-        self.udp_client = OptimizedUdpClient()
+        self.tcp_client = TcpClient()
+        self.udp_client = UdpClient()
         
         # 시그널 연결
         self._connect_signals()
@@ -86,6 +67,7 @@ class NetworkManager(QObject):
         self.tcp_client.map_response.connect(self._handle_map_response)
         self.tcp_client.cctv_a_response.connect(self._handle_cctv_a_response)
         self.tcp_client.cctv_b_response.connect(self._handle_cctv_b_response)
+        self.tcp_client.cctv_frame_received.connect(self._handle_cctv_frame)
 
         # TCP 연결 상태 시그널 연결
         self.tcp_client.connected.connect(self._on_tcp_connected)
@@ -248,18 +230,27 @@ class NetworkManager(QObject):
             return None
 
     def _handle_udp_frame(self, camera_id: str, frame, image_id: Optional[int]):
-        """UDP 프레임 처리"""
+        """UDP 프레임 처리 - 데이터 변환 및 전달만 담당"""
         try:
+            if frame is None:
+                logger.error(f"프레임이 None: 카메라 {camera_id}, 이미지 ID {image_id}")
+                return
+            
             # QImage로 변환
             qimage = self._convert_to_qimage(frame)
+            
             if qimage:
                 if camera_id == "A":
                     self.frame_a_received.emit(qimage, image_id or 0)
                 elif camera_id == "B":
                     self.frame_b_received.emit(qimage, image_id or 0)
+                else:
+                    logger.warning(f"알 수 없는 카메라 ID: {camera_id}, 이미지 ID {image_id}")
+            else:
+                logger.error(f"QImage 변환 실패: 카메라 {camera_id}, 이미지 ID {image_id}")
                     
         except Exception as e:
-            logger.error(f"프레임 처리 실패 ({camera_id}): {e}")
+            logger.error(f"프레임 처리 실패 (카메라 {camera_id}, 이미지 ID {image_id}): {e}")
 
     def _convert_to_qimage(self, frame) -> Optional[QImage]:
         """OpenCV 프레임을 QImage로 변환"""
@@ -267,15 +258,19 @@ class NetworkManager(QObject):
             import cv2
             
             if frame is None or frame.size == 0:
+                logger.error("프레임이 None이거나 크기가 0")
                 return None
                 
             # BGR을 RGB로 변환
             rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            
             h, w, ch = rgb_frame.shape
             bytes_per_line = ch * w
             
             qimage = QImage(rgb_frame.data, w, h, bytes_per_line, QImage.Format.Format_RGB888)
-            return qimage.copy()  # 복사본 반환
+            result = qimage.copy()  # 복사본 반환
+            
+            return result
             
         except Exception as e:
             logger.error(f"이미지 변환 실패: {e}")
@@ -286,80 +281,118 @@ class NetworkManager(QObject):
         pass  # 로그 없이 처리
 
     def _handle_cctv_a_response(self, response: str):
-        """CCTV A 응답 처리"""
-        pass  # 로그 없이 처리
+        """CCTV A 응답 처리 - 비즈니스 로직만 담당"""
+        logger.info(f"CCTV A 응답 수신: {response}")
+        if response == "OK":
+            # UDP 연결 확인 및 연결
+            if not self.udp_client.is_connected():
+                logger.info("UDP 연결이 없어서 연결 시도")
+                self._ensure_udp_connection()
+            else:
+                logger.info("UDP 연결이 이미 되어 있음")
+        else:
+            logger.error(f"CCTV A 요청 거부됨: {response}")
 
     def _handle_cctv_b_response(self, response: str):
-        """CCTV B 응답 처리"""
-        pass  # 로그 없이 처리
+        """CCTV B 응답 처리 - 비즈니스 로직만 담당"""
+        logger.info(f"CCTV B 응답 수신: {response}")
+        if response == "OK":
+            # UDP 연결 확인 및 연결
+            if not self.udp_client.is_connected():
+                logger.info("UDP 연결이 없어서 연결 시도")
+                self._ensure_udp_connection()
+            else:
+                logger.info("UDP 연결이 이미 되어 있음")
+        else:
+            logger.error(f"CCTV B 요청 거부됨: {response}")
+
+
+    def _ensure_udp_connection(self):
+        """UDP 연결 보장 - UDP 클라이언트에 위임"""
+        host = self.settings.server.udp_ip
+        port = self.settings.server.udp_port
+        logger.info(f"UDP 연결 보장 시도: {host}:{port}")
+        logger.debug(f"현재 UDP 연결 상태: {self.udp_client.is_connected()}")
+        
+        if not self.udp_client.connect(host, port):
+            logger.error(f"UDP 연결 실패: {host}:{port}")
+        else:
+            logger.info(f"UDP 연결 성공: {host}:{port}")
+            logger.debug(f"연결 후 UDP 상태: {self.udp_client.is_connected()}")
+
+    def _handle_cctv_frame(self, camera_id: str, frame, image_id: int = 0):
+        """CCTV 프레임 처리 - TCP를 통한 프레임 처리"""
+        try:
+            # frame이 이미 QImage인 경우 직접 사용
+            if hasattr(frame, 'size') and hasattr(frame, 'format'):
+                # QImage 객체인 경우
+                if camera_id == "A":
+                    self.frame_a_received.emit(frame, image_id)
+                elif camera_id == "B":
+                    self.frame_b_received.emit(frame, image_id)
+                else:
+                    logger.warning(f"알 수 없는 카메라 ID: {camera_id}")
+            else:
+                # numpy array인 경우 QImage로 변환
+                qimage = self._convert_to_qimage(frame)
+                if qimage:
+                    if camera_id == "A":
+                        self.frame_a_received.emit(qimage, image_id)
+                    elif camera_id == "B":
+                        self.frame_b_received.emit(qimage, image_id)
+                    else:
+                        logger.warning(f"알 수 없는 카메라 ID: {camera_id}")
+                else:
+                    logger.warning("QImage 변환 실패")
+                    
+        except Exception as e:
+            logger.error(f"프레임 처리 실패 ({camera_id}): {e}")
 
     # === 공개 인터페이스 메서드 ===
     def request_cctv_a(self):
         """CCTV A 영상 요청"""
         try:
-            start_time = datetime.now()
             success = self.tcp_client.request_cctv_a()
-            
-            # 메트릭 기록
-            latency = (datetime.now() - start_time).total_seconds() * 1000
-            self.metrics.record_message_latency("cctv_a_request", latency)
-            
             return success
             
-        except Exception:
+        except Exception as e:
+            logger.error(f"CCTV A 영상 요청 실패: {e}")
             return False
 
     def request_cctv_b(self):
         """CCTV B 영상 요청"""
         try:
-            start_time = datetime.now()
             success = self.tcp_client.request_cctv_b()
-            
-            # 메트릭 기록
-            latency = (datetime.now() - start_time).total_seconds() * 1000
-            self.metrics.record_message_latency("cctv_b_request", latency)
-            
             return success
             
-        except Exception:
+        except Exception as e:
+            logger.error(f"CCTV B 영상 요청 실패: {e}")
             return False
 
     def request_object_detail(self, object_id: int):
         """객체 상세보기 요청"""
         try:
-            start_time = datetime.now()
             success = self.tcp_client.request_object_detail(object_id)
-            
-            # 메트릭 기록
-            latency = (datetime.now() - start_time).total_seconds() * 1000
-            self.metrics.record_message_latency("object_detail_request", latency)
-            
+
+            logger.info(f"객체 상세보기 요청 결과: {success}")
             return success
             
-        except Exception:
+        except Exception as e:
+            logger.error(f"객체 상세보기 요청 실패: {e}")
             return False
 
     def request_map(self):
         """지도 요청"""
         try:
-            start_time = datetime.now()
             success = self.tcp_client.request_map()
-            
-            # 메트릭 기록
-            latency = (datetime.now() - start_time).total_seconds() * 1000
-            self.metrics.record_message_latency("map_request", latency)
-            
             return success
             
-        except Exception:
+        except Exception as e:
+            logger.error(f"지도 요청 실패: {e}")
             return False
 
     def get_connection_status(self) -> Dict[str, Any]:
         """연결 상태 반환"""
-        return self.connection_manager.get_overall_status()
-
-    def get_network_metrics(self) -> Dict[str, Any]:
-        """네트워크 메트릭 반환"""
         return self.connection_manager.get_overall_status()
 
     def set_udp_max_fps(self, fps: int):

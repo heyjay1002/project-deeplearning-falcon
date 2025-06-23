@@ -1,4 +1,5 @@
 import sys
+import os
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
@@ -10,11 +11,14 @@ from views.log_page import LogPage
 from views.notification_dialog import NotificationDialog
 from utils.interface import DetectedObject, BirdRisk, RunwayRisk
 from utils.network_manager import NetworkManager
+from utils.logger import logger
 
 class WindowClass(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi("ui/main_window.ui", self)
+        # UI 파일 경로를 절대 경로로 설정
+        ui_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ui/main_window.ui")
+        uic.loadUi(ui_file_path, self)
         self.setWindowTitle("FALCON")
         
         # 창 크기 설정 
@@ -31,10 +35,15 @@ class WindowClass(QMainWindow):
         
         # 네트워크 시그널 연결
         self._connect_network_signals()
+        
+        # 네트워크 서비스 시작
+        self.network_manager.start_services()
+        
+        # 알림 중복 방지를 위한 변수들
+        self._test_dialogs = []        
 
     def _connect_network_signals(self):
         nm = self.network_manager
-        nm.object_detected.connect(lambda obj: self.show_notification_dialog('object', obj))
         nm.bird_risk_changed.connect(lambda risk: self.show_notification_dialog('bird', risk))
         nm.runway_a_risk_changed.connect(lambda risk: self.show_notification_dialog('runway_a_risk', risk))
         nm.runway_b_risk_changed.connect(lambda risk: self.show_notification_dialog('runway_b_risk', risk))
@@ -59,6 +68,7 @@ class WindowClass(QMainWindow):
         
         # 상태바에 위젯 추가
         self.statusbar.addWidget(QLabel("TCP:"))
+        self.statusbar.addWidget(self.tcp_indicator)
         self.statusbar.addWidget(QLabel("UDP:"))
         self.statusbar.addWidget(self.udp_indicator)
 
@@ -92,12 +102,12 @@ class WindowClass(QMainWindow):
         self._setup_tab_widget(0, self.main_page)
 
         # AccessPage 인스턴스 생성 및 셋팅
-        access_page = AccessPage(self)
-        self._setup_tab_widget(1, access_page)
+        self.access_page = AccessPage(self)
+        self._setup_tab_widget(1, self.access_page)
 
         # LogPage 인스턴스 생성 및 셋팅
-        log_page = LogPage(self)
-        self._setup_tab_widget(2, log_page)
+        self.log_page = LogPage(self)
+        self._setup_tab_widget(2, self.log_page)
 
         # 탭 이름 설정
         self.tabWidget.setTabText(0, "Main")
@@ -106,6 +116,9 @@ class WindowClass(QMainWindow):
         
         # 탭 스타일 설정
         self._setup_tab_style()
+        
+        # MainPage의 최초 감지 시그널 연결
+        self.main_page.object_detected.connect(lambda obj: self.show_notification_dialog('object', obj))
 
     def _setup_tab_widget(self, tab_index: int, widget: QWidget):
         """개별 탭 위젯 설정"""
@@ -135,9 +148,26 @@ class WindowClass(QMainWindow):
         """)
 
     def show_notification_dialog(self, dialog_type, data):
-        """알림 다이얼로그 표시"""
-        if not hasattr(self, '_test_dialogs'):
-            self._test_dialogs = []
+        """알림 다이얼로그 표시 - 중복 방지 로직 추가"""
+        # 기존 알림창 중복 확인
+        for existing_dialog in self._test_dialogs:
+            if existing_dialog.isVisible() and existing_dialog.notification_type == dialog_type:
+                # 객체 알림의 경우 ID로 중복 확인
+                if dialog_type == 'object' and hasattr(data, 'object_id') and hasattr(existing_dialog.data, 'object_id'):
+                    if data.object_id == existing_dialog.data.object_id:
+                        logger.debug(f"중복 객체 알림 방지: ID {data.object_id}")
+                        return
+                # 위험도 알림의 경우 값으로 중복 확인
+                elif dialog_type in ['bird', 'runway_a_risk', 'runway_b_risk']:
+                    if hasattr(data, 'value') and hasattr(existing_dialog.data, 'value'):
+                        if data.value == existing_dialog.data.value:
+                            logger.debug(f"중복 위험도 알림 방지: {dialog_type} = {data.value}")
+                            return
+        
+        # 기존에 닫힌 다이얼로그들 정리
+        self._test_dialogs = [d for d in self._test_dialogs if d.isVisible()]
+        
+        # 새 알림창 생성
         dialog = NotificationDialog(dialog_type, data, self)
         self._test_dialogs.append(dialog)
         dialog.show()
