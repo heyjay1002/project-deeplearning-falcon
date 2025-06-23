@@ -3,7 +3,7 @@ from typing import Optional, List, Dict, Any
 import base64
 from dataclasses import dataclass, field
 from enum import Enum
-from config.constants import ObjectType, BirdRiskLevel, RunwayRiskLevel, AirportZone, MessagePrefix, Constants
+from config.constants import ObjectType, BirdRiskLevel, RunwayRiskLevel, Airportarea, MessagePrefix, Constants
 from utils.logger import logger
 
 class ConnectionState(Enum):
@@ -15,23 +15,14 @@ class ConnectionState(Enum):
     ERROR = "error"
 
 @dataclass
-class ProcessedFrame:
-    """처리된 프레임 데이터"""
-    frame: Any  # numpy array
-    camera_id: str
-    image_id: Optional[int] = None
-    timestamp: datetime = field(default_factory=datetime.now)
-    quality_score: Optional[float] = None
-
-@dataclass
 class DetectedObject:
     """개선된 감지 객체 정보를 저장하는 데이터 클래스"""
     object_id: int
     object_type: ObjectType
     x_coord: float
     y_coord: float
-    zone: AirportZone
-    timestamp: datetime
+    zone: Airportarea
+    timestamp: Optional[datetime] = None
     extra_info: Optional[str] = None  # str로 변경
     image_data: Optional[bytes] = None  # bytes로 통일
     
@@ -61,7 +52,7 @@ class DetectedObject:
     
     def _validate_timestamp(self):
         """타임스탬프 유효성 검증"""
-        if not isinstance(self.timestamp, datetime):
+        if self.timestamp is not None and not isinstance(self.timestamp, datetime):
             raise ValueError(f"Invalid timestamp: {self.timestamp}")
     
     @property
@@ -167,32 +158,39 @@ class MessageParser:
     """메시지 파싱 전용 클래스"""
     
     @staticmethod
-    def parse_object_detail_info(data: str, include_image: bool = False) -> DetectedObject:
-        """객체 정보 파싱"""
-        try:
-            # MR_OD:OK,{object_id},{object_type},{zone},{timestamp},{image_data} 형식 파싱
-            if not data.startswith(f"{MessagePrefix.MR_OD.value}:OK,"):
-                raise ValueError(f"잘못된 메시지 형식: {data}")
-                
-            fields = data.replace(f"{MessagePrefix.MR_OD.value}:OK,", '').split(Constants.Protocol.OBJECT_FIELD_SEPARATOR)
-            if len(fields) != 5:  # MR_OD:OK, 제외하고 5개 필드
-                raise ValueError(f"필드 수 오류: {len(fields)} != 5")
+    def parse_object_detail_info(data: str, image_data: bytes) -> DetectedObject:
+        # MR_OD:OK,{object_id},{object_type},{area},{timestamp},{image_size},{image_data} 형식 파싱
+        if not data.startswith(f"{MessagePrefix.MR_OD.value}:OK,"):
+            raise ValueError(f"잘못된 메시지 형식: {data}")
             
-            # 필수 필드 파싱
-            parsed_data = {
-                'object_id': int(fields[0]),
-                'object_type': MessageParser._parse_object_type(fields[1]),
-                'zone': MessageParser._parse_zone(fields[2]),
-                'timestamp': MessageParser._parse_timestamp(fields[3]),
-                'image_data': MessageParser._parse_image_data(fields[4]) if include_image else None,
-                'x_coord': 0.0,  # 기본값 설정
-                'y_coord': 0.0   # 기본값 설정
-            }
+        # --- 추가: 서버에서 받은 원본 텍스트 데이터 info 로그 ---
+        logger.info(f"MR_OD: 원본 텍스트 데이터(이미지 제외): {data}")
+        # ---
+        fields = data.replace(f"{MessagePrefix.MR_OD.value}:OK,", '').split(Constants.Protocol.OBJECT_FIELD_SEPARATOR)
+        logger.error(f"MR_OD: 수신 row(이미지 제외): {fields}")
+        if len(fields) != 6:
+            logger.error(f"MR_OD: 응답 필드 수 부족: {len(fields)} / row={fields}")
+            raise ValueError(f"필드 수 오류: {len(fields)} != 6")
             
-            return DetectedObject(**parsed_data)
+        object_id = int(fields[0])
+        object_type = MessageParser._parse_object_type(fields[1])
+        zone = MessageParser._parse_zone(fields[2])
+        timestamp = MessageParser._parse_timestamp(fields[3])
+        image_size = int(fields[4])
+        
+        # image_data는 별도로 전달받은 바이너리 데이터 사용
+        if len(image_data) != image_size:
+            logger.warning(f"이미지 크기 불일치: {len(image_data)} != {image_size}")
             
-        except Exception as e:
-            raise Exception(f"객체 정보 파싱 실패: {e}") from e
+        return DetectedObject(
+            object_id=object_id,
+            object_type=object_type,
+            x_coord=0.0,  # 상세 정보에는 좌표가 없음
+            y_coord=0.0,
+            zone=zone,
+            timestamp=timestamp,
+            image_data=image_data
+        )
     
     @staticmethod
     def _parse_required_fields(fields: List[str]) -> Dict[str, Any]:
@@ -203,8 +201,7 @@ class MessageParser:
                 'object_type': MessageParser._parse_object_type(fields[1]),
                 'x_coord': float(fields[2]),
                 'y_coord': float(fields[3]),
-                'zone': MessageParser._parse_zone(fields[4]),
-                'timestamp': MessageParser._parse_timestamp(fields[5])
+                'zone': MessageParser._parse_zone(fields[4]),                
             }
         except (ValueError, IndexError) as e:
             raise Exception(f"필수 필드 파싱 실패: {e}") from e
@@ -213,7 +210,9 @@ class MessageParser:
     def _parse_optional_fields(fields: List[str], include_image: bool) -> Dict[str, Any]:
         """선택적 필드 파싱"""
         result = {
+            'timestamp': MessageParser._parse_timestamp(fields[4]),
             'extra_info': None,
+            'image_size': int(fields[5]),
             'image_data': None
         }
         
@@ -265,16 +264,16 @@ class MessageParser:
                 raise ValueError(f"객체 타입 오류: {type_str}")
     
     @staticmethod
-    def _parse_zone(zone_str: str) -> AirportZone:
+    def _parse_zone(zone_str: str) -> Airportarea:
         """구역 파싱"""
         try:
             # 정수인 경우
             zone_id = int(zone_str)
-            return Constants.ZONE_MAPPING[zone_id]
+            return Constants.area_MAPPING[zone_id]
         except ValueError:
             # 문자열인 경우
             try:
-                return AirportZone[zone_str.upper()]
+                return Airportarea[zone_str.upper()]
             except KeyError:
                 raise ValueError(f"구역 이름 오류: {zone_str}")
     
@@ -325,7 +324,7 @@ class MessageParser:
                 object_type=ObjectType[fields[1]],
                 x_coord=float(fields[2]),
                 y_coord=float(fields[3]),
-                zone=AirportZone(fields[4]),
+                zone=Airportarea(fields[4]),
                 timestamp=MessageParser._parse_timestamp(fields[5])
             )
         except Exception as e:
@@ -337,14 +336,14 @@ class MessageInterface:
     
     @staticmethod
     def validate_object_info(object_id: int, object_type: ObjectType, x_coord: float, 
-                           y_coord: float, zone: AirportZone, timestamp: float) -> bool:
+                           y_coord: float, zone: Airportarea, timestamp: float) -> bool:
         """객체 정보 유효성 검증"""
         try:
             validators = [
                 lambda: isinstance(object_id, int) and object_id >= 0,
                 lambda: isinstance(object_type, ObjectType),
                 lambda: isinstance(x_coord, (int, float)) and isinstance(y_coord, (int, float)),
-                lambda: isinstance(zone, AirportZone),
+                lambda: isinstance(zone, Airportarea),
                 lambda: isinstance(timestamp, (int, float)) and timestamp >= 0
             ]
             
@@ -434,23 +433,22 @@ class MessageInterface:
                         logger.warning(f"알 수 없는 객체 타입: {object_type_str}")
                         continue
                 
-                # AirportZone 파싱 - 한글 value와 영문 key 모두 처리
+                # Airportarea 파싱 - 한글 value와 영문 key 모두 처리
                 try:
-                    zone = AirportZone[zone_str]
-                    logger.debug(f"AirportZone 영문 key로 파싱 성공: {zone.value}")
+                    zone = Airportarea[zone_str]
+                    logger.debug(f"Airportarea 영문 key로 파싱 성공: {zone.value}")
                 except KeyError:
                     # 한글 value로 시도
-                    for zone_type in AirportZone:
+                    for zone_type in Airportarea:
                         if zone_type.value == zone_str:
                             zone = zone_type
-                            logger.debug(f"AirportZone 한글 value로 파싱 성공: {zone.value}")
+                            logger.debug(f"Airportarea 한글 value로 파싱 성공: {zone.value}")
                             break
                     else:
                         logger.warning(f"알 수 없는 구역: {zone_str}")
                         continue
                 
                 # 타임스탬프 처리 (선택적)
-                timestamp = datetime.now()  # 기본값
                 if len(parts) > 5 and parts[5].strip():
                     try:
                         timestamp_str = parts[5].strip()
@@ -460,7 +458,11 @@ class MessageInterface:
                             timestamp = datetime.fromtimestamp(float(timestamp_str))
                         logger.debug(f"타임스탬프 파싱 성공: {timestamp}")
                     except (ValueError, OSError):
-                        logger.warning(f"타임스탬프 파싱 실패, 현재 시간 사용: {parts[5]}")
+                        logger.warning(f"타임스탬프 형식 오류")
+                        timestamp =None
+                else:
+                    logger.debug("타임스탬프 정보 없음")
+                    timestamp = None
                 
                 # 이미지 데이터 처리 (선택적)
                 image_data = None
@@ -474,7 +476,7 @@ class MessageInterface:
                         image_data = base64.b64decode(image_b64)
                         logger.debug(f"이미지 데이터 파싱 성공: {len(image_data)} bytes")
                     except Exception as e:
-                        logger.warning(f"이미지 데이터 파싱 실패: {e}")
+                        logger.debug(f"이미지 데이터 파싱 실패: {e}")
                         image_data = None
                 
                 # DetectedObject 생성

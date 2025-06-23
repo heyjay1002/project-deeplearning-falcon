@@ -4,10 +4,10 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime
 import base64
 
-from config.constants import ObjectType, AirportZone, BirdRiskLevel, RunwayRiskLevel
+from config.constants import ObjectType, Airportarea, BirdRiskLevel, RunwayRiskLevel
 from utils.tcp_client import TcpClient
 from utils.udp_client import UdpClient
-from utils.interface import DetectedObject
+from utils.interface import DetectedObject, BirdRisk, RunwayRisk, MessageInterface, MessageParser
 from utils.logger import logger
 from config.settings import Settings
 from utils.interface import ConnectionManager, ConnectionState
@@ -25,13 +25,14 @@ class NetworkManager(QObject):
 
     # UI가 연결할 시그널들
     object_detected = pyqtSignal(DetectedObject)
+    first_object_detected = pyqtSignal(DetectedObject)  # 최초 감지 이벤트용
     bird_risk_changed = pyqtSignal(BirdRiskLevel)
     runway_a_risk_changed = pyqtSignal(RunwayRiskLevel)
     runway_b_risk_changed = pyqtSignal(RunwayRiskLevel)
     object_detail_response = pyqtSignal(DetectedObject)
     object_detail_error = pyqtSignal(str)
-    frame_a_received = pyqtSignal(QImage, int)  # (프레임, 이미지ID)
-    frame_b_received = pyqtSignal(QImage, int)  # (프레임, 이미지ID)
+    frame_a_received = pyqtSignal(QImage, object)  # (프레임, 이미지ID)
+    frame_b_received = pyqtSignal(QImage, object)  # (프레임, 이미지ID)
     tcp_connection_status_changed = pyqtSignal(bool, str)
     udp_connection_status_changed = pyqtSignal(bool, str)
     network_health_updated = pyqtSignal(dict)  # 네트워크 건강 상태
@@ -59,6 +60,7 @@ class NetworkManager(QObject):
         """내부 클라이언트의 시그널을 NetworkManager의 시그널로 전달"""
         # TCP 클라이언트 시그널 연결
         self.tcp_client.object_detected.connect(self._handle_object_detected)
+        self.tcp_client.first_object_detected.connect(self._handle_first_object_detected)  # 최초 감지 이벤트
         self.tcp_client.bird_risk_changed.connect(self.bird_risk_changed)
         self.tcp_client.runway_a_risk_changed.connect(self.runway_a_risk_changed)
         self.tcp_client.runway_b_risk_changed.connect(self.runway_b_risk_changed)
@@ -152,6 +154,17 @@ class NetworkManager(QObject):
         except Exception as e:
             logger.error(f"객체 감지 처리 실패: {e}")
 
+    def _handle_first_object_detected(self, objects: List[DetectedObject]):
+        """최초 객체 감지 이벤트를 개별 객체로 처리 (알림용)"""
+        try:
+            for obj in objects:
+                # 최초 감지 이벤트는 바로 알림 시그널 발생
+                self.first_object_detected.emit(obj)
+                logger.info(f"최초 객체 감지 알림: ID {obj.object_id} ({obj.object_type.value})")
+                
+        except Exception as e:
+            logger.error(f"최초 객체 감지 처리 실패: {e}")
+
     def _validate_and_emit_object(self, obj_data):
         """객체 데이터 유효성 검증 후 시그널 발생"""
         try:
@@ -181,7 +194,7 @@ class NetworkManager(QObject):
             object_type = ObjectType(fields[1])
             x_coord = float(fields[2])
             y_coord = float(fields[3])
-            zone = AirportZone(fields[4])
+            zone = Airportarea(fields[4])
             
             # 선택적 필드 처리
             timestamp = datetime.now()
@@ -229,7 +242,7 @@ class NetworkManager(QObject):
         except Exception:
             return None
 
-    def _handle_udp_frame(self, camera_id: str, frame, image_id: Optional[int]):
+    def _handle_udp_frame(self, camera_id: str, frame, image_id: object):
         """UDP 프레임 처리 - 데이터 변환 및 전달만 담당"""
         try:
             if frame is None:
@@ -320,7 +333,7 @@ class NetworkManager(QObject):
             logger.info(f"UDP 연결 성공: {host}:{port}")
             logger.debug(f"연결 후 UDP 상태: {self.udp_client.is_connected()}")
 
-    def _handle_cctv_frame(self, camera_id: str, frame, image_id: int = 0):
+    def _handle_cctv_frame(self, camera_id: str, frame, image_id: object):
         """CCTV 프레임 처리 - TCP를 통한 프레임 처리"""
         try:
             # frame이 이미 QImage인 경우 직접 사용

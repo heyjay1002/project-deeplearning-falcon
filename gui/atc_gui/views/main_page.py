@@ -1,33 +1,20 @@
-from PyQt6.QtWidgets import *
 from PyQt6 import uic
-from PyQt6.QtGui import QPixmap, QColor, QImage, QPainter, QPen
+from PyQt6.QtGui import QImage
+from PyQt6.QtWidgets import QWidget, QLabel, QTableWidgetItem
 from PyQt6.QtCore import Qt, QTimer, pyqtSignal
 from datetime import datetime
-import sys
 import os
-
-# 상위 디렉토리를 파이썬 경로에 추가
-current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)  # atc_gui 디렉토리
-if parent_dir not in sys.path:
-    sys.path.append(parent_dir)
-
 from views.object_detail_dialog import ObjectDetailDialog
-from config.constants import BirdRiskLevel, RunwayRiskLevel, ObjectType, AirportZone
+from config.constants import BirdRiskLevel, RunwayRiskLevel
 from config.settings import Settings
-from utils.network_manager import NetworkManager
 from utils.interface import DetectedObject, BirdRisk, RunwayRisk
 from utils.logger import logger
 from widgets.map_marker_widget import MapMarkerWidget
-import time
-from collections import deque
-import cv2
 from typing import Optional
 
 class MainPage(QWidget):
     # 객체 목록 업데이트 시그널 추가
-    object_list_updated = pyqtSignal(set)   
-    object_detected = pyqtSignal(DetectedObject)
+    object_list_updated = pyqtSignal(set)
     bird_risk_alerted = pyqtSignal(BirdRisk)
     runway_risk_alerted = pyqtSignal(RunwayRisk)
 
@@ -40,9 +27,6 @@ class MainPage(QWidget):
         # 현재 처리된 객체 ID 저장
         self.current_object_ids = set()
         
-        # 최초 감지된 객체 ID 추적 (알림용)
-        self.first_detected_object_ids = set()
-
         # 설정 로드
         self.settings = Settings.get_instance()
 
@@ -137,19 +121,15 @@ class MainPage(QWidget):
     def on_cctv_a_response(self, response: str):
         """CCTV A 응답 처리"""
         if response == "OK":
-            logger.info("CCTV A 응답 성공 - UDP 프레임 수신 대기 중...")
+            logger.info(f"CCTV A 응답 성공: {response}")
             # CCTV 화면으로 전환
-            logger.info(f"CCTV 화면으로 전환: 현재 인덱스 {self.map_cctv_stack.currentIndex()} → 1")
             self.map_cctv_stack.setCurrentIndex(1)
-            logger.info(f"전환 후 인덱스: {self.map_cctv_stack.currentIndex()}")
             
             # UDP 프레임 수신을 기다리는 상태 표시
             self.label_cctv_1.setText("CCTV A 연결 중...\nUDP 프레임 수신 대기")
             self.label_cctv_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
             self.label_cctv_1.setStyleSheet("background-color: #f0f0f0; border: 1px solid #ccc;")
-            
-            # 라벨 상태 확인
-            logger.info(f"CCTV A 라벨 상태: visible={self.label_cctv_1.isVisible()}, geometry={self.label_cctv_1.geometry()}")
+          
         else:
             logger.error(f"CCTV A 응답 실패: {response}")
             # 오류 상태 표시
@@ -160,19 +140,14 @@ class MainPage(QWidget):
     def on_cctv_b_response(self, response: str):
         """CCTV B 응답 처리"""
         if response == "OK":
-            logger.info("CCTV B 응답 성공 - UDP 프레임 수신 대기 중...")
+            logger.info(f"CCTV B 응답 성공: {response}")
             # CCTV 화면으로 전환
-            logger.info(f"CCTV 화면으로 전환: 현재 인덱스 {self.map_cctv_stack.currentIndex()} → 1")
             self.map_cctv_stack.setCurrentIndex(1)
-            logger.info(f"전환 후 인덱스: {self.map_cctv_stack.currentIndex()}")
             
             # UDP 프레임 수신을 기다리는 상태 표시
             self.label_cctv_2.setText("CCTV B 연결 중...\nUDP 프레임 수신 대기")
             self.label_cctv_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
             self.label_cctv_2.setStyleSheet("background-color: #f0f0f0; border: 1px solid #ccc;")
-            
-            # 라벨 상태 확인
-            logger.info(f"CCTV B 라벨 상태: visible={self.label_cctv_2.isVisible()}, geometry={self.label_cctv_2.geometry()}")
         else:
             logger.error(f"CCTV B 응답 실패: {response}")
             # 오류 상태 표시
@@ -284,16 +259,19 @@ class MainPage(QWidget):
         new_objects = [obj for obj in objects if obj.object_id not in self.current_object_ids]
         logger.debug(f"새로운 객체: {len(new_objects)}개 (전체: {len(objects)}개)")
         
-        # 최초 감지된 객체들 (알림용) - first_detected_object_ids 업데이트 전에 찾기
-        first_detected_objects = [obj for obj in new_objects if obj.object_id not in self.first_detected_object_ids]
-        logger.debug(f"최초 감지된 객체: {len(first_detected_objects)}개 (first_detected_object_ids 크기: {len(self.first_detected_object_ids)})")
-        
         # 현재 처리된 객체 ID 업데이트
         self.current_object_ids.update(obj.object_id for obj in new_objects)
         
-        # 최초 감지된 객체 ID 업데이트 (알림 발생 후)
-        self.first_detected_object_ids.update(obj.object_id for obj in first_detected_objects)
-        
+        # 테이블에 있는 모든 객체를 리스트로 만듦
+        all_objects = []
+        for row in range(self.table_object_list.rowCount()):
+            object_id = int(self.table_object_list.item(row, 0).text())
+            # 객체 정보를 self.current_object_ids에서 찾아서 추가
+            for obj in objects:
+                if obj.object_id == object_id:
+                    all_objects.append(obj)
+                    break
+
         # 테이블 업데이트
         current_row_count = self.table_object_list.rowCount()
         self.table_object_list.setRowCount(current_row_count + len(new_objects))       
@@ -307,16 +285,21 @@ class MainPage(QWidget):
             # 종류
             self.table_object_list.setItem(row, 2, QTableWidgetItem(obj.object_type.value))
 
-        # 마커 업데이트
-        self.update_markers(new_objects)
+        # 기존 row도 갱신
+        for row in range(self.table_object_list.rowCount()):
+            object_id = int(self.table_object_list.item(row, 0).text())
+            for obj in objects:
+                if obj.object_id == object_id:
+                    # 위치/종류 등 갱신
+                    self.table_object_list.setItem(row, 1, QTableWidgetItem(obj.zone.value))
+                    self.table_object_list.setItem(row, 2, QTableWidgetItem(obj.object_type.value))
+                    break
+
+        # 마커 업데이트: 테이블에 있는 모든 객체 기준
+        self.update_markers(all_objects)
 
         # 처리된 객체 ID 목록을 메인 윈도우에 전달
         self.object_list_updated.emit(self.current_object_ids)
-
-        # 최초 감지된 객체들에 대해서만 알림 시그널 발생 (main.py로 전달)
-        for obj in first_detected_objects:
-            logger.info(f"새로운 객체 최초 감지: ID {obj.object_id} ({obj.object_type.value})")
-            self.object_detected.emit(obj)
 
     def update_markers(self, objects: list[DetectedObject]):
         """마커 업데이트"""
@@ -344,11 +327,11 @@ class MainPage(QWidget):
                 if obj.object_id in existing_object_ids:
                     # 기존 마커 업데이트
                     self.map_marker.update_marker(marker_data)
-                    logger.debug(f"마커 업데이트: ID {obj.object_id}")
+                    logger.debug(f"마커 업데이트: ID {obj.object_id}, 좌표=({obj.x_coord}, {obj.y_coord})")
                 else:
                     # 새 마커 추가
                     self.map_marker.add_dynamic_marker(marker_data)
-                    logger.debug(f"마커 추가: ID {obj.object_id}")
+                    logger.debug(f"마커 추가: ID {obj.object_id}, 좌표=({obj.x_coord}, {obj.y_coord})")
                     
             except Exception as e:
                 logger.error(f"마커 처리 중 오류 발생 (ID: {obj.object_id}): {str(e)}")
@@ -660,7 +643,6 @@ class MainPage(QWidget):
         """객체 목록 초기화"""
         logger.info("객체 목록 초기화")
         self.current_object_ids.clear()
-        self.first_detected_object_ids.clear()
         self.pending_objects.clear()
         self.table_object_list.setRowCount(0)
         

@@ -1,16 +1,23 @@
 import sys
 import os
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import socket
 import time
+import base64
+from datetime import datetime
 from PyQt6.QtWidgets import QApplication, QPushButton, QVBoxLayout, QWidget
-from PyQt6.QtCore import QThread, pyqtSignal, Qt
+from PyQt6.QtCore import QThread, pyqtSignal, Qt, QTimer
+
+# 상위 디렉토리를 파이썬 경로에 추가
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+if parent_dir not in sys.path:
+    sys.path.append(parent_dir)
+
+from config.constants import ObjectType, Airportarea as Zone
 from main import WindowClass
 from utils.interface import MessageInterface, MessagePrefix, DetectedObject
 from views.notification_dialog import NotificationDialog
-from config.constants import ObjectType, AirportZone as Zone
-import base64
-from datetime import datetime
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # 테스트 이벤트 서버 (TCP)
 class TestEventServer(QThread):
@@ -67,8 +74,8 @@ class TestEventServer(QThread):
 
 def send_test_event_raw(msg):
     try:
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    s.connect(('127.0.0.1', 50007))
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.connect(('127.0.0.1', 50007))
         s.sendall(f"{msg}\n".encode())
 
         # 서버로부터 응답을 받을 수도 있으므로, 수신 로직 추가
@@ -84,7 +91,7 @@ def send_test_event_raw(msg):
             # 타임아웃은 예상된 동작일 수 있음 (응답이 없는 경우)
             pass
         finally:
-    s.close()
+            s.close()
         
         # 응답이 있다면 처리
         if response_buffer:
@@ -189,7 +196,7 @@ def handle_test_event(window, prefix, payload):
 # monkey patch는 반드시 여기!
 origin_show_notification_dialog = WindowClass.show_notification_dialog
 
-def     debug_show_notification_dialog(self, dialog_type, data):
+def debug_show_notification_dialog(self, dialog_type, data):
     print(f"[DEBUG] 알림 다이얼로그 호출됨: {dialog_type}, id={getattr(data, 'object_id', None)}, type={getattr(data, 'object_type', None)}")
     if not hasattr(self, '_test_dialogs'):
         self._test_dialogs = []

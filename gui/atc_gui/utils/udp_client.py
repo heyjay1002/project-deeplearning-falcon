@@ -76,7 +76,7 @@ class UdpClient(QObject):
     """
     
     # 시그널 정의
-    frame_received = pyqtSignal(str, np.ndarray, int)  # (카메라 ID, 프레임, 이미지ID)
+    frame_received = pyqtSignal(str, np.ndarray, object)  # (카메라 ID, 프레임, 이미지ID)
     connection_status_changed = pyqtSignal(bool, str)  # (연결 상태, 메시지)
     performance_updated = pyqtSignal(dict)  # 성능 정보
     
@@ -267,39 +267,29 @@ class UdpClient(QObject):
             logger.error(f"데이터 처리 오류: {e}")
 
     def _parse_frame_header(self, data: bytes) -> Optional[FrameHeader]:
-        """프레임 헤더 파싱"""
+        """프레임 헤더 파싱 - 반드시 {camera_id}:{image_id}:{이미지데이터} 포맷만 허용"""
         try:
-            # 첫 번째 콜론까지가 카메라 ID
             first_colon = data.find(b':')
             if first_colon == -1:
-                logger.error("프레임 헤더 형식 오류: 첫 번째 콜론 없음")
+                logger.error("프레임 헤더 형식 오류: 첫 번째 콜론 없음 (camera_id)")
                 return None
-            
-            camera_id = data[:first_colon].decode('utf-8')
-            
-            # 두 번째 콜론까지가 이미지 ID (선택적)
+
             second_colon = data.find(b':', first_colon + 1)
-            
             if second_colon == -1:
-                # 이미지 ID가 없는 경우
-                image_id = None
-                data_offset = first_colon + 1
-            else:
-                # 이미지 ID가 있는 경우
-                try:
-                    image_id_str = data[first_colon + 1:second_colon].decode('utf-8')
-                    image_id = int(image_id_str)
-                    data_offset = second_colon + 1
-                except ValueError:
-                    # 이미지 ID 파싱 실패시 무시
-                    image_id = None
-                    data_offset = first_colon + 1
-                except Exception as e:
-                    image_id = None
-                    data_offset = first_colon + 1
-            
+                logger.error("프레임 헤더 형식 오류: 두 번째 콜론 없음 (image_id 필수)")
+                return None
+
+            camera_id = data[:first_colon].decode('utf-8')
+            image_id_str = data[first_colon + 1:second_colon].decode('utf-8')
+            try:
+                image_id = int(image_id_str)
+            except ValueError:
+                logger.error(f"이미지 ID 파싱 오류: '{image_id_str}' (int 변환 실패)")
+                return None
+            data_offset = second_colon + 1
+
             frame_size = len(data) - data_offset
-            
+
             header = FrameHeader(
                 camera_id=camera_id,
                 image_id=image_id,
@@ -307,9 +297,7 @@ class UdpClient(QObject):
                 frame_size=frame_size,
                 data_offset=data_offset
             )
-            
             return header
-            
         except Exception as e:
             logger.error(f"헤더 파싱 오류: {e}")
             return None

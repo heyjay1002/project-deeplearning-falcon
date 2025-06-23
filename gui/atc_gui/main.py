@@ -44,6 +44,7 @@ class WindowClass(QMainWindow):
 
     def _connect_network_signals(self):
         nm = self.network_manager
+        nm.first_object_detected.connect(lambda obj: self.show_notification_dialog('object', obj))  # 최초 감지 알림
         nm.bird_risk_changed.connect(lambda risk: self.show_notification_dialog('bird', risk))
         nm.runway_a_risk_changed.connect(lambda risk: self.show_notification_dialog('runway_a_risk', risk))
         nm.runway_b_risk_changed.connect(lambda risk: self.show_notification_dialog('runway_b_risk', risk))
@@ -116,9 +117,6 @@ class WindowClass(QMainWindow):
         
         # 탭 스타일 설정
         self._setup_tab_style()
-        
-        # MainPage의 최초 감지 시그널 연결
-        self.main_page.object_detected.connect(lambda obj: self.show_notification_dialog('object', obj))
 
     def _setup_tab_widget(self, tab_index: int, widget: QWidget):
         """개별 탭 위젯 설정"""

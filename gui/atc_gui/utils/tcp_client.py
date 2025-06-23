@@ -51,6 +51,7 @@ class TcpClient(QObject):
     connection_error = pyqtSignal(str)
     
     object_detected = pyqtSignal(list)
+    first_object_detected = pyqtSignal(list)  # 최초 감지 이벤트용
     bird_risk_changed = pyqtSignal(BirdRiskLevel)
     runway_a_risk_changed = pyqtSignal(RunwayRiskLevel)
     runway_b_risk_changed = pyqtSignal(RunwayRiskLevel)
@@ -272,9 +273,13 @@ class TcpClient(QObject):
                         self.message_buffer += text_data
                         # 완전한 메시지들 처리
                         self._process_buffered_messages()
-                    except UnicodeDecodeError:
+                    except UnicodeDecodeError as e:
                         # 부분적으로 손상된 데이터는 버퍼에서 제거
-                        logger.warning("부분적으로 손상된 텍스트 데이터 무시")
+                        logger.warning(f"부분적으로 손상된 텍스트 데이터 무시: {len(raw_data)} bytes, 오류: {e}")
+                        # 디버깅을 위해 처음 몇 바이트 출력
+                        if len(raw_data) > 0:
+                            hex_data = raw_data[:20].hex()
+                            logger.debug(f"손상된 데이터 샘플 (처음 20바이트): {hex_data}")
                         continue
                 
         except Exception as e:
@@ -287,21 +292,52 @@ class TcpClient(QObject):
             return False
             
         # 메시지 접두사 확인 (예: ME_OD:, MR_CA: 등)
-        text_prefixes = [b'ME_OD:', b'ME_BR:', b'ME_RA:', b'ME_RB:', 
+        text_prefixes = [b'ME_OD:', b'ME_FD:', b'ME_BR:', b'ME_RA:', b'ME_RB:', 
                         b'MR_CA:', b'MR_CB:', b'MR_MP:', b'MR_OD:']
         
         for prefix in text_prefixes:
             if data.startswith(prefix):
+                if prefix == b'MR_OD:':
+                    return self._check_if_contains_image_data(data)
                 return False
         
         # 바이너리 데이터로 판단 (이미지 데이터 등)
         return True
+    
+    def _check_if_contains_image_data(self, data: bytes) -> bool:
+        """MR_OD: 응답에 이미지 데이터가 포함되어 있는지 확인"""
+        try:
+            # MR_OD: 응답에서 콤마를 찾아 필드 분리
+            if b',' not in data:
+                return False
+                
+            # 첫 번째 콤마 이후의 데이터 확인
+            after_comma = data[data.find(b','):]
+            
+            # JPEG 시그니처 확인 (0xFF 0xD8 0xFF)
+            if b'\xff\xd8\xff' in after_comma:
+                logger.debug("MR_OD: 응답에서 JPEG 이미지 데이터 발견")
+                return True
+                
+            # PNG 시그니처 확인 (0x89 0x50 0x4E 0x47)
+            if b'\x89PNG' in after_comma:
+                logger.debug("MR_OD: 응답에서 PNG 이미지 데이터 발견")
+                return True
+                
+            return False
+            
+        except Exception as e:
+            logger.debug(f"이미지 데이터 확인 중 오류: {e}")
+            return False
 
     def _handle_binary_data(self, data: bytes):
         """바이너리 데이터 처리"""
         try:
+            # MR_OD: 응답인 경우 특별 처리
+            if data.startswith(b'MR_OD:'):
+                self._handle_object_detail_binary_response(data)
             # CCTV 프레임 데이터인지 확인
-            if self._is_cctv_frame_data(data):
+            elif self._is_cctv_frame_data(data):
                 self._process_cctv_frame(data)
             else:
                 # 기타 바이너리 데이터는 로그만 남김
@@ -309,6 +345,90 @@ class TcpClient(QObject):
                 
         except Exception as e:
             logger.error(f"바이너리 데이터 처리 오류: {e}")
+    
+    def _handle_object_detail_binary_response(self, data: bytes):
+        """MR_OD: 바이너리 응답 처리 (텍스트 + 이미지)"""
+        try:
+            # MR_OD: 응답에서 텍스트 부분과 이미지 부분 분리
+            # 형식: MR_OD:OK,{object_id},{object_type},{area},{timestamp},{image_size},{image_data}
+            
+            # 텍스트 부분과 이미지 부분을 분리
+            # image_size 필드까지 텍스트로 파싱하고, 그 이후는 이미지 데이터
+            text_end_pos = -1
+            comma_count = 0
+            target_commas = 5  # OK,object_id,object_type,area,timestamp,image_size
+            
+            for i, byte in enumerate(data):
+                if byte == ord(b','):
+                    comma_count += 1
+                    if comma_count == target_commas:
+                        text_end_pos = i
+                        break
+            
+            if text_end_pos == -1:
+                logger.error("MR_OD: 응답에서 image_size 필드를 찾을 수 없음")
+                return
+                
+            # 텍스트 부분 파싱 (image_size까지)
+            text_part = data[:text_end_pos].decode('utf-8')
+            logger.debug(f"MR_OD: 텍스트 부분: {text_part}")
+            
+            # 이미지 데이터 부분
+            image_data = data[text_end_pos + 1:]
+            
+            # 텍스트 부분을 메시지로 처리
+            if text_part.startswith("MR_OD:OK"):
+                # 성공 응답인 경우 이미지 데이터와 함께 처리
+                self._process_object_detail_with_image(text_part, image_data)
+            else:
+                # 오류 응답인 경우 텍스트만 처리
+                self._handle_object_detail_response(text_part)
+                
+        except Exception as e:
+            logger.error(f"MR_OD: 바이너리 응답 처리 오류: {e}")
+    
+    def _process_object_detail_with_image(self, text_part: str, image_data: bytes):
+        """이미지가 포함된 객체 상세보기 응답 처리"""
+        try:
+            # 텍스트 부분에서 객체 정보 파싱
+            # MR_OD:OK,{object_id},{object_type},{area},{timestamp},{image_size}
+            parts = text_part.split(',')
+            if len(parts) < 6:
+                logger.error(f"MR_OD: 응답 필드 수 부족: {len(parts)}")
+                return
+
+            # --- 추가: 이미지 데이터 제외한 raw 텍스트 필드 info 로그 ---
+            logger.info(f"MR_OD: 이미지 제외 raw 필드: {parts[:6]}")
+            # ---
+            
+            # 객체 정보 생성
+            object_id = int(parts[1])
+            object_type = MessageParser._parse_object_type(parts[2])
+            zone = MessageParser._parse_zone(parts[3])
+            timestamp = MessageParser._parse_timestamp(parts[4])
+            image_size = int(parts[5])
+            
+            # 이미지 크기 검증
+            if len(image_data) != image_size:
+                logger.warning(f"이미지 크기 불일치: {len(image_data)} != {image_size}")
+            
+            # DetectedObject 생성
+            obj = DetectedObject(
+                object_id=object_id,
+                object_type=object_type,
+                zone=zone,
+                timestamp=timestamp,
+                extra_info=None,
+                image_data=image_data
+            )
+            
+            # 시그널 발생
+            self.object_detail_response.emit(obj)
+            logger.info(f"이미지 포함 객체 상세보기 응답 처리 완료: ID {object_id}")
+            
+        except Exception as e:
+            logger.error(f"이미지 포함 객체 상세보기 처리 오류: {e}")
+            self.object_detail_error.emit(str(e))
 
     def _is_cctv_frame_data(self, data: bytes) -> bool:
         """CCTV 프레임 데이터인지 확인"""
@@ -425,6 +545,7 @@ class TcpClient(QObject):
             # 메시지 타입별 처리
             handler_map = {
                 MessagePrefix.ME_OD: self._handle_object_detection,
+                MessagePrefix.ME_FD: self._handle_first_detection,  # 최초 감지 이벤트
                 MessagePrefix.ME_BR: self._handle_bird_risk_change,
                 MessagePrefix.ME_RA: self._handle_runway_a_risk_change,
                 MessagePrefix.ME_RB: self._handle_runway_b_risk_change,
@@ -513,11 +634,22 @@ class TcpClient(QObject):
             return False
 
     # === 개별 메시지 핸들러 ===
+    def _handle_first_detection(self, data: str):
+        """최초 객체 감지 이벤트 처리 (ME_FD)"""
+        try:
+            objects = MessageInterface.parse_object_detection_event(data)
+            # 최초 감지 이벤트는 별도 시그널로 전달
+            self.first_object_detected.emit(objects)
+            logger.info(f"최초 객체 감지 이벤트 처리: {len(objects)}개 객체")
+        except Exception as e:
+            logger.error(f"최초 객체 감지 이벤트 처리 실패: {e}, 데이터: {data[:100]}")
+
     def _handle_object_detection(self, data: str):
-        """객체 감지 이벤트 처리"""
+        """일반 객체 감지 이벤트 처리 (ME_OD)"""
         try:
             objects = MessageInterface.parse_object_detection_event(data)
             self.object_detected.emit(objects)
+            logger.debug(f"일반 객체 감지 이벤트 처리: {len(objects)}개 객체")
         except Exception as e:
             logger.error(f"객체 감지 이벤트 처리 실패: {e}, 데이터: {data[:100]}")
 
@@ -576,7 +708,7 @@ class TcpClient(QObject):
         try:
             # "OK," 접두사 제거
             payload = data.split(',', 1)[1]
-            obj = MessageParser.parse_object_detail_info(payload, include_image=True)
+            obj = MessageParser.parse_object_detail_info(payload)
             self.object_detail_response.emit(obj)
         except Exception as e:
             logger.error(f"객체 상세보기 응답 파싱 실패: {e}")

@@ -140,7 +140,7 @@ class DynamicMarker(QLabel):
             else:
                 logger.warning(f"아이콘 로드 실패 (null): {icon_path}")
         else:
-            logger.warning(f"아이콘 파일을 찾을 수 없음: {icon_path}")
+            logger.debug(f"아이콘 파일을 찾을 수 없음: {icon_path}")
         
         # 아이콘 로드 실패 시 기본 마커 생성
         logger.debug("기본 파란색 마커 생성")

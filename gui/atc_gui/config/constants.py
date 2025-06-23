@@ -22,7 +22,7 @@ class RunwayRiskLevel(Enum):
     LOW = "안전"
     HIGH = "경고"
 
-class AirportZone(Enum):
+class Airportarea(Enum):
     """공항 구역 식별자"""    
     TWY_A = "TWY_A"
     TWY_B = "TWY_B"
@@ -59,6 +59,7 @@ class MessagePrefix(Enum):
     """메시지 프리픽스"""
     # 이벤트 메시지 (서버 -> GUI)
     ME_OD = "ME_OD"      # 객체 감지 이벤트
+    ME_FD = "ME_FD"      # 최초 객체 감지 이벤트
     ME_BR = "ME_BR"      # 조류 위험도 변경 이벤트
     ME_RA = "ME_RA"      # 활주로 A 위험도 변경 이벤트
     ME_RB = "ME_RB"      # 활주로 B 위험도 변경 이벤트
@@ -101,16 +102,16 @@ class Constants:
         1: RunwayRiskLevel.HIGH
     }
     
-    ZONE_MAPPING = {    
-        1: AirportZone.TWY_A,
-        2: AirportZone.TWY_B,
-        3: AirportZone.TWY_C,
-        4: AirportZone.TWY_D,
-        5: AirportZone.RWY_A,
-        6: AirportZone.RWY_B,
-        7: AirportZone.GRASS_A,
-        8: AirportZone.GRASS_B,
-        9: AirportZone.RAMP
+    area_MAPPING = {    
+        1: Airportarea.TWY_A,
+        2: Airportarea.TWY_B,
+        3: Airportarea.TWY_C,
+        4: Airportarea.TWY_D,
+        5: Airportarea.RWY_A,
+        6: Airportarea.RWY_B,
+        7: Airportarea.GRASS_A,
+        8: Airportarea.GRASS_B,
+        9: Airportarea.RAMP
     }
     
     SECURITY_LEVEL_MAPPING = {
@@ -125,6 +126,7 @@ class Constants:
         MESSAGE_FORMAT = {
             # 이벤트 메시지 (서버 -> GUI)
             MessagePrefix.ME_OD: "{prefix}:{object_info}[;{object_info}]*",
+            MessagePrefix.ME_FD: "{prefix}:{object_info_first}[;{object_info}]*",
             MessagePrefix.ME_BR: "{prefix}:{risk_level}",
             MessagePrefix.ME_RA: "{prefix}:{risk_level}",
             MessagePrefix.ME_RB: "{prefix}:{risk_level}",
@@ -151,12 +153,6 @@ class Constants:
     # --- 객체 정보 형식 ---
     class ObjectInfo:
         """객체 정보 문자열 형식 정의"""
-        OBJECT_INFO = "{object_id},{object_type},{x_coord},{y_coord},{zone},{timestamp}[,{extra_info}],{image_data}"
-        OBJECT_INFO_DETAIL = "{object_id},{object_type},{x_coord},{y_coord},{zone},{timestamp},{image_data}"
-
-    # --- 비디오 관련 ---
-    class Video:
-        """비디오 인코딩 및 품질 관련 상수"""
-        ENCODING = "utf-8"
-        QUALITY = 80
-        MAX_SIZE = (1920, 1080) 
+        OBJECT_INFO = "{object_id},{object_type},{x_coord},{y_coord},{area},{timestamp}[,{extra_info}]"
+        OBJECT_INFO_FIRST = "{object_id},{object_type},{x_coord},{y_coord},{area},{timestamp},{image_size},{image_data}"
+        OBJECT_INFO_DETAIL = "{object_id},{object_type},{area},{timestamp},{image_size},{image_data}"
