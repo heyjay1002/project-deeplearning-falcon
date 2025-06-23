@@ -9,6 +9,7 @@ class EventManager:
     이벤트 관리 및 핸들러 등록
     
     TCP 서버로부터 이벤트를 수신하고, 등록된 핸들러에게 전달합니다.
+    시뮬레이터 모드에서는 자동 이벤트 생성 기능을 제공합니다.
     """
     
     def __init__(self, server_host: str = "localhost", server_port: int = 5300, use_simulator: bool = True):
@@ -46,11 +47,18 @@ class EventManager:
             print(f"[EventManager] ❌ 서버 연결 실패")
             if self.use_simulator:
                 print(f"[EventManager] 🔄 시뮬레이터로 폴백")
+                # 🆕 시뮬레이터 자동 이벤트 설정
+                self._setup_simulator_events()
         return success
     
     def disconnect(self):
         """서버 연결 해제"""
         self.tcp_client.disconnect()
+        
+        # 🆕 시뮬레이터 자동 이벤트 중지
+        if hasattr(self, 'simulator') and self.simulator:
+            self.simulator.stop_auto_events()
+        
         print(f"[EventManager] 연결 해제 완료")
     
     def register_handler(self, event_name: str, handler: Callable):
@@ -58,11 +66,15 @@ class EventManager:
         이벤트 핸들러 등록
         
         Args:
-            event_name: 이벤트 이름 (BR_CHANGED, RUNWAY_ALPHA_STATUS_CHANGED 등)
+            event_name: 이벤트 이름 (BR_CHANGED, RWY_A_STATUS_CHANGED 등)
             handler: 이벤트 처리 함수 (event_data: dict를 인자로 받음)
         """
         self.tcp_client.register_event_handler(event_name, handler)
         print(f"[EventManager] 이벤트 핸들러 등록: {event_name}")
+        
+        # 🆕 시뮬레이터에도 핸들러 등록
+        if self.use_simulator and self.simulator:
+            self.simulator.register_event_handler(event_name, self._handle_simulator_event)
     
     def unregister_handler(self, event_name: str):
         """
@@ -101,6 +113,12 @@ class EventManager:
         """
         status = self.tcp_client.get_server_status()
         status["registered_events"] = self.get_registered_events()
+        
+        # 🆕 시뮬레이터 상태 추가
+        if self.use_simulator and self.simulator:
+            status["simulator_auto_events"] = getattr(self.simulator, 'auto_events_enabled', False)
+            status["simulator_event_intervals"] = getattr(self.simulator, 'event_intervals', {})
+        
         return status
     
     def handle_event(self, event_message: dict):
@@ -132,8 +150,71 @@ class EventManager:
         """
         event_name = event_message.get("event")
         if event_name in self.tcp_client.event_handlers:
-            for handler in self.tcp_client.event_handlers[event_name]:
-                try:
-                    handler(event_message)
-                except Exception as e:
-                    print(f"[EventManager] ❌ 핸들러 실행 오류: {e}")
+            handler = self.tcp_client.event_handlers[event_name]
+            try:
+                handler(event_message)
+            except Exception as e:
+                print(f"[EventManager] ❌ 핸들러 실행 오류: {e}")
+    
+    # 🆕 시뮬레이터 자동 이벤트 설정
+    def _setup_simulator_events(self):
+        """시뮬레이터 자동 이벤트 설정"""
+        if not self.use_simulator or not self.simulator:
+            return
+        
+        # 시뮬레이터에 이벤트 핸들러 등록
+        self.simulator.register_event_handler("BR_CHANGED", self._handle_simulator_event)
+        self.simulator.register_event_handler("RWY_A_STATUS_CHANGED", self._handle_simulator_event)
+        self.simulator.register_event_handler("RWY_B_STATUS_CHANGED", self._handle_simulator_event)
+        
+        # 자동 이벤트 시작
+        self.simulator.start_auto_events()
+        print("[EventManager] 🚀 시뮬레이터 자동 이벤트 시작")
+    
+    def _handle_simulator_event(self, event_data: dict):
+        """시뮬레이터 이벤트를 GUI로 전달"""
+        print(f"[EventManager] 📤 시뮬레이터 이벤트 전달: {event_data.get('event')} = {event_data.get('result')}")
+        self._notify_handlers(event_data)
+    
+    # 🆕 수동 이벤트 트리거 기능
+    def trigger_event(self, event_type: str) -> bool:
+        """
+        수동으로 이벤트 트리거
+        
+        Args:
+            event_type: 이벤트 타입 (BR_CHANGED, RWY_A_STATUS_CHANGED, RWY_B_STATUS_CHANGED)
+            
+        Returns:
+            성공 여부
+        """
+        if self.use_simulator and self.simulator:
+            event_data = self.simulator.generate_event(event_type)
+            if event_data:
+                self._handle_simulator_event(event_data)
+                return True
+        
+        return False
+    
+    # 🆕 자동 이벤트 제어 기능
+    def start_auto_events(self):
+        """자동 이벤트 시작"""
+        if self.use_simulator and self.simulator:
+            self.simulator.start_auto_events()
+            print("[EventManager] 🚀 자동 이벤트 시작")
+    
+    def stop_auto_events(self):
+        """자동 이벤트 중지"""
+        if self.use_simulator and self.simulator:
+            self.simulator.stop_auto_events()
+            print("[EventManager] ⏹️ 자동 이벤트 중지")
+    
+    def set_event_intervals(self, intervals: Dict[str, float]):
+        """
+        이벤트 간격 설정
+        
+        Args:
+            intervals: 이벤트 타입별 간격 (초)
+        """
+        if self.use_simulator and self.simulator:
+            self.simulator.event_intervals.update(intervals)
+            print(f"[EventManager] ⏱️ 이벤트 간격 설정: {intervals}")

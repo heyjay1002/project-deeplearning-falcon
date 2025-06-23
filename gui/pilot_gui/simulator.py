@@ -1,16 +1,18 @@
 import random
 import time
-from typing import Dict, Any, Optional, Tuple
+import threading
+from typing import Dict, Any, Optional, Tuple, Callable
 from datetime import datetime
 
 class TCPSimulator:
     """
-    TCP 서버 시뮬레이터
+    TCP 서버 시뮬레이터 (TCP 프로토콜 명세 준수 + 자동 이벤트 생성)
     
     실제 TCP 서버의 동작을 시뮬레이션하며, 다음 용도로 사용됩니다:
     1. 서버 연결 실패 시 폴백 메커니즘
     2. 개발 및 테스트 환경
     3. 오프라인 모드 지원
+    4. 자동 이벤트 생성 및 브로드캐스트
     """
     
     def __init__(self):
@@ -30,18 +32,18 @@ class TCPSimulator:
             {"risk_level": "LOW", "result": "BR_LOW"}  # 다시 LOW로 순환
         ]
         
-        # TCP 프로토콜 기준 활주로 상태 로테이션 (CLEAR/WARNING)
+        # TCP 프로토콜 기준 활주로 상태 로테이션 (CLEAR/BLOCKED)
         self.runway_alpha_rotation_states = [
             {"status": "CLEAR", "result": "CLEAR"},
-            {"status": "WARNING", "result": "WARNING"},
+            {"status": "BLOCKED", "result": "BLOCKED"},  # WARNING → BLOCKED로 수정
             {"status": "CLEAR", "result": "CLEAR"},
-            {"status": "WARNING", "result": "WARNING"}
+            {"status": "BLOCKED", "result": "BLOCKED"}
         ]
         
         self.runway_bravo_rotation_states = [
-            {"status": "WARNING", "result": "WARNING"},
+            {"status": "BLOCKED", "result": "BLOCKED"},  # WARNING → BLOCKED로 수정
             {"status": "CLEAR", "result": "CLEAR"},
-            {"status": "WARNING", "result": "WARNING"},
+            {"status": "BLOCKED", "result": "BLOCKED"},
             {"status": "CLEAR", "result": "CLEAR"}
         ]
         
@@ -60,7 +62,7 @@ class TCPSimulator:
                 "visibility": "10KM"
             },
             "RWY-BRAVO": {
-                "status": "WARNING",  # 초기 상태 - 경고
+                "status": "BLOCKED",  # 초기 상태 - 차단 (WARNING → BLOCKED)
                 "risk_level": "MEDIUM",
                 "condition": "WET", 
                 "wind": "270/12KT",
@@ -97,9 +99,81 @@ class TCPSimulator:
         self.bird_data = self.risk_scenarios[0].copy()
         self.bird_last_update = datetime.now()
         
+        # 🆕 자동 이벤트 생성 관련
+        self.auto_events_enabled = False
+        self.event_handlers: Dict[str, Callable] = {}
+        self.event_thread: Optional[threading.Thread] = None
+        self.event_intervals = {
+            "BR_CHANGED": 15.0,          # 15초마다 조류 위험도 변화
+            "RWY_A_STATUS_CHANGED": 20.0, # 20초마다 활주로 A 상태 변화
+            "RWY_B_STATUS_CHANGED": 25.0  # 25초마다 활주로 B 상태 변화
+        }
+        self.last_event_times = {
+            "BR_CHANGED": 0,
+            "RWY_A_STATUS_CHANGED": 0,
+            "RWY_B_STATUS_CHANGED": 0
+        }
+        
         print(f"[TCPSimulator] 🦅 조류 시나리오: {self.bird_data['risk_level']} 위험도 → {self.bird_data['result']}")
         print(f"[TCPSimulator] 🛬 활주로 상태: ALPHA({self.runway_data['RWY-ALPHA']['status']}), BRAVO({self.runway_data['RWY-BRAVO']['status']})")
-        print(f"[TCPSimulator] 🔄 TCP 프로토콜 기준 로테이션 모드")
+        print(f"[TCPSimulator] 🔄 TCP 프로토콜 명세 준수 모드")
+    
+    # 🆕 자동 이벤트 생성 기능
+    def start_auto_events(self):
+        """자동 이벤트 생성 시작"""
+        if self.auto_events_enabled:
+            print("[TCPSimulator] ⚠️ 자동 이벤트가 이미 실행 중입니다")
+            return
+        
+        self.auto_events_enabled = True
+        self.event_thread = threading.Thread(target=self._auto_event_loop, daemon=True)
+        self.event_thread.start()
+        print("[TCPSimulator] 🚀 자동 이벤트 생성 시작")
+    
+    def stop_auto_events(self):
+        """자동 이벤트 생성 중지"""
+        self.auto_events_enabled = False
+        if self.event_thread and self.event_thread.is_alive():
+            self.event_thread.join(timeout=2)
+        print("[TCPSimulator] ⏹️ 자동 이벤트 생성 중지")
+    
+    def register_event_handler(self, event_type: str, handler: Callable):
+        """이벤트 핸들러 등록"""
+        self.event_handlers[event_type] = handler
+        print(f"[TCPSimulator] 📝 이벤트 핸들러 등록: {event_type}")
+    
+    def _auto_event_loop(self):
+        """자동 이벤트 생성 루프"""
+        print("[TCPSimulator] 🔄 자동 이벤트 루프 시작")
+        
+        while self.auto_events_enabled:
+            try:
+                current_time = time.time()
+                
+                # 각 이벤트 타입별로 시간 간격 체크
+                for event_type, interval in self.event_intervals.items():
+                    last_time = self.last_event_times[event_type]
+                    
+                    if current_time - last_time >= interval:
+                        # 이벤트 생성 및 전송
+                        event_data = self.generate_event(event_type)
+                        if event_data and event_type in self.event_handlers:
+                            try:
+                                self.event_handlers[event_type](event_data)
+                                print(f"[TCPSimulator] 📤 자동 이벤트 전송: {event_type} = {event_data.get('result')}")
+                            except Exception as e:
+                                print(f"[TCPSimulator] ❌ 이벤트 핸들러 오류: {e}")
+                        
+                        self.last_event_times[event_type] = current_time
+                
+                # 1초 대기
+                time.sleep(1.0)
+                
+            except Exception as e:
+                print(f"[TCPSimulator] ❌ 자동 이벤트 루프 오류: {e}")
+                time.sleep(5.0)
+        
+        print("[TCPSimulator] 🔄 자동 이벤트 루프 종료")
     
     def _rotate_bird_state(self):
         """조류 위험도 로테이션 (TCP 프로토콜 기준)"""
@@ -116,7 +190,7 @@ class TCPSimulator:
         print(f"[TCPSimulator] 🦅 BIRD 로테이션: {old_level} → {self.bird_data['risk_level']} ({self.bird_data['result']})")
     
     def _rotate_runway_state(self, runway_id):
-        """활주로 상태 로테이션 (TCP 프로토콜 기준)"""
+        """활주로 상태 로테이션 (TCP 프로토콜 기준: CLEAR/BLOCKED)"""
         if runway_id == "RWY-ALPHA":
             self.runway_alpha_rotation_index = (self.runway_alpha_rotation_index + 1) % len(self.runway_alpha_rotation_states)
             new_state = self.runway_alpha_rotation_states[self.runway_alpha_rotation_index]
@@ -159,12 +233,12 @@ class TCPSimulator:
             
             runway_info = self.runway_data["RWY-ALPHA"]
             status = runway_info["status"]
-            result = "CLEAR" if status == "CLEAR" else "WARNING"
+            result = "CLEAR" if status == "CLEAR" else "BLOCKED"  # WARNING → BLOCKED로 수정
             
             return {
                 "type": "response",
                 "command": "RWY_A_STATUS",
-                "result": result,  # CLEAR 또는 WARNING
+                "result": result,  # CLEAR 또는 BLOCKED
                 "source": "simulator"
             }
             
@@ -174,12 +248,12 @@ class TCPSimulator:
             
             runway_info = self.runway_data["RWY-BRAVO"]
             status = runway_info["status"]
-            result = "CLEAR" if status == "CLEAR" else "WARNING"
+            result = "CLEAR" if status == "CLEAR" else "BLOCKED"  # WARNING → BLOCKED로 수정
             
             return {
                 "type": "response",
                 "command": "RWY_B_STATUS",
-                "result": result,  # CLEAR 또는 WARNING
+                "result": result,  # CLEAR 또는 BLOCKED
                 "source": "simulator"
             }
             
@@ -253,7 +327,7 @@ class TCPSimulator:
     
     def generate_event(self, event_type: str) -> Optional[Dict[str, Any]]:
         """
-        이벤트 생성
+        이벤트 생성 (TCP 프로토콜 명세 준수)
         
         Args:
             event_type: 이벤트 타입 (BR_CHANGED, RWY_A_STATUS_CHANGED 등)
@@ -266,23 +340,23 @@ class TCPSimulator:
             return {
                 "type": "event",
                 "event": "BR_CHANGED",
-                "result": self.bird_data["result"],
+                "result": self.bird_data["result"],  # BR_LOW, BR_MEDIUM, BR_HIGH
                 "timestamp": datetime.now().isoformat()
             }
-        elif event_type == "RWY_A_STATUS_CHANGED":
+        elif event_type == "RWY_A_STATUS_CHANGED":  # TCP 명세 준수
             self._rotate_runway_state("RWY-ALPHA")
             return {
                 "type": "event",
                 "event": "RWY_A_STATUS_CHANGED",
-                "result": self.runway_data["RWY-ALPHA"]["status"],
+                "result": self.runway_data["RWY-ALPHA"]["status"],  # CLEAR, BLOCKED
                 "timestamp": datetime.now().isoformat()
             }
-        elif event_type == "RWY_B_STATUS_CHANGED":
+        elif event_type == "RWY_B_STATUS_CHANGED":  # TCP 명세 준수
             self._rotate_runway_state("RWY-BRAVO")
             return {
                 "type": "event",
                 "event": "RWY_B_STATUS_CHANGED",
-                "result": self.runway_data["RWY-BRAVO"]["status"],
+                "result": self.runway_data["RWY-BRAVO"]["status"],  # CLEAR, BLOCKED
                 "timestamp": datetime.now().isoformat()
             }
         return None 

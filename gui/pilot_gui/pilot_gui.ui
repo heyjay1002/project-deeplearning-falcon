@@ -332,25 +332,12 @@ QPushButton:pressed {
      <rect>
       <x>40</x>
       <y>330</y>
-      <width>100</width>
+      <width>211</width>
       <height>35</height>
      </rect>
     </property>
     <property name="text">
      <string>STATUS</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btn_toggle">
-    <property name="geometry">
-     <rect>
-      <x>150</x>
-      <y>330</y>
-      <width>100</width>
-      <height>35</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>TOGGLE SQ</string>
     </property>
    </widget>
    <widget class="QGroupBox" name="group_system_status">
@@ -369,26 +356,13 @@ QPushButton:pressed {
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>250</y>
+       <y>220</y>
        <width>361</width>
        <height>25</height>
       </rect>
      </property>
      <property name="text">
       <string>main_server: False</string>
-     </property>
-    </widget>
-    <widget class="QLabel" name="status_structured_query">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>220</y>
-       <width>321</width>
-       <height>25</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>structured_query: True</string>
      </property>
     </widget>
     <widget class="QLabel" name="status_stt_engine">
@@ -649,7 +623,7 @@ QPushButton:pressed {
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
   </widget>

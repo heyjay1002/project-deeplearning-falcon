@@ -617,36 +617,22 @@ class PilotAvionics(QMainWindow):
             self.status_bird_risk.setText(f"BIRD RISK: {display_text}")
             
             # 색상 설정 (원래 UI 스타일 유지하면서 색상만 변경)
+            base_style = """QLabel {
+                font-weight: bold;
+                background-color: #000800;
+                border: 2px solid {border_color};
+                border-radius: 6px;
+                padding: 8px;
+                font-family: "Courier New", monospace;
+                color: {text_color};
+            }"""
+            
             if risk_level == "BR_HIGH":
-                style = """QLabel {
-                font-weight: bold;
-                background-color: #000800;
-                border: 2px solid #cc0000;
-                border-radius: 6px;
-                padding: 8px;
-                font-family: "Courier New", monospace;
-                color: #ff4444;
-            }"""
+                style = base_style.format(border_color="#cc0000", text_color="#ff4444")
             elif risk_level == "BR_MEDIUM":
-                style = """QLabel {
-                font-weight: bold;
-                background-color: #000800;
-                border: 2px solid #cc8800;
-                border-radius: 6px;
-                padding: 8px;
-                font-family: "Courier New", monospace;
-                color: #ffaa00;
-            }"""
+                style = base_style.format(border_color="#cc8800", text_color="#ffaa00")
             else:
-                style = """QLabel {
-                font-weight: bold;
-                background-color: #000800;
-                border: 2px solid #006600;
-                border-radius: 6px;
-                padding: 8px;
-                font-family: "Courier New", monospace;
-                color: #00ff00;
-            }"""
+                style = base_style.format(border_color="#006600", text_color="#00ff00")
             
             self.status_bird_risk.setStyleSheet(style)
             
@@ -670,26 +656,20 @@ class PilotAvionics(QMainWindow):
             self.status_runway_a.setText(f"RWY ALPHA: {display_text}")
             
             # 색상 설정 (원래 UI 스타일 유지하면서 색상만 변경)
+            base_style = """QLabel {
+                font-weight: bold;
+                background-color: #000800;
+                border: 2px solid {border_color};
+                border-radius: 6px;
+                padding: 8px;
+                font-family: "Courier New", monospace;
+                color: {text_color};
+            }"""
+            
             if status in ["RWY_A_CLEAR", "CLEAR"]:
-                style = """QLabel {
-                font-weight: bold;
-                background-color: #000800;
-                border: 2px solid #006600;
-                border-radius: 6px;
-                padding: 8px;
-                font-family: "Courier New", monospace;
-                color: #00ff00;
-            }"""
+                style = base_style.format(border_color="#006600", text_color="#00ff00")
             else:
-                style = """QLabel {
-                font-weight: bold;
-                background-color: #000800;
-                border: 2px solid #cc0000;
-                border-radius: 6px;
-                padding: 8px;
-                font-family: "Courier New", monospace;
-                color: #ff4444;
-            }"""
+                style = base_style.format(border_color="#cc0000", text_color="#ff4444")
             
             self.status_runway_a.setStyleSheet(style)
             
@@ -713,26 +693,20 @@ class PilotAvionics(QMainWindow):
             self.status_runway_b.setText(f"RWY BRAVO: {display_text}")
             
             # 색상 설정 (원래 UI 스타일 유지하면서 색상만 변경)
+            base_style = """QLabel {
+                font-weight: bold;
+                background-color: #000800;
+                border: 2px solid {border_color};
+                border-radius: 6px;
+                padding: 8px;
+                font-family: "Courier New", monospace;
+                color: {text_color};
+            }"""
+            
             if status in ["RWY_B_CLEAR", "CLEAR"]:
-                style = """QLabel {
-                font-weight: bold;
-                background-color: #000800;
-                border: 2px solid #006600;
-                border-radius: 6px;
-                padding: 8px;
-                font-family: "Courier New", monospace;
-                color: #00ff00;
-            }"""
+                style = base_style.format(border_color="#006600", text_color="#00ff00")
             else:
-                style = """QLabel {
-                font-weight: bold;
-                background-color: #000800;
-                border: 2px solid #cc0000;
-                border-radius: 6px;
-                padding: 8px;
-                font-family: "Courier New", monospace;
-                color: #ff4444;
-            }"""
+                style = base_style.format(border_color="#cc0000", text_color="#ff4444")
             
             self.status_runway_b.setStyleSheet(style)
             
