@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class FrameHeader:
     """프레임 헤더 정보"""
     camera_id: str
-    image_id: Optional[int]
+    image_id: int
     timestamp: datetime
     frame_size: int
     data_offset: int
@@ -34,6 +34,7 @@ class FrameProcessor:
         """프레임 디코딩"""
         try:
             if not frame_data:
+                logger.warning(f"프레임 데이터가 비어있음: 카메라 {camera_id}")
                 return None
             
             # OpenCV로 디코딩
@@ -41,6 +42,7 @@ class FrameProcessor:
             frame = cv2.imdecode(frame_arr, cv2.IMREAD_COLOR)
             
             if frame is None:
+                logger.error(f"OpenCV 디코딩 실패: 카메라 {camera_id}")
                 return None
             
             # 프레임 캐시에 저장 (최근 3개만 유지)
@@ -51,7 +53,8 @@ class FrameProcessor:
             
             return frame
             
-        except Exception:
+        except Exception as e:
+            logger.error(f"프레임 디코딩 오류 (카메라 {camera_id}): {e}")
             return None
     
     def get_cached_frame(self, camera_id: str) -> Optional[np.ndarray]:
@@ -62,7 +65,15 @@ class FrameProcessor:
 
 
 class UdpClient(QObject):
-    """최적화된 UDP 클라이언트 클래스 - 포트 및 지연 문제 수정"""
+    """UDP 클라이언트 - 순수한 UDP 통신 담당
+    
+    역할:
+    - UDP 소켓 관리
+    - 데이터 수신 및 파싱
+    - 프레임 처리
+    - 연결 상태 관리
+    - 성능 통계 수집
+    """
     
     # 시그널 정의
     frame_received = pyqtSignal(str, np.ndarray, int)  # (카메라 ID, 프레임, 이미지ID)
@@ -115,6 +126,11 @@ class UdpClient(QObject):
         self.performance_timer = QTimer(self)
         self.performance_timer.timeout.connect(self._update_performance_stats)
         self.performance_timer.start(5000)  # 5초마다
+        
+        # UDP 데이터 수신 상태 체크 타이머
+        self.udp_check_timer = QTimer(self)
+        self.udp_check_timer.timeout.connect(self._check_udp_data)
+        self.udp_check_timer.start(3000)  # 3초마다
 
     def connect(self, host: str, port: int) -> bool:
         """UDP 연결 - PyQt6 호환성 개선"""
@@ -124,28 +140,25 @@ class UdpClient(QObject):
                 self.disconnect()
             
             logger.info(f"UDP 연결 시도: {host}:{port}")
+            logger.debug(f"현재 소켓 상태: {self.socket.state()}")
             
-            # **수정**: QHostAddress 문제 해결 - LocalHost 사용
-            local_host = QHostAddress(QHostAddress.SpecialAddress.LocalHost)
-            if not self.socket.bind(local_host, port):
-                # 포트가 이미 사용 중인 경우 다른 포트 시도
-                for attempt_port in range(port, port + 100):
-                    if self.socket.bind(local_host, attempt_port):
-                        logger.info(f"대체 포트 사용: {attempt_port}")
-                        break
-                else:
-                    if not self._connection_logged:
-                        logger.error(f"UDP 소켓 바인딩 실패 (포트: {port})")
-                    self._connected = False
-                    self.connection_status_changed.emit(False, "소켓 바인딩 실패")
-                    return False
+            # UDP 소켓을 지정된 포트에 바인드
+            if not self.socket.bind(QHostAddress.SpecialAddress.Any, port):
+                logger.error(f"UDP 소켓 바인드 실패: {self.socket.errorString()}")
+                return False
             
+            logger.info(f"UDP 소켓 바인드 성공: 포트 {port}")
+            
+            # 서버 정보 저장
             self.server_address = host
             self.server_port = port
             self._connected = True
             self._connection_logged = True
             
-            logger.info(f"UDP 클라이언트 바인딩 성공 (포트: {self.socket.localPort()}), 데이터 수신 대기 중...")
+            logger.info(f"UDP 클라이언트 연결 성공, 데이터 수신 대기 중...")
+            logger.debug(f"연결 후 소켓 상태: {self.socket.state()}")
+            logger.debug(f"소켓이 데이터 수신 대기 중: {self.socket.isValid()}")
+            logger.info(f"UDP 클라이언트가 포트 {self.socket.localPort()}에 바인딩됨")
             
             # 상태 업데이트
             self.connection_status_changed.emit(True, f"서버 {host}:{port} 연결됨")
@@ -181,7 +194,9 @@ class UdpClient(QObject):
 
     def is_connected(self) -> bool:
         """연결 상태 확인"""
-        return self._connected and self.socket.state() != QUdpSocket.SocketState.UnconnectedState
+        is_connected = self._connected and self.socket.state() != QUdpSocket.SocketState.UnconnectedState
+        logger.debug(f"UDP 연결 상태 확인: _connected={self._connected}, socket_state={self.socket.state()}, is_valid={self.socket.isValid()}, result={is_connected}")
+        return is_connected
 
     def set_max_fps(self, fps: int):
         """최대 FPS 설정"""
@@ -198,12 +213,20 @@ class UdpClient(QObject):
     def _on_data_ready(self):
         """데이터 수신 이벤트 처리"""
         try:
+            datagram_count = 0
+            total_bytes = 0
+            
             while self.socket.hasPendingDatagrams():
                 datagram_size = self.socket.pendingDatagramSize()
                 data, host, port = self.socket.readDatagram(datagram_size)
                 
                 if data:
                     self._process_received_data(data)
+                    datagram_count += 1
+                    total_bytes += datagram_size
+                    
+            if datagram_count > 0:
+                logger.info(f"UDP 데이터그램 처리: {datagram_count}개, {total_bytes}바이트")
                     
         except Exception as e:
             logger.error(f"UDP 데이터 수신 오류: {str(e)}")
@@ -217,7 +240,10 @@ class UdpClient(QObject):
             # 헤더 파싱
             header = self._parse_frame_header(data)
             if not header:
+                logger.warning("프레임 헤더 파싱 실패")
                 return
+            
+            logger.info(f"프레임 수신: 카메라 {header.camera_id}, 이미지 ID {header.image_id}")
             
             # 프레임 디코딩
             frame_data = data[header.data_offset:]
@@ -231,8 +257,11 @@ class UdpClient(QObject):
                 self.stats['frames_received'] += 1
                 self.stats['frames_processed'] += 1
                 self._update_fps_stats(header.camera_id)
+                
+                logger.info(f"프레임 처리 완료: 카메라 {header.camera_id}, 이미지 ID {header.image_id}")
             else:
                 self.stats['frames_dropped'] += 1
+                logger.error(f"프레임 디코딩 실패: 카메라 {header.camera_id}, 이미지 ID {header.image_id}")
             
         except Exception as e:
             logger.error(f"데이터 처리 오류: {e}")
@@ -243,6 +272,7 @@ class UdpClient(QObject):
             # 첫 번째 콜론까지가 카메라 ID
             first_colon = data.find(b':')
             if first_colon == -1:
+                logger.error("프레임 헤더 형식 오류: 첫 번째 콜론 없음")
                 return None
             
             camera_id = data[:first_colon].decode('utf-8')
@@ -257,20 +287,28 @@ class UdpClient(QObject):
             else:
                 # 이미지 ID가 있는 경우
                 try:
-                    image_id = int(data[first_colon + 1:second_colon])
+                    image_id_str = data[first_colon + 1:second_colon].decode('utf-8')
+                    image_id = int(image_id_str)
                     data_offset = second_colon + 1
                 except ValueError:
                     # 이미지 ID 파싱 실패시 무시
                     image_id = None
                     data_offset = first_colon + 1
+                except Exception as e:
+                    image_id = None
+                    data_offset = first_colon + 1
             
-            return FrameHeader(
+            frame_size = len(data) - data_offset
+            
+            header = FrameHeader(
                 camera_id=camera_id,
                 image_id=image_id,
                 timestamp=datetime.now(),
-                frame_size=len(data) - data_offset,
+                frame_size=frame_size,
                 data_offset=data_offset
             )
+            
+            return header
             
         except Exception as e:
             logger.error(f"헤더 파싱 오류: {e}")
@@ -370,3 +408,12 @@ class UdpClient(QObject):
             
         except Exception:
             return False
+
+    def _check_udp_data(self):
+        """UDP 데이터 수신 상태 체크"""
+        if self._connected and self.socket.state() == QUdpSocket.SocketState.BoundState:
+            logger.debug(f"UDP 상태 체크: 연결됨, 소켓상태={self.socket.state()}, 대기중데이터그램={self.socket.hasPendingDatagrams()}")
+            if self.socket.hasPendingDatagrams():
+                logger.info(f"대기 중인 UDP 데이터그램 발견: {self.socket.pendingDatagramSize()}바이트")
+        else:
+            logger.debug(f"UDP 상태 체크: 연결되지 않음 또는 바인딩되지 않음 (상태: {self.socket.state()})")

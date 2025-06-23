@@ -1,7 +1,7 @@
 from PyQt6.QtCore import QObject, pyqtSignal, QTimer
 from PyQt6.QtNetwork import QTcpSocket
 import asyncio
-from typing import Optional, Dict, Any, Callable
+from typing import Optional, Any, Callable
 from datetime import datetime
 import time
 
@@ -60,6 +60,9 @@ class TcpClient(QObject):
     map_response = pyqtSignal(str)
     object_detail_response = pyqtSignal(DetectedObject)
     object_detail_error = pyqtSignal(str)
+    
+    # CCTV 프레임 시그널 추가
+    cctv_frame_received = pyqtSignal(str, object, int)  # (카메라 ID, QImage, 이미지ID)
 
     def __init__(self):
         super().__init__()
@@ -85,7 +88,7 @@ class TcpClient(QObject):
         # 재연결 관리
         self.reconnect_count = 0
         self.max_reconnect_attempts = None  # 무한 재시도
-        self.reconnect_interval = 3000  # 3초
+        self.reconnect_interval = 5000  # 5초
         
         # 로그 상태 추적 (중복 방지)
         self._initial_connection_attempted = False
@@ -100,6 +103,9 @@ class TcpClient(QObject):
             'connection_attempts': 0,
             'last_activity': time.time()
         }
+        
+        # CCTV 상태 추적
+        self.active_cctv = None  # 현재 활성화된 CCTV ('A' 또는 'B')
 
     def _setup_timers(self):
         """타이머 설정"""
@@ -112,6 +118,11 @@ class TcpClient(QObject):
         self.reconnect_timer = QTimer(self)
         self.reconnect_timer.setSingleShot(True)
         self.reconnect_timer.timeout.connect(self._attempt_reconnect)
+        
+        # 메시지 처리 타이머
+        self.message_timer = QTimer(self)
+        self.message_timer.timeout.connect(self._process_message_queue)
+        self.message_timer.start(100)  # 100ms마다
 
     def connect_to_server(self) -> bool:
         """서버에 연결 시도"""
@@ -174,27 +185,20 @@ class TcpClient(QObject):
     def is_connected(self) -> bool:
         """TCP 연결 상태 확인"""
         return (self.socket and 
-                self.socket.state() == QTcpSocket.SocketState.ConnectedState and
-                self.heartbeat_manager.is_connection_alive())
+                self.socket.state() == QTcpSocket.SocketState.ConnectedState)
 
     # === 요청 메서드 ===
     def request_cctv_a(self) -> bool:
         """CCTV A 영상 요청"""
-        return self._send_request(
-            MessageInterface.create_cctv_request, 
-            "A", 
-            "CCTV A 요청",
-            priority=1
-        )
+        self.active_cctv = 'A'
+        success = self._send_request(MessageInterface.create_cctv_request, "A", "CCTV A 요청")
+        return success
 
     def request_cctv_b(self) -> bool:
         """CCTV B 영상 요청"""
-        return self._send_request(
-            MessageInterface.create_cctv_request, 
-            "B", 
-            "CCTV B 요청",
-            priority=1
-        )
+        self.active_cctv = 'B'
+        success = self._send_request(MessageInterface.create_cctv_request, "B", "CCTV B 요청")
+        return success
 
     def request_map(self) -> bool:
         """지도 영상 요청"""
@@ -252,21 +256,105 @@ class TcpClient(QObject):
         try:
             while self.socket.bytesAvailable():
                 raw_data = self.socket.readAll().data()
-                text_data = raw_data.decode('utf-8')
-                self.message_buffer += text_data
                 
                 # 통계 업데이트
                 self.stats['bytes_received'] += len(raw_data)
                 self.stats['last_activity'] = time.time()
                 
-                # 완전한 메시지들 처리
-                self._process_buffered_messages()
+                # 바이너리 데이터인지 텍스트 데이터인지 확인
+                if self._is_binary_data(raw_data):
+                    # 바이너리 데이터 처리 (이미지 등)
+                    self._handle_binary_data(raw_data)
+                else:
+                    # 텍스트 데이터 처리
+                    try:
+                        text_data = raw_data.decode('utf-8')
+                        self.message_buffer += text_data
+                        # 완전한 메시지들 처리
+                        self._process_buffered_messages()
+                    except UnicodeDecodeError:
+                        # 부분적으로 손상된 데이터는 버퍼에서 제거
+                        logger.warning("부분적으로 손상된 텍스트 데이터 무시")
+                        continue
                 
-        except UnicodeDecodeError:
-            self.message_buffer = ""  # 손상된 버퍼 초기화
-            logger.error("TCP 데이터 디코딩 오류")
         except Exception as e:
             logger.error(f"TCP 데이터 수신 오류: {e}")
+
+    def _is_binary_data(self, data: bytes) -> bool:
+        """바이너리 데이터인지 확인"""
+        # 첫 몇 바이트가 텍스트 메시지 형식인지 확인
+        if len(data) < 10:
+            return False
+            
+        # 메시지 접두사 확인 (예: ME_OD:, MR_CA: 등)
+        text_prefixes = [b'ME_OD:', b'ME_BR:', b'ME_RA:', b'ME_RB:', 
+                        b'MR_CA:', b'MR_CB:', b'MR_MP:', b'MR_OD:']
+        
+        for prefix in text_prefixes:
+            if data.startswith(prefix):
+                return False
+        
+        # 바이너리 데이터로 판단 (이미지 데이터 등)
+        return True
+
+    def _handle_binary_data(self, data: bytes):
+        """바이너리 데이터 처리"""
+        try:
+            # CCTV 프레임 데이터인지 확인
+            if self._is_cctv_frame_data(data):
+                self._process_cctv_frame(data)
+            else:
+                # 기타 바이너리 데이터는 로그만 남김
+                logger.debug(f"바이너리 데이터 수신: {len(data)} bytes")
+                
+        except Exception as e:
+            logger.error(f"바이너리 데이터 처리 오류: {e}")
+
+    def _is_cctv_frame_data(self, data: bytes) -> bool:
+        """CCTV 프레임 데이터인지 확인"""
+        # 간단한 휴리스틱: JPEG/PNG 시그니처 확인
+        jpeg_signatures = [b'\xff\xd8\xff', b'\xff\xd8\xff\xe0', b'\xff\xd8\xff\xe1']
+        png_signature = b'\x89PNG\r\n\x1a\n'
+        
+        if data.startswith(png_signature):
+            return True
+            
+        for sig in jpeg_signatures:
+            if data.startswith(sig):
+                return True
+                
+        return False
+
+    def _process_cctv_frame(self, data: bytes):
+        """CCTV 프레임 데이터 처리"""
+        try:
+            # OpenCV로 이미지 디코딩
+            import cv2
+            import numpy as np
+            
+            frame_arr = np.frombuffer(data, dtype=np.uint8)
+            frame = cv2.imdecode(frame_arr, cv2.IMREAD_COLOR)
+            
+            if frame is not None:
+                # QImage로 변환
+                from PyQt6.QtGui import QImage
+                
+                # BGR을 RGB로 변환
+                rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                h, w, ch = rgb_frame.shape
+                bytes_per_line = ch * w
+                
+                qimage = QImage(rgb_frame.data, w, h, bytes_per_line, QImage.Format.Format_RGB888)
+                
+                # 활성 CCTV에 따라 시그널 발생
+                if self.active_cctv:
+                    logger.debug(f"CCTV {self.active_cctv} 프레임 수신: {w}x{h}")
+                    self.cctv_frame_received.emit(self.active_cctv, qimage, 0)
+                else:
+                    logger.warning("활성 CCTV가 설정되지 않음")
+                
+        except Exception as e:
+            logger.error(f"CCTV 프레임 처리 오류: {e}")
 
     def _on_socket_error(self, error):
         """소켓 오류 처리"""
@@ -478,8 +566,8 @@ class TcpClient(QObject):
             elif data.startswith("ERR"):
                 self._handle_object_detail_error_response(data)
             else:
-                raise ProtocolError("알 수 없는 응답 형식")
-        except (ParseError, ProtocolError) as e:
+                raise Exception("알 수 없는 응답 형식")
+        except Exception as e:
             logger.error(f"객체 상세보기 응답 처리 실패: {e}")
             self.object_detail_error.emit(str(e))
 
@@ -490,7 +578,7 @@ class TcpClient(QObject):
             payload = data.split(',', 1)[1]
             obj = MessageParser.parse_object_detail_info(payload, include_image=True)
             self.object_detail_response.emit(obj)
-        except (ParseError, ProtocolError) as e:
+        except Exception as e:
             logger.error(f"객체 상세보기 응답 파싱 실패: {e}")
             self.object_detail_error.emit(str(e))
 

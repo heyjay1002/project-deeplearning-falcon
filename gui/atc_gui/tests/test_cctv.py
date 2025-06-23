@@ -45,7 +45,7 @@ class TestServer:
         # TCP 서버
         self.tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.tcp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.tcp_socket.bind(('0.0.0.0', self.tcp_port))
+        self.tcp_socket.bind(('127.0.0.1', self.tcp_port))
         self.tcp_socket.listen(1)
         
         # UDP 소켓

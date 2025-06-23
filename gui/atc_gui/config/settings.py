@@ -4,9 +4,11 @@ from typing import Optional
 @dataclass
 class ServerSettings:
     """서버 연결 설정"""
-    tcp_ip: str = "127.0.0.1"
+    tcp_ip: str = "192.168.0.2"
+    # tcp_ip: str = "127.0.0.1"
     tcp_port: int = 5100
-    udp_ip: str = "127.0.0.1"
+    udp_ip: str = "192.168.0.2"
+    # udp_ip: str = "127.0.0.1"
     udp_port: int = 4100
     connection_timeout: int = 3  # 초 단위
     reconnect_interval: int = 3  # 초 단위

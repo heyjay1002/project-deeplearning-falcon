@@ -495,7 +495,6 @@ class MessageInterface:
                 logger.error(f"객체 레코드 {i+1} 파싱 실패: {e}, 레코드: {record}")
                 continue
         
-        logger.info(f"객체 감지 이벤트 파싱 완료: {len(objects)}개 객체")
         return objects
     
     @staticmethod

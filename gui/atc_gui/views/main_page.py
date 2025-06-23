@@ -39,6 +39,9 @@ class MainPage(QWidget):
 
         # 현재 처리된 객체 ID 저장
         self.current_object_ids = set()
+        
+        # 최초 감지된 객체 ID 추적 (알림용)
+        self.first_detected_object_ids = set()
 
         # 설정 로드
         self.settings = Settings.get_instance()
@@ -58,9 +61,6 @@ class MainPage(QWidget):
 
         # 상세보기 다이얼로그 설정
         self.setup_detail_dialog()
-
-        # 첫 객체 감지 여부를 추적하는 변수
-        self.is_first_detection = True
 
         # 객체 업데이트 최적화를 위한 변수들
         self.pending_objects = []  # 대기 중인 객체 목록
@@ -107,34 +107,78 @@ class MainPage(QWidget):
         if self.network_manager is None:
             raise ValueError("network_manager가 필요합니다.")
 
+        logger.info("네트워크 매니저 시그널 연결 시작")
+        
         self.network_manager.object_detected.connect(self.update_object_list)
         self.network_manager.bird_risk_changed.connect(self.update_bird_risk)
         self.network_manager.runway_a_risk_changed.connect(self.update_runway_a_risk)
         self.network_manager.runway_b_risk_changed.connect(self.update_runway_b_risk)
         self.network_manager.object_detail_response.connect(self.update_object_detail)
         self.network_manager.object_detail_error.connect(self.handle_object_detail_error)
+        
+        # CCTV 프레임 시그널 연결
+        logger.info("CCTV 프레임 시그널 연결 시도")
+        logger.debug(f"frame_a_received 시그널 존재: {hasattr(self.network_manager, 'frame_a_received')}")
+        logger.debug(f"frame_b_received 시그널 존재: {hasattr(self.network_manager, 'frame_b_received')}")
+        
         self.network_manager.frame_a_received.connect(self.update_cctv_a_frame)
         self.network_manager.frame_b_received.connect(self.update_cctv_b_frame)
+        logger.info("CCTV 프레임 시그널 연결 완료")
+        
         self.network_manager.tcp_connection_status_changed.connect(self.update_tcp_connection_status)
         self.network_manager.udp_connection_status_changed.connect(self.update_udp_connection_status)
         
         # CCTV 응답 시그널 연결
         self.network_manager.tcp_client.cctv_a_response.connect(self.on_cctv_a_response)
         self.network_manager.tcp_client.cctv_b_response.connect(self.on_cctv_b_response)
+        
+        logger.info("네트워크 매니저 시그널 연결 완료")
 
     def on_cctv_a_response(self, response: str):
         """CCTV A 응답 처리"""
         if response == "OK":
-            logger.info("CCTV A 응답: OK")
+            logger.info("CCTV A 응답 성공 - UDP 프레임 수신 대기 중...")
+            # CCTV 화면으로 전환
+            logger.info(f"CCTV 화면으로 전환: 현재 인덱스 {self.map_cctv_stack.currentIndex()} → 1")
+            self.map_cctv_stack.setCurrentIndex(1)
+            logger.info(f"전환 후 인덱스: {self.map_cctv_stack.currentIndex()}")
+            
+            # UDP 프레임 수신을 기다리는 상태 표시
+            self.label_cctv_1.setText("CCTV A 연결 중...\nUDP 프레임 수신 대기")
+            self.label_cctv_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.label_cctv_1.setStyleSheet("background-color: #f0f0f0; border: 1px solid #ccc;")
+            
+            # 라벨 상태 확인
+            logger.info(f"CCTV A 라벨 상태: visible={self.label_cctv_1.isVisible()}, geometry={self.label_cctv_1.geometry()}")
         else:
             logger.error(f"CCTV A 응답 실패: {response}")
+            # 오류 상태 표시
+            self.label_cctv_1.setText(f"CCTV A 연결 실패\n{response}")
+            self.label_cctv_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.label_cctv_1.setStyleSheet("background-color: #ffebee; border: 1px solid #f44336; color: #d32f2f;")
 
     def on_cctv_b_response(self, response: str):
         """CCTV B 응답 처리"""
         if response == "OK":
-            logger.info("CCTV B 응답: OK")        
+            logger.info("CCTV B 응답 성공 - UDP 프레임 수신 대기 중...")
+            # CCTV 화면으로 전환
+            logger.info(f"CCTV 화면으로 전환: 현재 인덱스 {self.map_cctv_stack.currentIndex()} → 1")
+            self.map_cctv_stack.setCurrentIndex(1)
+            logger.info(f"전환 후 인덱스: {self.map_cctv_stack.currentIndex()}")
+            
+            # UDP 프레임 수신을 기다리는 상태 표시
+            self.label_cctv_2.setText("CCTV B 연결 중...\nUDP 프레임 수신 대기")
+            self.label_cctv_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.label_cctv_2.setStyleSheet("background-color: #f0f0f0; border: 1px solid #ccc;")
+            
+            # 라벨 상태 확인
+            logger.info(f"CCTV B 라벨 상태: visible={self.label_cctv_2.isVisible()}, geometry={self.label_cctv_2.geometry()}")
         else:
             logger.error(f"CCTV B 응답 실패: {response}")
+            # 오류 상태 표시
+            self.label_cctv_2.setText(f"CCTV B 연결 실패\n{response}")
+            self.label_cctv_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            self.label_cctv_2.setStyleSheet("background-color: #ffebee; border: 1px solid #f44336; color: #d32f2f;")
 
     def setup_status_bar(self):
         """커스텀 상태바 위젯 설정 (TCP/UDP 상태만)"""
@@ -218,9 +262,13 @@ class MainPage(QWidget):
         # 단일 객체인 경우 리스트로 변환
         if isinstance(objects, DetectedObject):
             objects = [objects]
-            
+        
+        # pending_objects에서 중복 제거
+        existing_pending_ids = {obj.object_id for obj in self.pending_objects}
+        new_objects = [obj for obj in objects if obj.object_id not in existing_pending_ids]
+        
         # 대기 중인 객체 목록에 추가
-        self.pending_objects.extend(objects)
+        self.pending_objects.extend(new_objects)
         
         # 대기 중인 객체가 너무 많아지면 강제로 업데이트
         if len(self.pending_objects) >= self.settings.data.object_update_force_threshold:
@@ -234,15 +282,24 @@ class MainPage(QWidget):
         
         # 중복 제거: 이미 처리된 객체는 제외
         new_objects = [obj for obj in objects if obj.object_id not in self.current_object_ids]
-            
+        logger.debug(f"새로운 객체: {len(new_objects)}개 (전체: {len(objects)}개)")
+        
+        # 최초 감지된 객체들 (알림용) - first_detected_object_ids 업데이트 전에 찾기
+        first_detected_objects = [obj for obj in new_objects if obj.object_id not in self.first_detected_object_ids]
+        logger.debug(f"최초 감지된 객체: {len(first_detected_objects)}개 (first_detected_object_ids 크기: {len(self.first_detected_object_ids)})")
+        
         # 현재 처리된 객체 ID 업데이트
         self.current_object_ids.update(obj.object_id for obj in new_objects)
         
-        # 테이블 업데이트
-        self.table_object_list.setRowCount(len(self.current_object_ids))
+        # 최초 감지된 객체 ID 업데이트 (알림 발생 후)
+        self.first_detected_object_ids.update(obj.object_id for obj in first_detected_objects)
         
-        # 모든 객체 정보 업데이트
-        for row, obj in enumerate(new_objects):
+        # 테이블 업데이트
+        current_row_count = self.table_object_list.rowCount()
+        self.table_object_list.setRowCount(current_row_count + len(new_objects))       
+ 
+        for i, obj in enumerate(new_objects):
+            row = current_row_count + i
             # ID
             self.table_object_list.setItem(row, 0, QTableWidgetItem(str(obj.object_id)))
             # 위치
@@ -256,11 +313,10 @@ class MainPage(QWidget):
         # 처리된 객체 ID 목록을 메인 윈도우에 전달
         self.object_list_updated.emit(self.current_object_ids)
 
-        # 첫 객체 감지 시 시그널로 전달
-        if self.is_first_detection and new_objects:
-            self.is_first_detection = False
-            logger.info("첫 번째 객체 감지")
-            self.object_detected.emit(new_objects[0])  # 시그널로만 전달
+        # 최초 감지된 객체들에 대해서만 알림 시그널 발생 (main.py로 전달)
+        for obj in first_detected_objects:
+            logger.info(f"새로운 객체 최초 감지: ID {obj.object_id} ({obj.object_type.value})")
+            self.object_detected.emit(obj)
 
     def update_markers(self, objects: list[DetectedObject]):
         """마커 업데이트"""
@@ -490,14 +546,27 @@ class MainPage(QWidget):
     def show_cctv(self):
         """CCTV 보기"""
         idx = self.combo_cctv.currentIndex()
+        
         if idx == 0:
             logger.info(f"CCTV A 보기 요청")
-            self.map_cctv_stack.setCurrentIndex(1)
-            self.network_manager.request_cctv_a()
+            if self.network_manager:
+                success = self.network_manager.request_cctv_a()
+                if success:
+                    logger.info("CCTV A 요청 전송 성공")
+                else:
+                    logger.error("CCTV A 요청 전송 실패")
+            else:
+                logger.error("네트워크 매니저가 없음")
         elif idx == 1:
             logger.info(f"CCTV B 보기 요청")
-            self.map_cctv_stack.setCurrentIndex(1)
-            self.network_manager.request_cctv_b()
+            if self.network_manager:
+                success = self.network_manager.request_cctv_b()
+                if success:
+                    logger.info("CCTV B 요청 전송 성공")
+                else:
+                    logger.error("CCTV B 요청 전송 실패")
+            else:
+                logger.error("네트워크 매니저가 없음")
 
     def show_table(self):
         """테이블 보기"""
@@ -519,10 +588,15 @@ class MainPage(QWidget):
         """CCTV A 프레임 업데이트"""
         try:
             if frame.isNull():
+                logger.error(f"CCTV A 프레임이 Null: 이미지 ID {image_id}")
                 return
 
             # 라벨 크기에 맞게 이미지 크기 조정
             label_size = self.label_cctv_1.size()
+            
+            if label_size.width() == 0 or label_size.height() == 0:
+                logger.warning(f"CCTV A 라벨 크기가 0: 이미지 ID {image_id}, 기본 크기 사용")
+                label_size = frame.size()
             
             scaled_pixmap = QPixmap.fromImage(frame).scaled(
                 label_size,
@@ -535,20 +609,29 @@ class MainPage(QWidget):
             self.label_cctv_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
             
             # 프레임 업데이트 강제
-            self.label_cctv_1.repaint()
+            self.label_cctv_1.update()
+            
+            logger.info(f"CCTV A 프레임 업데이트 완료: 이미지 ID {image_id}")
             
         except Exception as e:
-            logger.error(f"CCTV A 프레임 업데이트 오류: {str(e)}")
+            logger.error(f"CCTV A 프레임 업데이트 오류 (이미지 ID {image_id}): {str(e)}")
 
     def update_cctv_b_frame(self, frame: QImage, image_id: int = 0):
         """CCTV B 프레임 업데이트"""
         try:
             if frame.isNull():
+                logger.error(f"CCTV B 프레임이 Null: 이미지 ID {image_id}")
                 return
                 
             # 라벨 크기에 맞게 이미지 크기 조정
+            label_size = self.label_cctv_2.size()
+            
+            if label_size.width() == 0 or label_size.height() == 0:
+                logger.warning(f"CCTV B 라벨 크기가 0: 이미지 ID {image_id}, 기본 크기 사용")
+                label_size = frame.size()
+            
             scaled_pixmap = QPixmap.fromImage(frame).scaled(
-                self.label_cctv_2.size(),
+                label_size,
                 Qt.AspectRatioMode.KeepAspectRatio,
                 Qt.TransformationMode.SmoothTransformation
             )
@@ -558,10 +641,12 @@ class MainPage(QWidget):
             self.label_cctv_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
             
             # 프레임 업데이트 강제
-            self.label_cctv_2.repaint()
+            self.label_cctv_2.update()
+            
+            logger.info(f"CCTV B 프레임 업데이트 완료: 이미지 ID {image_id}")
             
         except Exception as e:
-            logger.error(f"CCTV B 프레임 업데이트 오류: {str(e)}")
+            logger.error(f"CCTV B 프레임 업데이트 오류 (이미지 ID {image_id}): {str(e)}")
 
     def closeEvent(self, event):
         """위젯 종료 시 처리"""
@@ -570,3 +655,15 @@ class MainPage(QWidget):
             self.map_marker.clear_markers()
         
         super().closeEvent(event)
+
+    def clear_object_list(self):
+        """객체 목록 초기화"""
+        logger.info("객체 목록 초기화")
+        self.current_object_ids.clear()
+        self.first_detected_object_ids.clear()
+        self.pending_objects.clear()
+        self.table_object_list.setRowCount(0)
+        
+        # 마커도 정리
+        if hasattr(self, 'map_marker'):
+            self.map_marker.clear_markers()
