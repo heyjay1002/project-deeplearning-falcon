@@ -3,7 +3,7 @@ from PyQt6.QtGui import QImage
 from models.detected_object import DetectedObject
 from config.constants import ObjectType, AirportZone, BirdRiskLevel, RunwayRiskLevel
 from utils.tcp_client import TcpClient
-from utils.udp_client import UdpClient
+from gui.atc_gui.trash.udp_client_old2 import UdpClient
 from utils.logger import logger
 from config.settings import Settings
 import cv2

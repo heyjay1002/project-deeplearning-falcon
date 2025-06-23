@@ -1,4 +1,5 @@
 import sys
+import os
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
@@ -14,7 +15,9 @@ from utils.network_manager import NetworkManager
 class WindowClass(QMainWindow):
     def __init__(self):
         super().__init__()
-        uic.loadUi("ui/main_window.ui", self)
+        # UI 파일 경로를 절대 경로로 설정
+        ui_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ui/main_window.ui")
+        uic.loadUi(ui_file_path, self)
         self.setWindowTitle("FALCON")
         
         # 창 크기 설정 
@@ -31,6 +34,9 @@ class WindowClass(QMainWindow):
         
         # 네트워크 시그널 연결
         self._connect_network_signals()
+        
+        # 네트워크 서비스 시작
+        self.network_manager.start_services()
 
     def _connect_network_signals(self):
         nm = self.network_manager
@@ -59,6 +65,7 @@ class WindowClass(QMainWindow):
         
         # 상태바에 위젯 추가
         self.statusbar.addWidget(QLabel("TCP:"))
+        self.statusbar.addWidget(self.tcp_indicator)
         self.statusbar.addWidget(QLabel("UDP:"))
         self.statusbar.addWidget(self.udp_indicator)
 

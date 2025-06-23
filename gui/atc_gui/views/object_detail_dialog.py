@@ -39,6 +39,7 @@ class ObjectDetailDialog(QWidget):
         self.btn_back: QPushButton = self.findChild(QPushButton, 'btn_back')
         
         # 이미지 라벨 설정
+        self.detail_img.setFixedSize(300, 200)
         self.detail_img.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.detail_img.setStyleSheet("background-color: #f0f0f0; border: 1px solid #ccc;")
         
@@ -48,7 +49,7 @@ class ObjectDetailDialog(QWidget):
                 background-color: white;
                 border: 1px solid #ccc;
                 padding: 10px;
-                font-size: 12px;
+                font-size: 16px;
             }
         """)
         
@@ -93,7 +94,7 @@ class ObjectDetailDialog(QWidget):
                         color: #666;
                         font-size: 14px;
                     }
-                """)
+                """)                
             
             # 정보 텍스트 업데이트
             info_text = f"""객체 상세 정보

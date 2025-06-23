@@ -5,41 +5,15 @@ from datetime import datetime
 import base64
 
 from config.constants import ObjectType, AirportZone, BirdRiskLevel, RunwayRiskLevel
-from utils.tcp_client import ImprovedTcpClient
-from utils.udp_client import OptimizedUdpClient
+from utils.tcp_client import TcpClient
+from utils.udp_client import UdpClient
 from utils.interface import DetectedObject
 from utils.logger import logger
 from config.settings import Settings
-from utils.interface import ConnectionManager, ConnectionState, ErrorHandler, NetworkException
-
-
-class NetworkMetrics:
-    """네트워크 성능 메트릭 수집"""
-    
-    def __init__(self):
-        self.tcp_metrics = TcpMetrics()
-        
-    def record_message_latency(self, message_type: str, latency: float):
-        """메시지 지연시간 기록"""
-        self.tcp_metrics.add_latency(message_type, latency)
-
-
-class TcpMetrics:
-    """TCP 메트릭"""
-    
-    def __init__(self):
-        self.latencies = {}
-        self.message_counts = {}
-        
-    def add_latency(self, message_type: str, latency: float):
-        """지연시간 추가"""
-        if message_type not in self.latencies:
-            self.latencies[message_type] = []
-        self.latencies[message_type].append(latency)
-
+from utils.interface import ConnectionManager, ConnectionState
 
 class NetworkManager(QObject):
-    """개선된 TCP 및 UDP 통신을 총괄하는 네트워크 관리자"""
+    """TCP 및 UDP 통신을 총괄하는 네트워크 관리자"""
 
     # UI가 연결할 시그널들
     object_detected = pyqtSignal(DetectedObject)
@@ -60,11 +34,10 @@ class NetworkManager(QObject):
         
         # 연결 관리자 및 메트릭
         self.connection_manager = ConnectionManager()
-        self.metrics = NetworkMetrics()
         
         # 클라이언트 초기화
-        self.tcp_client = ImprovedTcpClient()
-        self.udp_client = OptimizedUdpClient()
+        self.tcp_client = TcpClient()
+        self.udp_client = UdpClient()
         
         # 시그널 연결
         self._connect_signals()
@@ -257,9 +230,15 @@ class NetworkManager(QObject):
                     self.frame_a_received.emit(qimage, image_id or 0)
                 elif camera_id == "B":
                     self.frame_b_received.emit(qimage, image_id or 0)
+                else:
+                    logger.warning(f"알 수 없는 카메라 ID: {camera_id}")
+            else:
+                logger.warning("QImage 변환 실패")
                     
         except Exception as e:
             logger.error(f"프레임 처리 실패 ({camera_id}): {e}")
+            import traceback
+            logger.error(f"상세 오류: {traceback.format_exc()}")
 
     def _convert_to_qimage(self, frame) -> Optional[QImage]:
         """OpenCV 프레임을 QImage로 변환"""
@@ -287,79 +266,75 @@ class NetworkManager(QObject):
 
     def _handle_cctv_a_response(self, response: str):
         """CCTV A 응답 처리"""
-        pass  # 로그 없이 처리
+        logger.info(f"CCTV A 응답 수신: {response}")
+        if response == "OK":
+            # UDP 연결 시도
+            if not self.udp_client.is_connected():
+                host = self.settings.server.udp_ip
+                port = self.settings.server.udp_port
+                if self.udp_client.connect(host, port):
+                    logger.info(f"CCTV A용 UDP 연결 성공: {host}:{port}")
+                else:
+                    logger.error(f"CCTV A용 UDP 연결 실패: {host}:{port}")
 
     def _handle_cctv_b_response(self, response: str):
         """CCTV B 응답 처리"""
-        pass  # 로그 없이 처리
+        logger.info(f"CCTV B 응답 수신: {response}")
+        if response == "OK":
+            # UDP 연결 시도
+            if not self.udp_client.is_connected():
+                host = self.settings.server.udp_ip
+                port = self.settings.server.udp_port
+                if self.udp_client.connect(host, port):
+                    logger.info(f"CCTV B용 UDP 연결 성공: {host}:{port}")
+                else:
+                    logger.error(f"CCTV B용 UDP 연결 실패: {host}:{port}")
 
     # === 공개 인터페이스 메서드 ===
     def request_cctv_a(self):
         """CCTV A 영상 요청"""
         try:
-            start_time = datetime.now()
             success = self.tcp_client.request_cctv_a()
-            
-            # 메트릭 기록
-            latency = (datetime.now() - start_time).total_seconds() * 1000
-            self.metrics.record_message_latency("cctv_a_request", latency)
-            
             return success
             
         except Exception:
+            logger.error(f"CCTV A 영상 요청 실패")
             return False
 
     def request_cctv_b(self):
         """CCTV B 영상 요청"""
         try:
-            start_time = datetime.now()
             success = self.tcp_client.request_cctv_b()
-            
-            # 메트릭 기록
-            latency = (datetime.now() - start_time).total_seconds() * 1000
-            self.metrics.record_message_latency("cctv_b_request", latency)
-            
             return success
             
         except Exception:
+            logger.error(f"CCTV B 영상 요청 실패")
             return False
 
     def request_object_detail(self, object_id: int):
         """객체 상세보기 요청"""
         try:
-            start_time = datetime.now()
             success = self.tcp_client.request_object_detail(object_id)
-            
-            # 메트릭 기록
-            latency = (datetime.now() - start_time).total_seconds() * 1000
-            self.metrics.record_message_latency("object_detail_request", latency)
-            
+
+            logger.info(f"객체 상세보기 요청 결과: {success}")
             return success
             
-        except Exception:
+        except Exception as e:
+            logger.error(f"객체 상세보기 요청 실패: {e}")
             return False
 
     def request_map(self):
         """지도 요청"""
         try:
-            start_time = datetime.now()
             success = self.tcp_client.request_map()
-            
-            # 메트릭 기록
-            latency = (datetime.now() - start_time).total_seconds() * 1000
-            self.metrics.record_message_latency("map_request", latency)
-            
             return success
             
-        except Exception:
+        except Exception as e:
+            logger.error(f"지도 요청 실패: {e}")
             return False
 
     def get_connection_status(self) -> Dict[str, Any]:
         """연결 상태 반환"""
-        return self.connection_manager.get_overall_status()
-
-    def get_network_metrics(self) -> Dict[str, Any]:
-        """네트워크 메트릭 반환"""
         return self.connection_manager.get_overall_status()
 
     def set_udp_max_fps(self, fps: int):

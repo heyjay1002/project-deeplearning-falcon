@@ -50,7 +50,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_rwy1">
+   <widget class="QLabel" name="label_rwy_a">
     <property name="geometry">
      <rect>
       <x>30</x>
@@ -60,13 +60,13 @@
      </rect>
     </property>
     <property name="text">
-     <string>RWY 1</string>
+     <string>RWY A</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_rwy2">
+   <widget class="QLabel" name="label_rwy_b">
     <property name="geometry">
      <rect>
       <x>320</x>
@@ -76,13 +76,13 @@
      </rect>
     </property>
     <property name="text">
-     <string>RWY 2</string>
+     <string>RWY B</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_rwy2_status">
+   <widget class="QLabel" name="label_rwy_b_status">
     <property name="geometry">
      <rect>
       <x>430</x>
@@ -104,7 +104,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QLabel" name="label_rwy1_status">
+   <widget class="QLabel" name="label_rwy_a_status">
     <property name="geometry">
      <rect>
       <x>140</x>
@@ -230,12 +230,12 @@
    </property>
    <item>
     <property name="text">
-     <string>CCTV 1</string>
+     <string>CCTV A</string>
     </property>
    </item>
    <item>
     <property name="text">
-     <string>CCTV 2</string>
+     <string>CCTV B</string>
     </property>
    </item>
   </widget>

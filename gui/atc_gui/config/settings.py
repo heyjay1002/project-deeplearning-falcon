@@ -32,7 +32,7 @@ class DataSettings:
 class LogSettings:
     """로그 설정"""
     file_path: str = "logs/falcon_system.log"
-    level: str = "INFO"
+    level: str = "DEBUG"
     max_size: int = 10  # MB
     backup_count: int = 5
 

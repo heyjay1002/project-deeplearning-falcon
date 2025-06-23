@@ -6,30 +6,9 @@ from datetime import datetime
 import time
 
 from config import Settings, Constants, MessagePrefix, BirdRiskLevel, RunwayRiskLevel
-from utils.interface import (MessageInterface, MessageParser, ErrorHandler, 
-                           ConnectionError, ParseError, ProtocolError,
-                           DetectedObject, BirdRisk, RunwayRisk)
+from utils.interface import (MessageInterface, MessageParser, 
+                           DetectedObject)
 from utils.logger import logger
-
-
-class HeartbeatManager:
-    """하트비트 관리 클래스"""
-    
-    def __init__(self, tcp_client):
-        self.tcp_client = tcp_client
-        self.last_heartbeat = time.time()
-        self.heartbeat_interval = 30
-        self.heartbeat_timeout = 60
-        
-    def should_send_heartbeat(self) -> bool:
-        return time.time() - self.last_heartbeat > self.heartbeat_interval
-    
-    def is_connection_alive(self) -> bool:
-        return time.time() - self.last_heartbeat < self.heartbeat_timeout
-    
-    def update_heartbeat(self):
-        self.last_heartbeat = time.time()
-
 
 class MessageQueue:
     """메시지 큐 관리 클래스"""
@@ -63,8 +42,8 @@ class MessageQueue:
         return len(self.queue)
 
 
-class ImprovedTcpClient(QObject):
-    """개선된 TCP 클라이언트 - 서버와의 통신을 담당"""
+class TcpClient(QObject):
+    """TCP 클라이언트"""
     
     # === 시그널 정의 ===
     connected = pyqtSignal()
@@ -89,8 +68,6 @@ class ImprovedTcpClient(QObject):
         self.settings = Settings.get_instance()
         self.message_interface = MessageInterface()
         
-        # 관리자 클래스들
-        self.heartbeat_manager = HeartbeatManager(self)
         self.message_queue = MessageQueue()
         
         # TCP 소켓 및 연결 관리
@@ -130,11 +107,6 @@ class ImprovedTcpClient(QObject):
         self.connection_timeout_timer = QTimer(self)
         self.connection_timeout_timer.setSingleShot(True)
         self.connection_timeout_timer.timeout.connect(self._on_connection_timeout)
-        
-        # 하트비트 타이머
-        self.heartbeat_timer = QTimer(self)
-        self.heartbeat_timer.timeout.connect(self._send_heartbeat)
-        self.heartbeat_timer.start(10000)  # 10초마다 체크
         
         # 재연결 타이머
         self.reconnect_timer = QTimer(self)
@@ -256,9 +228,6 @@ class ImprovedTcpClient(QObject):
             logger.info(f"TCP 연결 성공 ({self.settings.server.tcp_ip}:{self.settings.server.tcp_port})")
             self._connection_successful = True
         
-        # 하트비트 시작
-        self.heartbeat_manager.update_heartbeat()
-        
         # 큐에 있던 메시지들 전송
         self._process_message_queue()
         
@@ -290,16 +259,14 @@ class ImprovedTcpClient(QObject):
                 self.stats['bytes_received'] += len(raw_data)
                 self.stats['last_activity'] = time.time()
                 
-                # 하트비트 업데이트
-                self.heartbeat_manager.update_heartbeat()
-                
                 # 완전한 메시지들 처리
                 self._process_buffered_messages()
                 
         except UnicodeDecodeError:
             self.message_buffer = ""  # 손상된 버퍼 초기화
-        except Exception:
-            pass  # 데이터 수신 오류는 로그 안함
+            logger.error("TCP 데이터 디코딩 오류")
+        except Exception as e:
+            logger.error(f"TCP 데이터 수신 오류: {e}")
 
     def _on_socket_error(self, error):
         """소켓 오류 처리"""
@@ -382,9 +349,11 @@ class ImprovedTcpClient(QObject):
             handler = handler_map.get(prefix)
             if handler:
                 handler(data)
+            else:
+                logger.warning(f"알 수 없는 메시지 타입: {prefix}")
                 
-        except Exception:
-            pass  # 메시지 처리 실패는 로그 안함
+        except Exception as e:
+            logger.error(f"메시지 처리 실패: {e}, 메시지: {message[:100]}")
 
     def _process_message_queue(self):
         """메시지 큐 처리"""
@@ -394,19 +363,6 @@ class ImprovedTcpClient(QObject):
             if message:
                 self._send_message_direct(message)
                 processed += 1
-
-    def _send_heartbeat(self):
-        """하트비트 전송"""
-        if not self.is_connected():
-            return
-        
-        if self.heartbeat_manager.should_send_heartbeat():
-            try:
-                heartbeat_msg = "PING\n"
-                if self._send_message_direct(heartbeat_msg):
-                    self.heartbeat_manager.update_heartbeat()
-            except Exception:
-                pass
 
     # === 내부 유틸리티 메서드 ===
     def _cleanup_previous_connection(self):
@@ -474,32 +430,32 @@ class ImprovedTcpClient(QObject):
         try:
             objects = MessageInterface.parse_object_detection_event(data)
             self.object_detected.emit(objects)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.error(f"객체 감지 이벤트 처리 실패: {e}, 데이터: {data[:100]}")
 
     def _handle_bird_risk_change(self, data: str):
         """조류 위험도 변경 이벤트 처리"""
         try:
             risk_level = MessageInterface.parse_bird_risk_level_event(data)
             self.bird_risk_changed.emit(risk_level)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.error(f"조류 위험도 변경 이벤트 처리 실패: {e}, 데이터: {data}")
 
     def _handle_runway_a_risk_change(self, data: str):
         """활주로 A 위험도 변경 이벤트 처리"""
         try:
             risk_level = MessageInterface.parse_runway_risk_level_event(data)
             self.runway_a_risk_changed.emit(risk_level)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.error(f"활주로 A 위험도 변경 이벤트 처리 실패: {e}, 데이터: {data}")
 
     def _handle_runway_b_risk_change(self, data: str):
         """활주로 B 위험도 변경 이벤트 처리"""
         try:
             risk_level = MessageInterface.parse_runway_risk_level_event(data)
             self.runway_b_risk_changed.emit(risk_level)
-        except Exception:
-            pass
+        except Exception as e:
+            logger.error(f"활주로 B 위험도 변경 이벤트 처리 실패: {e}, 데이터: {data}")
 
     def _handle_cctv_a_response(self, data: str):
         """CCTV A 응답 처리"""
@@ -516,29 +472,27 @@ class ImprovedTcpClient(QObject):
     def _handle_object_detail_response(self, data: str):
         """객체 상세보기 응답 처리"""
         try:
+            # 응답 성공/실패 여부 확인
             if data.startswith("OK"):
                 self._handle_object_detail_success(data)
             elif data.startswith("ERR"):
                 self._handle_object_detail_error_response(data)
             else:
-                raise ValueError(f"알 수 없는 응답: {data}")
-                
-        except Exception as e:
-            error_msg = f"객체 상세보기 처리 실패: {e}"
-            self.object_detail_error.emit(error_msg)
+                raise ProtocolError("알 수 없는 응답 형식")
+        except (ParseError, ProtocolError) as e:
+            logger.error(f"객체 상세보기 응답 처리 실패: {e}")
+            self.object_detail_error.emit(str(e))
 
     def _handle_object_detail_success(self, data: str):
         """객체 상세보기 성공 응답 처리"""
         try:
-            if Constants.Protocol.MESSAGE_SEPARATOR not in data:
-                raise ValueError("잘못된 응답 형식")
-                
-            _, object_info_str = data.split(Constants.Protocol.MESSAGE_SEPARATOR, 1)
-            obj_info = MessageParser.parse_object_detail_info(object_info_str, include_image=True)
-            self.object_detail_response.emit(obj_info)
-            
-        except Exception as e:
-            self.object_detail_error.emit(f"응답 파싱 실패: {e}")
+            # "OK," 접두사 제거
+            payload = data.split(',', 1)[1]
+            obj = MessageParser.parse_object_detail_info(payload, include_image=True)
+            self.object_detail_response.emit(obj)
+        except (ParseError, ProtocolError) as e:
+            logger.error(f"객체 상세보기 응답 파싱 실패: {e}")
+            self.object_detail_error.emit(str(e))
 
     def _handle_object_detail_error_response(self, data: str):
         """객체 상세보기 오류 응답 처리"""
