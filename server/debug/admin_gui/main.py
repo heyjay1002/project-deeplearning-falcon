@@ -70,16 +70,25 @@ class UDPVideoReceiver(QThread):
         while self.running:
             try:
                 data, _ = sock.recvfrom(65536)
-                # 데이터 파싱: {cam_id}:{binary_img}
+                # 데이터 파싱: {cam_id}:{img_id}:{binary_img}
                 sep_idx = data.find(b':')
                 if sep_idx == -1:
                     continue
                 cam_id = data[:sep_idx].decode()
-                img_bytes = data[sep_idx+1:]
+                
+                # img_id 부분 찾기
+                sep_idx2 = data.find(b':', sep_idx + 1)
+                if sep_idx2 == -1:
+                    continue
+                
+                # img_id는 사용하지 않지만 파싱은 함
+                img_id = data[sep_idx+1:sep_idx2].decode()
+                img_bytes = data[sep_idx2+1:]
+                
                 img_array = np.frombuffer(img_bytes, dtype=np.uint8)
                 frame = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
                 if frame is not None:
-                    print(f"[UDP] cam_id={cam_id}, frame_shape={frame.shape}")
+                    # print(f"[UDP] cam_id={cam_id}, img_id={img_id}, frame_shape={frame.shape}")
                     self.frame_received.emit(frame, cam_id)
             except socket.timeout:
                 continue
