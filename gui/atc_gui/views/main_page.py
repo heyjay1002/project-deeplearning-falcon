@@ -1,16 +1,17 @@
 from PyQt6 import uic
-from PyQt6.QtGui import QImage
-from PyQt6.QtWidgets import QWidget, QLabel, QTableWidgetItem
+from PyQt6.QtGui import QImage, QPixmap, QPainter, QPen, QColor, QFont
+from PyQt6.QtWidgets import QWidget, QLabel, QTableWidgetItem, QMessageBox
 from PyQt6.QtCore import Qt, QTimer, pyqtSignal
 from datetime import datetime
 import os
 from views.object_detail_dialog import ObjectDetailDialog
 from config.constants import BirdRiskLevel, RunwayRiskLevel
 from config.settings import Settings
-from utils.interface import DetectedObject, BirdRisk, RunwayRisk
+from utils.interface import DetectedObject, BirdRisk, RunwayRisk, ObjectType, Airportarea, EventType
 from utils.logger import logger
 from widgets.map_marker_widget import MapMarkerWidget
 from typing import Optional
+import time
 
 class MainPage(QWidget):
     # 객체 목록 업데이트 시그널 추가
@@ -26,6 +27,14 @@ class MainPage(QWidget):
 
         # 현재 처리된 객체 ID 저장
         self.current_object_ids = set()
+        
+        # FPS 추적을 위한 변수들
+        self.cctv_a_fps = 0
+        self.cctv_b_fps = 0
+        self.cctv_a_frame_count = 0
+        self.cctv_b_frame_count = 0
+        self.cctv_a_last_time = 0
+        self.cctv_b_last_time = 0
         
         # 설정 로드
         self.settings = Settings.get_instance()
@@ -66,12 +75,18 @@ class MainPage(QWidget):
     def setup_table(self):
         """테이블 초기 설정"""
         # 컬럼 헤더 설정
-        headers = ["ID", "위치", "종류"]
+        headers = ["ID", "종류", "위치"]
         self.table_object_list.setColumnCount(len(headers))
         self.table_object_list.setHorizontalHeaderLabels(headers)
         
         # 선택 모드 설정
         self.table_object_list.setSelectionBehavior(self.table_object_list.SelectionBehavior.SelectRows)
+        
+        # 컬럼 크기 자동 조정 설정
+        self.table_object_list.horizontalHeader().setStretchLastSection(True)  # 마지막 컬럼이 남은 공간을 차지
+        self.table_object_list.horizontalHeader().setSectionResizeMode(0, self.table_object_list.horizontalHeader().ResizeMode.ResizeToContents)  # ID 컬럼은 내용에 맞게
+        self.table_object_list.horizontalHeader().setSectionResizeMode(1, self.table_object_list.horizontalHeader().ResizeMode.Stretch)  # 종류 컬럼은 늘어남
+        self.table_object_list.horizontalHeader().setSectionResizeMode(2, self.table_object_list.horizontalHeader().ResizeMode.Stretch)  # 위치 컬럼은 늘어남
         
         # 초기 데이터 클리어
         self.table_object_list.setRowCount(0)
@@ -90,8 +105,6 @@ class MainPage(QWidget):
         """네트워크 관리자 시그널만 연결, 서비스 시작/중지는 WindowClass에서 관리"""
         if self.network_manager is None:
             raise ValueError("network_manager가 필요합니다.")
-
-        logger.info("네트워크 매니저 시그널 연결 시작")
         
         self.network_manager.object_detected.connect(self.update_object_list)
         self.network_manager.bird_risk_changed.connect(self.update_bird_risk)
@@ -101,13 +114,9 @@ class MainPage(QWidget):
         self.network_manager.object_detail_error.connect(self.handle_object_detail_error)
         
         # CCTV 프레임 시그널 연결
-        logger.info("CCTV 프레임 시그널 연결 시도")
-        logger.debug(f"frame_a_received 시그널 존재: {hasattr(self.network_manager, 'frame_a_received')}")
-        logger.debug(f"frame_b_received 시그널 존재: {hasattr(self.network_manager, 'frame_b_received')}")
-        
         self.network_manager.frame_a_received.connect(self.update_cctv_a_frame)
         self.network_manager.frame_b_received.connect(self.update_cctv_b_frame)
-        logger.info("CCTV 프레임 시그널 연결 완료")
+
         
         self.network_manager.tcp_connection_status_changed.connect(self.update_tcp_connection_status)
         self.network_manager.udp_connection_status_changed.connect(self.update_udp_connection_status)
@@ -115,15 +124,17 @@ class MainPage(QWidget):
         # CCTV 응답 시그널 연결
         self.network_manager.tcp_client.cctv_a_response.connect(self.on_cctv_a_response)
         self.network_manager.tcp_client.cctv_b_response.connect(self.on_cctv_b_response)
-        
-        logger.info("네트워크 매니저 시그널 연결 완료")
 
     def on_cctv_a_response(self, response: str):
         """CCTV A 응답 처리"""
         if response == "OK":
-            logger.info(f"CCTV A 응답 성공: {response}")
             # CCTV 화면으로 전환
             self.map_cctv_stack.setCurrentIndex(1)
+            
+            # FPS 카운터 리셋
+            self.cctv_a_frame_count = 0
+            self.cctv_a_last_time = 0
+            self.cctv_a_fps = 0
             
             # UDP 프레임 수신을 기다리는 상태 표시
             self.label_cctv_1.setText("CCTV A 연결 중...\nUDP 프레임 수신 대기")
@@ -131,7 +142,6 @@ class MainPage(QWidget):
             self.label_cctv_1.setStyleSheet("background-color: #f0f0f0; border: 1px solid #ccc;")
           
         else:
-            logger.error(f"CCTV A 응답 실패: {response}")
             # 오류 상태 표시
             self.label_cctv_1.setText(f"CCTV A 연결 실패\n{response}")
             self.label_cctv_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -140,16 +150,19 @@ class MainPage(QWidget):
     def on_cctv_b_response(self, response: str):
         """CCTV B 응답 처리"""
         if response == "OK":
-            logger.info(f"CCTV B 응답 성공: {response}")
             # CCTV 화면으로 전환
             self.map_cctv_stack.setCurrentIndex(1)
+            
+            # FPS 카운터 리셋
+            self.cctv_b_frame_count = 0
+            self.cctv_b_last_time = 0
+            self.cctv_b_fps = 0
             
             # UDP 프레임 수신을 기다리는 상태 표시
             self.label_cctv_2.setText("CCTV B 연결 중...\nUDP 프레임 수신 대기")
             self.label_cctv_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
             self.label_cctv_2.setStyleSheet("background-color: #f0f0f0; border: 1px solid #ccc;")
         else:
-            logger.error(f"CCTV B 응답 실패: {response}")
             # 오류 상태 표시
             self.label_cctv_2.setText(f"CCTV B 연결 실패\n{response}")
             self.label_cctv_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -171,7 +184,6 @@ class MainPage(QWidget):
 
     def update_tcp_connection_status(self, is_connected: bool, message: str):
         """TCP 연결 상태 UI 업데이트"""
-        logger.info(f"TCP 연결 상태 변경: {message}")
         if hasattr(self, 'tcp_status_label'):
             if is_connected:
                 self.tcp_status_label.setStyleSheet("color: green; font-weight: bold; margin-right: 8px;")
@@ -180,7 +192,6 @@ class MainPage(QWidget):
 
     def update_udp_connection_status(self, is_connected: bool, message: str):
         """UDP 연결 상태 UI 업데이트"""
-        logger.info(f"UDP 연결 상태 변경: {message}")
         if hasattr(self, 'udp_status_label'):
             if is_connected:
                 self.udp_status_label.setStyleSheet("color: green; font-weight: bold; margin-right: 8px;")
@@ -254,14 +265,29 @@ class MainPage(QWidget):
     def _update_object_list(self, objects: list[DetectedObject]):
         """실제 객체 목록 업데이트 처리"""
         logger.debug(f"객체 목록 업데이트: {len(objects)}개 객체")
-        
+
         # 중복 제거: 이미 처리된 객체는 제외
         new_objects = [obj for obj in objects if obj.object_id not in self.current_object_ids]
         logger.debug(f"새로운 객체: {len(new_objects)}개 (전체: {len(objects)}개)")
-        
+
         # 현재 처리된 객체 ID 업데이트
         self.current_object_ids.update(obj.object_id for obj in new_objects)
-        
+
+        # 현재 존재하는 객체 ID 집합
+        all_object_ids = set(obj.object_id for obj in objects)
+        # 테이블에서 삭제할 row 인덱스 수집
+        rows_to_remove = []
+        for row in range(self.table_object_list.rowCount()):
+            item = self.table_object_list.item(row, 0)
+            if item is not None:
+                object_id = int(item.text())
+                if object_id not in all_object_ids:
+                    rows_to_remove.append(row)
+        # row 인덱스가 뒤에서부터 삭제해야 인덱스 밀림 없음
+        for row in reversed(rows_to_remove):
+            self.table_object_list.removeRow(row)
+            logger.debug(f"테이블에서 사라진 객체 삭제: row={row}")
+
         # 테이블에 있는 모든 객체를 리스트로 만듦
         all_objects = []
         for row in range(self.table_object_list.rowCount()):
@@ -275,15 +301,15 @@ class MainPage(QWidget):
         # 테이블 업데이트
         current_row_count = self.table_object_list.rowCount()
         self.table_object_list.setRowCount(current_row_count + len(new_objects))       
- 
+
         for i, obj in enumerate(new_objects):
             row = current_row_count + i
             # ID
             self.table_object_list.setItem(row, 0, QTableWidgetItem(str(obj.object_id)))
-            # 위치
-            self.table_object_list.setItem(row, 1, QTableWidgetItem(obj.zone.value))
             # 종류
-            self.table_object_list.setItem(row, 2, QTableWidgetItem(obj.object_type.value))
+            self.table_object_list.setItem(row, 1, QTableWidgetItem(obj.object_type.value))
+            # 위치
+            self.table_object_list.setItem(row, 2, QTableWidgetItem(obj.area.value))
 
         # 기존 row도 갱신
         for row in range(self.table_object_list.rowCount()):
@@ -291,8 +317,8 @@ class MainPage(QWidget):
             for obj in objects:
                 if obj.object_id == object_id:
                     # 위치/종류 등 갱신
-                    self.table_object_list.setItem(row, 1, QTableWidgetItem(obj.zone.value))
-                    self.table_object_list.setItem(row, 2, QTableWidgetItem(obj.object_type.value))
+                    self.table_object_list.setItem(row, 1, QTableWidgetItem(obj.object_type.value))
+                    self.table_object_list.setItem(row, 2, QTableWidgetItem(obj.area.value))
                     break
 
         # 마커 업데이트: 테이블에 있는 모든 객체 기준
@@ -346,6 +372,13 @@ class MainPage(QWidget):
         
         # 테이블에서 해당 행 선택
         self.select_table_row_by_id(object_id)
+        
+        # # 상세보기 요청
+        # logger.info(f"객체 상세보기 요청: ID {object_id}")
+        # if self.network_manager:
+        #     self.network_manager.request_object_detail(object_id)
+        # else:
+        #     logger.error("상세보기 요청을 할 수 없습니다.")
 
     def select_table_row_by_id(self, object_id: int):
         """객체 ID로 테이블 행 선택"""
@@ -361,7 +394,7 @@ class MainPage(QWidget):
         # risk_level이 None이면 기본값으로 LOW(안전) 설정
         if risk_level is None:
             risk_level = BirdRiskLevel.LOW
-            logger.info("조류 위험도 값이 없어 기본값(안전)으로 설정됨")
+            logger.info("조류 위험도 기본값(안전)으로 설정됨")
         else:
             logger.info(f"조류 위험도 변경: {risk_level.value}")
             
@@ -405,7 +438,7 @@ class MainPage(QWidget):
         # risk_level이 None이면 기본값으로 LOW(안전) 설정
         if risk_level is None:
             risk_level = RunwayRiskLevel.LOW
-            logger.info("활주로 A 위험도 값이 없어 기본값(안전)으로 설정됨")
+            logger.info("활주로 A 위험도 값 기본값(안전)으로 설정됨")
         else:
             logger.info(f"활주로 A 위험도 변경: {risk_level.value}")
 
@@ -438,7 +471,7 @@ class MainPage(QWidget):
         # risk_level이 None이면 기본값으로 LOW(안전) 설정
         if risk_level is None:
             risk_level = RunwayRiskLevel.LOW
-            logger.info("활주로 B 위험도 값이 없어 기본값(안전)으로 설정됨")
+            logger.info("활주로 B 위험도 값 기본값(안전)으로 설정됨")
         else:
             logger.info(f"활주로 B 위험도 변경: {risk_level.value}")
 
@@ -471,11 +504,11 @@ class MainPage(QWidget):
         logger.info(f"객체 상세 정보 수신 완료. ID: {obj.object_id}. 상세 보기로 전환합니다.")
         info = f"객체 ID: {obj.object_id}\n"
         info += f"종류: {obj.object_type.value}\n"
-        info += f"위치: {obj.zone.value}\n"
+        info += f"위치: {obj.area.value}\n"
         info += f"발견 시각: {obj.timestamp.strftime('%Y-%m-%d %H:%M:%S')}"
         
-        if obj.extra_info:
-            info += f"\n추가 정보: {obj.extra_info}"
+        if obj.state_info:
+            info += f"\n상태 정보: {obj.state_info}"
             
         self.object_detail_dialog.detail_info.setText(info)
         
@@ -521,6 +554,10 @@ class MainPage(QWidget):
         """지도 보기"""
         logger.info("지도 보기")
         self.map_cctv_stack.setCurrentIndex(0)
+        
+        # UDP 연결 해제
+        if self.network_manager and self.network_manager.udp_client.is_connected():
+            self.network_manager.udp_client.disconnect()
         
         # 서버에 지도 요청
         if self.network_manager:
@@ -574,6 +611,17 @@ class MainPage(QWidget):
                 logger.error(f"CCTV A 프레임이 Null: 이미지 ID {image_id}")
                 return
 
+            # FPS 계산
+            current_time = time.time()
+            self.cctv_a_frame_count += 1
+            
+            if self.cctv_a_last_time == 0:
+                self.cctv_a_last_time = current_time
+            elif current_time - self.cctv_a_last_time >= 1.0:  # 1초마다 FPS 계산
+                self.cctv_a_fps = self.cctv_a_frame_count / (current_time - self.cctv_a_last_time)
+                self.cctv_a_frame_count = 0
+                self.cctv_a_last_time = current_time
+
             # 라벨 크기에 맞게 이미지 크기 조정
             label_size = self.label_cctv_1.size()
             
@@ -591,10 +639,21 @@ class MainPage(QWidget):
             self.label_cctv_1.setPixmap(scaled_pixmap)
             self.label_cctv_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
             
+            # FPS 정보 표시 (이미지 위에 오버레이)
+            if self.cctv_a_fps > 0:
+                fps_text = f"FPS: {self.cctv_a_fps:.1f}"
+                # FPS 텍스트를 이미지 위에 그리기
+                painter = QPainter(scaled_pixmap)
+                painter.setPen(QPen(QColor(255, 255, 255)))  # 흰색 텍스트
+                painter.setFont(QFont("Arial", 12, QFont.Weight.Bold))
+                painter.drawText(10, 30, fps_text)
+                painter.end()
+                self.label_cctv_1.setPixmap(scaled_pixmap)
+            
             # 프레임 업데이트 강제
             self.label_cctv_1.update()
             
-            logger.info(f"CCTV A 프레임 업데이트 완료: 이미지 ID {image_id}")
+            logger.info(f"CCTV A 프레임 업데이트 완료: 이미지 ID {image_id}, FPS: {self.cctv_a_fps:.1f}")
             
         except Exception as e:
             logger.error(f"CCTV A 프레임 업데이트 오류 (이미지 ID {image_id}): {str(e)}")
@@ -605,6 +664,17 @@ class MainPage(QWidget):
             if frame.isNull():
                 logger.error(f"CCTV B 프레임이 Null: 이미지 ID {image_id}")
                 return
+                
+            # FPS 계산
+            current_time = time.time()
+            self.cctv_b_frame_count += 1
+            
+            if self.cctv_b_last_time == 0:
+                self.cctv_b_last_time = current_time
+            elif current_time - self.cctv_b_last_time >= 1.0:  # 1초마다 FPS 계산
+                self.cctv_b_fps = self.cctv_b_frame_count / (current_time - self.cctv_b_last_time)
+                self.cctv_b_frame_count = 0
+                self.cctv_b_last_time = current_time
                 
             # 라벨 크기에 맞게 이미지 크기 조정
             label_size = self.label_cctv_2.size()
@@ -623,10 +693,21 @@ class MainPage(QWidget):
             self.label_cctv_2.setPixmap(scaled_pixmap)
             self.label_cctv_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
             
+            # FPS 정보 표시 (이미지 위에 오버레이)
+            if self.cctv_b_fps > 0:
+                fps_text = f"FPS: {self.cctv_b_fps:.1f}"
+                # FPS 텍스트를 이미지 위에 그리기
+                painter = QPainter(scaled_pixmap)
+                painter.setPen(QPen(QColor(255, 255, 255)))  # 흰색 텍스트
+                painter.setFont(QFont("Arial", 12, QFont.Weight.Bold))
+                painter.drawText(10, 30, fps_text)
+                painter.end()
+                self.label_cctv_2.setPixmap(scaled_pixmap)
+            
             # 프레임 업데이트 강제
             self.label_cctv_2.update()
             
-            logger.info(f"CCTV B 프레임 업데이트 완료: 이미지 ID {image_id}")
+            logger.info(f"CCTV B 프레임 업데이트 완료: 이미지 ID {image_id}, FPS: {self.cctv_b_fps:.1f}")
             
         except Exception as e:
             logger.error(f"CCTV B 프레임 업데이트 오류 (이미지 ID {image_id}): {str(e)}")

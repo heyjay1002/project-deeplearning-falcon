@@ -4,13 +4,12 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime
 import base64
 
-from config.constants import ObjectType, Airportarea, BirdRiskLevel, RunwayRiskLevel
+from config.constants import ObjectType, Airportarea, BirdRiskLevel, RunwayRiskLevel, EventType
+from utils.interface import DetectedObject, ConnectionManager, ConnectionState
 from utils.tcp_client import TcpClient
 from utils.udp_client import UdpClient
-from utils.interface import DetectedObject, BirdRisk, RunwayRisk, MessageInterface, MessageParser
 from utils.logger import logger
 from config.settings import Settings
-from utils.interface import ConnectionManager, ConnectionState
 
 class NetworkManager(QObject):
     """네트워크 매니저 - 전체 네트워크 서비스 조율
@@ -123,17 +122,17 @@ class NetworkManager(QObject):
         """TCP 연결 성공 시 상태 전파"""
         self.connection_manager.set_tcp_state(ConnectionState.CONNECTED)
         self.connection_manager.reset_reconnect_attempts()
-        self.tcp_connection_status_changed.emit(True, "TCP 서버에 연결되었습니다.")
+        self.tcp_connection_status_changed.emit(True, "서버에 연결되었습니다.")
 
     def _on_tcp_disconnected(self):
         """TCP 연결 해제 시 상태 전파"""
         self.connection_manager.set_tcp_state(ConnectionState.DISCONNECTED)
-        self.tcp_connection_status_changed.emit(False, "TCP 서버 연결이 해제되었습니다.")
+        self.tcp_connection_status_changed.emit(False, "서버 연결이 해제되었습니다.")
 
     def _on_tcp_connection_error(self, error_msg: str):
         """TCP 연결 오류 시 상태 전파"""
         self.connection_manager.set_tcp_state(ConnectionState.ERROR)
-        self.tcp_connection_status_changed.emit(False, f"TCP 연결 오류: {error_msg}")
+        self.tcp_connection_status_changed.emit(False, f"연결 오류: {error_msg}")
 
     def _on_udp_status_changed(self, is_connected: bool, message: str):
         """UDP 상태 변경 처리"""
@@ -194,11 +193,11 @@ class NetworkManager(QObject):
             object_type = ObjectType(fields[1])
             x_coord = float(fields[2])
             y_coord = float(fields[3])
-            zone = Airportarea(fields[4])
+            area = Airportarea(fields[4])
             
             # 선택적 필드 처리
             timestamp = datetime.now()
-            extra_info = None
+            state_info = None
             image_data = None
             
             # 나머지 필드 분석
@@ -222,20 +221,21 @@ class NetworkManager(QObject):
                         else:
                             timestamp = datetime.fromtimestamp(float(field))
                     except ValueError:
-                        extra_info = field
+                        state_info = field
                 
                 # 기타 정보
                 else:
-                    extra_info = field
+                    state_info = field
 
             return DetectedObject(
                 object_id=object_id,
                 object_type=object_type,
                 x_coord=x_coord,
                 y_coord=y_coord,
-                zone=zone,
+                area=area,
+                event_type=EventType.HAZARD,  # 기본값
                 timestamp=timestamp,
-                extra_info=extra_info,
+                state_info=state_info,
                 image_data=image_data
             )
             
@@ -299,10 +299,9 @@ class NetworkManager(QObject):
         if response == "OK":
             # UDP 연결 확인 및 연결
             if not self.udp_client.is_connected():
-                logger.info("UDP 연결이 없어서 연결 시도")
                 self._ensure_udp_connection()
             else:
-                logger.info("UDP 연결이 이미 되어 있음")
+                pass
         else:
             logger.error(f"CCTV A 요청 거부됨: {response}")
 
@@ -312,10 +311,9 @@ class NetworkManager(QObject):
         if response == "OK":
             # UDP 연결 확인 및 연결
             if not self.udp_client.is_connected():
-                logger.info("UDP 연결이 없어서 연결 시도")
                 self._ensure_udp_connection()
             else:
-                logger.info("UDP 연결이 이미 되어 있음")
+                pass
         else:
             logger.error(f"CCTV B 요청 거부됨: {response}")
 
@@ -324,14 +322,11 @@ class NetworkManager(QObject):
         """UDP 연결 보장 - UDP 클라이언트에 위임"""
         host = self.settings.server.udp_ip
         port = self.settings.server.udp_port
-        logger.info(f"UDP 연결 보장 시도: {host}:{port}")
-        logger.debug(f"현재 UDP 연결 상태: {self.udp_client.is_connected()}")
         
         if not self.udp_client.connect(host, port):
             logger.error(f"UDP 연결 실패: {host}:{port}")
         else:
-            logger.info(f"UDP 연결 성공: {host}:{port}")
-            logger.debug(f"연결 후 UDP 상태: {self.udp_client.is_connected()}")
+            pass
 
     def _handle_cctv_frame(self, camera_id: str, frame, image_id: object):
         """CCTV 프레임 처리 - TCP를 통한 프레임 처리"""

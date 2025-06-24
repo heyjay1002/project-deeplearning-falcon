@@ -109,7 +109,7 @@ class NotificationDialog(QDialog):
 
             info_layout.addRow("ID:", QLabel(str(self.data.object_id)))
             info_layout.addRow("종류:", QLabel(str(self.data.object_type.value)))
-            info_layout.addRow("구역:", QLabel(str(self.data.zone.value)))
+            info_layout.addRow("구역:", QLabel(str(self.data.area.value)))
             
             if hasattr(self.data, 'timestamp'):
                 ts = self.data.timestamp
@@ -119,9 +119,9 @@ class NotificationDialog(QDialog):
                     ts_str = str(ts)
                 info_layout.addRow("발견 시각:", QLabel(ts_str))
             
-            if hasattr(self.data, 'extra_info') and self.data.extra_info:
-                value = self.data.extra_info.value if hasattr(self.data.extra_info, 'value') else str(self.data.extra_info)
-                info_layout.addRow("상태:", QLabel(value))
+            if hasattr(self.data, 'state_info') and self.data.state_info:
+                value = self.data.state_info
+                info_layout.addRow("상태:", QLabel(str(value)))
 
             content_layout.addLayout(info_layout)
             main_layout.addLayout(content_layout)
@@ -146,11 +146,11 @@ class NotificationDialog(QDialog):
 
     def get_title(self) -> str:
         return {
-            'object': '이상 객체 감지',
-            'bird': '조류 충돌 위험 변화',
-            'runway_a_risk': '활주로 A 위험도 변화',
-            'runway_b_risk': '활주로 B 위험도 변화',
-            'violation_access': '접근 위반'
+            'object': '위험요소 감지 알림',
+            'bird': '조류 위험도 알림',
+            'runway_a_risk': '활주로 A 위험도 알림',
+            'runway_b_risk': '활주로 B 위험도 알림',
+            'violation_access': '출입 위반 알림'
         }.get(self.notification_type, '알림')
 
     def adjust_position(self):

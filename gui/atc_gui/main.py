@@ -12,6 +12,7 @@ from views.notification_dialog import NotificationDialog
 from utils.interface import DetectedObject, BirdRisk, RunwayRisk
 from utils.network_manager import NetworkManager
 from utils.logger import logger
+from config.constants import BirdRiskLevel, RunwayRiskLevel
 
 class WindowClass(QMainWindow):
     def __init__(self):
@@ -45,9 +46,9 @@ class WindowClass(QMainWindow):
     def _connect_network_signals(self):
         nm = self.network_manager
         nm.first_object_detected.connect(lambda obj: self.show_notification_dialog('object', obj))  # 최초 감지 알림
-        nm.bird_risk_changed.connect(lambda risk: self.show_notification_dialog('bird', risk))
-        nm.runway_a_risk_changed.connect(lambda risk: self.show_notification_dialog('runway_a_risk', risk))
-        nm.runway_b_risk_changed.connect(lambda risk: self.show_notification_dialog('runway_b_risk', risk))
+        nm.bird_risk_changed.connect(lambda risk: self.show_notification_dialog('bird', risk) if risk == BirdRiskLevel.HIGH else None)  # 조류 위험도 "경고"일 때만
+        nm.runway_a_risk_changed.connect(lambda risk: self.show_notification_dialog('runway_a_risk', risk) if risk == RunwayRiskLevel.HIGH else None)  # 활주로 A 위험도 "경고"일 때만
+        nm.runway_b_risk_changed.connect(lambda risk: self.show_notification_dialog('runway_b_risk', risk) if risk == RunwayRiskLevel.HIGH else None)  # 활주로 B 위험도 "경고"일 때만
         nm.tcp_connection_status_changed.connect(lambda connected, msg: self.update_connection_status(connected, msg, "TCP"))
         nm.udp_connection_status_changed.connect(lambda connected, msg: self.update_connection_status(connected, msg, "UDP"))
 
@@ -83,8 +84,17 @@ class WindowClass(QMainWindow):
                 self.tcp_indicator.setStyleSheet("color: #4CAF50; font-size: 16px;")
                 self.tcp_indicator.setToolTip("TCP 연결됨")
             else:
-                self.tcp_indicator.setStyleSheet("color: #F44336; font-size: 16px;")
-                self.tcp_indicator.setToolTip("TCP 연결 끊김")
+                # 재연결 시도 중인지 확인
+                if (self.network_manager and 
+                    self.network_manager.tcp_client and 
+                    self.network_manager.tcp_client.reconnect_timer.isActive()):
+                    # 재연결 시도 중 - 노란색
+                    self.tcp_indicator.setStyleSheet("color: #FFC107; font-size: 16px;")
+                    self.tcp_indicator.setToolTip("TCP 재연결 시도 중")
+                else:
+                    # 연결 끊김 - 빨간색
+                    self.tcp_indicator.setStyleSheet("color: #F44336; font-size: 16px;")
+                    self.tcp_indicator.setToolTip("TCP 연결 끊김")
                 
         elif connection_type == "UDP":
             self.udp_connected = is_connected

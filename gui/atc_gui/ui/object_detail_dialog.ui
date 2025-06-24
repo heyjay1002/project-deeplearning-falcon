@@ -28,6 +28,25 @@
     </widget>
    </item>
    <item>
+    <widget class="QLabel" name="event_type_label">
+     <property name="minimumSize">
+      <size>
+       <width>180</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="text">
+      <string>이벤트 타입</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QLabel" name="detail_info">
      <property name="minimumSize">
       <size>

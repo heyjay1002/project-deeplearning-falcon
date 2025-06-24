@@ -35,6 +35,7 @@ class ObjectDetailDialog(QWidget):
         
         # UI 요소 타입 힌팅
         self.detail_img: QLabel = self.findChild(QLabel, 'detail_img')
+        self.event_type_label: QLabel = self.findChild(QLabel, 'event_type_label')
         self.detail_info: QLabel = self.findChild(QLabel, 'detail_info')
         self.btn_back: QPushButton = self.findChild(QPushButton, 'btn_back')
         
@@ -42,6 +43,24 @@ class ObjectDetailDialog(QWidget):
         self.detail_img.setFixedSize(300, 200)
         self.detail_img.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.detail_img.setStyleSheet("background-color: #f0f0f0; border: 1px solid #ccc;")
+        
+        # 이벤트 타입 라벨 설정
+        self.event_type_label.setStyleSheet("""
+            QLabel {
+                background-color: #e8f4fd;
+                border: 1px solid #4a90e2;
+                padding: 2px 8px;
+                font-size: 14px;
+                font-weight: bold;
+                color: #2c3e50;
+                min-width: 80px;
+                max-width: 160px;
+                min-height: 24px;
+                max-height: 32px;
+                qproperty-alignment: 'AlignCenter';
+                border-radius: 6px;
+            }
+        """)
         
         # 정보 라벨 설정
         self.detail_info.setStyleSheet("""
@@ -99,15 +118,19 @@ class ObjectDetailDialog(QWidget):
             # 정보 텍스트 업데이트
             info_text = f"""객체 상세 정보
 ID: {getattr(obj, 'object_id', 'N/A')}
-종류: {getattr(obj, 'object_type', {}).get('value', 'N/A') if hasattr(getattr(obj, 'object_type', {}), 'get') else getattr(getattr(obj, 'object_type', {}), 'value', 'N/A')}
-위치: {getattr(obj, 'zone', {}).get('value', 'N/A') if hasattr(getattr(obj, 'zone', {}), 'get') else getattr(getattr(obj, 'zone', {}), 'value', 'N/A')}
+종류: {getattr(getattr(obj, 'object_type', None), 'value', 'N/A')}
+위치: {getattr(getattr(obj, 'area', None), 'value', 'N/A')}
 발견 시각: {getattr(obj, 'timestamp', 'N/A')}"""
             
-            if hasattr(obj, 'extra_info') and obj.extra_info:
-                extra_info_value = getattr(obj.extra_info, 'value', obj.extra_info)
-                info_text += f"\n추가 정보: {extra_info_value}"
+            if hasattr(obj, 'state_info') and obj.state_info:
+                state_info_value = obj.state_info
+                info_text += f"\n상태 정보: {state_info_value}"
             
             self.detail_info.setText(info_text)
+            
+            # 이벤트 타입 업데이트
+            event_type_value = getattr(getattr(obj, 'event_type', None), 'value', 'N/A')
+            self.event_type_label.setText(str(event_type_value) if event_type_value else "-")
             
         except Exception as e:
             if logger:

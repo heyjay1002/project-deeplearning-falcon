@@ -13,7 +13,7 @@ parent_dir = os.path.dirname(current_dir)
 if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
-from config.constants import ObjectType, Airportarea as Zone
+from config.constants import ObjectType, Airportarea as Zone, EventType
 from main import WindowClass
 from utils.interface import MessageInterface, MessagePrefix, DetectedObject
 from views.notification_dialog import NotificationDialog
@@ -123,15 +123,8 @@ class TestControlPanel(QWidget):
         btn_rwy_b.clicked.connect(self.send_rwy_b)
 
     def send_object(self):
-        image_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'resources', 'images', 'detection_sample_bird.png')
-        try:
-            with open(image_path, "rb") as image_file:
-                image_data_b64 = base64.b64encode(image_file.read()).decode('utf-8')
-        except FileNotFoundError:
-            print(f"[서버 오류] 이미지 파일 없음: {image_path}")
-            image_data_b64 = ""
-        
-        msg = f"ME_OD:123,{ObjectType.BIRD.name},200.0,100.0,{Zone.RWY_A.value},{datetime.now().isoformat()},{image_data_b64}"
+        # 실제 서버 형식에 맞게 5개 필드만 전송: object_id,object_type,x_coord,y_coord,area
+        msg = f"ME_OD:123,{ObjectType.BIRD.name},200.0,100.0,{Zone.RWY_A.value}"
         send_test_event_raw(msg)
 
     def send_bird(self):
@@ -177,9 +170,10 @@ def handle_test_event(window, prefix, payload):
                             object_type=ObjectType(obj_type_str),
                             x_coord=0.0, # 상세 정보에는 좌표가 없음
                             y_coord=0.0,
-                            zone=Zone(zone_str),
+                            area=Zone(zone_str),
+                            event_type=EventType.HAZARD,  # 기본값
                             timestamp=datetime.fromisoformat(timestamp_str),
-                            extra_info=None,
+                            state_info=None,
                             image_data=image_data
                         )
                         window.main_page.network_manager.object_detail_response.emit(obj)

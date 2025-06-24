@@ -23,10 +23,14 @@ class MarkerData:
     y: float
     object_type: str
     zone: str
-    is_selected: bool = False
     size: int = 50
     icon_path: Optional[str] = None
     state: str = 'NORMAL'  # NORMAL, WARNING, SELECTED
+    
+    @property
+    def is_selected(self) -> bool:
+        """선택 상태 확인"""
+        return self.state == 'SELECTED'
 
 class DynamicMarker(QLabel):
     """동적 마커 위젯"""
@@ -36,12 +40,27 @@ class DynamicMarker(QLabel):
         super().__init__(parent)
         self.data = data
         self.is_animating = False
-        self.animation = QPropertyAnimation(self, b"pos")
+        
+        # 애니메이션 객체를 부모와 연결하여 메모리 누수 방지
+        self.animation = QPropertyAnimation(self, b"pos", self)
         self.animation.setEasingCurve(QEasingCurve.Type.OutCubic)
         self.animation.finished.connect(self._animation_finished)
         
+        # 깜빡임 타이머 초기화
+        self.blink_timer = QTimer(self)
+        self.blink_timer.timeout.connect(self.toggle_visibility)
+        self.blink_visible = True
+        
         # 마커 설정
         self.setup_marker()
+        
+    def get_marker_size(self) -> int:
+        """마커 크기 반환"""
+        return self.data.size
+    
+    def get_marker_half_size(self) -> int:
+        """마커 크기의 절반 반환"""
+        return self.data.size // 2
         
     def setup_marker(self):
         """마커 초기 설정"""
@@ -95,10 +114,19 @@ class DynamicMarker(QLabel):
             ObjectType.AIRPLANE.value: os.path.join(base_path, 'resources/images/airplane.png'),
             ObjectType.VEHICLE.value: os.path.join(base_path, 'resources/images/vehicle.png'),
             ObjectType.WORK_PERSON.value: os.path.join(base_path, 'resources/images/worker.png'),
-            ObjectType.WORK_VEHICLE.value: os.path.join(base_path, 'resources/images/vehicle_work.png')
+            ObjectType.WORK_VEHICLE.value: os.path.join(base_path, 'resources/images/vehicle_work.png'),
+            ObjectType.UNKNOWN.value: os.path.join(base_path, 'resources/images/unknown.png')
         }
-        # Enum이 들어오면 value, 아니면 그대로
-        obj_type_key = self.data.object_type.value if hasattr(self.data.object_type, 'value') else str(self.data.object_type)
+        
+        # 안전한 객체 타입 처리
+        obj_type = self.data.object_type
+        if obj_type is None:
+            obj_type_key = ObjectType.UNKNOWN.value
+        elif hasattr(obj_type, 'value'):
+            obj_type_key = obj_type.value
+        else:
+            obj_type_key = str(obj_type)
+            
         icon_path = icon_paths.get(obj_type_key)
         logger.debug(f"마커 아이콘 로드 시도: base_path={base_path}, object_type={obj_type_key}, icon_path={icon_path}")
         logger.debug(f"사용 가능한 icon_paths 키들: {list(icon_paths.keys())}")
@@ -189,7 +217,7 @@ class DynamicMarker(QLabel):
             painter.drawPixmap(0, 0, pixmap)
             
             # 깜빡임 효과를 위한 반투명 오버레이
-            if hasattr(self, 'blink_visible') and self.blink_visible:
+            if self.blink_visible:
                 overlay_color = QColor("#FFA500")
                 overlay_color.setAlpha(128)  # 50% 투명도
                 painter.setBrush(QBrush(overlay_color))
@@ -215,18 +243,14 @@ class DynamicMarker(QLabel):
         
     def start_blinking(self):
         """깜빡임 효과 시작"""
-        if not hasattr(self, 'blink_timer'):
-            self.blink_timer = QTimer()
-            self.blink_timer.timeout.connect(self.toggle_visibility)
-            self.blink_visible = True
-            
         self.blink_timer.start(500)  # 0.5초 간격
         
     def stop_blinking(self):
         """깜빡임 효과 중지"""
-        if hasattr(self, 'blink_timer'):
-            self.blink_timer.stop()
-            self.setVisible(True)
+        self.blink_timer.stop()
+        self.setVisible(True)
+        self.blink_visible = True
+        self.update_appearance()
     
     def toggle_visibility(self):
         """가시성 토글 (깜빡임 용)"""
@@ -248,7 +272,11 @@ class MapMarkerWidget(QWidget):
         self.markers: Dict[int, DynamicMarker] = {}
         self.marker_labels: Dict[int, QLabel] = {}  # 추가
         self.selected_marker_id: Optional[int] = None
-        self.set_map_size(960, 720)  # 기본 지도 크기
+        
+        # 기본 지도 크기 설정
+        self.map_width = 960
+        self.map_height = 720
+        self.set_map_size(self.map_width, self.map_height)
         
         # 지도 이미지를 표시할 레이블 생성
         self.label_map = QLabel(self)
@@ -275,11 +303,7 @@ class MapMarkerWidget(QWidget):
         self.map_pixmap = QPixmap()
         
         if os.path.exists(self.map_path):
-            if self.map_pixmap.load(self.map_path):
-                logger.info(f"지도 이미지 로드 성공: {self.map_path}")
-            else:
-                logger.warning(f"지도 이미지 로드 실패: {self.map_path}")
-                self.create_placeholder_map()
+            self.map_pixmap.load(self.map_path)
         else:
             logger.warning(f"지도 이미지를 찾을 수 없습니다: {self.map_path}")
             self.create_placeholder_map()
@@ -323,37 +347,76 @@ class MapMarkerWidget(QWidget):
         else:
             logger.warning("지도 이미지가 null임")
         
-    def create_marker_data(self, obj: DetectedObject) -> MarkerData:
+    def create_marker_data(self, obj: DetectedObject) -> dict:
         """DetectedObject로부터 MarkerData 생성"""
-        return MarkerData(
-            object_id=obj.object_id,
-            x=obj.x_coord,
-            y=obj.y_coord,
-            object_type=obj.object_type.value,
-            zone=obj.zone.value
-        )
+        return {
+            'object_id': obj.object_id,
+            'object_type': obj.object_type,
+            'x_coord': obj.x_coord,
+            'y_coord': obj.y_coord,
+            'area': obj.area,
+            'timestamp': obj.timestamp,
+            'image_data': obj.image_data
+        }
         
-    def add_dynamic_marker(self, marker_data: MarkerData):
+    def calculate_marker_position(self, map_x: float, map_y: float, marker_size: int = 50) -> Tuple[int, int]:
+        """지도 좌표를 위젯 좌표로 변환"""
+        # 안전한 나누기 연산을 위한 검사 (0으로 나누는 것 방지)
+        widget_width = max(1, self.width())
+        widget_height = max(1, self.height())
+        map_width = max(1, self.map_width)
+        map_height = max(1, self.map_height)
+        
+        # 지도 좌표를 위젯 좌표로 변환
+        x = int(map_x * widget_width / map_width)
+        y = int(map_y * widget_height / map_height)
+        
+        # 마커 크기의 절반만큼 조정 (마커 중앙이 좌표에 오도록)
+        marker_half_size = marker_size // 2
+        
+        # 경계 제약 조건 적용
+        x = self._constrain_position(x, marker_half_size, widget_width)
+        y = self._constrain_position(y, marker_half_size, widget_height)
+        
+        return x - marker_half_size, y - marker_half_size
+    
+    def _constrain_position(self, position: int, margin: int, max_size: int) -> int:
+        """위치를 경계 내로 제한"""
+        constrained_position = max(margin, min(position, max_size - margin))
+        
+        # 경계 제약이 적용되었는지 확인하고 로깅
+        if constrained_position != position:
+            logger.debug(f"위치 제약 적용: {position} -> {constrained_position} (margin: {margin}, max_size: {max_size})")
+            
+        return constrained_position
+    
+    def add_dynamic_marker(self, marker_data: dict):
         """동적 마커 추가"""
         try:
             # 기존 마커가 있으면 제거
-            if marker_data.object_id in self.markers:
-                self.remove_marker(marker_data.object_id)
+            if marker_data['object_id'] in self.markers:
+                self.remove_marker(marker_data['object_id'])
                 
             # 새 마커 생성
-            marker = DynamicMarker(marker_data, self)
-            marker.clicked.connect(lambda: self.marker_clicked.emit(marker_data.object_id))
+            marker = DynamicMarker(MarkerData(
+                object_id=marker_data['object_id'],
+                x=marker_data['x_coord'],
+                y=marker_data['y_coord'],
+                object_type=marker_data['object_type'],
+                zone=marker_data['area']
+            ), self)
+            marker.clicked.connect(lambda: self.marker_clicked.emit(marker_data['object_id']))
             
-            # 위치 계산 및 설정
-            x, y = self.calculate_marker_position(marker_data.x, marker_data.y)
+            # 위치 계산 및 설정 (경계 제약 적용됨)
+            x, y = self.calculate_marker_position(marker_data['x_coord'], marker_data['y_coord'], 50)
             marker.move(x, y)
             marker.show()
             
-            self.markers[marker_data.object_id] = marker
-            logger.debug(f"마커 추가 성공: ID {marker_data.object_id}")
+            self.markers[marker_data['object_id']] = marker
+            logger.debug(f"마커 추가 성공: ID {marker_data['object_id']}, 위치: ({x}, {y})")
             
-            # ID 라벨 추가
-            id_label = QLabel(f"ID:{marker_data.object_id}", self)
+            # ID 라벨 추가 (경계 제약 고려)
+            id_label = QLabel(f"ID:{marker_data['object_id']}", self)
             id_label.setStyleSheet("""
                 background: rgba(0,0,0,0.7);
                 color: white;
@@ -363,38 +426,57 @@ class MapMarkerWidget(QWidget):
                 font-size: 12px;
             """)
             id_label.adjustSize()
-            # 마커 중앙 상단에 위치 (마커 크기 50px 고려)
-            label_x = x + 25 - id_label.width()//2  # 마커 중앙에서 라벨 중앙 정렬
+            
+            # 라벨 위치 계산 (마커 중앙 상단, 경계 제약 적용)
+            marker_half_size = 50 // 2
+            label_x = x + marker_half_size - id_label.width()//2  # 마커 중앙에서 라벨 중앙 정렬
             label_y = y - id_label.height() - 2     # 마커 상단에서 2px 위
+            
+            # 라벨도 경계 제약 적용
+            label_x = self._constrain_position(label_x, 0, self.width() - id_label.width())
+            label_y = self._constrain_position(label_y, 0, self.height() - id_label.height())
+            
             id_label.move(label_x, label_y)
             id_label.show()
-            self.marker_labels[marker_data.object_id] = id_label
+            self.marker_labels[marker_data['object_id']] = id_label
             
         except Exception as e:
             logger.error(f"마커 추가 실패: {str(e)}")
             
-    def update_marker(self, marker_data: MarkerData):
+    def update_marker(self, marker_data: dict):
         """마커 업데이트"""
         try:
-            if marker_data.object_id in self.markers:
-                marker = self.markers[marker_data.object_id]
-                marker.data = marker_data
+            if marker_data['object_id'] in self.markers:
+                marker = self.markers[marker_data['object_id']]
+                marker.data = MarkerData(
+                    object_id=marker_data['object_id'],
+                    x=marker_data['x_coord'],
+                    y=marker_data['y_coord'],
+                    object_type=marker_data['object_type'],
+                    zone=marker_data['area']
+                )
                 
-                # 위치가 변경되었으면 이동
-                x, y = self.calculate_marker_position(marker_data.x, marker_data.y)
+                # 위치가 변경되었으면 이동 (경계 제약 적용됨)
+                x, y = self.calculate_marker_position(marker_data['x_coord'], marker_data['y_coord'], 50)
                 marker.animate_to_position(x, y)
                 
-                # 라벨 위치도 업데이트
-                label = self.marker_labels.get(marker_data.object_id)
+                # 라벨 위치도 업데이트 (경계 제약 적용)
+                label = self.marker_labels.get(marker_data['object_id'])
                 if label:
-                    label_x = x + 25 - label.width()//2  # 마커 중앙에서 라벨 중앙 정렬
+                    marker_half_size = 50 // 2
+                    label_x = x + marker_half_size - label.width()//2  # 마커 중앙에서 라벨 중앙 정렬
                     label_y = y - label.height() - 2     # 마커 상단에서 2px 위
+                    
+                    # 라벨도 경계 제약 적용
+                    label_x = self._constrain_position(label_x, 0, self.width() - label.width())
+                    label_y = self._constrain_position(label_y, 0, self.height() - label.height())
+                    
                     label.move(label_x, label_y)
                 
                 # 외관 업데이트
                 marker.update_appearance()
                 
-                logger.debug(f"마커 업데이트 성공: ID {marker_data.object_id}")
+                logger.debug(f"마커 업데이트 성공: ID {marker_data['object_id']}, 위치: ({x}, {y})")
         except Exception as e:
             logger.error(f"마커 업데이트 실패: {str(e)}")
             
@@ -456,23 +538,24 @@ class MapMarkerWidget(QWidget):
         except Exception as e:
             logger.error(f"마커 제거 실패: {str(e)}")
             
-    def calculate_marker_position(self, map_x: float, map_y: float) -> Tuple[int, int]:
-        """지도 좌표를 위젯 좌표로 변환"""
-        x = int(map_x * self.width() / self.map_width)
-        y = int(map_y * self.height() / self.map_height)
-        return x - 12, y - 12  # 마커 크기의 절반만큼 조정
-        
     def update_marker_positions(self):
         """모든 마커 위치 업데이트 (위젯 크기 변경 시)"""
         for marker in self.markers.values():
-            x, y = self.calculate_marker_position(marker.data.x, marker.data.y)
+            x, y = self.calculate_marker_position(marker.data.x, marker.data.y, marker.data.size)
             if not marker.is_animating:
                 marker.move(x, y)
-            # 라벨도 같이 이동 (마커 중앙 상단에 위치)
+            
+            # 라벨도 같이 이동 (경계 제약 적용)
             label = self.marker_labels.get(marker.data.object_id)
             if label:
-                label_x = x + 25 - label.width()//2  # 마커 중앙에서 라벨 중앙 정렬
+                marker_half_size = marker.data.size // 2
+                label_x = x + marker_half_size - label.width()//2  # 마커 중앙에서 라벨 중앙 정렬
                 label_y = y - label.height() - 2     # 마커 상단에서 2px 위
+                
+                # 라벨도 경계 제약 적용
+                label_x = self._constrain_position(label_x, 0, self.width() - label.width())
+                label_y = self._constrain_position(label_y, 0, self.height() - label.height())
+                
                 label.move(label_x, label_y)
                 
     def resizeEvent(self, event):

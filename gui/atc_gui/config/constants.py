@@ -1,5 +1,11 @@
 from enum import Enum
 
+class EventType(Enum):
+    """이벤트 타입"""
+    HAZARD = "위험요소 감지"
+    UNAUTH = "출입 위반"
+    RESCUE = "구조"
+
 class ObjectType(Enum):
     """지상 위험 요소 타입"""
     BIRD = "조류"
@@ -10,6 +16,7 @@ class ObjectType(Enum):
     VEHICLE = "차량"
     WORK_PERSON = "작업자"
     WORK_VEHICLE = "작업차량"
+    UNKNOWN = "알 수 없음"
 
 class BirdRiskLevel(Enum):
     """조류 위험도 등급"""
@@ -45,11 +52,6 @@ class AccessTarget(Enum):
     VEHICLE = "차량"
     PERSON = "인원"
 
-class ExtraInfo(Enum):
-    """추가 정보"""
-    N = "없음"
-    R = "쓰러짐"
-
 class CameraID(Enum):
     """CCTV 카메라 식별자"""
     A = "A"
@@ -80,6 +82,12 @@ class Constants:
     """상수 정의 클래스"""
     
     # --- 매핑 테이블 ---
+    EVENT_TYPE_MAPPING = {
+        0: EventType.HAZARD,
+        1: EventType.UNAUTH,
+        2: EventType.RESCUE
+    }
+
     OBJECT_CLASS_MAPPING = {
         0: ObjectType.BIRD,
         1: ObjectType.FOD,
@@ -88,7 +96,8 @@ class Constants:
         4: ObjectType.AIRPLANE,
         5: ObjectType.VEHICLE,
         6: ObjectType.WORK_PERSON,
-        7: ObjectType.WORK_VEHICLE
+        7: ObjectType.WORK_VEHICLE,
+        8: ObjectType.UNKNOWN
     }
     
     BIRD_RISK_MAPPING = {
@@ -123,10 +132,18 @@ class Constants:
     # --- 통신 프로토콜 관련 ---
     class Protocol:
         """메시지 형식 및 구분자 관련 상수"""
+        
+        # 구분자
+        MESSAGE_SEPARATOR = ":"
+        OBJECT_FIELD_SEPARATOR = ","
+        OBJECT_RECORD_SEPARATOR = ";"
+        UDP_DATA_SEPARATOR = ":"
+        
+        # 메시지 형식 정의
         MESSAGE_FORMAT = {
             # 이벤트 메시지 (서버 -> GUI)
-            MessagePrefix.ME_OD: "{prefix}:{object_info}[;{object_info}]*",
-            MessagePrefix.ME_FD: "{prefix}:{object_info_first}[;{object_info}]*",
+            MessagePrefix.ME_OD: "{prefix}:{object_id},{object_type},{x_coord},{y_coord},{area},{timestamp}[,{state_info}][;{object_id},{object_type},{x_coord},{y_coord},{area},{timestamp}[,{state_info}]]*",
+            MessagePrefix.ME_FD: "{prefix}:{event_type},{object_id},{object_type},{x_coord},{y_coord},{area},{timestamp},{image_size},{image_data}[;{event_type},{object_id},{object_type},{x_coord},{y_coord},{area},{timestamp}[,{state_info}]]*",
             MessagePrefix.ME_BR: "{prefix}:{risk_level}",
             MessagePrefix.ME_RA: "{prefix}:{risk_level}",
             MessagePrefix.ME_RB: "{prefix}:{risk_level}",
@@ -141,18 +158,5 @@ class Constants:
             MessagePrefix.MR_CA: "{prefix}:{response}",
             MessagePrefix.MR_CB: "{prefix}:{response}",
             MessagePrefix.MR_MP: "{prefix}:{response}",
-            MessagePrefix.MR_OD: "{prefix}:{response}[,{object_info_detail}]"
+            MessagePrefix.MR_OD: "{prefix}:{response},{event_type},{object_id},{object_type},{area},{timestamp},{image_size},{image_data}"
         }
-        
-        # 구분자
-        MESSAGE_SEPARATOR = ":"
-        OBJECT_FIELD_SEPARATOR = ","
-        OBJECT_RECORD_SEPARATOR = ";"
-        UDP_DATA_SEPARATOR = ":"
-    
-    # --- 객체 정보 형식 ---
-    class ObjectInfo:
-        """객체 정보 문자열 형식 정의"""
-        OBJECT_INFO = "{object_id},{object_type},{x_coord},{y_coord},{area},{timestamp}[,{extra_info}]"
-        OBJECT_INFO_FIRST = "{object_id},{object_type},{x_coord},{y_coord},{area},{timestamp},{image_size},{image_data}"
-        OBJECT_INFO_DETAIL = "{object_id},{object_type},{area},{timestamp},{image_size},{image_data}"
