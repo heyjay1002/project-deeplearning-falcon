@@ -1,14 +1,14 @@
 import cv2
 from ultralytics import YOLO
 def main():
-    cap = cv2.VideoCapture(2, cv2.CAP_V4L2)
+    cap = cv2.VideoCapture(4, cv2.CAP_V4L2)
     cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))  # MJPG는 필수
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2592)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1944)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 960)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 960)
     # yolo 새 전용 모델 ("/home/mac/dev_ws/project/runs/bird_only/stage24/weights/best.pt")
     # 활주로내 물체 1차 학습모델("/home/mac/dev_ws/project/runs/FOhD-multiclass/stage29/weights/best.pt")
     # model = YOLO("/home/mac/dev_ws/project/runs/FOD-multiclass/stage29/weights/best.pt")qq
-    model = YOLO("runsreal/runs/segment/seg_run_final5/weights/best./home/mac/dev_ws/project/deeplearning-repo-2/technical_test/dl_model_test/object_detecting/single_model/yolo8s_seg/all_fine_fune_v1/weights/best.pt")
+    model = YOLO("/home/mac/dev_ws/project/deeplearning-repo-2/IDS/v2/models/yolov8n_box_v0.1.0.pt")
     cv2.namedWindow("ABKO 1944p", cv2.WINDOW_NORMAL)  # 창 리사이징 가능하게 설정
     while True:
         ok, frame = cap.read()
