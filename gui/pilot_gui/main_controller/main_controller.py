@@ -41,7 +41,8 @@ class VoiceInteractionController:
         self.tts_engine = tts_engine or UnifiedTTSEngine(
             use_coqui=True,
             coqui_model="tts_models/en/ljspeech/tacotron2-DDC",
-            fallback_to_pyttsx3=True
+            fallback_to_pyttsx3=True,
+            device="cuda"
         )
         self.session_manager = session_manager or SessionManager()
         
@@ -633,7 +634,8 @@ def create_voice_controller(
         tts_engine = UnifiedTTSEngine(
             use_coqui=True,
             coqui_model="tts_models/en/ljspeech/tacotron2-DDC",
-            fallback_to_pyttsx3=True
+            fallback_to_pyttsx3=True,
+            device="cuda"
         )
         session_manager = SessionManager()
         

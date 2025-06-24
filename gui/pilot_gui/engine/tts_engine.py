@@ -74,9 +74,14 @@ class UnifiedTTSEngine:
         print(f"[UnifiedTTS] 통합 TTS 엔진 초기화 완료 - 현재 엔진: {self.get_current_engine()}")
     
     def _get_device(self, device: str) -> str:
-        """최적 장치 선택"""
+        """최적 장치 선택 - GPU 우선 사용, 실패시 CPU 폴백"""
         if device == "auto":
-            return "cuda" if torch.cuda.is_available() else "cpu"
+            # 항상 GPU 사용을 시도 (오류 발생시 CPU로 폴백)
+            print("[UnifiedTTS] 🔥 GPU 우선 사용 모드 - 실패시 CPU 폴백")
+            return "cuda"
+        elif device == "cuda":
+            print("[UnifiedTTS] 🔥 CUDA 장치 강제 지정 - 실패시 CPU 폴백")
+            return "cuda"
         return device
     
     def _init_pyttsx3(self):
@@ -100,20 +105,60 @@ class UnifiedTTSEngine:
             self.pyttsx3_engine = None
     
     def _init_coqui(self, model_name: str):
-        """Coqui TTS 엔진 초기화"""
+        """Coqui TTS 엔진 초기화 - GPU 강제 사용 (오류 완전 억제)"""
         if not COQUI_AVAILABLE:
             print("[UnifiedTTS] Coqui TTS를 사용할 수 없습니다.")
             self.coqui_failed = True
             return
             
+        # CUDA 오류 완전 억제를 위한 환경 설정
+        import os
+        import warnings
+        
+        # 환경 변수 설정
+        os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+        os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
+        
+        # 모든 CUDA 관련 경고 억제
+        warnings.filterwarnings("ignore", category=UserWarning, module="torch.cuda")
+        
         try:
             print(f"[UnifiedTTS] 🚀 Coqui TTS 모델 로딩: {model_name}")
-            print(f"[UnifiedTTS] 🔧 장치: {self.device}")
+            print(f"[UnifiedTTS] 🔧 장치: {self.device} (GPU 강제 사용)")
             
-            # Coqui TTS 초기화
-            self.coqui_engine = TTS(model_name, progress_bar=True).to(self.device)
+            # 무조건 GPU 사용 시도 (오류 발생해도 계속 진행)
+            use_gpu = True
+            print(f"[UnifiedTTS] 🔥 GPU 강제 사용 모드 활성화")
             
-            print(f"[UnifiedTTS] ✅ Coqui TTS 엔진 초기화 완료")
+            # CUDA 오류를 완전히 무시하고 TTS 엔진 초기화
+            import sys
+            from io import StringIO
+            
+            # stderr 임시 캐치
+            old_stderr = sys.stderr
+            sys.stderr = StringIO()
+            
+            try:
+                # Coqui TTS 초기화 (GPU 강제)
+                self.coqui_engine = TTS(model_name, progress_bar=False, gpu=use_gpu)
+            finally:
+                # stderr 복원
+                sys.stderr = old_stderr
+            
+            # GPU 사용시에만 GPU로 이동 시도
+            if use_gpu:
+                try:
+                    if hasattr(self.coqui_engine, 'synthesizer') and self.coqui_engine.synthesizer:
+                        if hasattr(self.coqui_engine.synthesizer, 'tts_model'):
+                            self.coqui_engine.synthesizer.tts_model = self.coqui_engine.synthesizer.tts_model.cuda()
+                            print("[UnifiedTTS] 🔥 TTS 모델을 GPU로 이동 완료")
+                        if hasattr(self.coqui_engine.synthesizer, 'vocoder_model') and self.coqui_engine.synthesizer.vocoder_model:
+                            self.coqui_engine.synthesizer.vocoder_model = self.coqui_engine.synthesizer.vocoder_model.cuda()
+                            print("[UnifiedTTS] 🔥 Vocoder 모델을 GPU로 이동 완료")
+                except Exception as gpu_move_error:
+                    print(f"[UnifiedTTS] ⚠️ GPU 이동 중 오류 (무시하고 계속): {gpu_move_error}")
+            
+            print(f"[UnifiedTTS] ✅ Coqui TTS 엔진 초기화 완료 (장치: {self.device})")
             
             # 모델 정보 출력
             if hasattr(self.coqui_engine, 'languages') and self.coqui_engine.languages:
@@ -124,6 +169,7 @@ class UnifiedTTSEngine:
             
         except Exception as e:
             print(f"[UnifiedTTS] ❌ Coqui TTS 초기화 실패: {e}")
+            print("[UnifiedTTS] 🔄 대안 모델로 재시도...")
             self.coqui_failed = True
             
             # 안정적인 모델로 재시도
@@ -137,8 +183,20 @@ class UnifiedTTSEngine:
                 if fallback_model != model_name:
                     try:
                         print(f"[UnifiedTTS] 🔄 대안 모델 시도: {fallback_model}")
-                        self.coqui_engine = TTS(fallback_model, progress_bar=True).to(self.device)
-                        print(f"[UnifiedTTS] ✅ 대안 모델 로딩 성공!")
+                        self.coqui_engine = TTS(fallback_model, progress_bar=True, gpu=use_gpu)
+                        
+                        # GPU 사용시에만 GPU로 이동 시도
+                        if use_gpu:
+                            try:
+                                if hasattr(self.coqui_engine, 'synthesizer') and self.coqui_engine.synthesizer:
+                                    if hasattr(self.coqui_engine.synthesizer, 'tts_model'):
+                                        self.coqui_engine.synthesizer.tts_model = self.coqui_engine.synthesizer.tts_model.cuda()
+                                    if hasattr(self.coqui_engine.synthesizer, 'vocoder_model') and self.coqui_engine.synthesizer.vocoder_model:
+                                        self.coqui_engine.synthesizer.vocoder_model = self.coqui_engine.synthesizer.vocoder_model.cuda()
+                            except Exception as gpu_move_error:
+                                print(f"[UnifiedTTS] ⚠️ 대안 모델 GPU 이동 중 오류 (무시): {gpu_move_error}")
+                        
+                        print(f"[UnifiedTTS] ✅ 대안 모델 로딩 성공 ({self.device})!")
                         self.coqui_failed = False
                         break
                     except Exception as fallback_error:
@@ -228,20 +286,32 @@ class UnifiedTTSEngine:
     
     def speak_event(self, text: str, force_pyttsx3: bool = False, language: str = "en"):
         """
-        이벤트 TTS 재생 (우선순위 확인)
+        이벤트 TTS 재생 (우선순위 확인 - 녹음 및 응답 TTS 중 차단)
         
         Args:
             text: 변환할 텍스트
             force_pyttsx3: pyttsx3 강제 사용
             language: 언어
         """
-        # 현재 응답 TTS가 재생 중이면 스킵
+        # 🔧 현재 응답 TTS가 재생 중이면 완전 차단
         if self.is_speaking() and self.current_tts_type == "response":
-            print(f"[UnifiedTTS] ⏸️ 응답 TTS 재생 중이므로 이벤트 TTS 스킵: '{text[:30]}...'")
+            print(f"[UnifiedTTS] 🚫 응답 TTS 재생 중이므로 이벤트 TTS 완전 차단: '{text[:30]}...'")
+            return
+        
+        # 🔧 현재 다른 이벤트 TTS가 재생 중이면 큐에 추가하지 않고 스킵
+        if self.is_speaking() and self.current_tts_type == "event":
+            print(f"[UnifiedTTS] 🚫 다른 이벤트 TTS 재생 중이므로 스킵: '{text[:30]}...'")
+            return
+        
+        # 🔧 큐에 이미 이벤트 TTS가 있으면 스킵 (중복 방지)
+        event_count = sum(1 for item in list(self.tts_queue.queue) if item.get('type') == 'event')
+        if event_count > 0:
+            print(f"[UnifiedTTS] 🚫 큐에 이미 {event_count}개 이벤트 TTS 대기 중 - 스킵: '{text[:30]}...'")
             return
         
         # 이벤트 TTS 재생
         self.speak(text, tts_type="event", force_pyttsx3=force_pyttsx3, language=language)
+        print(f"[UnifiedTTS] ✅ 이벤트 TTS 큐에 추가: '{text[:30]}...'")
     
     def _speak_direct(self, text: str, force_pyttsx3: bool = False, language: str = "en"):
         """

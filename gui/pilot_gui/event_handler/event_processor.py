@@ -12,6 +12,8 @@ class EventProcessor:
         # 이벤트 타입별 처리 규칙
         self.event_type_mapping = {
             "BR_CHANGED": "bird_risk",
+            "RWY_A_STATUS_CHANGED": "runway_alpha",
+            "RWY_B_STATUS_CHANGED": "runway_bravo",
             "RUNWAY_ALPHA_STATUS_CHANGED": "runway_alpha",
             "RUNWAY_BRAVO_STATUS_CHANGED": "runway_bravo"
         }
@@ -19,12 +21,13 @@ class EventProcessor:
         # 결과 코드 매핑
         self.result_mapping = {
             # 조류 위험도
-            "BR_LOW": "LOW",
-            "BR_MEDIUM": "MEDIUM", 
-            "BR_HIGH": "HIGH",
+            "BR_LOW": "NORMAL",
+            "BR_MEDIUM": "CAUTION",
+            "BR_HIGH": "WARNING",
             
             # 활주로 상태
             "CLEAR": "CLEAR",
+            "BLOCKED": "BLOCKED",
             "WARNING": "WARNING"
         }
         
@@ -86,16 +89,18 @@ class EventProcessor:
         """
         descriptions = {
             "bird_risk": {
-                "LOW": "조류 위험도가 낮음으로 변경되었습니다",
-                "MEDIUM": "조류 위험도가 보통으로 변경되었습니다",
-                "HIGH": "조류 위험도가 높음으로 변경되었습니다"
+                "NORMAL": "조류 위험도가 낮음으로 변경되었습니다",
+                "CAUTION": "조류 위험도가 보통으로 변경되었습니다",
+                "WARNING": "조류 위험도가 높음으로 변경되었습니다"
             },
             "runway_alpha": {
                 "CLEAR": "활주로 알파가 사용 가능 상태로 변경되었습니다",
+                "BLOCKED": "활주로 알파가 차단되었습니다",
                 "WARNING": "활주로 알파에 경고가 발생했습니다"
             },
             "runway_bravo": {
                 "CLEAR": "활주로 브라보가 사용 가능 상태로 변경되었습니다",
+                "BLOCKED": "활주로 브라보가 차단되었습니다",
                 "WARNING": "활주로 브라보에 경고가 발생했습니다"
             }
         }
@@ -115,16 +120,18 @@ class EventProcessor:
         """
         priority_rules = {
             "bird_risk": {
-                "HIGH": 1,      # 높은 조류 위험도 - 최우선
-                "MEDIUM": 2,    # 보통 조류 위험도 - 보통
-                "LOW": 3        # 낮은 조류 위험도 - 낮음
+                "WARNING": 1,   # 높은 조류 위험도 - 최우선
+                "CAUTION": 2,   # 보통 조류 위험도 - 보통
+                "NORMAL": 3     # 낮은 조류 위험도 - 낮음
             },
             "runway_alpha": {
                 "WARNING": 1,   # 활주로 경고 - 최우선
+                "BLOCKED": 1,   # 활주로 차단 - 최우선
                 "CLEAR": 3      # 활주로 정상 - 낮음
             },
             "runway_bravo": {
                 "WARNING": 1,   # 활주로 경고 - 최우선
+                "BLOCKED": 1,   # 활주로 차단 - 최우선
                 "CLEAR": 3      # 활주로 정상 - 낮음
             }
         }
@@ -144,9 +151,9 @@ class EventProcessor:
         """
         # 모든 이벤트에 대해 TTS 알림 (필요시 조건 추가)
         tts_rules = {
-            "bird_risk": ["HIGH", "MEDIUM", "LOW"],
-            "runway_alpha": ["WARNING", "CLEAR"],
-            "runway_bravo": ["WARNING", "CLEAR"]
+            "bird_risk": ["WARNING", "CAUTION", "NORMAL"],
+            "runway_alpha": ["WARNING", "BLOCKED", "CLEAR"],
+            "runway_bravo": ["WARNING", "BLOCKED", "CLEAR"]
         }
         
         return result in tts_rules.get(event_type, [])

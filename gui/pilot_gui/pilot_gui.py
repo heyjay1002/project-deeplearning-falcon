@@ -15,12 +15,11 @@ from typing import Optional
 # Qt imports
 try:
     from PyQt6.QtWidgets import (
-        QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-        QPushButton, QLabel, QTextEdit, QProgressBar, QSlider,
-        QFrame, QGridLayout, QGroupBox, QStatusBar, QMessageBox
+        QApplication, QMainWindow, QPushButton, QLabel, QVBoxLayout, QHBoxLayout,
+        QTextEdit, QProgressBar, QSlider, QMessageBox, QWidget, QGroupBox
     )
-    from PyQt6.QtCore import QTimer, QThread, pyqtSignal, Qt, QSize
-    from PyQt6.QtGui import QFont, QPalette, QColor, QPixmap, QIcon
+    from PyQt6.QtCore import QTimer, QThread, pyqtSignal, Qt, QMutex, QEventLoop
+    from PyQt6.QtGui import QTextCursor
     from PyQt6 import uic
 except ImportError:
     print("FAIL PyQt6가 설치되지 않았습니다. 설치하려면:")
@@ -132,6 +131,7 @@ class PilotAvionics(QMainWindow):
     bird_risk_changed_signal = pyqtSignal(str)
     runway_alpha_changed_signal = pyqtSignal(str)
     runway_bravo_changed_signal = pyqtSignal(str)
+    event_tts_signal = pyqtSignal(str)  # 🔧 이벤트 TTS용 시그널 추가
     
     def __init__(self, stt_manager=None, tts_manager=None, api_client=None, 
                  use_keyboard_shortcuts=True, parent=None):
@@ -153,6 +153,9 @@ class PilotAvionics(QMainWindow):
         self.init_controller()
         self.init_timers()
         self.connect_signals()
+        
+        # 🔧 GUI 초기화 완료 후 시뮬레이터에 준비 완료 신호 전송
+        QTimer.singleShot(1000, self.signal_gui_ready)  # 1초 후 신호 전송
         
         print("🚁 FALCON Pilot Avionics Interface 초기화 완료")
     
@@ -258,7 +261,7 @@ class PilotAvionics(QMainWindow):
             self.slider_tts_volume.setValue(50)
             
             # NEW 슬라이더 정밀도 향상
-            self.slider_tts_volume.setTickPosition(self.slider_tts_volume.TickPosition.TicksBelow)
+            self.slider_tts_volume.setTickPosition(QSlider.TickPosition.TicksBelow)
             self.slider_tts_volume.setTickInterval(10)  # 10% 단위로 눈금
             self.slider_tts_volume.setSingleStep(1)     # 키보드 화살표로 1% 단위 조절
             self.slider_tts_volume.setPageStep(5)       # 마우스 클릭으로 5% 단위 조절
@@ -306,6 +309,16 @@ class PilotAvionics(QMainWindow):
         print(f"  - STT 결과 텍스트: {self.text_stt_result is not None}")
         print(f"  - TTS 응답 텍스트: {self.text_tts_response is not None}")
         
+        # 🔧 위젯 상세 정보 출력 (디버깅용)
+        if self.text_tts_response:
+            print(f"[GUI] ✅ TTS 위젯 정보:")
+            print(f"  - 이름: {self.text_tts_response.objectName()}")
+            print(f"  - 타입: {type(self.text_tts_response).__name__}")
+            print(f"  - 가시성: {self.text_tts_response.isVisible()}")
+            print(f"  - 활성화: {self.text_tts_response.isEnabled()}")
+        else:
+            print(f"[GUI] ❌ TTS 위젯이 None입니다!")
+        
         # OK TTS 위젯이 None인 경우 강제로 모든 QTextEdit 검색
         if self.text_tts_response is None:
             print(f"[GUI] FAIL TTS 위젯을 찾을 수 없음! 전체 검색 시작...")
@@ -321,18 +334,37 @@ class PilotAvionics(QMainWindow):
                     self.text_stt_result = widget
                     print(f"[GUI] OK STT 위젯 발견 및 할당: {object_name}")
         
-        # NEW 초기 텍스트 설정 (안전하게)
+        # 🔧 TTS/STT 위젯 가시성 강제 설정
         if self.text_stt_result:
-            self.text_stt_result.setText("STT results will be displayed here...")
-            print(f"[GUI] OK STT 위젯 초기 텍스트 설정")
+            self.text_stt_result.setVisible(True)
+            self.text_stt_result.setEnabled(True)
+            self.text_stt_result.clear()
+            print(f"[GUI] OK STT 위젯 초기화 (비움) 및 가시성 설정")
         else:
             print(f"[GUI] WARN STT 위젯이 None입니다!")
             
         if self.text_tts_response:
-            self.text_tts_response.setText("TTS response will be displayed here...")
-            print(f"[GUI] OK TTS 위젯 초기 텍스트 설정")
+            self.text_tts_response.setVisible(True)
+            self.text_tts_response.setEnabled(True)
+            self.text_tts_response.clear()
+            # 🔧 테스트 텍스트로 위젯 동작 확인
+            self.text_tts_response.setText("TTS 위젯 준비 완료 - 응답 대기 중...")
+            print(f"[GUI] OK TTS 위젯 초기화 및 테스트 텍스트 설정")
+            
+            # 잠시 후 초기화
+            QTimer.singleShot(2000, lambda: self.text_tts_response.clear())
         else:
             print(f"[GUI] WARN TTS 위젯이 None입니다!")
+        
+        # 🔧 그룹박스들도 가시성 설정
+        group_stt = self.findChild(QGroupBox, "group_stt_result")
+        group_tts = self.findChild(QGroupBox, "group_tts_response")
+        if group_stt:
+            group_stt.setVisible(True)
+            print(f"[GUI] OK STT 그룹박스 가시성 설정")
+        if group_tts:
+            group_tts.setVisible(True)
+            print(f"[GUI] OK TTS 그룹박스 가시성 설정")
         
         # NEW 초기 시간 설정 (안전하게)
         try:
@@ -344,22 +376,22 @@ class PilotAvionics(QMainWindow):
         print("OK 모든 프로그레스바/슬라이더를 0으로 초기화")
     
     def connect_signals(self):
-        """시그널 연결"""
-        # 버튼 클릭 이벤트 연결
+        """시그널과 슬롯 연결"""
+        # 버튼 연결
         if self.btn_voice:
             self.btn_voice.clicked.connect(self.start_voice_input)
         if self.btn_status:
             self.btn_status.clicked.connect(self.show_system_status)
-        # btn_toggle 기능 제거됨 (구조화된 질의 시스템만 사용)
         
-        # 슬라이더 이벤트 연결
+        # 슬라이더 연결
         if self.slider_tts_volume:
             self.slider_tts_volume.valueChanged.connect(self.update_tts_volume)
         
-        # 🔧 스레드 안전한 GUI 업데이트를 위한 시그널-슬롯 연결
+        # 🔧 시그널 연결 (스레드 안전성)
         self.bird_risk_changed_signal.connect(self.update_bird_risk_display)
         self.runway_alpha_changed_signal.connect(self.update_runway_alpha_display)
         self.runway_bravo_changed_signal.connect(self.update_runway_bravo_display)
+        self.event_tts_signal.connect(self.update_tts_display_with_event)
     
     def init_controller(self):
         """컨트롤러 초기화"""
@@ -400,6 +432,13 @@ class PilotAvionics(QMainWindow):
             self.event_processor = EventProcessor()
             self.event_tts = EventTTS(self.controller.tts_engine if self.controller else None)
             
+            # 🔧 EventTTS에 스레드 안전한 GUI 콜백 설정
+            if self.event_tts:
+                self.event_tts.set_gui_callback(self.thread_safe_event_tts_update)
+                # 🔧 녹음 상태 체크 콜백 설정
+                self.event_tts.set_recording_checker(self.is_recording_or_processing)
+                print("[GUI] EventTTS 스레드 안전 GUI 콜백 및 녹음 체크 설정 완료")
+            
             # 🔧 TCP 프로토콜 명세에 맞는 이벤트 핸들러 등록
             self.event_manager.register_handler("BR_CHANGED", self.on_bird_risk_changed)
             self.event_manager.register_handler("RWY_A_STATUS_CHANGED", self.on_runway_alpha_changed)  # 수정됨
@@ -416,6 +455,44 @@ class PilotAvionics(QMainWindow):
             self.event_manager = None
             self.event_processor = None
             self.event_tts = None
+    
+    def thread_safe_event_tts_update(self, tts_message: str):
+        """스레드 안전한 이벤트 TTS 업데이트 - 녹음 중 차단"""
+        # 🔧 녹음 중이면 이벤트 TTS 완전 차단
+        if hasattr(self, 'is_recording') and self.is_recording:
+            print(f"[GUI] 🚫 녹음 중이므로 이벤트 TTS 차단: '{tts_message[:50]}...'")
+            return
+        
+        # 🔧 음성 워커 스레드가 실행 중이면 차단
+        if hasattr(self, 'voice_worker') and self.voice_worker and self.voice_worker.isRunning():
+            print(f"[GUI] 🚫 음성 처리 중이므로 이벤트 TTS 차단: '{tts_message[:50]}...'")
+            return
+        
+        print(f"[GUI] 🔔 스레드 안전 이벤트 TTS 시그널 전송: '{tts_message[:50]}...'")
+        self.event_tts_signal.emit(tts_message)
+    
+    def signal_gui_ready(self):
+        """GUI 준비 완료 신호를 이벤트 매니저에 전송"""
+        try:
+            if hasattr(self, 'event_manager') and self.event_manager:
+                self.event_manager.signal_gui_ready()
+                print("[GUI] ✅ GUI 준비 완료 신호를 이벤트 매니저에 전송")
+            else:
+                print("[GUI] ⚠️ 이벤트 매니저가 없어 GUI 준비 완료 신호를 전송할 수 없음")
+        except Exception as e:
+            print(f"[GUI] ❌ GUI 준비 완료 신호 전송 오류: {e}")
+    
+    def is_recording_or_processing(self) -> bool:
+        """녹음 또는 음성 처리 중인지 확인"""
+        # 녹음 중인지 확인
+        if hasattr(self, 'is_recording') and self.is_recording:
+            return True
+        
+        # 음성 워커 스레드가 실행 중인지 확인
+        if hasattr(self, 'voice_worker') and self.voice_worker and self.voice_worker.isRunning():
+            return True
+        
+        return False
     
     def on_bird_risk_changed(self, event_data: dict):
         """조류 위험도 변화 이벤트 처리"""
@@ -536,36 +613,41 @@ class PilotAvionics(QMainWindow):
         Returns:
             표준 TTS 메시지 텍스트
         """
-        # TCP 결과를 표준 응답 코드로 변환
+        # TCP 결과를 표준 응답 코드로 변환 (BLOCKED/WARNING 통일 처리)
         result_to_response_code = {
             # 조류 위험도
             "BR_HIGH": "BIRD_RISK_HIGH",
             "BR_MEDIUM": "BIRD_RISK_MEDIUM", 
             "BR_LOW": "BIRD_RISK_LOW",
             
-            # 활주로 알파 상태 (TCP 명세: CLEAR/BLOCKED)
+            # 활주로 알파 상태 (BLOCKED/WARNING 모두 WARNING으로 처리)
             "RWY_A_CLEAR": "RWY_A_CLEAR",
-            "RWY_A_BLOCKED": "RWY_A_BLOCKED",
-            "CLEAR": "RWY_A_CLEAR",      # TCP 명세 직접 매핑
-            "BLOCKED": "RWY_A_BLOCKED",  # TCP 명세 직접 매핑
+            "RWY_A_BLOCKED": "RWY_A_WARNING",  # BLOCKED → WARNING으로 처리
+            "RWY_A_WARNING": "RWY_A_WARNING",  # WARNING 그대로
+            "CLEAR": "RWY_A_CLEAR",            # TCP 명세 직접 매핑
+            "BLOCKED": "RWY_A_WARNING",        # BLOCKED → WARNING으로 처리
+            "WARNING": "RWY_A_WARNING",        # WARNING 그대로
             
-            # 활주로 브라보 상태 (TCP 명세: CLEAR/BLOCKED)
+            # 활주로 브라보 상태 (BLOCKED/WARNING 모두 WARNING으로 처리)
             "RWY_B_CLEAR": "RWY_B_CLEAR",
-            "RWY_B_BLOCKED": "RWY_B_BLOCKED"
+            "RWY_B_BLOCKED": "RWY_B_WARNING",  # BLOCKED → WARNING으로 처리
+            "RWY_B_WARNING": "RWY_B_WARNING"   # WARNING 그대로
         }
         
-        # 기존 표준 응답 메시지 (response_processor.py와 동일)
+        # 기존 표준 응답 메시지 (response_processor.py와 동일) - BLOCKED/WARNING 통일
         standard_responses = {
             # 조류 위험도 응답
-            "BIRD_RISK_HIGH": "Bird activity high. Hold for approach.",
-            "BIRD_RISK_MEDIUM": "Bird activity moderate. Be advised.",
-            "BIRD_RISK_LOW": "Bird activity low. Clear to proceed.",
+            "BIRD_RISK_HIGH": "WARNING. Large flock of birds observed crossing approach path. Advise extreme vigilance.",
+            "BIRD_RISK_MEDIUM": "CAUTION. Bird activity reported near runway threshold.",
+            "BIRD_RISK_LOW": "Runway CLEAR of bird activity at this time.",
             
-            # 활주로 상태 응답
-            "RWY_A_CLEAR": "Runway Alfa available for landing.",
-            "RWY_A_BLOCKED": "Runway Alfa blocked. Use alternate runway.",
-            "RWY_B_CLEAR": "Runway Bravo available for landing.",
-            "RWY_B_BLOCKED": "Runway Bravo blocked. Use alternate runway."
+            # 활주로 상태 응답 (BLOCKED/WARNING 통일 처리)
+            "RWY_A_CLEAR": "Runway Alpha is clear. Cleared for operations.",
+            "RWY_A_BLOCKED": "WARNING. Runway Alpha advisory. Proceed with vigilance.",  # BLOCKED → WARNING 메시지
+            "RWY_A_WARNING": "WARNING. Runway Alpha advisory. Proceed with vigilance.",  # WARNING 메시지
+            "RWY_B_CLEAR": "Runway Bravo is clear. Cleared for operations.",
+            "RWY_B_BLOCKED": "WARNING. Runway Bravo advisory. Proceed with vigilance.",  # BLOCKED → WARNING 메시지
+            "RWY_B_WARNING": "WARNING. Runway Bravo advisory. Proceed with vigilance."   # WARNING 메시지
         }
         
         response_code = result_to_response_code.get(result)
@@ -577,30 +659,53 @@ class PilotAvionics(QMainWindow):
     
     def update_tts_display_with_event(self, tts_message: str):
         """TTS 디스플레이에 이벤트 메시지 추가"""
+        print(f"[GUI] 🔔 update_tts_display_with_event 시작 - 메시지: '{tts_message[:50]}...'")
+        
         try:
             from datetime import datetime
             
+            # 위젯 상태 확인
+            print(f"[GUI] 🔍 이벤트 TTS 위젯 상태:")
+            print(f"  - self.text_tts_response is None: {self.text_tts_response is None}")
+            if self.text_tts_response:
+                print(f"  - 위젯 가시성: {self.text_tts_response.isVisible()}")
+                print(f"  - 위젯 활성화: {self.text_tts_response.isEnabled()}")
+            
             if hasattr(self, 'text_tts_response') and self.text_tts_response:
-                current_text = self.text_tts_response.toPlainText()
                 timestamp = datetime.now().strftime("%H:%M:%S")
                 
                 # 이벤트 메시지를 구분하여 표시
                 event_line = f"[{timestamp}] 🔔 EVENT: {tts_message}"
                 
+                # 기존 내용이 있으면 위에 추가
+                current_text = self.text_tts_response.toPlainText()
                 if current_text.strip():
                     new_text = f"{event_line}\n{current_text}"
                 else:
                     new_text = event_line
                 
+                print(f"[GUI] 🔧 이벤트 TTS 텍스트 설정 시도:")
+                print(f"  - 기존 텍스트 길이: {len(current_text)}")
+                print(f"  - 새 텍스트 길이: {len(new_text)}")
+                
                 self.text_tts_response.setText(new_text)
+                print(f"[GUI] ✅ 이벤트 TTS 텍스트 설정 성공")
                 
                 # 스크롤을 맨 위로 (최신 이벤트가 보이도록)
                 cursor = self.text_tts_response.textCursor()
-                cursor.movePosition(cursor.MoveOperation.Start)
+                cursor.movePosition(QTextCursor.MoveOperation.Start)
                 self.text_tts_response.setTextCursor(cursor)
+                
+                # 확인용으로 설정된 텍스트 다시 읽기
+                verification_text = self.text_tts_response.toPlainText()
+                print(f"[GUI] 🔍 이벤트 설정 후 확인 - 텍스트 길이: {len(verification_text)}")
+            else:
+                print(f"[GUI] ❌ 이벤트 TTS - 위젯이 None입니다!")
         
         except Exception as e:
             print(f"[GUI] ❌ TTS 디스플레이 업데이트 오류: {e}")
+        
+        print(f"[GUI] 🔔 update_tts_display_with_event 종료")
     
     def update_bird_risk_display(self, risk_level: str):
         """조류 위험도 디스플레이 업데이트"""
@@ -608,16 +713,16 @@ class PilotAvionics(QMainWindow):
         if hasattr(self, 'status_bird_risk') and self.status_bird_risk:
             # TCP 결과를 GUI 표시용으로 변환
             display_mapping = {
-                "BR_HIGH": "HIGH",
-                "BR_MEDIUM": "MEDIUM", 
-                "BR_LOW": "LOW"
+                "BR_HIGH": "WARNING",   # 변경됨
+                "BR_MEDIUM": "CAUTION", # 변경됨
+                "BR_LOW": "NORMAL"      # 변경됨
             }
             display_text = display_mapping.get(risk_level, risk_level)
             
             self.status_bird_risk.setText(f"BIRD RISK: {display_text}")
             
-            # 색상 설정 (원래 UI 스타일 유지하면서 색상만 변경)
-            if risk_level == "BR_HIGH":
+            # 색상 설정 (WARNING=빨강, CAUTION=노랑, NORMAL=초록)
+            if risk_level == "BR_HIGH":  # WARNING
                 style = """QLabel {
                 font-weight: bold;
                 background-color: #000800;
@@ -655,21 +760,23 @@ class PilotAvionics(QMainWindow):
             print(f"[GUI] ❌ 조류 위험도 라벨을 찾을 수 없음: status_bird_risk = {getattr(self, 'status_bird_risk', None)}")
     
     def update_runway_alpha_display(self, status: str):
-        """활주로 알파 상태 디스플레이 업데이트"""
+        """활주로 알파 상태 디스플레이 업데이트 (BLOCKED/WARNING 통일 처리)"""
         print(f"[GUI] 🔄 활주로 알파 업데이트 시도: {status}")
         if hasattr(self, 'status_runway_a') and self.status_runway_a:
-            # TCP 결과를 GUI 표시용으로 변환
+            # TCP 결과를 GUI 표시용으로 변환 (BLOCKED/WARNING 모두 WARNING으로 표시)
             display_mapping = {
                 "RWY_A_CLEAR": "CLEAR",
-                "RWY_A_BLOCKED": "BLOCKED",
-                "CLEAR": "CLEAR",      # TCP 명세 직접 매핑
-                "BLOCKED": "BLOCKED"   # TCP 명세 직접 매핑
+                "RWY_A_BLOCKED": "WARNING",    # BLOCKED → WARNING으로 표시
+                "RWY_A_WARNING": "WARNING",    # WARNING 그대로
+                "CLEAR": "CLEAR",              # TCP 명세 직접 매핑
+                "BLOCKED": "WARNING",          # BLOCKED → WARNING으로 표시
+                "WARNING": "WARNING"           # WARNING 그대로
             }
             display_text = display_mapping.get(status, status)
             
             self.status_runway_a.setText(f"RWY ALPHA: {display_text}")
             
-            # 색상 설정 (원래 UI 스타일 유지하면서 색상만 변경)
+            # 색상 설정 (CLEAR는 녹색, 나머지는 모두 황색 WARNING)
             if status in ["RWY_A_CLEAR", "CLEAR"]:
                 style = """QLabel {
                 font-weight: bold;
@@ -681,14 +788,15 @@ class PilotAvionics(QMainWindow):
                 color: #00ff00;
             }"""
             else:
+                # BLOCKED/WARNING 모두 황색 WARNING으로 표시
                 style = """QLabel {
                 font-weight: bold;
-                background-color: #000800;
-                border: 2px solid #cc0000;
+                background-color: #1a1a00;
+                border: 2px solid #cccc00;
                 border-radius: 6px;
                 padding: 8px;
                 font-family: "Courier New", monospace;
-                color: #ff4444;
+                color: #ffff00;
             }"""
             
             self.status_runway_a.setStyleSheet(style)
@@ -698,21 +806,23 @@ class PilotAvionics(QMainWindow):
             print(f"[GUI] ❌ 활주로 알파 라벨을 찾을 수 없음: status_runway_a = {getattr(self, 'status_runway_a', None)}")
     
     def update_runway_bravo_display(self, status: str):
-        """활주로 브라보 상태 디스플레이 업데이트"""
+        """활주로 브라보 상태 디스플레이 업데이트 (BLOCKED/WARNING 통일 처리)"""
         print(f"[GUI] 🔄 활주로 브라보 업데이트 시도: {status}")
         if hasattr(self, 'status_runway_b') and self.status_runway_b:
-            # TCP 결과를 GUI 표시용으로 변환
+            # TCP 결과를 GUI 표시용으로 변환 (BLOCKED/WARNING 모두 WARNING으로 표시)
             display_mapping = {
                 "RWY_B_CLEAR": "CLEAR",
-                "RWY_B_BLOCKED": "BLOCKED",
-                "CLEAR": "CLEAR",      # TCP 명세 직접 매핑
-                "BLOCKED": "BLOCKED"   # TCP 명세 직접 매핑
+                "RWY_B_BLOCKED": "WARNING",    # BLOCKED → WARNING으로 표시
+                "RWY_B_WARNING": "WARNING",    # WARNING 그대로
+                "CLEAR": "CLEAR",              # TCP 명세 직접 매핑
+                "BLOCKED": "WARNING",          # BLOCKED → WARNING으로 표시
+                "WARNING": "WARNING"           # WARNING 그대로
             }
             display_text = display_mapping.get(status, status)
             
             self.status_runway_b.setText(f"RWY BRAVO: {display_text}")
             
-            # 색상 설정 (원래 UI 스타일 유지하면서 색상만 변경)
+            # 색상 설정 (CLEAR는 녹색, 나머지는 모두 황색 WARNING)
             if status in ["RWY_B_CLEAR", "CLEAR"]:
                 style = """QLabel {
                 font-weight: bold;
@@ -724,14 +834,15 @@ class PilotAvionics(QMainWindow):
                 color: #00ff00;
             }"""
             else:
+                # BLOCKED/WARNING 모두 황색 WARNING으로 표시
                 style = """QLabel {
                 font-weight: bold;
-                background-color: #000800;
-                border: 2px solid #cc0000;
+                background-color: #1a1a00;
+                border: 2px solid #cccc00;
                 border-radius: 6px;
                 padding: 8px;
                 font-family: "Courier New", monospace;
-                color: #ff4444;
+                color: #ffff00;
             }"""
             
             self.status_runway_b.setStyleSheet(style)
@@ -1253,8 +1364,24 @@ class PilotAvionics(QMainWindow):
         print(f"[GUI] STT RESULT: '{text}' (confidence: {confidence:.2f})")
         
         if self.text_stt_result:
-            formatted_text = f"[Confidence: {confidence:.2f}] {text}"
-            self.text_stt_result.setText(formatted_text)
+            from datetime import datetime
+            timestamp = datetime.now().strftime("%H:%M:%S")
+            formatted_text = f"[{timestamp}] 🎤 STT: {text}"
+            
+            # 기존 내용이 있으면 위에 추가
+            current_text = self.text_stt_result.toPlainText()
+            if current_text.strip():
+                new_text = f"{formatted_text}\n{current_text}"
+            else:
+                new_text = formatted_text
+                
+            self.text_stt_result.setText(new_text)
+            
+            # 스크롤을 맨 위로 (최신 STT 결과가 보이도록)
+            cursor = self.text_stt_result.textCursor()
+            cursor.movePosition(QTextCursor.MoveOperation.Start)
+            self.text_stt_result.setTextCursor(cursor)
+            
             print(f"[GUI] OK STT 결과 텍스트 에디트 업데이트 완료")
         else:
             print(f"[GUI] FAIL STT 결과 텍스트 에디트가 None입니다!")
@@ -1264,15 +1391,111 @@ class PilotAvionics(QMainWindow):
     
     def on_tts_text_ready(self, tts_text):
         """TTS 텍스트 생성 완료 즉시 GUI에 전달"""
+        print(f"[GUI] 🔧 on_tts_text_ready 시작 - TTS 텍스트: '{tts_text[:50] if tts_text else 'None'}...'")
+        
         if tts_text:
             print(f"[GUI] TTS TEXT READY 즉시 GUI에 전달: '{tts_text[:50]}...'")
-            self.text_tts_response.setText(tts_text)
-            print(f"[GUI] OK TTS 응답 설정 완료")
+            
+            # 위젯 상태 상세 확인
+            print(f"[GUI] 🔍 TTS 위젯 상태 확인:")
+            print(f"  - self.text_tts_response is None: {self.text_tts_response is None}")
+            if self.text_tts_response:
+                print(f"  - 위젯 타입: {type(self.text_tts_response)}")
+                print(f"  - 위젯 이름: {self.text_tts_response.objectName()}")
+                print(f"  - 위젯 가시성: {self.text_tts_response.isVisible()}")
+                print(f"  - 위젯 활성화: {self.text_tts_response.isEnabled()}")
+            
+            if self.text_tts_response:
+                from datetime import datetime
+                timestamp = datetime.now().strftime("%H:%M:%S")
+                formatted_text = f"[{timestamp}] 🔊 RESPONSE: {tts_text}"
+                
+                # 기존 내용이 있으면 위에 추가
+                current_text = self.text_tts_response.toPlainText()
+                if current_text.strip():
+                    new_text = f"{formatted_text}\n{current_text}"
+                else:
+                    new_text = formatted_text
+                    
+                print(f"[GUI] 🔧 TTS 텍스트 설정 시도:")
+                print(f"  - 기존 텍스트 길이: {len(current_text)}")
+                print(f"  - 새 텍스트 길이: {len(new_text)}")
+                
+                try:
+                    # 🔧 Qt 메인 스레드에서 UI 업데이트 보장
+                    def update_tts_ui():
+                        self.text_tts_response.setText(new_text)
+                        print(f"[GUI] ✅ TTS 텍스트 설정 성공")
+                        
+                        # 스크롤을 맨 위로 (최신 TTS 응답이 보이도록)
+                        cursor = self.text_tts_response.textCursor()
+                        cursor.movePosition(QTextCursor.MoveOperation.Start)
+                        self.text_tts_response.setTextCursor(cursor)
+                        
+                        # 확인용으로 설정된 텍스트 다시 읽기
+                        verification_text = self.text_tts_response.toPlainText()
+                        print(f"[GUI] 🔍 설정 후 확인 - 텍스트 길이: {len(verification_text)}")
+                    
+                    # 메인 스레드에서 UI 업데이트 실행
+                    QTimer.singleShot(0, update_tts_ui)
+                    
+                except Exception as e:
+                    print(f"[GUI] ❌ TTS 텍스트 설정 오류: {e}")
+                
+                print(f"[GUI] OK TTS 응답 설정 완료")
+            else:
+                print(f"[GUI] ❌ TTS 위젯이 None - 위젯 재탐색 시도")
+                
+                # 모든 QTextEdit 위젯 다시 찾기
+                all_text_edits = self.findChildren(QTextEdit)
+                print(f"[GUI] 전체 QTextEdit 위젯 수: {len(all_text_edits)}")
+                
+                for i, widget in enumerate(all_text_edits):
+                    name = widget.objectName()
+                    print(f"[GUI]   위젯 {i}: '{name}'")
+                    if name == "tts_response":
+                        self.text_tts_response = widget
+                        print(f"[GUI] ✅ TTS 위젯 재할당 성공")
+                        
+                        # 재할당된 위젯으로 텍스트 설정
+                        from datetime import datetime
+                        timestamp = datetime.now().strftime("%H:%M:%S")
+                        formatted_text = f"[{timestamp}] 🔊 RESPONSE: {tts_text}"
+                        
+                        # 기존 내용이 있으면 위에 추가
+                        current_text = self.text_tts_response.toPlainText()
+                        if current_text.strip():
+                            new_text = f"{formatted_text}\n{current_text}"
+                        else:
+                            new_text = formatted_text
+                        
+                        # 🔧 Qt 메인 스레드에서 UI 업데이트 보장
+                        def update_reassigned_tts_ui():
+                            self.text_tts_response.setText(new_text)
+                            
+                            # 스크롤을 맨 위로 (최신 TTS 응답이 보이도록)
+                            cursor = self.text_tts_response.textCursor()
+                            cursor.movePosition(QTextCursor.MoveOperation.Start)
+                            self.text_tts_response.setTextCursor(cursor)
+                            
+                            print(f"[GUI] ✅ TTS 위젯 재할당 및 텍스트 설정 성공")
+                        
+                        # 메인 스레드에서 UI 업데이트 실행
+                        QTimer.singleShot(0, update_reassigned_tts_ui)
+                        break
+                else:
+                    print(f"[GUI] ❌ tts_response 위젯을 찾을 수 없음!")
+                    # 모든 위젯에 대해 이름과 타입 출력 (디버깅용)
+                    for i, widget in enumerate(all_text_edits):
+                        name = widget.objectName()
+                        print(f"[GUI] 디버깅 - 위젯 {i}: 이름='{name}', 타입={type(widget).__name__}")
             
             # 🔧 서버 응답이 확정되자마자 상태 즉시 업데이트 (TTS 완료 기다리지 않음)
             self.update_status_from_response(tts_text)
         else:
             print(f"[GUI] WARN TTS 텍스트가 없습니다")
+        
+        print(f"[GUI] 🔧 on_tts_text_ready 종료")
     
     def on_voice_completed(self, result):
         print(f"[GUI] on_voice_completed 시작")
@@ -1282,43 +1505,11 @@ class PilotAvionics(QMainWindow):
         if 'stt_text' in result and result['stt_text']:
             print(f"[GUI] STT 결과: {result['stt_text'][:50]}...")
         
-        # OK TTS 응답 상세 처리 - 딕셔너리 키로 접근
+        # 🔧 TTS 응답 처리는 on_tts_text_ready에서 이미 완료되었으므로 여기서는 하지 않음
+        # 음성 재생 완료 후에는 단순히 상태만 확인
         if 'response_text' in result and result['response_text']:
             tts_text = result['response_text']
-            print(f"[GUI] TTS 응답 - 타입: {type(tts_text)}, 길이: {len(tts_text)}")
-            print(f"[GUI] TTS 응답 처음 100자: {tts_text[:100]}")
-            
-            # 위젯 상태 확인
-            print(f"[GUI] TTS 위젯 None 여부: {self.text_tts_response is None}")
-            
-            if self.text_tts_response:
-                print(f"[GUI] OK TTS 위젯 찾음 - setText 시도")
-                
-                # TTS 응답 설정
-                self.text_tts_response.setText(tts_text)
-                print(f"[GUI] OK TTS 응답 설정 완료")
-                
-            else:
-                print(f"[GUI] FAIL TTS 위젯이 None - 다시 찾기 시도")
-                
-                # 모든 QTextEdit 위젯 찾기
-                all_text_widgets = self.findChildren(QTextEdit)
-                print(f"[GUI] 전체 QTextEdit 위젯 수: {len(all_text_widgets)}")
-                
-                for i, widget in enumerate(all_text_widgets):
-                    name = widget.objectName() if hasattr(widget, 'objectName') else "이름없음"
-                    print(f"[GUI] 위젯 {i}: {name}")
-                    
-                    # tts_response 이름 포함하는 위젯 찾기
-                    if 'tts' in name.lower() or 'response' in name.lower():
-                        print(f"[GUI] TTS WIDGET FOUND: {name}")
-                        widget.setText(tts_text)
-                        self.text_tts_response = widget  # 재할당
-                        print(f"[GUI] OK TTS 위젯 재할당 및 텍스트 설정 완료")
-                        break
-                else:
-                    print(f"[GUI] FAIL TTS 위젯을 찾을 수 없음")
-                    
+            print(f"[GUI] TTS 응답 확인 - 길이: {len(tts_text)} (이미 on_tts_text_ready에서 처리됨)")
         else:
             print(f"[GUI] FAIL TTS 응답이 없음 - result 키들: {list(result.keys())}")
         
@@ -1521,14 +1712,15 @@ class PilotAvionics(QMainWindow):
                     print(f"[GUI] 🛬 RWY ALPHA 변경 없음: {old_text} (이미 CLEAR)")
             elif ("IS CAUTION" in response_upper or "CAUTION" in response_upper or 
                   "WARNING" in response_upper or "WET" in response_upper):
-                new_text = "RWY ALPHA: CAUTION"
+                # 🔧 CAUTION과 WARNING 모두 WARNING으로 통일 표시
+                new_text = "RWY ALPHA: WARNING"
                 if old_text != new_text:  # 중복 업데이트 방지
                     self.status_runway_a.setText(new_text)
                     # 🟡 황색 - 주의/경고
                     self.status_runway_a.setStyleSheet("background-color: #1a1a00; color: #ffff00; border: 2px solid #aaaa00; padding: 8px; border-radius: 6px; font-weight: bold;")
-                    print(f"[GUI] 🛬 RWY ALPHA 업데이트: {old_text} → CAUTION")
+                    print(f"[GUI] 🛬 RWY ALPHA 업데이트: {old_text} → WARNING (CAUTION/WARNING 통일)")
                 else:
-                    print(f"[GUI] 🛬 RWY ALPHA 변경 없음: {old_text} (이미 CAUTION)")
+                    print(f"[GUI] 🛬 RWY ALPHA 변경 없음: {old_text} (이미 WARNING)")
             elif ("IS BLOCKED" in response_upper or "BLOCKED" in response_upper or 
                   "CLOSED" in response_upper or "POOR" in response_upper):
                 new_text = "RWY ALPHA: BLOCKED"
@@ -1561,14 +1753,15 @@ class PilotAvionics(QMainWindow):
                     print(f"[GUI] 🛬 RWY BRAVO 변경 없음: {old_text} (이미 CLEAR)")
             elif ("IS CAUTION" in response_upper or "CAUTION" in response_upper or 
                   "WARNING" in response_upper or "WET" in response_upper):
-                new_text = "RWY BRAVO: CAUTION"
+                # 🔧 CAUTION과 WARNING 모두 WARNING으로 통일 표시
+                new_text = "RWY BRAVO: WARNING"
                 if old_text != new_text:  # 중복 업데이트 방지
                     self.status_runway_b.setText(new_text)
                     # 🟡 황색 - 주의/경고
                     self.status_runway_b.setStyleSheet("background-color: #1a1a00; color: #ffff00; border: 2px solid #aaaa00; padding: 8px; border-radius: 6px; font-weight: bold;")
-                    print(f"[GUI] 🛬 RWY BRAVO 업데이트: {old_text} → CAUTION")
+                    print(f"[GUI] 🛬 RWY BRAVO 업데이트: {old_text} → WARNING (CAUTION/WARNING 통일)")
                 else:
-                    print(f"[GUI] 🛬 RWY BRAVO 변경 없음: {old_text} (이미 CAUTION)")
+                    print(f"[GUI] 🛬 RWY BRAVO 변경 없음: {old_text} (이미 WARNING)")
             elif ("IS BLOCKED" in response_upper or "BLOCKED" in response_upper or 
                   "CLOSED" in response_upper or "POOR" in response_upper):
                 new_text = "RWY BRAVO: BLOCKED"

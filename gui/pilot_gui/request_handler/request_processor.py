@@ -16,29 +16,29 @@ class ResponseProcessor:
         # Confluence 문서 기준 표준 응답 테이블 (RESPONSE_TYPE)
         self.standard_responses = {
             # 조류 위험도 응답 - Confluence 문서 기준
-            "BIRD_RISK_HIGH": "Bird activity high. Hold for approach.",
-            "BIRD_RISK_MEDIUM": "Bird activity moderate. Be advised.",
-            "BIRD_RISK_LOW": "Bird activity low. Clear to proceed.",
+            "BIRD_RISK_HIGH": "WARNING. Large flock of birds observed crossing approach path. Advise extreme vigilance.",
+            "BIRD_RISK_MEDIUM": "CAUTION. Bird activity reported near runway threshold.",
+            "BIRD_RISK_LOW": "Runway CLEAR of bird activity at this time.",
             
             # 활주로 상태 응답 - Confluence 문서 기준
-            "RWY_A_CLEAR": "Runway Alfa available for landing.",
-            "RWY_A_BLOCKED": "Runway Alfa blocked. Use alternate runway.",
-            "RWY_B_CLEAR": "Runway Bravo available for landing.",
-            "RWY_B_BLOCKED": "Runway Bravo blocked. Use alternate runway.",
+            "RWY_A_CLEAR": "Runway Alpha is clear. Cleared for operations.",
+            "RWY_A_BLOCKED": "Runway Alpha is blocked. Expect delay.",
+            "RWY_B_CLEAR": "Runway Bravo is clear. Cleared for operations.",
+            "RWY_B_BLOCKED": "Runway Bravo is blocked. Hold position.",
             
             # TCP 프로토콜 기준 활주로 상태 응답 (WARNING 추가)
-            "RWY_A_WARNING": "Runway Alfa caution advised. Use alternate runway.",
-            "RWY_B_WARNING": "Runway Bravo caution advised. Use alternate runway.",
+            "RWY_A_WARNING": "WARNING. Runway Alpha advisory. Proceed with vigilance.",
+            "RWY_B_WARNING": "WARNING. Runway Bravo advisory. Proceed with vigilance.",
             
             # 사용 가능한 활주로 목록 응답 - Confluence 문서 기준
-            "AVAILABLE_RUNWAYS_ALL": "Available runways Alfa, Bravo.",
-            "AVAILABLE_RUNWAYS_A_ONLY": "Runway Alfa available.",
+            "AVAILABLE_RUNWAYS_ALL": "Available runways Alpha, Bravo.",
+            "AVAILABLE_RUNWAYS_A_ONLY": "Runway Alpha available.",
             "AVAILABLE_RUNWAYS_B_ONLY": "Runway Bravo available.",
             "NO_RUNWAYS_AVAILABLE": "No runways available. Hold for approach.",
             
             # TCP 프로토콜 기준 가용 활주로 응답 (간소화된 형태)
-            "ALL_RUNWAYS_AVAILABLE": "Available runways Alfa, Bravo.",
-            "RUNWAY_ALPHA_ONLY": "Runway Alfa available.",
+            "ALL_RUNWAYS_AVAILABLE": "Available runways Alpha, Bravo.",
+            "RUNWAY_ALPHA_ONLY": "Runway Alpha available.",
             "RUNWAY_BRAVO_ONLY": "Runway Bravo available.",
             
             # 오류 응답
@@ -94,10 +94,10 @@ class ResponseProcessor:
     
     def process_response(self, response_data: Dict[str, Any], original_request: Dict[str, Any]) -> Tuple[bool, str]:
         """
-        메인 서버 응답을 처리하여 표준 자연어 응답 생성 (Confluence 문서 기준)
+        메인 서버 응답을 처리하여 표준 자연어 응답 생성 (TCP 프로토콜 지원)
         
         Args:
-            response_data: 메인 서버 응답 데이터 (Confluence 문서 형식)
+            response_data: 메인 서버 응답 데이터 (TCP 또는 Confluence 문서 형식)
             original_request: 원본 요청 정보 (콜사인 등)
             
         Returns:
@@ -106,24 +106,38 @@ class ResponseProcessor:
         try:
             # 1. 기본 정보 추출
             callsign = original_request.get("callsign", "Aircraft")
-            intent = response_data.get("intent", "unknown")
             
             print(f"[ResponseProcessor] 🆔 원본 콜사인: '{callsign}'")
             print(f"[ResponseProcessor] 📋 전체 original_request: {original_request}")
             
-            # 2. Confluence 문서 기준 오류 응답 처리
-            if response_data.get("status") == "error":
+            # 2. TCP 프로토콜 응답 처리 (type=response, command 있음, status 없음)
+            if (response_data.get("type") == "response" and 
+                "command" in response_data and 
+                "result" in response_data):
+                
+                command = response_data.get("command")
+                result = response_data.get("result")
+                
+                print(f"[ResponseProcessor] 🔌 TCP 응답 처리: {command} = {result}")
+                
+                # TCP 결과를 표준 응답 코드로 변환
+                response_code = self._convert_tcp_result_to_response_code(command, result)
+                
+                print(f"[ResponseProcessor] 🔄 TCP → 표준 변환: {result} → {response_code}")
+                
+                return self._generate_standard_response(response_code, callsign, {})
+            
+            # 3. Confluence 문서 기준 오류 응답 처리
+            elif response_data.get("status") == "error":
                 response_code = response_data.get("response_code", "UNRECOGNIZED_COMMAND")
                 return self._generate_standard_response(response_code, callsign, {})
             
-            # 3. Confluence 문서 기준 정상 응답 처리
-            if response_data.get("type") == "response" and response_data.get("status") == "success":
+            # 4. Confluence 문서 기준 정상 응답 처리
+            elif response_data.get("type") == "response" and response_data.get("status") == "success":
                 response_code = response_data.get("response_code", "UNRECOGNIZED_COMMAND")
                 
-                print(f"[ResponseProcessor] 🎯 Confluence 표준 응답 처리: {intent} - {response_code}")
-                print(f"[ResponseProcessor] 📝 응답 설명: {self.response_descriptions.get(response_code, '알 수 없음')}")
+                print(f"[ResponseProcessor] 🎯 Confluence 표준 응답 처리: {response_code}")
                 
-                # 표준 응답 텍스트 생성
                 return self._generate_standard_response(response_code, callsign, {})
             
             else:
@@ -272,4 +286,52 @@ class ResponseProcessor:
             return f"{intent}: {response_code}"
         
         return "알 수 없는 응답 형식"
+    
+    def _convert_tcp_result_to_response_code(self, command: str, result: str) -> str:
+        """
+        TCP 결과를 표준 응답 코드로 변환 (TCP 프로토콜 명세 기준)
+        
+        Args:
+            command: TCP 명령어 (BR_INQ, RWY_A_STATUS, RWY_B_STATUS, RWY_AVAIL_INQ)
+            result: TCP 결과
+            
+        Returns:
+            표준 응답 코드
+        """
+        # TCP 프로토콜 명세 기준 매핑
+        tcp_mapping = {
+            # 조류 위험도 조회 (BR_INQ)
+            "BR_INQ": {
+                "BR_HIGH": "BIRD_RISK_HIGH",
+                "BR_MEDIUM": "BIRD_RISK_MEDIUM", 
+                "BR_LOW": "BIRD_RISK_LOW"
+            },
+            # 활주로 A 상태 조회 (RWY_A_STATUS) - BLOCKED/WARNING 모두 WARNING으로 처리
+            "RWY_A_STATUS": {
+                "CLEAR": "RWY_A_CLEAR",
+                "WARNING": "RWY_A_WARNING",  # WARNING으로 통일
+                "BLOCKED": "RWY_A_WARNING"   # BLOCKED도 WARNING으로 처리
+            },
+            # 활주로 B 상태 조회 (RWY_B_STATUS) - BLOCKED/WARNING 모두 WARNING으로 처리
+            "RWY_B_STATUS": {
+                "CLEAR": "RWY_B_CLEAR", 
+                "WARNING": "RWY_B_WARNING",  # WARNING으로 통일
+                "BLOCKED": "RWY_B_WARNING"   # BLOCKED도 WARNING으로 처리
+            },
+            # 사용 가능한 활주로 조회 (RWY_AVAIL_INQ)
+            "RWY_AVAIL_INQ": {
+                "ALL": "AVAILABLE_RUNWAYS_ALL",
+                "A_ONLY": "AVAILABLE_RUNWAYS_A_ONLY",
+                "B_ONLY": "AVAILABLE_RUNWAYS_B_ONLY",
+                "NONE": "NO_RUNWAYS_AVAILABLE"
+            }
+        }
+        
+        # 명령어별 결과 매핑 확인
+        if command in tcp_mapping and result in tcp_mapping[command]:
+            return tcp_mapping[command][result]
+        
+        # 매핑되지 않은 경우 기본값
+        print(f"[ResponseProcessor] ⚠️ TCP 매핑 실패: {command} - {result}")
+        return "UNRECOGNIZED_COMMAND"
     

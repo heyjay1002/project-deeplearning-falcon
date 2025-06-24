@@ -1,4 +1,4 @@
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
 from datetime import datetime
 
 class EventTTS:
@@ -16,38 +16,77 @@ class EventTTS:
             tts_engine: TTS 엔진 인스턴스
         """
         self.tts_engine = tts_engine
+        self.gui_callback = None  # GUI 업데이트 콜백 함수
+        self.recording_checker = None  # 녹음 상태 체크 콜백 함수
         
-        # 이벤트별 TTS 메시지 템플릿
-        self.tts_templates = {
-            "bird_risk": {
-                "HIGH": "Bird strike risk level high. Exercise extreme caution.",
-                "MEDIUM": "Bird strike risk level medium. Maintain awareness.",
-                "LOW": "Bird strike risk level low. Normal operations."
+        # 🇺🇸 영어 이벤트 TTS 메시지 템플릿 (TCP 프로토콜 기준)
+        self.event_tts_templates = {
+            "en": {
+                "bird_risk": {
+                    "HIGH": "WARNING. Large flock of birds observed crossing approach path. Advise extreme vigilance.",
+                    "MEDIUM": "CAUTION. Bird activity reported in vicinity of runway. Maintain vigilance on approach.",
+                    "LOW": "CLEAR. Minimal bird activity. Normal operations authorized.",
+                    "CAUTION": "CAUTION. Bird activity reported in vicinity of runway. Maintain vigilance on approach.",
+                    "CLEAR": "CLEAR. Minimal bird activity. Normal operations authorized."
+                },
+                "runway_alpha": {
+                    "CLEAR": "CLEAR. Runway Alpha operational. Normal landing and takeoff procedures authorized.",
+                    "WARNING": "WARNING. Runway Alpha restricted. Maintenance operations in progress. Use alternate runway.",  # BLOCKED → WARNING
+                    "BLOCKED": "WARNING. Runway Alpha restricted. Maintenance operations in progress. Use alternate runway."  # 호환성을 위해 유지
+                },
+                "runway_bravo": {
+                    "CLEAR": "CLEAR. Runway Bravo operational. Normal landing and takeoff procedures authorized.",
+                    "WARNING": "WARNING. Runway Bravo restricted. Emergency vehicles on runway. Standby for further instructions.",  # BLOCKED → WARNING
+                    "BLOCKED": "WARNING. Runway Bravo restricted. Emergency vehicles on runway. Standby for further instructions."  # 호환성을 위해 유지
+                }
             },
-            "runway_alpha": {
-                "WARNING": "Runway Alpha warning. Check runway conditions.",
-                "CLEAR": "Runway Alpha clear for operations."
-            },
-            "runway_bravo": {
-                "WARNING": "Runway Bravo warning. Check runway conditions.",
-                "CLEAR": "Runway Bravo clear for operations."
+            "ko": {
+                "bird_risk": {
+                    "HIGH": "경고. 대형 조류 무리가 접근 경로를 횡단하고 있습니다. 극도로 주의하시기 바랍니다.",
+                    "MEDIUM": "주의. 활주로 근처에서 조류 활동이 보고되었습니다. 접근 시 주의를 유지하십시오.",
+                    "LOW": "정상. 조류 활동이 최소한입니다. 정상 운항이 승인되었습니다.",
+                    "CAUTION": "주의. 활주로 근처에서 조류 활동이 보고되었습니다. 접근 시 주의를 유지하십시오.",
+                    "CLEAR": "정상. 조류 활동이 최소한입니다. 정상 운항이 승인되었습니다."
+                },
+                "runway_alpha": {
+                    "CLEAR": "정상. 알파 활주로 운영 중입니다. 정상 착륙 및 이륙 절차가 승인되었습니다.",
+                    "WARNING": "경고. 알파 활주로 제한됩니다. 정비 작업이 진행 중입니다. 대체 활주로를 사용하십시오.",  # BLOCKED → WARNING
+                    "BLOCKED": "경고. 알파 활주로 제한됩니다. 정비 작업이 진행 중입니다. 대체 활주로를 사용하십시오."  # 호환성을 위해 유지
+                },
+                "runway_bravo": {
+                    "CLEAR": "정상. 브라보 활주로 운영 중입니다. 정상 착륙 및 이륙 절차가 승인되었습니다.",
+                    "WARNING": "경고. 브라보 활주로 제한됩니다. 응급 차량이 활주로에 있습니다. 추가 지시를 기다리십시오.",  # BLOCKED → WARNING
+                    "BLOCKED": "경고. 브라보 활주로 제한됩니다. 응급 차량이 활주로에 있습니다. 추가 지시를 기다리십시오."  # 호환성을 위해 유지
+                }
             }
         }
         
         # 한국어 TTS 메시지 템플릿 (필요시 사용)
         self.tts_templates_ko = {
             "bird_risk": {
-                "HIGH": "조류 충돌 위험도 높음. 극도로 주의하시기 바랍니다.",
-                "MEDIUM": "조류 충돌 위험도 보통. 주의를 유지하시기 바랍니다.",
-                "LOW": "조류 충돌 위험도 낮음. 정상 운항 가능합니다."
+                "WARNING": "경고. 진입로에서 대형 조류 무리 관찰됨. 주의 바람.",
+                "CAUTION": "주의. 활주로 접지점 근처에서 조류 활동 보고됨.",
+                "NORMAL": "현재 활주로에 조류 활동 없음. 정상.",
+                "UNKNOWN": "조류 활동 상황 불명. 관제탑에 연락 바람.",
+                "ERROR": "조류 감시 시스템 고장. 관제탑에 연락 바람."
             },
             "runway_alpha": {
-                "WARNING": "활주로 알파 경고. 활주로 상태를 확인하시기 바랍니다.",
-                "CLEAR": "활주로 알파 운항 가능합니다."
+                "WARNING": "경고. 활주로 알파 주의 요망. 주의하여 진행 바람.",
+                "CLEAR": "활주로 알파 정상. 운항 허가.",
+                "BLOCKED": "활주로 알파 폐쇄. 지연 예상.",
+                "UNKNOWN": "활주로 알파 상태 불명. 관제탑에 연락 바람.",
+                "ERROR": "활주로 알파 감시 시스템 고장."
             },
             "runway_bravo": {
-                "WARNING": "활주로 브라보 경고. 활주로 상태를 확인하시기 바랍니다.",
-                "CLEAR": "활주로 브라보 운항 가능합니다."
+                "WARNING": "경고. 활주로 브라보 주의 요망. 주의하여 진행 바람.",
+                "CLEAR": "활주로 브라보 정상. 운항 허가.",
+                "BLOCKED": "활주로 브라보 폐쇄. 현재 위치에서 대기 바람.",
+                "UNKNOWN": "활주로 브라보 상태 불명. 관제탑에 연락 바람.",
+                "ERROR": "활주로 브라보 감시 시스템 고장."
+            },
+            "unknown": {
+                "UNKNOWN": "시스템 상태 불명. 관제탑에 연락 바람.",
+                "ERROR": "시스템 고장 감지됨. 즉시 관제탑에 연락 바람."
             }
         }
         
@@ -63,6 +102,26 @@ class EventTTS:
         self.tts_engine = tts_engine
         print("[EventTTS] TTS 엔진 설정 완료")
     
+    def set_gui_callback(self, callback):
+        """
+        GUI 업데이트 콜백 설정
+        
+        Args:
+            callback: GUI 업데이트 함수 (message: str) -> None
+        """
+        self.gui_callback = callback
+        print("[EventTTS] GUI 콜백 설정 완료")
+    
+    def set_recording_checker(self, checker):
+        """
+        녹음 상태 체크 콜백 설정
+        
+        Args:
+            checker: 녹음 상태 체크 함수 () -> bool (True면 녹음 중)
+        """
+        self.recording_checker = checker
+        print("[EventTTS] 녹음 상태 체크 콜백 설정 완료")
+    
     def play_event_notification(self, event_type: str, result: str, language: str = "en"):
         """
         이벤트 TTS 알림 재생
@@ -76,6 +135,11 @@ class EventTTS:
             print("[EventTTS] ⚠️ TTS 엔진이 설정되지 않음")
             return
         
+        # 🔧 녹음 중이면 이벤트 TTS 완전 차단
+        if self.recording_checker and self.recording_checker():
+            print(f"[EventTTS] 🚫 녹음 중이므로 이벤트 TTS 완전 차단: {event_type} - {result}")
+            return
+        
         try:
             # TTS 메시지 생성
             tts_message = self.get_tts_message(event_type, result, language)
@@ -83,6 +147,11 @@ class EventTTS:
             if not tts_message:
                 print(f"[EventTTS] ⚠️ TTS 메시지를 찾을 수 없음: {event_type} - {result}")
                 return
+            
+            # GUI 콜백 호출 (TTS 재생 전에 먼저 GUI 업데이트)
+            if self.gui_callback:
+                print(f"[EventTTS] 🔔 GUI 콜백 호출: '{tts_message[:50]}...'")
+                self.gui_callback(tts_message)
             
             # TTS 엔진의 speak_event 메서드 사용 (충돌 방지)
             if hasattr(self.tts_engine, 'speak_event'):
@@ -96,21 +165,29 @@ class EventTTS:
         except Exception as e:
             print(f"[EventTTS] ❌ TTS 재생 오류: {e}")
     
-    def get_tts_message(self, event_type: str, result: str, language: str = "en") -> Optional[str]:
+    def get_tts_message(self, event_type: str, result: str, language: str = "en") -> str:
         """
-        TTS 메시지 생성
+        이벤트 타입과 결과에 따른 TTS 메시지 생성 (TCP 프로토콜 기준)
         
         Args:
-            event_type: 이벤트 타입
-            result: 결과 값
-            language: 언어
+            event_type: 이벤트 타입 (bird_risk, runway_alpha, runway_bravo)
+            result: 결과 값 (HIGH/MEDIUM/LOW, CLEAR/WARNING)
+            language: 언어 ("en" 또는 "ko")
             
         Returns:
             TTS 메시지 문자열
         """
-        templates = self.tts_templates_ko if language == "ko" else self.tts_templates
+        templates = self.event_tts_templates.get(language, self.event_tts_templates.get("en", {}))
         
-        return templates.get(event_type, {}).get(result)
+        # 직접 매칭 시도
+        if event_type in templates and result in templates[event_type]:
+            return templates[event_type][result]
+        
+        # 기본 메시지
+        if language == "ko":
+            return f"이벤트 알림: {event_type} 상태가 {result}로 변경되었습니다."
+        else:
+            return f"Event notification: {event_type} status changed to {result}."
     
     def get_priority_delay(self, event_type: str, result: str) -> float:
         """
@@ -125,9 +202,9 @@ class EventTTS:
         """
         # 높은 우선순위 이벤트는 즉시 재생
         high_priority = {
-            "bird_risk": ["HIGH"],
-            "runway_alpha": ["WARNING"],
-            "runway_bravo": ["WARNING"]
+            "bird_risk": ["WARNING"],  # WARNING만 최우선으로 변경
+            "runway_alpha": ["WARNING", "BLOCKED"],
+            "runway_bravo": ["WARNING", "BLOCKED"]
         }
         
         if result in high_priority.get(event_type, []):
@@ -165,9 +242,9 @@ class EventTTS:
         """
         # 높은 우선순위 이벤트는 현재 TTS를 중단
         interrupt_events = {
-            "bird_risk": ["HIGH"],
-            "runway_alpha": ["WARNING"],
-            "runway_bravo": ["WARNING"]
+            "bird_risk": ["WARNING"],  # WARNING만 중단으로 변경
+            "runway_alpha": ["WARNING", "BLOCKED"],
+            "runway_bravo": ["WARNING", "BLOCKED"]
         }
         
         return result in interrupt_events.get(event_type, [])
@@ -181,18 +258,22 @@ class EventTTS:
         """
         return ["en", "ko"]
     
-    def get_event_types(self) -> list:
+    def get_supported_event_types(self, language: str = "en") -> List[str]:
         """
-        지원하는 이벤트 타입 목록 반환
+        지원하는 이벤트 타입 목록 반환 (TCP 프로토콜 기준)
         
+        Args:
+            language: 언어
+            
         Returns:
             지원하는 이벤트 타입 리스트
         """
-        return list(self.tts_templates.keys())
+        templates = self.event_tts_templates.get(language, self.event_tts_templates.get("en", {}))
+        return list(templates.keys())
     
     def add_custom_template(self, event_type: str, result: str, message: str, language: str = "en"):
         """
-        사용자 정의 TTS 템플릿 추가
+        사용자 정의 TTS 템플릿 추가 (TCP 프로토콜 기준)
         
         Args:
             event_type: 이벤트 타입
@@ -200,10 +281,13 @@ class EventTTS:
             message: TTS 메시지
             language: 언어
         """
-        templates = self.tts_templates_ko if language == "ko" else self.tts_templates
+        if language not in self.event_tts_templates:
+            self.event_tts_templates[language] = {}
+        
+        templates = self.event_tts_templates[language]
         
         if event_type not in templates:
             templates[event_type] = {}
         
         templates[event_type][result] = message
-        print(f"[EventTTS] 사용자 정의 템플릿 추가: {event_type} - {result} ({language})") 
+        print(f"[EventTTS] 사용자 정의 템플릿 추가: {language}.{event_type}.{result} = '{message}'") 

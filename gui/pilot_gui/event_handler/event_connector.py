@@ -218,3 +218,9 @@ class EventManager:
         if self.use_simulator and self.simulator:
             self.simulator.event_intervals.update(intervals)
             print(f"[EventManager] ⏱️ 이벤트 간격 설정: {intervals}")
+    
+    def signal_gui_ready(self):
+        """GUI 준비 완료 신호를 시뮬레이터에 전달"""
+        if self.use_simulator and self.simulator:
+            self.simulator.set_gui_ready()
+            print("[EventManager] 📢 GUI 준비 완료 신호를 시뮬레이터에 전달")

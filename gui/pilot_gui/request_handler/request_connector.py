@@ -111,7 +111,7 @@ class TCPServerClient:
             
             # 활주로 알파 상태 (TCP 스펙: CLEAR/WARNING)
             "CLEAR": "RWY_A_CLEAR",
-            "WARNING": "RWY_A_BLOCKED",  # WARNING을 BLOCKED로 매핑
+            "WARNING": "RWY_A_WARNING",
             "BLOCKED": "RWY_A_BLOCKED",
             
             # 활주로 브라보 상태 (TCP 스펙: CLEAR/WARNING)  
@@ -125,19 +125,19 @@ class TCPServerClient:
             "NONE": "NO_RUNWAYS_AVAILABLE"
         }
         
-        # 활주로 상태는 요청 코드에 따라 다르게 처리
+        # 활주로 상태는 요청 코드에 따라 다르게 처리 (BLOCKED/WARNING 모두 WARNING으로 통일)
         if request_code == "RUNWAY_ALPHA_STATUS":
             if result == "CLEAR":
                 response_code = "RWY_A_CLEAR"
             elif result in ["WARNING", "BLOCKED"]:
-                response_code = "RWY_A_BLOCKED"
+                response_code = "RWY_A_WARNING"  # BLOCKED도 WARNING으로 처리
             else:
                 response_code = response_code_mapping.get(result, result)
         elif request_code == "RUNWAY_BRAVO_STATUS":
             if result == "CLEAR":
                 response_code = "RWY_B_CLEAR"
             elif result in ["WARNING", "BLOCKED"]:
-                response_code = "RWY_B_BLOCKED"
+                response_code = "RWY_B_WARNING"  # BLOCKED도 WARNING으로 처리
             else:
                 response_code = response_code_mapping.get(result, result)
         else:
