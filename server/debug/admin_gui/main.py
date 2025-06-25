@@ -282,7 +282,7 @@ class MainWindow(QMainWindow):
             print(f"[DEBUG] 파싱된 필드 개수: {len(parts)}")
             print(f"[DEBUG] 필드들: {parts}")
 
-            # ME_FD:{event_type},{object_id},{class},{x},{y},{zone},{timestamp},{state},{image_size},<img_binary>
+            # ME_FD:{event_type},{object_id},{class},{x},{y},{zone},{timestamp},{rescue_level},{image_size},<img_binary>
             # 또는 ME_FD:{event_type},{object_id},{class},{x},{y},{zone},{timestamp},{image_size},<img_binary>
             
             if len(parts) < 8:
@@ -299,11 +299,11 @@ class MainWindow(QMainWindow):
 
             # 사람인지 비사람인지 판단하여 파싱
             if obj_class == 'PERSON':
-                # 사람: event_type,object_id,class,x,y,zone,timestamp,state,image_size,<img_binary>
+                # 사람: event_type,object_id,class,x,y,zone,timestamp,rescue_level,image_size,<img_binary>
                 if len(parts) < 10:
                     print(f"[ERROR] PERSON ME_FD 메시지 형식 오류: {data}")
                     return
-                state = parts[7]
+                rescue_level = int(parts[7])  # rescue_level을 정수로 파싱
                 image_size = int(parts[8])
                 # 이미지 바이너리 추출 (9번째 필드 이후)
                 img_bytes = b','.join(parts[9:]).encode()
@@ -312,7 +312,7 @@ class MainWindow(QMainWindow):
                 if len(parts) < 9:
                     print(f"[ERROR] Non-PERSON ME_FD 메시지 형식 오류: {data}")
                     return
-                state = 'N'
+                # 비사람 객체는 rescue_level 필드 없음
                 image_size = int(parts[7])
                 # 이미지 바이너리 추출 (8번째 필드 이후)
                 img_bytes = b','.join(parts[8:]).encode()
@@ -320,10 +320,14 @@ class MainWindow(QMainWindow):
             if len(img_bytes) > image_size:
                 img_bytes = img_bytes[:image_size]
             
-            print(f"[DEBUG] obj_class: {obj_class}, state: {state}, image_size: {image_size}")
+            # 디버그 로그 - rescue_level은 사람일 때만 출력
+            if obj_class == 'PERSON':
+                print(f"[DEBUG] obj_class: {obj_class}, rescue_level: {rescue_level}, image_size: {image_size}")
+                print(f"[DEBUG] ME_FD 수신: event_type={event_type}, object_id={object_id}, class={obj_class}, rescue_level={rescue_level}, image_size={image_size}, len(img_bytes)={len(img_bytes)}")
+            else:
+                print(f"[DEBUG] obj_class: {obj_class}, image_size: {image_size}")
+                print(f"[DEBUG] ME_FD 수신: event_type={event_type}, object_id={object_id}, class={obj_class}, image_size={image_size}, len(img_bytes)={len(img_bytes)}")
             
-            # 진단용 로그 및 파일 저장
-            print(f"[DEBUG] ME_FD 수신: event_type={event_type}, object_id={object_id}, class={obj_class}, image_size={image_size}, len(img_bytes)={len(img_bytes)}")
             with open(f"/tmp/client_img_{object_id}.jpg", "wb") as f:
                 f.write(img_bytes)
 
@@ -347,8 +351,11 @@ class MainWindow(QMainWindow):
             label = QLabel()
             label.setPixmap(pixmap)
             layout.addWidget(label)
-            # 정보 텍스트 추가
-            info = QLabel(f"Event Type: {event_type}\nID: {object_id}\nClass: {obj_class}\n좌표: ({x}, {y})\nZone: {zone}\nTime: {timestamp}\nState: {state}")
+            # 정보 텍스트 추가 - 사람일 때만 rescue_level 표시
+            if obj_class == 'PERSON':
+                info = QLabel(f"Event Type: {event_type}\nID: {object_id}\nClass: {obj_class}\n좌표: ({x}, {y})\nZone: {zone}\nTime: {timestamp}\nRescue Level: {rescue_level}")
+            else:
+                info = QLabel(f"Event Type: {event_type}\nID: {object_id}\nClass: {obj_class}\n좌표: ({x}, {y})\nZone: {zone}\nTime: {timestamp}")
             layout.addWidget(info)
             dlg.setLayout(layout)
             dlg.exec()

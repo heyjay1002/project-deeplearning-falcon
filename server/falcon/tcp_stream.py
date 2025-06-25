@@ -8,12 +8,33 @@ import time
 from datetime import datetime
 import os
 import json
+import queue
+import numpy as np
 
 from network.tcp import TCPServer
 from config import *
 import config
 from db.repository import DetectionRepository
 import pymysql
+
+# === 보정 데이터 저장 ===
+calibration_data = {}
+
+def handle_map_calibration(event_data):
+    """맵 보정 데이터를 전역 변수에 저장"""
+    camera_id = event_data.get("camera_id")
+    matrix_data = event_data.get("matrix")
+    scale_data = event_data.get("scale")
+    
+    if not all([camera_id, matrix_data, scale_data is not None]):
+        print("[ERROR] map_calibration 이벤트 데이터 부족")
+        return
+        
+    calibration_data[camera_id] = {
+        "homography_matrix": np.array(matrix_data, dtype=np.float64),
+        "scale": scale_data
+    }
+    print(f"[INFO] 카메라 '{camera_id}' 보정 데이터 저장 완료")
 
 class RunwayStatus:
     """활주로 상태 관리 클래스"""
@@ -89,6 +110,80 @@ class RunwayStatus:
             return self.runway_b_status
         return 'CLEAR'
 
+class CalibrationThread(QThread):
+    """맵 보정 처리 전용 스레드"""
+    
+    # 시그널 정의
+    calibration_completed = pyqtSignal(str)  # 보정 완료 시그널 (camera_id)
+    calibration_failed = pyqtSignal(str, str)  # 보정 실패 시그널 (camera_id, error_msg)
+    
+    def __init__(self):
+        super().__init__()
+        self.calibration_queue = queue.Queue()
+        self.running = True
+        
+    def run(self):
+        """메인 실행 루프"""
+        print("[INFO] CalibrationThread 시작")
+        
+        while self.running:
+            try:
+                # 큐에서 보정 메시지 대기 (1초 타임아웃)
+                message = self.calibration_queue.get(timeout=1.0)
+                self._process_calibration(message)
+                self.calibration_queue.task_done()
+                
+            except queue.Empty:
+                # 타임아웃 시 계속 루프
+                continue
+            except Exception as e:
+                print(f"[ERROR] CalibrationThread 실행 오류: {e}")
+        
+        print("[INFO] CalibrationThread 종료")
+    
+    def add_calibration_task(self, message):
+        """보정 작업을 큐에 추가"""
+        try:
+            self.calibration_queue.put(message, block=False)
+            print(f"[DEBUG] 보정 작업 큐 추가: camera_id={message.get('camera_id')}")
+        except queue.Full:
+            print("[ERROR] 보정 작업 큐가 가득참")
+    
+    def _process_calibration(self, message):
+        """맵 보정 처리"""
+        try:
+            camera_id = message.get('camera_id')
+            matrix = message.get('matrix')
+            scale = message.get('scale')
+            
+            print(f"[INFO] 보정 처리 시작: camera_id={camera_id}, scale={scale}")
+            
+            # 데이터 유효성 검증
+            if not camera_id or not matrix or scale is None:
+                error_msg = f"보정 데이터 누락: {message}"
+                print(f"[ERROR] {error_msg}")
+                self.calibration_failed.emit(camera_id or "UNKNOWN", error_msg)
+                return
+                
+            # 보정 데이터 저장
+            handle_map_calibration(message)
+            
+            print(f"[INFO] 카메라 {camera_id} 맵 보정 완료")
+            
+            # 보정 완료 시그널 emit
+            self.calibration_completed.emit(camera_id)
+            
+        except Exception as e:
+            error_msg = f"보정 처리 실패: {e}"
+            print(f"[ERROR] {error_msg}")
+            camera_id = message.get('camera_id', 'UNKNOWN')
+            self.calibration_failed.emit(camera_id, error_msg)
+    
+    def stop(self):
+        """스레드 종료"""
+        self.running = False
+        print("[INFO] CalibrationThread 종료 요청")
+
 class DetectionCommunicator(QThread):
     """감지 결과 통신을 담당하는 클래스"""
     # 시그널 정의
@@ -116,6 +211,11 @@ class DetectionCommunicator(QThread):
         
         # 활주로 상태 관리
         self.runway_status = RunwayStatus()
+        
+        # 보정 처리 스레드 초기화
+        self.calibration_thread = CalibrationThread()
+        self.calibration_thread.calibration_completed.connect(self._on_calibration_completed)
+        self.calibration_thread.calibration_failed.connect(self._on_calibration_failed)
         
         # 로그 디렉토리 설정
         self.log_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs')
@@ -150,6 +250,9 @@ class DetectionCommunicator(QThread):
         self.bds_server.start()
         self.pilot_server.start()
         
+        # 보정 처리 스레드 시작
+        self.calibration_thread.start()
+        
         print("[INFO] 감지 결과 통신 시작")
         
         last_status_check = time.time()
@@ -161,7 +264,7 @@ class DetectionCommunicator(QThread):
             self.pilot_server.accept_client()
             
             # 새로운 IDS 클라이언트에게 모드 설정 명령 전송
-            self._send_mode_to_new_ids_clients()
+            # self._send_mode_to_new_ids_clients()
 
             # IDS로부터 데이터 수신
             messages = self.detection_server.receive_json()
@@ -286,57 +389,93 @@ class DetectionCommunicator(QThread):
                 continue
             
             # 메시지 타입 확인
-            if message.get('type') != 'event' or message.get('event') != 'object_detected':
-                print(f"[WARNING] 알 수 없는 메시지: {message.get('type')}, {message.get('event')}")
+            if message.get('type') != 'event':
+                print(f"[WARNING] 알 수 없는 메시지 타입: {message.get('type')}")
                 continue
-            
-            # 이미지 ID와 검출 결과 확인
-            img_id = message.get('img_id')
-            if img_id is None:
-                print("[WARNING] 이미지 ID 없음")
-                continue
-            
-            # 검출 결과 처리
-            detections = message.get('detections', [])
-            
-            # 프레임 크기 정보 필요
-            frame_width = config.frame_width
-            frame_height = config.frame_height
-            for det in detections:
-                bbox = det.get('bbox', None)
-                if bbox and len(bbox) == 4 and frame_width and frame_height:
-                    x1, y1, x2, y2 = bbox
-                    center_x = (x1 + x2) / 2
-                    center_y = (y1 + y2) / 2
-                    map_x, map_y, norm_x, norm_y = self.convert_to_map_coords(center_x, center_y, frame_width, frame_height)
-                    area_id = self.find_area_id(norm_x, norm_y)
-                    det['map_x'] = map_x
-                    det['map_y'] = map_y
-                    det['area_id'] = area_id
-                else:
-                    det['map_x'] = None
-                    det['map_y'] = None
-                    det['area_id'] = None
-            
-            # 검출 결과 전달
-            detection_data = {
-                'img_id': img_id,
-                'detections': detections
-            }
-            self.detection_received.emit(detection_data)
-            
-            # 활주로 상태 업데이트
-            self.runway_status.update_runway_status(detections)
-            
-            # 활주로 상태 변경 알림 전송
-            status_changes = self.runway_status.check_status_changes()
-            for runway_id, status in status_changes:
-                self._send_runway_status_change(runway_id, status)      # 조종사 GUI
-                self._send_runway_status_to_admin(runway_id, status)    # 관제사 GUI
-            
-            # GUI로 검출 결과 전송
-            self._send_to_gui(detections)
+
+            event_type = message.get('event')
+
+            # object_detected 처리 (기존 로직)
+            if event_type == 'object_detected':
+                # 이미지 ID와 검출 결과 확인
+                img_id = message.get('img_id')
+                if img_id is None:
+                    print("[WARNING] 이미지 ID 없음")
+                    continue
+                
+                # 검출 결과 처리
+                detections = message.get('detections', [])
+                
+                # 프레임 크기 정보 필요
+                frame_width = config.frame_width
+                frame_height = config.frame_height
+                for det in detections:
+                    bbox = det.get('bbox', None)
+                    if bbox and len(bbox) == 4 and frame_width and frame_height:
+                        x1, y1, x2, y2 = bbox
+                        center_x = (x1 + x2) / 2
+                        center_y = (y1 + y2) / 2
+                        map_x, map_y, norm_x, norm_y = self.convert_to_map_coords(center_x, center_y, frame_width, frame_height)
+                        area_id = self.find_area_id(norm_x, norm_y)
+                        det['map_x'] = map_x
+                        det['map_y'] = map_y
+                        det['area_id'] = area_id
+                    else:
+                        det['map_x'] = None
+                        det['map_y'] = None
+                        det['area_id'] = None
+                    
+                    # 사람 객체인 경우에만 rescue_level 추출
+                    if det.get('class', '').upper() == 'PERSON':
+                        rescue_level = det.get('rescue_level', 0)  # 기본값 0
+                        det['rescue_level'] = rescue_level
+                    # 비사람 객체는 rescue_level 필드를 만들지 않음
+                
+                # 검출 결과 전달
+                detection_data = {
+                    'img_id': img_id,
+                    'detections': detections
+                }
+                self.detection_received.emit(detection_data)
+                
+                # 활주로 상태 업데이트
+                self.runway_status.update_runway_status(detections)
+                
+                # 활주로 상태 변경 알림 전송
+                status_changes = self.runway_status.check_status_changes()
+                for runway_id, status in status_changes:
+                    self._send_runway_status_change(runway_id, status)      # 조종사 GUI
+                    self._send_runway_status_to_admin(runway_id, status)    # 관제사 GUI
+                
+                # GUI로 검출 결과 전송
+                self._send_to_gui(detections)
+
+            # map_calibration 처리 (새로 추가)
+            elif event_type == 'map_calibration':
+                self._handle_map_calibration(message)
+                
+            else:
+                print(f"[WARNING] 알 수 없는 이벤트: {event_type}")
     
+    def _handle_map_calibration(self, message):
+        """맵 보정 이벤트 처리 (CalibrationThread로 전달)"""
+        camera_id = message.get('camera_id')
+        print(f"[INFO] 맵 보정 이벤트 수신: camera_id={camera_id}")
+        
+        # CalibrationThread에 작업 추가
+        self.calibration_thread.add_calibration_task(message)
+
+    def _on_calibration_completed(self, camera_id):
+        """보정 완료 시그널 핸들러"""
+        print(f"[INFO] 카메라 {camera_id} 보정 완료 - IDS에 모드 전환 명령 전송")
+        
+        # 보정 완료 후 IDS에게 객체 감지 모드 전환 명령 전송
+        self._send_mode_to_new_ids_clients()
+
+    def _on_calibration_failed(self, camera_id, error_msg):
+        """보정 실패 시그널 핸들러"""
+        print(f"[ERROR] 카메라 {camera_id} 보정 실패: {error_msg}")
+
     def _send_to_gui(self, detections):
         """GUI로 검출 결과 전송
         Args:
@@ -354,7 +493,8 @@ class DetectionCommunicator(QThread):
             area_name = self.area_id_to_name.get(area_id, 'UNKNOWN') if area_id is not None else 'UNKNOWN'
             gui_msg = f"{det['object_id']},{det['class'].upper()},{int(map_x) if map_x is not None else -1},{int(map_y) if map_y is not None else -1},{area_name}"
             if det['class'].upper() == 'PERSON':
-                gui_msg += ",none"  # state 정보 추가
+                rescue_level = det.get('rescue_level', 0)  # rescue_level을 숫자로 사용
+                gui_msg += f",{rescue_level}"  # state 정보 추가
             gui_messages.append(gui_msg)
         # 모든 메시지를 하나의 문자열로 결합하고 맨 앞에 ME_OD: 추가
         message = "ME_OD:" + ";".join(gui_messages) + "\n"
@@ -612,6 +752,12 @@ class DetectionCommunicator(QThread):
     def stop(self):
         """통신 중지"""
         print("[INFO] 감지 결과 통신 중지")
+        
+        # CalibrationThread 종료
+        if hasattr(self, 'calibration_thread'):
+            self.calibration_thread.stop()
+            self.calibration_thread.wait(3000)  # 3초 대기
+            
         self.detection_server.close()
         self.gui_server.close()
         self.bds_server.close()
@@ -818,9 +964,9 @@ class DetectionCommunicator(QThread):
 
                 # 객체 타입에 따라 다른 메시지 포맷 사용
                 if object_class == 'PERSON':
-                    # 사람: event_type_id,object_id,object_class,map_x,map_y,area_name,timestamp,state,image_size
-                    state = det.get('state', 'N')
-                    gui_msg_header = f"{event_type_id},{object_id},{object_class},{int(map_x) if map_x is not None else -1},{int(map_y) if map_y is not None else -1},{area_name},{timestamp},{state},{len(img_binary)}"
+                    # 사람: event_type_id,object_id,object_class,map_x,map_y,area_name,timestamp,rescue_level,image_size
+                    rescue_level = det.get('rescue_level', 0)  # rescue_level을 숫자로 사용
+                    gui_msg_header = f"{event_type_id},{object_id},{object_class},{int(map_x) if map_x is not None else -1},{int(map_y) if map_y is not None else -1},{area_name},{timestamp},{rescue_level},{len(img_binary)}"
                     gui_msg = gui_msg_header.encode() + b"," + img_binary #$$
                     self.gui_server.send_binary_to_client(b"ME_FD:" + gui_msg)
                     # 로그 기록 ('$$' 기준)
