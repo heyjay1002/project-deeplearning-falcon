@@ -20,6 +20,9 @@ class Settings:
         # === YOLO 설정 ===
         self.DETECTING_MODEL_PATH = "models/yolov8n_box_v0.1.0.pt"
         self.MODEL_PATH_POSE = "models/pose_model_v1.pt"
+        self.TRACKER_CONFIG_FILE = "bytetrack.yaml"  # 또는 "botsort.yaml"
+
+
         self.YOLO_CONFIDENCE_THRESHOLD = 0.6
         self.YOLO_IOU_THRESHOLD = 0.5
 
@@ -59,14 +62,6 @@ class Settings:
         # === 구조 감지 ===
         self.RESCUE_LEVEL_MAX = 10
         self.RESCUE_LEVEL_STEP_SEC = 1
-
-        # === 트래커 설정 ===
-        self.OCSORT_CFG = {
-            "det_thresh": 0.3,
-            "delta_t": 1,
-            "max_age": 30,
-            "min_hits": 5, # 최소 감지회수
-        }
 
         # === 큐 크기 ===
         self.INFERENCE_QUEUE_SIZE = 10

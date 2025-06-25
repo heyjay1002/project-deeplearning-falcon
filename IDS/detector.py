@@ -26,8 +26,10 @@ class Detector:
         self.model = YOLO(detect_model_path)
         self.pose_model = YOLO(pose_model_path)
         self.last_fall_time = {}
-        self.object_id_map = {}  # {class: {track_id: our_id}}
+        self.object_id_map = {} 
 
+
+    # 맵 보정 모드 
     def process_map_mode(self, frame):
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_4X4_50)
@@ -37,16 +39,19 @@ class Detector:
             if self.settings.DISPLAY_DEBUG:
                 print(f"[ArUco] 마커 부족: {len(ids) if ids is not None else 0}/4")
             return None
-
+        # ID가 0, 1, 2, 3인 마커의 코너를 추출
         id_corner_map = {int(id[0]): corner for id, corner in zip(ids, corners)}
         if not all(i in id_corner_map for i in range(4)):
             if self.settings.DISPLAY_DEBUG:
                 print(f"[ArUco] 필요한 ID 부족: {list(id_corner_map.keys())}")
             return None
-
+        # 각 마커의 중심 좌표 계산
         image_points = np.array([id_corner_map[i][0].mean(axis=0) for i in range(4)])
+
+        # 각 마커의 실제 좌표 설정
         world_points = np.array(self.settings.ARUCO_WORLD, dtype=np.float32)
-        
+
+        # Homography 계산
         try:
             homography, _ = cv2.findHomography(image_points, world_points)
             if homography is None:
@@ -55,7 +60,7 @@ class Detector:
         except Exception as e:
             print(f"[ArUco] Homography 오류: {e}")
             return None
-
+        # 스케일 계산
         pixel_dist = np.linalg.norm(image_points[0] - image_points[1])
         real_dist = np.linalg.norm(world_points[0] - world_points[1])
         scale = real_dist / pixel_dist
@@ -71,7 +76,8 @@ class Detector:
             "matrix": homography.tolist(),
             "scale": scale
         }
-
+    
+    # 객체 감지 모드
     def process_object_mode(self, frame, img_id):
         try:
             results = self.model.track(
@@ -79,6 +85,7 @@ class Detector:
                 persist=True,
                 conf=self.settings.YOLO_CONFIDENCE_THRESHOLD,
                 iou=self.settings.YOLO_IOU_THRESHOLD,
+                tracker=self.settings.TRACKER_CONFIG_FILE,
                 verbose=False
             )[0]
         except Exception as e:
@@ -162,7 +169,8 @@ class Detector:
             "img_id": img_id,
             "detections": detections
         }
-
+    
+    # 형광조끼 유무 판단
     def is_vest_present(self, hsv_img):
         try:
             mask = cv2.inRange(hsv_img, np.array(self.settings.VEST_HSV_LOWER), np.array(self.settings.VEST_HSV_UPPER))
@@ -171,6 +179,7 @@ class Detector:
         except:
             return False
 
+    # 차량 색상 판단
     def is_vehicle_color(self, hsv_img):
         try:
             yellow_mask = cv2.inRange(hsv_img, np.array(self.settings.VEHICLE_YELLOW_LOWER), np.array(self.settings.VEHICLE_YELLOW_UPPER))
@@ -179,7 +188,8 @@ class Detector:
                    (np.count_nonzero(black_mask) / black_mask.size > 0.01)
         except:
             return False
-
+        
+    # 쓰러짐 레벨 업데이트
     def update_fall_level(self, pose_status, object_id):
         now = time.time()
         key = f"{self.settings.CAMERA_ID}_{object_id}"
