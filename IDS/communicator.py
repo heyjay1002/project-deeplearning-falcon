@@ -25,25 +25,34 @@ class TcpCommunicator(threading.Thread):
         try:
             server_addr = (self.settings.MAIN_SERVER_IP, self.settings.IDS_TCP_PORT)
             self.sock.connect(server_addr)
-            # [로그 강화] 연결 성공 로그
             print(f"✅ [연결 성공] TCP 서버({server_addr[0]}:{server_addr[1]})와 연결되었습니다.")
             return True
         except Exception as e:
-            # [로그 강화] 연결 실패 로그
-            print(f"❌ [연결 실패] TCP 서버 연결에 실패했습니다. 원인: {e}")
+            # 연결 실패는 재시도 로직에서 관리하므로, 여기서는 로그만 남기고 실패를 반환
+            # print(f"❌ [연결 실패] TCP 서버 연결에 실패했습니다. 원인: {e}")
             self.sock = None
             return False
 
     def run(self):
-        # [로그 추가] 스레드 시작 시 초기 연결 시도
-        print("ℹ️ [연결 시작] TCP 통신 스레드를 시작하고 서버와 연결을 시도합니다.")
-        if not self.connect_to_server():
-            print("🛑 [스레드 종료] 초기 TCP 연결에 실패하여 스레드를 종료합니다. 5초 후 재시도 로직을 원하시면 수정이 필요합니다.")
-            return
+        """
+        [로직 개선] 메인 스레드 루프.
+        - 초기 연결 실패 시 스레드가 종료되지 않고, 메인 루프 안에서 계속 재연결을 시도합니다.
+        - 연결이 끊겼을 때도 동일한 로직으로 안정적으로 재연결을 수행합니다.
+        """
+        print("ℹ️ [스레드 시작] TCP 통신 스레드를 시작합니다.")
 
         while self.running:
             try:
-                # 전송 로직
+                # [핵심 수정] 소켓이 연결되지 않은 상태라면 먼저 연결 시도
+                if self.sock is None:
+                    if not self.connect_to_server():
+                        print("⏳ [재연결 대기] 서버 연결에 실패했습니다. 5초 후 재시도합니다.")
+                        time.sleep(5)
+                        continue  # 루프의 처음으로 돌아가 재시도
+
+                # --- 이하 로직은 소켓이 정상 연결된 경우에만 수행 ---
+
+                # 1. 전송 로직: tcp_queue에 메시지가 있으면 서버로 전송
                 if not self.tcp_queue.empty():
                     msg = self.tcp_queue.get_nowait()
                     if isinstance(msg, dict):
@@ -52,35 +61,34 @@ class TcpCommunicator(threading.Thread):
                         if self.settings.DISPLAY_DEBUG:
                             print(f"📤 전송됨 (TCP): {data_to_send.strip()}")
 
-                # 수신 로직
-                self.sock.settimeout(0.01)
+                # 2. 수신 로직: non-blocking으로 서버로부터 데이터 수신
+                self.sock.settimeout(0.01) # 짧은 타임아웃으로 non-blocking 효과
                 try:
                     recv_data = self.sock.recv(4096).decode("utf-8")
                     if not recv_data:
-                        # [로직 변경] 서버가 연결을 정상 종료하면, 예외를 발생시켜 재연결 로직으로 넘김
+                        # 서버가 연결을 정상 종료한 경우
                         raise ConnectionError("서버가 연결을 종료했습니다.")
                     
                     self.recv_buffer += recv_data
                 except socket.timeout:
+                    # 데이터가 없는 것은 정상적인 상황이므로 통과
                     pass
 
-                # 버퍼 처리 로직
+                # 3. 버퍼 처리 로직: 수신된 데이터가 완전한 메시지(\n 기준)를 이루면 처리
                 while "\n" in self.recv_buffer:
                     message_str, self.recv_buffer = self.recv_buffer.split("\n", 1)
                     if message_str:
                         self.process_command(message_str)
 
             except (socket.error, ConnectionError, BrokenPipeError) as e:
-                # [로그 강화] 연결 문제 발생 및 재연결 시도 로그
+                # [핵심 수정] 예외 발생 시 재연결을 위해 소켓을 None으로 설정
                 print(f"⛔️ [연결 끊김] TCP 연결에 문제가 발생했습니다. 원인: {e}")
-                self.sock.close()
+                if self.sock:
+                    self.sock.close()
+                self.sock = None # 다음 루프에서 재연결을 시도하도록 상태 변경
+                
                 print("⏳ [재연결 시도] 5초 후 서버와 재연결을 시작합니다...")
                 time.sleep(5)
-                
-                if not self.connect_to_server():
-                    # [로그 추가] 재연결 실패 시 로그
-                    print("❌ [재연결 실패] 재연결에 실패했습니다. 5초 후 다시 시도합니다.")
-                    time.sleep(5)
             
             except Exception as e:
                 print(f"🔥 [기타 오류] 처리되지 않은 TCP 오류: {e}")
@@ -104,6 +112,7 @@ class TcpCommunicator(threading.Thread):
             print(f"⚠️ 명령 처리 중 오류 발생: {e}")
 
     def close(self):
+        """스레드를 안전하게 종료하는 함수"""
         self.running = False
         if self.sock:
             self.sock.close()
