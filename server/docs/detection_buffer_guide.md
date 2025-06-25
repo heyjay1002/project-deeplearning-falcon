@@ -92,8 +92,13 @@ sequenceDiagram
        detections = detection_buffer[img_id]
    else:
        # 없으면 가장 가까운 이전 타임스탬프의 결과 사용
-       prev_id = find_closest_previous_frame(img_id)
-       detections = detection_buffer[prev_id]
+       prev_frame_id = None
+       for frame_id in detection_buffer.keys():
+           if frame_id < img_id and (prev_frame_id is None or frame_id > prev_frame_id):
+               prev_frame_id = frame_id
+       
+       if prev_frame_id is not None:
+           detections = detection_buffer[prev_frame_id]
    ```
 
 ### 실제 예시
@@ -170,76 +175,91 @@ graph TD
     A[현재 프레임<br/>img_id=T] --> B{검출 결과<br/>있음?}
     B -->|Yes| C[현재 프레임<br/>검출 결과 사용]
     B -->|No| D[이전 프레임<br/>검색]
-    D --> E[시간 차이<br/>계산]
-    E --> F{차이 < 200ms?}
+    D --> E[가장 가까운<br/>이전 프레임 찾기]
+    E --> F{이전 프레임<br/>있음?}
     F -->|Yes| G[이전 프레임<br/>결과 사용]
     F -->|No| H[빈 결과<br/>반환]
 ```
 
-#### 1. 시간 기반 매칭
+#### 1. 실제 구현된 매칭 로직
 ```python
-def find_closest_previous_frame(current_img_id):
-    """
-    가장 가까운 이전 프레임의 검출 결과 찾기
-    
+def draw_detections(self, frame, img_id):
+    """검출 결과를 프레임에 시각화
     Args:
-        current_img_id: int, 현재 프레임의 타임스탬프
+        frame (np.ndarray): 원본 프레임
+        img_id (int): 이미지 ID
     Returns:
-        int or None: 가장 가까운 이전 프레임의 타임스탬프
+        np.ndarray: 검출 결과가 그려진 프레임
     """
-    closest_id = None
-    min_diff = float('inf')
+    frame_with_boxes = frame.copy()
     
-    # 버퍼에서 가장 가까운 이전 프레임 찾기
-    for img_id in detection_buffer.keys():
-        if img_id < current_img_id:  # 이전 프레임만 고려
-            time_diff = current_img_id - img_id
-            if time_diff < min_diff:
-                min_diff = time_diff
-                closest_id = img_id
+    # 현재 프레임의 검출 결과 확인
+    if img_id in self.detection_buffer:
+        detections = self.detection_buffer[img_id]
+    else:
+        # 현재 프레임보다 이전의 가장 가까운 검출 결과 찾기
+        prev_frame_id = None
+        for frame_id in self.detection_buffer.keys():
+            if frame_id < img_id and (prev_frame_id is None or frame_id > prev_frame_id):
+                prev_frame_id = frame_id
+        
+        if prev_frame_id is not None:
+            detections = self.detection_buffer[prev_frame_id]
+        else:
+            return frame_with_boxes
     
-    # 200ms(200_000_000ns) 이내의 결과만 사용
-    if min_diff <= 200_000_000:
-        return closest_id
-    return None
+    # 검출 결과 시각화
+    for detection in detections:
+        bbox = detection.get('bbox', [])
+        if not bbox or len(bbox) != 4:
+            continue
+        
+        x1, y1, x2, y2 = map(int, bbox)
+        cls = detection.get('class', 'Unknown')
+        conf = detection.get('confidence', 0.0)
+        
+        # 박스 그리기
+        cv2.rectangle(frame_with_boxes, (x1, y1), (x2, y2), (0, 255, 0), 2)
+        
+        # 레이블 표시
+        label = f"{cls}: {conf:.2f}"
+        (label_w, label_h), _ = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 2)
+        cv2.rectangle(frame_with_boxes, (x1, y1 - label_h - 10), (x1 + label_w, y1), (0, 255, 0), -1)
+        cv2.putText(frame_with_boxes, label, (x1, y1 - 5),
+                  cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0), 2)
+    
+    return frame_with_boxes
 ```
 
-#### 2. 검출 결과 재사용 기준
-- **시간 임계값**: 200ms (0.2초)
-  - 이유: 객체 검출이 5fps(200ms)로 동작하므로
-  - 이 시간을 초과하면 객체 위치가 크게 달라질 수 있음
-
+#### 2. 검출 결과 재사용 규칙
 - **재사용 규칙**:
   ```
   1. 현재 프레임(T)에 검출 결과가 있으면 그대로 사용
   
   2. 검출 결과가 없을 때:
-     A. T-200ms 이내의 가장 가까운 이전 프레임 찾기
+     A. T보다 작은 가장 큰 타임스탬프를 가진 프레임 찾기
      B. 해당 프레임의 검출 결과 재사용
-     C. 200ms 이상 차이나면 빈 결과 반환
+     C. 이전 프레임이 없으면 빈 결과 반환
   
   예시:
-  T+000ms: 프레임 #1 (검출 O) → 직접 사용
-  T+033ms: 프레임 #2 (검출 X) → #1 재사용 (△t=33ms)
-  T+066ms: 프레임 #3 (검출 X) → #1 재사용 (△t=66ms)
-  T+250ms: 프레임 #8 (검출 X) → 빈 결과 (△t>200ms)
+  T+000ns: 프레임 #1 (검출 O) → 직접 사용
+  T+033ns: 프레임 #2 (검출 X) → #1 재사용
+  T+066ns: 프레임 #3 (검출 X) → #1 재사용
+  T+200ns: 프레임 #6 (검출 O) → 직접 사용
+  T+233ns: 프레임 #7 (검출 X) → #6 재사용
   ```
 
-#### 3. 성능 최적화
-- **버퍼 정리**: 200ms 이상 지난 검출 결과는 자동 삭제
+#### 3. 버퍼 관리
+- **버퍼 초기화**: `clear_buffer()` 메서드로 전체 버퍼 삭제
   ```python
-  def cleanup_old_detections():
-      current_time = time.time_ns()
-      old_threshold = 200_000_000  # 200ms in nanoseconds
-      
-      # 오래된 결과 삭제
-      old_keys = [k for k in detection_buffer.keys() 
-                 if current_time - k > old_threshold]
-      for k in old_keys:
-          del detection_buffer[k]
+  def clear_buffer(self):
+      """버퍼 초기화"""
+      self.detection_buffer.clear()
+      self.last_detection = None
+      self.last_detection_img_id = None
   ```
 
-- **실제 구현**:
+- **검출 결과 저장**: `process_detection()` 메서드로 버퍼에 저장
   ```python
   def process_detection(self, detection_data):
       """검출 결과 처리

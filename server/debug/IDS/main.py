@@ -58,7 +58,7 @@ class YOLOClient:
         self.latest_frame_lock = threading.Lock()
         
         # YOLO 모델 로드
-        self.model = YOLO('best.pt')
+        self.model = YOLO('best2.pt')
         
         # 네트워크 클라이언트
         self.video_sender = UDPVideoSender(host=DEFAULT_HOST, port=UDP_PORT_IDS_VIDEO)
@@ -108,6 +108,7 @@ class YOLOClient:
     def detect_objects(self):
         """객체 감지 및 결과 전송 스레드"""
         print("[INFO] 객체 감지 시작...")
+        last_processed_img_id = None  # 마지막으로 처리한 프레임 ID 저장
         
         while self.running:
             try:
@@ -119,8 +120,14 @@ class YOLOClient:
                     frame = self.latest_frame.copy()
                     img_id = self.latest_frame_img_id
                 
+                # 프레임이 바뀌었을 때만 감지
+                if img_id == last_processed_img_id:
+                    time.sleep(0.001)
+                    continue
+                last_processed_img_id = img_id
+                
                 # YOLO 객체 감지
-                results = self.model(frame, conf=0.4, imgsz=1920)
+                results = self.model(frame, conf=0.6, imgsz=640) #1920
                 
                 # 결과 처리
                 detections = []
@@ -139,19 +146,24 @@ class YOLOClient:
                             'confidence': float(conf)
                         })
                 
-                # 검출 결과를 서버로 전송
-                detection_data = {
-                    'type': 'event',
-                    'event': 'object_detected',
-                    'camera_id': self.cam_id,
-                    'img_id': img_id,
-                    'detections': detections
-                }
-                
-                if not self.detection_client.send_message_json(detection_data):
-                    print(f"[WARNING] 검출 결과 전송 실패 (img_id: {img_id})")
+                # 검출이 있을 때만 전송
+                if detections:
+                    detection_data = {
+                        'type': 'event',
+                        'event': 'object_detected',
+                        'camera_id': self.cam_id,
+                        'img_id': img_id,
+                        'detections': detections
+                    }
+                    
+                    if not self.detection_client.send_message_json(detection_data):
+                        print(f"[WARNING] 검출 결과 전송 실패 (img_id: {img_id})")
+                    else:
+                        print(f"[INFO] 검출 결과 전송 완료 (img_id: {img_id}, 객체 수: {len(detections)})")
                 else:
-                    print(f"[INFO] 검출 결과 전송 완료 (img_id: {img_id}, 객체 수: {len(detections)})")
+                    # 검출이 없을 때는 로그만 출력 (선택적)
+                    # print(f"[INFO] 검출 없음 (img_id: {img_id})")
+                    pass
             
             except Exception as e:
                 print(f"[ERROR] 객체 감지 중 오류: {e}")

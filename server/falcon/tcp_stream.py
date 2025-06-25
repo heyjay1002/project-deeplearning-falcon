@@ -25,24 +25,45 @@ class RunwayStatus:
         # 이전 상태 (변경 감지용)
         self.previous_a_status = 'CLEAR'
         self.previous_b_status = 'CLEAR'
+        
+        # 활주로 구역 ID 상수 (DB 마이그레이션에서 확인)
+        self.RWY_A_AREA_ID = 5
+        self.RWY_B_AREA_ID = 6
+        
+        # 마지막 객체 감지 시간
+        self.last_object_time_a = 0
+        self.last_object_time_b = 0
+        
+        # 지연 시간 (초)
+        self.CLEAR_DELAY = 5.0
     
     def update_runway_status(self, detections):
         """객체 감지 결과로 활주로 상태 업데이트"""
-        # 활주로별 객체 존재 여부만 확인
+        current_time = time.time()
         runway_a_has_objects = False
         runway_b_has_objects = False
         
         for det in detections:
-            area_name = det.get('area_name', '')
+            area_id = det.get('area_id')
             
-            if 'RWY_A' in area_name:
+            if area_id == self.RWY_A_AREA_ID:
                 runway_a_has_objects = True
-            if 'RWY_B' in area_name:
+                self.last_object_time_a = current_time
+            if area_id == self.RWY_B_AREA_ID:
                 runway_b_has_objects = True
+                self.last_object_time_b = current_time
         
-        # 활주로별 상태 결정: 객체가 있으면 WARNING, 없으면 CLEAR
-        self.runway_a_status = 'WARNING' if runway_a_has_objects else 'CLEAR'
-        self.runway_b_status = 'WARNING' if runway_b_has_objects else 'CLEAR'
+        # 활주로 A 상태 결정
+        if runway_a_has_objects:
+            self.runway_a_status = 'WARNING'
+        elif current_time - self.last_object_time_a > self.CLEAR_DELAY:
+            self.runway_a_status = 'CLEAR'
+        
+        # 활주로 B 상태 결정
+        if runway_b_has_objects:
+            self.runway_b_status = 'WARNING'
+        elif current_time - self.last_object_time_b > self.CLEAR_DELAY:
+            self.runway_b_status = 'CLEAR'
     
     def check_status_changes(self):
         """상태 변경 감지"""
@@ -95,7 +116,7 @@ class DetectionCommunicator(QThread):
         
         # 활주로 상태 관리
         self.runway_status = RunwayStatus()
-            
+        
         # 로그 디렉토리 설정
         self.log_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'logs')
         os.makedirs(self.log_dir, exist_ok=True)
@@ -107,6 +128,13 @@ class DetectionCommunicator(QThread):
         print(f"[INFO] GUI TCP 로그 파일: {self.gui_log_file}")
         print(f"[INFO] BDS TCP 로그 파일: {self.bds_log_file}")
         print(f"[INFO] Pilot TCP 로그 파일: {self.pilot_log_file}")
+        
+        self.current_bird_risk = 'BR_LOW'
+        # 서버 시작 시 현재 조류 위험도 상태를 DB에 저장
+        # if hasattr(self, 'repository') and self.repository:
+        #     level_map = {'BR_HIGH': 1, 'BR_MEDIUM': 2, 'BR_LOW': 3}
+        #     level_id = level_map.get(self.current_bird_risk, 3)
+        #     self.repository.save_bird_risk_log(level_id)
     
     def set_video_communicator(self, video_comm):
         """비디오 통신기 설정
@@ -124,6 +152,7 @@ class DetectionCommunicator(QThread):
         
         print("[INFO] 감지 결과 통신 시작")
         
+        last_status_check = time.time()
         while self.detection_server.running:
             # 새로운 클라이언트 연결 수락
             self.detection_server.accept_client()
@@ -169,7 +198,7 @@ class DetectionCommunicator(QThread):
                                 self._log_gui_communication("SEND", header.strip())
                                 self._log_gui_communication("SEND", f"[Binary Data of size {len(binary_data)}]")
                                 # 헤더와 바이너리를 '$$'로 결합하여 전송
-                                final_response = header.encode('utf-8') + b'$$' + binary_data
+                                final_response = header.encode('utf-8') + b',' + binary_data #$$
                                 self.gui_server.send_binary_to_client(final_response)
                             # 그 외 일반 응답 처리
                             elif isinstance(response, str):
@@ -184,6 +213,15 @@ class DetectionCommunicator(QThread):
                     self._log_gui_communication("ERROR", error_msg)
             
             time.sleep(0.01)  # CPU 사용량 감소
+
+            # 감지 결과가 없을 때도 주기적으로 활주로 상태를 CLEAR로 갱신
+            if time.time() - last_status_check > 1.0:  # 1초마다 체크
+                self.runway_status.update_runway_status([])
+                status_changes = self.runway_status.check_status_changes()
+                for runway_id, status in status_changes:
+                    self._send_runway_status_change(runway_id, status)
+                    self._send_runway_status_to_admin(runway_id, status)
+                last_status_check = time.time()
     
     def _send_mode_to_new_ids_clients(self):
         """새로 연결된 IDS 클라이언트에게 모드 설정 명령을 보냅니다."""
@@ -320,6 +358,7 @@ class DetectionCommunicator(QThread):
             gui_messages.append(gui_msg)
         # 모든 메시지를 하나의 문자열로 결합하고 맨 앞에 ME_OD: 추가
         message = "ME_OD:" + ";".join(gui_messages) + "\n"
+        # print(f"{message.strip()}")
         # GUI로 전송 (바이너리로 변환)
         try:
             self.gui_server.send_binary_to_client(message.encode())
@@ -369,6 +408,13 @@ class DetectionCommunicator(QThread):
             # 현재 조류 위험도 저장
             self.current_bird_risk = risk_level
             
+            # DB에 조류 위험도 로그 저장
+            if hasattr(self, 'repository') and self.repository:
+                # 위험도 레벨을 ID로 변환
+                level_map = {'BR_HIGH': 1, 'BR_MEDIUM': 2, 'BR_LOW': 3}
+                level_id = level_map.get(risk_level, 3)  # 기본값: BR_LOW
+                self.repository.save_bird_risk_log(level_id)
+            
             # GUI로 조류 위험도 전송
             self._send_bird_risk_to_gui(risk_level)
             
@@ -409,7 +455,7 @@ class DetectionCommunicator(QThread):
         }
         
         try:
-            self.pilot_server.send_to_client(message)
+            self.send_to_pilot_with_log(message)
             print(f"[INFO] 조종사 GUI로 조류 위험도 변경 알림 전송: {risk_level}")
         except Exception as e:
             print(f"[WARNING] 조종사 GUI 조류 위험도 알림 전송 실패: {e}")
@@ -447,35 +493,40 @@ class DetectionCommunicator(QThread):
             
             # 명령 처리
             command = message.get('command')
+            request_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
             if command == 'BR_INQ':
-                self._handle_bird_risk_inquiry()
+                self._handle_bird_risk_inquiry(request_time)
             elif command == 'RWY_A_STATUS':
-                self._handle_runway_a_status_inquiry()
+                self._handle_runway_a_status_inquiry(request_time)
             elif command == 'RWY_B_STATUS':
-                self._handle_runway_b_status_inquiry()
+                self._handle_runway_b_status_inquiry(request_time)
             elif command == 'RWY_AVAIL_INQ':
-                self._handle_runway_availability_inquiry()
+                self._handle_runway_availability_inquiry(request_time)
             else:
                 print(f"[WARNING] 알 수 없는 조종사 GUI 명령: {command}")
     
-    def _handle_bird_risk_inquiry(self):
+    def _handle_bird_risk_inquiry(self, request_time):
         """조류 위험도 조회 처리"""
-        # 현재 조류 위험도 (임시로 BDS에서 받은 최신 값 사용)
         current_risk = getattr(self, 'current_bird_risk', 'BR_LOW')
-        
         response = {
             "type": "response",
             "command": "BR_INQ",
             "result": current_risk
         }
-        
         try:
-            self.pilot_server.send_to_client(response)
+            self.send_to_pilot_with_log(response)
             print(f"[INFO] 조류 위험도 응답 전송: {current_risk}")
+            response_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            if self.repository:
+                req_map = {'BR_INQ': 1}
+                res_map = {'BR_HIGH': 1, 'BR_MEDIUM': 2, 'BR_LOW': 3}
+                request_id = req_map.get('BR_INQ', 1)
+                response_id = res_map.get(current_risk, 3)
+                self.repository.add_interaction_log(request_id, response_id, request_time, response_time)
         except Exception as e:
             print(f"[WARNING] 조류 위험도 응답 전송 실패: {e}")
     
-    def _handle_runway_a_status_inquiry(self):
+    def _handle_runway_a_status_inquiry(self, request_time):
         """활주로 A 상태 조회 처리"""
         # 활주로 A 상태 판단 (객체 감지 + 조류 위험도 종합)
         status = self.runway_status.get_runway_status('A')
@@ -487,12 +538,19 @@ class DetectionCommunicator(QThread):
         }
         
         try:
-            self.pilot_server.send_to_client(response)
+            self.send_to_pilot_with_log(response)
             print(f"[INFO] 활주로 A 상태 응답 전송: {status}")
+            response_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            if self.repository:
+                req_map = {'RWY_A_STATUS': 2}
+                res_map = {'CLEAR': 4, 'BLOCKED': 5, 'WARNING': 5}
+                request_id = req_map.get('RWY_A_STATUS', 2)
+                response_id = res_map.get(status, 4)
+                self.repository.add_interaction_log(request_id, response_id, request_time, response_time)
         except Exception as e:
             print(f"[WARNING] 활주로 A 상태 응답 전송 실패: {e}")
     
-    def _handle_runway_b_status_inquiry(self):
+    def _handle_runway_b_status_inquiry(self, request_time):
         """활주로 B 상태 조회 처리"""
         # 활주로 B 상태 판단 (객체 감지 + 조류 위험도 종합)
         status = self.runway_status.get_runway_status('B')
@@ -504,12 +562,19 @@ class DetectionCommunicator(QThread):
         }
         
         try:
-            self.pilot_server.send_to_client(response)
+            self.send_to_pilot_with_log(response)
             print(f"[INFO] 활주로 B 상태 응답 전송: {status}")
+            response_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            if self.repository:
+                req_map = {'RWY_B_STATUS': 3}
+                res_map = {'CLEAR': 4, 'BLOCKED': 5, 'WARNING': 5}
+                request_id = req_map.get('RWY_B_STATUS', 3)
+                response_id = res_map.get(status, 4)
+                self.repository.add_interaction_log(request_id, response_id, request_time, response_time)
         except Exception as e:
             print(f"[WARNING] 활주로 B 상태 응답 전송 실패: {e}")
     
-    def _handle_runway_availability_inquiry(self):
+    def _handle_runway_availability_inquiry(self, request_time):
         """사용 가능한 활주로 조회 처리"""
         # 활주로 A, B 상태 확인
         status_a = self.runway_status.get_runway_status('A')
@@ -532,8 +597,15 @@ class DetectionCommunicator(QThread):
         }
         
         try:
-            self.pilot_server.send_to_client(response)
+            self.send_to_pilot_with_log(response)
             print(f"[INFO] 사용 가능한 활주로 응답 전송: {availability}")
+            response_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            if self.repository:
+                req_map = {'RWY_AVAIL_INQ': 4}
+                res_map = {'ALL': 6, 'A_ONLY': 7, 'B_ONLY': 8, 'NONE': 9}
+                request_id = req_map.get('RWY_AVAIL_INQ', 4)
+                response_id = res_map.get(availability, 6)
+                self.repository.add_interaction_log(request_id, response_id, request_time, response_time)
         except Exception as e:
             print(f"[WARNING] 사용 가능한 활주로 응답 전송 실패: {e}")
     
@@ -552,6 +624,8 @@ class DetectionCommunicator(QThread):
         Returns:
             str: 응답 메시지
         """
+        print(f"[DEBUG] ATS_GUI - {command}")
+        
         # 명령 파싱
         if not command.startswith('MC_'):
             return "MR_ERROR:Invalid command format\n"
@@ -594,6 +668,7 @@ class DetectionCommunicator(QThread):
         if not img_path:
             return b"MR_OD:ERR,4\n" # 이미지 경로 정보 없음
             
+        event_type_id = event_data.get('event_type_id', 1)
         object_type = event_data.get('class', 'UNKNOWN')
         area = event_data.get('zone', 'UNKNOWN')
         timestamp = event_data.get('timestamp')
@@ -617,8 +692,8 @@ class DetectionCommunicator(QThread):
         # 5. 최종 응답 생성
         timestamp_str = timestamp.strftime('%Y-%m-%dT%H:%M:%SZ') if timestamp else ""
 
-        # 헤더 생성 (개행 문자 없음)
-        response_header = f"MR_OD:OK,{object_id_int},{object_type},{area},{timestamp_str},{img_size}"
+        # 헤더 생성 (event_type이 제일 앞)
+        response_header = f"MR_OD:OK,{event_type_id},{object_id_int},{object_type},{area},{timestamp_str},{img_size}"
         
         # 헤더(문자열)와 이미지(바이너리)를 튜플로 반환
         return (response_header, img_data)
@@ -742,16 +817,18 @@ class DetectionCommunicator(QThread):
                 if object_class == 'PERSON':
                     # 사람: timestamp,state,image_size
                     state = det.get('state', 'N')
-                    gui_msg_header = f"{object_id},{object_class},{int(map_x) if map_x is not None else -1},{int(map_y) if map_y is not None else -1},{area_name},{timestamp},{state},{len(img_binary)}"
-                    gui_msg = gui_msg_header.encode() + b"$$" + img_binary
+                    event_type = det.get('event_type', 'HAZARD')
+                    gui_msg_header = f"1,{object_id},{object_class},{int(map_x) if map_x is not None else -1},{int(map_y) if map_y is not None else -1},{area_name},{timestamp},{state},{len(img_binary)}"
+                    gui_msg = gui_msg_header.encode() + b"," + img_binary #$$
                     self.gui_server.send_binary_to_client(b"ME_FD:" + gui_msg)
                     # 로그 기록 ('$$' 기준)
                     self._log_gui_communication("SEND", f"ME_FD:{gui_msg_header}")
                     self._log_gui_communication("SEND", f"[Binary Data of size {len(img_binary)}]")
                 else:
-                    # 비사람: timestamp,image_size
-                    gui_msg_header = f"{object_id},{object_class},{int(map_x) if map_x is not None else -1},{int(map_y) if map_y is not None else -1},{area_name},{timestamp},{len(img_binary)}"
-                    gui_msg = gui_msg_header.encode() + b"$$" + img_binary
+                    # 비사람: timestamp,event_type
+                    event_type = det.get('event_type', 'HAZARD')
+                    gui_msg_header = f"1,{object_id},{object_class},{int(map_x) if map_x is not None else -1},{int(map_y) if map_y is not None else -1},{area_name},{timestamp},{len(img_binary)}"
+                    gui_msg = gui_msg_header.encode() + b"," + img_binary #$$
                     self.gui_server.send_binary_to_client(b"ME_FD:" + gui_msg)
                     # 로그 기록 ('$$' 기준)
                     self._log_gui_communication("SEND", f"ME_FD:{gui_msg_header}")
@@ -781,7 +858,7 @@ class DetectionCommunicator(QThread):
         }
         
         try:
-            self.pilot_server.send_to_client(message)
+            self.send_to_pilot_with_log(message)
             print(f"[INFO] 활주로 {runway_id} 상태 변경 알림 전송: {status}")
         except Exception as e:
             print(f"[WARNING] 활주로 {runway_id} 상태 변경 알림 전송 실패: {e}")
@@ -799,6 +876,23 @@ class DetectionCommunicator(QThread):
         
         try:
             self.gui_server.send_binary_to_client(message.encode())
+            # GUI TCP 로그에 기록
+            self._log_gui_communication("SEND", message.strip())
             print(f"[INFO] 관제사 GUI - 활주로 {runway_id} 상태 변경: {status} -> {state}")
         except Exception as e:
             print(f"[WARNING] 관제사 GUI 활주로 상태 알림 전송 실패: {e}") 
+
+    def send_to_pilot_with_log(self, data):
+        # 조종사 GUI 송신 로그 파일에 기록
+        try:
+            log_entry = {
+                'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f'),
+                'sent': data
+            }
+            with open(self.pilot_log_file, 'a', encoding='utf-8') as f:
+                json.dump(log_entry, f, ensure_ascii=False)
+                f.write('\n')
+        except Exception as e:
+            print(f"[ERROR] 조종사 GUI 송신 로그 저장 실패: {e}")
+        # 실제 송신
+        self.pilot_server.send_to_client(data) 

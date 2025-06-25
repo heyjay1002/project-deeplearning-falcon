@@ -55,7 +55,7 @@ class TCPServer(TCPBase):
         self.socket.bind((self.host, self.port))
         self.socket.listen(1)
         self.running = True
-        print(f"[INFO] TCP 서버 시작 (포트: {self.port})")
+        print(f"[TCP:{self.port}] 서버 시작")
     
     def accept_client(self) -> bool:
         """새로운 클라이언트 연결 수락"""
@@ -78,7 +78,11 @@ class TCPServer(TCPBase):
             try:
                 client_socket.close()
                 self.client_sockets.discard(client_socket)
-                print("[INFO] 클라이언트 연결 종료")
+                try:
+                    peer = client_socket.getpeername()
+                    print(f"[TCP:{self.port}] 클라이언트 연결 종료: {peer[0]}:{peer[1]}")
+                except Exception:
+                    print(f"[TCP:{self.port}] 클라이언트 연결 종료: (이미 닫힘)")
             except Exception as e:
                 print(f"[WARNING] 클라이언트 소켓 정리 중 오류: {e}")
     

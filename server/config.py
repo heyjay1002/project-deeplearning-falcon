@@ -4,7 +4,7 @@
 
 # 네트워크 설정
 DEFAULT_HOST = "0.0.0.0"
-DEFAULT_CLIENT_HOST = "127.0.0.1"
+DEFAULT_CLIENT_HOST = "192.168.0.47"
 
 # TCP 설정
 TCP_BUFFER_SIZE = 65536
@@ -36,7 +36,7 @@ DEFAULT_WIDTH = 640
 DEFAULT_HEIGHT = 480
 
 # 버퍼 설정
-VIDEO_FRAME_BUFFER = 30  # 2초 분량 (30fps 기준)
+VIDEO_FRAME_BUFFER = 10  # 1초 분량 (15fps 기준)
 
 # 디버그 설정
 AUTO_DELETE_DB_ON_START = True  # 서버 시작 시 DB의 탐지 이벤트 초기화 여부

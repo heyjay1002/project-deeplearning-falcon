@@ -99,6 +99,9 @@ class MainWindow(QMainWindow):
         # 검출 결과 그리기
         frame_with_boxes = self.detection_processor.draw_detections(frame, img_id)
         
+        # 활주로 구역 그리기 (디버깅용)
+        # self.draw_runway_zones(frame_with_boxes)
+        
         # OpenCV BGR 이미지를 Qt QImage로 변환
         height, width, channel = frame_with_boxes.shape
         bytes_per_line = 3 * width
@@ -131,6 +134,22 @@ class MainWindow(QMainWindow):
     def update_buffer_status(self, status):
         """버퍼 상태 업데이트"""
         self.buffer_status_label.setText(status)
+    
+    def draw_runway_zones(self, frame):
+        """활주로 A, B 구역을 상수로 간단하게 그리기 (디버깅용)"""
+        height, width = frame.shape[:2]
+        
+        # 활주로 A (상단): y=0~22%
+        rwy_a_y1 = 0
+        rwy_a_y2 = int(0.22 * height)
+        cv2.rectangle(frame, (0, rwy_a_y1), (width, rwy_a_y2), (0, 0, 255), 3)
+        cv2.putText(frame, "RUNWAY A", (10, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 0, 255), 2)
+        
+        # 활주로 B (중간): y=52~70%  
+        rwy_b_y1 = int(0.52 * height)
+        rwy_b_y2 = int(0.70 * height)
+        cv2.rectangle(frame, (0, rwy_b_y1), (width, rwy_b_y2), (255, 0, 0), 3)
+        cv2.putText(frame, "RUNWAY B", (10, rwy_b_y1 + 25), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 2)
     
     def closeEvent(self, event):
         """윈도우 종료 시 호출"""

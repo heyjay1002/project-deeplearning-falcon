@@ -88,7 +88,7 @@ class UDPVideoReceiver(QThread):
                 img_array = np.frombuffer(img_bytes, dtype=np.uint8)
                 frame = cv2.imdecode(img_array, cv2.IMREAD_COLOR)
                 if frame is not None:
-                    # print(f"[UDP] cam_id={cam_id}, img_id={img_id}, frame_shape={frame.shape}")
+                    print(f"[UDP 수신] cam_id={cam_id}, img_id={img_id}, frame_shape={frame.shape}")
                     self.frame_received.emit(frame, cam_id)
             except socket.timeout:
                 continue
@@ -192,17 +192,27 @@ class MainWindow(QMainWindow):
     def handle_mr_od_message(self, data: bytes):
         """MR_OD 메시지 처리"""
         try:
-            # '$$'를 기준으로 헤더와 이미지 분리
-            header_bytes, img_bytes = data.split(b'$$', 1)
-            header_str = header_bytes.decode()
+            # ','를 기준으로 헤더와 이미지 분리 ($$에서 ,로 변경됨)
+            parts = data.decode().split(',')
+            
+            # MR_OD:OK,{event_type},{object_id},{class},{area},{timestamp},{image_size},<img_binary>
+            if len(parts) < 7:
+                print(f"[ERROR] MR_OD 메시지 형식 오류: {data}")
+                return
+                
+            event_type = parts[1]
+            object_id = parts[2]
+            obj_class = parts[3]
+            area = parts[4]
+            timestamp = parts[5]
+            image_size = int(parts[6])
+            
+            # 이미지 바이너리 추출 (7번째 필드 이후)
+            img_bytes = b','.join(parts[7:]).encode()
+            if len(img_bytes) > image_size:
+                img_bytes = img_bytes[:image_size]
 
-            self.message_display.append(f"[수신] {header_str}")
-
-            parts = header_str.split(',')
-            object_id = parts[1]
-            obj_class = parts[2]
-            area = parts[3]
-            timestamp = parts[4]
+            self.message_display.append(f"[수신] MR_OD:OK,{event_type},{object_id},{obj_class},{area},{timestamp},{image_size}")
             
             # QImage로 변환
             qimg = QImage.fromData(img_bytes, "JPG")
@@ -221,6 +231,7 @@ class MainWindow(QMainWindow):
             layout.addWidget(label)
             
             info_text = (
+                f"Event Type: {event_type}\n"
                 f"ID: {object_id}\n"
                 f"Class: {obj_class}\n"
                 f"Area: {area}\n"
@@ -239,36 +250,53 @@ class MainWindow(QMainWindow):
             print(f"[DEBUG] ME_FD 원본 데이터 길이: {len(data)}")
             print(f"[DEBUG] ME_FD 헤더: {data[:100]}")  # 처음 100바이트만 출력
             
-            # 서버에서 b"$$" 구분자를 사용하므로 수정
-            header, img_bytes = data[6:].split(b"$$", 1)
-            print(f"[DEBUG] 파싱된 헤더 길이: {len(header)}")
-            print(f"[DEBUG] 파싱된 이미지 길이: {len(img_bytes)}")
+            # 서버에서 쉼표 구분자를 사용하므로 수정
+            parts = data[6:].decode().split(',')  # ME_FD: 제거 후 쉼표로 분리
+            print(f"[DEBUG] 파싱된 필드 개수: {len(parts)}")
+            print(f"[DEBUG] 필드들: {parts}")
+
+            # ME_FD:{event_type},{object_id},{class},{x},{y},{zone},{timestamp},{state},{image_size},<img_binary>
+            # 또는 ME_FD:{event_type},{object_id},{class},{x},{y},{zone},{timestamp},{image_size},<img_binary>
             
-            header_str = header.decode("utf-8")
-            fields = header_str.split(",")
-            print(f"[DEBUG] ME_FD 헤더(문자열): {header_str}")
-            print(f"[DEBUG] 필드 개수: {len(fields)}")
-            print(f"[DEBUG] 필드들: {fields}")
+            if len(parts) < 8:
+                print(f"[ERROR] ME_FD 메시지 형식 오류: {data}")
+                return
 
-            object_id = fields[0]
-            obj_class = fields[1].upper()
-            x = fields[2]
-            y = fields[3]
-            zone = fields[4]
-            timestamp = fields[5]
+            event_type = parts[0]
+            object_id = parts[1]
+            obj_class = parts[2].upper()
+            x = parts[3]
+            y = parts[4]
+            zone = parts[5]
+            timestamp = parts[6]
 
+            # 사람인지 비사람인지 판단하여 파싱
             if obj_class == 'PERSON':
-                state = fields[6]
-                image_size = int(fields[7])
+                # 사람: event_type,object_id,class,x,y,zone,timestamp,state,image_size,<img_binary>
+                if len(parts) < 10:
+                    print(f"[ERROR] PERSON ME_FD 메시지 형식 오류: {data}")
+                    return
+                state = parts[7]
+                image_size = int(parts[8])
+                # 이미지 바이너리 추출 (9번째 필드 이후)
+                img_bytes = b','.join(parts[9:]).encode()
             else:
+                # 비사람: event_type,object_id,class,x,y,zone,timestamp,image_size,<img_binary>
+                if len(parts) < 9:
+                    print(f"[ERROR] Non-PERSON ME_FD 메시지 형식 오류: {data}")
+                    return
                 state = 'N'
-                image_size = int(fields[6])
+                image_size = int(parts[7])
+                # 이미지 바이너리 추출 (8번째 필드 이후)
+                img_bytes = b','.join(parts[8:]).encode()
+                
+            if len(img_bytes) > image_size:
+                img_bytes = img_bytes[:image_size]
+            
             print(f"[DEBUG] obj_class: {obj_class}, state: {state}, image_size: {image_size}")
-
-            img_bytes = img_bytes[:image_size]
             
             # 진단용 로그 및 파일 저장
-            print(f"[DEBUG] ME_FD 수신: object_id={object_id}, class={obj_class}, image_size={image_size}, len(img_bytes)={len(img_bytes)}")
+            print(f"[DEBUG] ME_FD 수신: event_type={event_type}, object_id={object_id}, class={obj_class}, image_size={image_size}, len(img_bytes)={len(img_bytes)}")
             with open(f"/tmp/client_img_{object_id}.jpg", "wb") as f:
                 f.write(img_bytes)
 
@@ -293,7 +321,7 @@ class MainWindow(QMainWindow):
             label.setPixmap(pixmap)
             layout.addWidget(label)
             # 정보 텍스트 추가
-            info = QLabel(f"ID: {object_id}\nClass: {obj_class}\n좌표: ({x}, {y})\nZone: {zone}\nTime: {timestamp}\nState: {state}")
+            info = QLabel(f"Event Type: {event_type}\nID: {object_id}\nClass: {obj_class}\n좌표: ({x}, {y})\nZone: {zone}\nTime: {timestamp}\nState: {state}")
             layout.addWidget(info)
             dlg.setLayout(layout)
             dlg.exec()

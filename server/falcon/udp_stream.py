@@ -105,4 +105,7 @@ class VideoCommunicator(QThread):
             img_id: 이미지 ID
         """
         if self.streaming and cam_id == self.current_camera:
+            from datetime import datetime
+            timestamp = datetime.now().strftime('%H:%M:%S.%f')[:-3]  # 밀리초까지
+            # print(f"[{timestamp}] [UDP 전송] cam_id={cam_id}, img_id={img_id}")
             self.admin_video_sender.send_frame(frame, cam_id=cam_id, img_id=img_id)

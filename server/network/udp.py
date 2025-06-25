@@ -51,7 +51,7 @@ class UDPVideoReceiver(UDPBase):
         self._init_socket()
         self.socket.bind((self.host, self.port))
         self.running = True
-        print(f"[정보] UDP 비디오 수신자가 포트 {self.port}에서 시작됨")
+        print(f"[UDP:{self.port}] 비디오 수신자 시작")
 
     def receive_frame(self):
         """비디오 프레임을 수신하고 디코딩. (프레임, 카메라ID, 이미지ID) 또는 (프레임, 카메라ID) 반환."""
@@ -108,14 +108,17 @@ class UDPVideoSender(UDPBase):
         self._init_socket()
         self.socket.setsockopt(socket.SOL_SOCKET, socket.SO_SNDBUF, UDP_BUFFER_SIZE)
         self.running = True
-        print(f"[정보] UDP 비디오 송신자가 {self.host}:{self.port}로 시작됨")
+        print(f"[UDP:{self.port}] 비디오 송신자 시작 (대상: {self.host})")
 
     def send_frame(self, frame: np.ndarray, cam_id: str = "A", img_id: Optional[int] = None) -> bool:
         """비디오 프레임을 인코딩하고 전송 (선택적 이미지 ID 포함)."""
         try:
             _, encoded = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
             header = f"{cam_id}:{img_id}:".encode() if img_id is not None else f"{cam_id}:".encode()
-            self.socket.sendto(header + encoded.tobytes(), (self.host, self.port))
+            final_data = header + encoded.tobytes()
+            self.socket.sendto(final_data, (self.host, self.port))
+            # print(f"{cam_id}:{img_id}:")
+            # print(f"{final_data[:len(header)]}")
             return True
         except Exception as e:
             if self.running:

@@ -69,7 +69,7 @@ class DetectionRepository:
 
             # config 값에 따라 테이블 초기화 실행
             if AUTO_DELETE_DB_ON_START:
-                logger.warning("AUTO_DELETE_DB_ON_START 설정이 True이므로 DB의 탐지 이벤트를 초기화합니다.")
+                print("[DEBUG] AUTO_DELETE_DB_ON_START 설정이 True이므로 DB의 탐지 이벤트를 초기화합니다.")
                 # 개발/테스트용: 부팅 시 테이블 초기화
                 cur.execute("DELETE FROM DETECT_EVENT")
                 cur.execute("DELETE FROM DETECTED_OBJECT")
@@ -106,23 +106,20 @@ class DetectionRepository:
 
         cur = self.conn.cursor()
         try:
-            print(f"[DEBUG] DB 저장 시작: {len(detections)}개 객체, img_id={img_id}")
+            print(f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+            print(f"[DB 저장] {len(detections)}개 객체 저장 시작 (img_id={img_id})")
             
             # 기존 트랜잭션이 있으면 롤백
             if self.conn.in_transaction:
-                print("[DEBUG] 기존 트랜잭션 롤백")
                 self.conn.rollback()
             
             self.conn.start_transaction()
-            print("[DEBUG] 새 트랜잭션 시작")
             
             for i, detection in enumerate(detections):
                 object_id = detection['object_id']
                 class_name = detection['class']
-                print(f"[DEBUG] 객체 {i+1}/{len(detections)}: object_id={object_id}, class={class_name}")
                 
                 object_type_id = self._get_object_type_id(class_name)
-                print(f"[DEBUG] object_type_id 조회 결과: {object_type_id}")
                 
                 if object_type_id is None:
                     print(f"[ERROR] 알 수 없는 객체 타입: {class_name}")
@@ -132,7 +129,6 @@ class DetectionRepository:
                 # KST (UTC+9) 시간으로 이벤트 시간 기록
                 kst = timezone(timedelta(hours=9))
                 event_time = datetime.now(kst).strftime('%Y-%m-%d %H:%M:%S')
-                print(f"[DEBUG] DETECTED_OBJECT 삽입: object_id={object_id}, object_type_id={object_type_id}")
                 
                 cur.execute(
                     "INSERT INTO DETECTED_OBJECT (object_id, object_type_id) VALUES (%s, %s)",
@@ -143,9 +139,6 @@ class DetectionRepository:
                 map_y = detection.get('map_y')
                 area_id = detection.get('area_id')
                 event_type_id = self._determine_event_type(class_name)
-                
-                print(f"[DEBUG] 좌표 정보: map_x={map_x}, map_y={map_y}, area_id={area_id}")
-                print(f"[DEBUG] 이벤트 타입: {event_type_id}")
                 
                 cur.execute("""
                     INSERT INTO DETECT_EVENT 
@@ -169,14 +162,13 @@ class DetectionRepository:
                 elif object_id > self.max_object_id:
                     self.max_object_id = object_id
 
-                print(f"[DEBUG] 객체 {object_id} 저장 완료")
+                print(f"  ✓ 객체 {object_id} ({class_name}) 저장 완료")
             
-            print("[DEBUG] 트랜잭션 커밋 시도")
             self.conn.commit()
-            print(f"[INFO] DB 저장 성공: {len(detections)}개 객체")
+            print(f"[DB 저장] 성공: {len(detections)}개 객체")
+            print(f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
             
             if self.on_save_complete:
-                print("[DEBUG] 콜백 함수 호출")
                 self.on_save_complete(detections, crop_imgs)
             return True
             
@@ -184,7 +176,6 @@ class DetectionRepository:
             print(f"[ERROR] DB 저장 실패: {str(e)}")
             print(f"[ERROR] 에러 타입: {type(e).__name__}")
             if self.conn.in_transaction:
-                print("[DEBUG] 트랜잭션 롤백")
                 self.conn.rollback()
             logger.error(f"이벤트 저장 중 오류: {str(e)}")
             return False
@@ -201,6 +192,7 @@ class DetectionRepository:
 
         query = """
             SELECT
+                de.event_type_id,
                 de.object_id,
                 ot.object_type_name AS class,
                 de.map_x,
@@ -235,22 +227,21 @@ class DetectionRepository:
         """
         cur = self.conn.cursor()
         try:
-            print(f"[DEBUG] 객체 타입 조회: class_name='{class_name}' -> '{class_name.upper()}'")
             cur.execute(
                 "SELECT object_type_id FROM OBJECT_TYPE WHERE object_type_name = %s",
                 (class_name.upper(),)
             )
             result = cur.fetchone()
             object_type_id = result[0] if result else None
-            print(f"[DEBUG] 조회 결과: {object_type_id}")
             
             # 사용 가능한 객체 타입들도 출력 (디버깅용)
             if object_type_id is None:
-                print("[DEBUG] 사용 가능한 객체 타입들:")
+                print(f"[WARNING] 알 수 없는 객체 타입: {class_name}")
                 cur.execute("SELECT object_type_id, object_type_name FROM OBJECT_TYPE")
                 available_types = cur.fetchall()
+                print("[DEBUG] 사용 가능한 객체 타입들:")
                 for obj_id, obj_name in available_types:
-                    print(f"[DEBUG]   {obj_id}: {obj_name}")
+                    print(f"  {obj_id}: {obj_name}")
             
             return object_type_id
         except Exception as e:
@@ -268,15 +259,71 @@ class DetectionRepository:
         class_name_upper = class_name.upper()
         
         # 클래스에 따른 이벤트 타입 결정
-        if class_name_upper in ['PERSON', 'WORK_PERSON']:
+        if class_name_upper in ['BIRD', 'FOD', 'ANIMAL']:
+            return 1  # RESCUE
+        elif class_name_upper in ['PERSON', 'WORK_PERSON']:
             return 2  # UNAUTH
-        elif class_name_upper in ['BIRD', 'ANIMAL']:
-            return 3  # RESCUE
-        elif class_name_upper in ['CAR', 'TRUCK', 'BUS', 'VEHICLE', 'WORK_VEHICLE']:
-            return 1  # HAZARD
-        elif class_name_upper in ['FOD', 'FIRE']:
-            return 1  # HAZARD
-        elif class_name_upper == 'AIRPLANE':
+        elif class_name_upper in ['VEHICLE', 'WORK_VEHICLE']:
+            return 2  # UNAUTH
+        elif class_name_upper in ['FIRE']:
             return 1  # HAZARD
         else:
             return 1  # 기본값: HAZARD 
+
+    def save_bird_risk_log(self, bird_risk_level_id: int) -> bool:
+        """조류 위험도 로그 저장
+        Args:
+            bird_risk_level_id: 조류 위험도 레벨 ID (1=BR_HIGH, 2=BR_MEDIUM, 3=BR_LOW)
+        Returns:
+            bool: 저장 성공 여부
+        """
+        if not self.conn:
+            self.connect()
+
+        cur = self.conn.cursor()
+        try:
+            kst = timezone(timedelta(hours=9))
+            timestamp = datetime.now(kst).strftime('%Y-%m-%d %H:%M:%S')
+            
+            cur.execute(
+                "INSERT INTO BIRD_RISK_LOG (bird_risk_level_id, timestamp) VALUES (%s, %s)",
+                (bird_risk_level_id, timestamp)
+            )
+            self.conn.commit()
+            print(f"[DB 저장] 조류 위험도 로그 저장 완료: level_id={bird_risk_level_id}")
+            return True
+        except Exception as e:
+            print(f"[ERROR] 조류 위험도 로그 저장 실패: {str(e)}")
+            if self.conn.in_transaction:
+                self.conn.rollback()
+            logger.error(f"조류 위험도 로그 저장 중 오류: {str(e)}")
+            return False 
+
+    def add_interaction_log(self, request_id: int, response_id: int, request_time: str, response_time: str) -> bool:
+        """상호작용 로그 저장
+        Args:
+            request_id: 요청 타입 ID
+            response_id: 응답 타입 ID  
+            request_time: 요청 시간
+            response_time: 응답 시간
+        Returns:
+            bool: 저장 성공 여부
+        """
+        if not self.conn:
+            self.connect()
+
+        cur = self.conn.cursor()
+        try:
+            cur.execute("""
+                INSERT INTO INTERACTION_LOG (request_id, response_id, request_time, response_time, status_id)
+                VALUES (%s, %s, %s, %s, %s)
+            """, (request_id, response_id, request_time, response_time, 1))  # status_id=1 (성공)
+            
+            self.conn.commit()
+            return True
+        except Exception as e:
+            print(f"[ERROR] 상호작용 로그 저장 실패: {str(e)}")
+            if self.conn.in_transaction:
+                self.conn.rollback()
+            logger.error(f"상호작용 로그 저장 중 오류: {str(e)}")
+            return False

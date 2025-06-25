@@ -47,14 +47,14 @@ class DatabaseMigration:
                 x1 FLOAT, y1 FLOAT, x2 FLOAT, y2 FLOAT
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4''')
             cur.execute('''CREATE TABLE IF NOT EXISTS DETECTED_OBJECT (
-                object_id INT PRIMARY KEY,
+                object_id BIGINT PRIMARY KEY,
                 object_type_id INT,
                 FOREIGN KEY(object_type_id) REFERENCES OBJECT_TYPE(object_type_id)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4''')
             cur.execute('''CREATE TABLE IF NOT EXISTS DETECT_EVENT (
                 event_id INT AUTO_INCREMENT PRIMARY KEY,
                 event_type_id INT,
-                object_id INT,
+                object_id BIGINT,
                 object_type_id INT,
                 map_x FLOAT,
                 map_y FLOAT,
@@ -81,16 +81,14 @@ class DatabaseMigration:
 
             # 2. 조류 위험도 분석
             cur.execute('''CREATE TABLE IF NOT EXISTS BIRD_RISK_LEVEL (
-                level_id INT PRIMARY KEY,
-                level_name VARCHAR(16) NOT NULL
+                id INT PRIMARY KEY,
+                name VARCHAR(16) NOT NULL
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4''')
             cur.execute('''CREATE TABLE IF NOT EXISTS BIRD_RISK_LOG (
                 id INT AUTO_INCREMENT PRIMARY KEY,
-                prev_level_id INT,
-                curr_level_id INT,
+                bird_risk_level_id INT,
                 timestamp DATETIME,
-                FOREIGN KEY(prev_level_id) REFERENCES BIRD_RISK_LEVEL(level_id),
-                FOREIGN KEY(curr_level_id) REFERENCES BIRD_RISK_LEVEL(level_id)
+                FOREIGN KEY(bird_risk_level_id) REFERENCES BIRD_RISK_LEVEL(id)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4''')
 
             # 3. 조종사 음성 요청 자동 응답
@@ -159,7 +157,7 @@ class DatabaseMigration:
                 (1, 'SUCCESS'), (2, 'ERROR')
             ])
             # BIRD_RISK_LEVEL
-            cur.executemany('INSERT IGNORE INTO BIRD_RISK_LEVEL (level_id, level_name) VALUES (%s, %s)', [
+            cur.executemany('INSERT IGNORE INTO BIRD_RISK_LEVEL (id, name) VALUES (%s, %s)', [
                 (1, 'BR_HIGH'), (2, 'BR_MEDIUM'), (3, 'BR_LOW')
             ])
             # AREA

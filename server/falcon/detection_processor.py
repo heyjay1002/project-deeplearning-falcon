@@ -152,6 +152,15 @@ class DetectionProcessor(QThread):
         """
         frame_with_boxes = frame.copy()
         
+        # 주기적으로 오래된 검출 결과 정리 (매 50번째 호출마다)
+        if hasattr(self, '_draw_count'):
+            self._draw_count += 1
+        else:
+            self._draw_count = 1
+            
+        if self._draw_count % 50 == 0:
+            self.cleanup_old_detections(img_id)
+        
         # 현재 프레임의 검출 결과 확인
         if img_id in self.detection_buffer:
             detections = self.detection_buffer[img_id]
@@ -231,4 +240,19 @@ class DetectionProcessor(QThread):
         filepath = os.path.join(img_dir, filename)
         result = cv2.imwrite(filepath, cropped_frame)
         print(f"[INFO] 이미지 저장: {filepath}, 성공={result}")
-        return result 
+        return result
+
+    def cleanup_old_detections(self, current_img_id, max_age_ns=3_000_000_000):
+        """오래된 검출 결과 정리 (5초 이상 or 50개 이상)"""
+        current_time = current_img_id
+        old_keys = []
+        
+        for frame_id in self.detection_buffer.keys():
+            if current_time - frame_id > max_age_ns:
+                old_keys.append(frame_id)
+        
+        for key in old_keys:
+            del self.detection_buffer[key]
+        
+        # if old_keys:
+        #     print(f"[INFO] 버퍼 정리: {len(old_keys)}개 오래된 검출 결과 삭제됨 (버퍼 크기: {len(self.detection_buffer)})") 

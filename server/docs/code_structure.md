@@ -247,18 +247,17 @@ def find_area_id(self, norm_x, norm_y):
 ### 2. 조류 위험도 분석
 
 #### BIRD_RISK_LOG
-| 필드명        | 타입       | 설명                |
-|---------------|------------|---------------------|
-| id            | INT (PK)   | 로그 ID             |
-| prev_level_id | INT (FK)   | 이전 위험도 레벨    |
-| curr_level_id | INT (FK)   | 현재 위험도 레벨    |
-| timestamp     | DATETIME   | 변경 시각           |
+| 필드명            | 타입       | 설명                |
+|-------------------|------------|---------------------|
+| id                | INT (PK)   | 로그 ID             |
+| bird_risk_level_id| INT (FK)   | 조류 위험도 레벨    |
+| timestamp         | DATETIME   | 변경 시각           |
 
 #### BIRD_RISK_LEVEL
 | 필드명   | 타입         | 설명         | 예시      |
 |----------|--------------|--------------|-----------|
-| level_id | INT (PK)     | 위험도 레벨  | 1         |
-| level_name| VARCHAR(16) | 레벨명       | BR_HIGH   |
+| id       | INT (PK)     | 위험도 레벨  | 1         |
+| name     | VARCHAR(16)  | 레벨명       | BR_HIGH   |
 
 ### 3. 조종사 음성 요청 자동 응답
 
