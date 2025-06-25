@@ -1,0 +1,19 @@
+# ATC GUI Application Requirements
+# Python 3.8+ required
+
+# GUI Framework
+PyQt6>=6.4.0
+
+# Optional: For better development experience
+# PyQt6-tools>=6.4.0  # Qt Designer and other tools
+
+# Optional: For testing (if needed)
+# pytest>=7.0.0
+# pytest-qt>=4.0.0
+
+# Optional: For logging enhancements (if needed)
+# colorlog>=6.7.0
+
+# Optional: For type checking (if needed)
+# mypy>=1.0.0
+# types-PyQt6>=6.4.0 

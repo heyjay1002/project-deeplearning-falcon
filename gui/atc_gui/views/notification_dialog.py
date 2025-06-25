@@ -1,6 +1,6 @@
 import os
 import datetime
-from PyQt6.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QFormLayout, QStyle
+from PyQt6.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QHBoxLayout, QFormLayout, QStyle, QWidget
 from PyQt6.QtCore import Qt, QSize, QTimer
 from PyQt6.QtGui import QPixmap, QImage
 from utils.logger import logger
@@ -9,9 +9,17 @@ class NotificationDialog(QDialog):
     """알림 다이얼로그"""
 
     def __init__(self, notification_type: str, data: any, parent=None):
-        super().__init__(parent)
-        self.setWindowTitle("알림")
         self.notification_type = notification_type
+        super().__init__(parent)
+        
+        # 활주로 위험도 알림과 조류 위험도 알림은 팝업에서 제외
+        excluded_types = ['bird', 'runway_a_risk', 'runway_b_risk']
+        if notification_type in excluded_types:
+            # 해당 알림 타입은 팝업을 표시하지 않고 즉시 종료
+            self.close()
+            return
+            
+        self.setWindowTitle("알림")
         self.data = data
 
         self.setWindowFlags(self.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
@@ -96,7 +104,60 @@ class NotificationDialog(QDialog):
                         image_label.setFixedSize(120, 100)
                         image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
                         image_label.setStyleSheet("border: 1px solid #ccc;")
-                        content_layout.addWidget(image_label)
+                        
+                        # 이미지 위에 ID 오버레이를 위한 스택 레이아웃
+                        image_stack = QVBoxLayout()
+                        image_stack.setSpacing(0)
+                        image_stack.setContentsMargins(0, 0, 0, 0)
+                        
+                        # ID 라벨 (이미지 상단 오버레이)
+                        id_label = QLabel(f"ID: {self.data.object_id}")
+                        id_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                        id_label.setStyleSheet("""
+                            background-color: rgba(0, 0, 0, 0.7);
+                            color: white;
+                            font-weight: bold;
+                            font-size: 12px;
+                            padding: 2px 4px;
+                            border-radius: 3px;
+                        """)
+                        id_label.adjustSize()
+                        
+                        # 이미지 위젯에 ID 오버레이 추가
+                        image_widget = QWidget()
+                        image_widget.setFixedSize(120, 100)
+                        image_widget.setStyleSheet("position: relative;")
+                        
+                        # 이미지 배경
+                        image_widget.setStyleSheet("background-color: #f0f0f0; border: 1px solid #ccc;")
+                        
+                        # 이미지와 ID를 같은 위치에 배치 (ID가 위에 오버레이)
+                        image_layout = QVBoxLayout(image_widget)
+                        image_layout.setContentsMargins(0, 0, 0, 0)
+                        image_layout.setSpacing(0)
+                        
+                        # ID를 상단에 배치
+                        id_container = QWidget()
+                        id_container.setFixedHeight(20)
+                        id_layout = QHBoxLayout(id_container)
+                        id_layout.setContentsMargins(0, 0, 0, 0)
+                        id_layout.addStretch()
+                        id_layout.addWidget(id_label)
+                        id_layout.addStretch()
+                        
+                        image_layout.addWidget(id_container)
+                        
+                        # 이미지를 하단에 배치
+                        image_container = QWidget()
+                        image_container.setFixedHeight(80)
+                        image_container_layout = QVBoxLayout(image_container)
+                        image_container_layout.setContentsMargins(0, 0, 0, 0)
+                        image_container_layout.addWidget(image_label)
+                        
+                        image_layout.addWidget(image_container)
+                        
+                        content_layout.addWidget(image_widget)
+                        
                 except Exception as e:
                     logger.error(f"이미지 처리 오류: {str(e)}")
 
@@ -107,17 +168,18 @@ class NotificationDialog(QDialog):
             info_layout.setHorizontalSpacing(10)
             info_layout.setVerticalSpacing(8)
 
-            info_layout.addRow("ID:", QLabel(str(self.data.object_id)))
             info_layout.addRow("종류:", QLabel(str(self.data.object_type.value)))
             info_layout.addRow("구역:", QLabel(str(self.data.area.value)))
             
             if hasattr(self.data, 'timestamp'):
                 ts = self.data.timestamp
                 if isinstance(ts, (datetime.datetime,)):
-                    ts_str = ts.strftime('%Y-%m-%d %H:%M:%S')
+                    ts_str = ts.strftime('%Y-%m-%d\n%H:%M:%S')
                 else:
                     ts_str = str(ts)
-                info_layout.addRow("발견 시각:", QLabel(ts_str))
+                timestamp_label = QLabel(ts_str)
+                timestamp_label.setStyleSheet("font-size: 16px;")
+                info_layout.addRow("발견 시각:", timestamp_label)
             
             if hasattr(self.data, 'state_info') and self.data.state_info:
                 value = self.data.state_info
@@ -134,9 +196,6 @@ class NotificationDialog(QDialog):
             info_layout.setHorizontalSpacing(10)
             info_layout.setVerticalSpacing(8)
 
-            if self.notification_type in ['bird', 'runway_a_risk', 'runway_b_risk']:
-                info_layout.addRow("위험 등급:", QLabel(str(self.data.value)))
-
             main_layout.addLayout(info_layout)
 
         # 버튼 (중앙 정렬)
@@ -147,9 +206,6 @@ class NotificationDialog(QDialog):
     def get_title(self) -> str:
         return {
             'object': '위험요소 감지 알림',
-            'bird': '조류 위험도 알림',
-            'runway_a_risk': '활주로 A 위험도 알림',
-            'runway_b_risk': '활주로 B 위험도 알림',
             'violation_access': '출입 위반 알림'
         }.get(self.notification_type, '알림')
 

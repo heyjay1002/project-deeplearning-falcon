@@ -142,8 +142,8 @@ class Constants:
         # 메시지 형식 정의
         MESSAGE_FORMAT = {
             # 이벤트 메시지 (서버 -> GUI)
-            MessagePrefix.ME_OD: "{prefix}:{object_id},{object_type},{x_coord},{y_coord},{area},{timestamp}[,{state_info}][;{object_id},{object_type},{x_coord},{y_coord},{area},{timestamp}[,{state_info}]]*",
-            MessagePrefix.ME_FD: "{prefix}:{event_type},{object_id},{object_type},{x_coord},{y_coord},{area},{timestamp},{image_size},{image_data}[;{event_type},{object_id},{object_type},{x_coord},{y_coord},{area},{timestamp}[,{state_info}]]*",
+            MessagePrefix.ME_OD: "{prefix}:{object_id},{object_type},{x_coord},{y_coord},{area}[,{state_info}][;{object_id},{object_type},{x_coord},{y_coord},{area}[,{state_info}]]*",
+            MessagePrefix.ME_FD: "{prefix}:{event_type},{object_id},{object_type},{x_coord},{y_coord},{area},{timestamp}[,{state_info}],{image_size},{image_data}[;{event_type},{object_id},{object_type},{x_coord},{y_coord},{area},{timestamp}[,{state_info}],{image_size},{image_data}]*",
             MessagePrefix.ME_BR: "{prefix}:{risk_level}",
             MessagePrefix.ME_RA: "{prefix}:{risk_level}",
             MessagePrefix.ME_RB: "{prefix}:{risk_level}",

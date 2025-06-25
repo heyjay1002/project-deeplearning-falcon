@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AccessPage</class>
+ <widget class="QWidget" name="AccessPage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1300</width>
+    <height>800</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" stretch="5">
+   <item>
+    <widget class="QGroupBox" name="group_limit_setting">
+     <property name="title">
+      <string>제한 설정</string>
+     </property>
+     <layout class="QVBoxLayout" name="groupLayout"/>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -266,6 +266,15 @@ class MainPage(QWidget):
         """실제 객체 목록 업데이트 처리"""
         logger.debug(f"객체 목록 업데이트: {len(objects)}개 객체")
 
+        # 현재 존재하는 객체 ID 집합
+        all_object_ids = set(obj.object_id for obj in objects)
+        
+        # 사라진 객체 ID들을 current_object_ids에서 제거
+        disappeared_objects = self.current_object_ids - all_object_ids
+        for obj_id in disappeared_objects:
+            self.current_object_ids.discard(obj_id)
+            logger.debug(f"사라진 객체 ID 제거: {obj_id}")
+
         # 중복 제거: 이미 처리된 객체는 제외
         new_objects = [obj for obj in objects if obj.object_id not in self.current_object_ids]
         logger.debug(f"새로운 객체: {len(new_objects)}개 (전체: {len(objects)}개)")
@@ -273,8 +282,6 @@ class MainPage(QWidget):
         # 현재 처리된 객체 ID 업데이트
         self.current_object_ids.update(obj.object_id for obj in new_objects)
 
-        # 현재 존재하는 객체 ID 집합
-        all_object_ids = set(obj.object_id for obj in objects)
         # 테이블에서 삭제할 row 인덱스 수집
         rows_to_remove = []
         for row in range(self.table_object_list.rowCount()):
@@ -285,14 +292,15 @@ class MainPage(QWidget):
                     rows_to_remove.append(row)
         # row 인덱스가 뒤에서부터 삭제해야 인덱스 밀림 없음
         for row in reversed(rows_to_remove):
+            object_id = int(self.table_object_list.item(row, 0).text())
             self.table_object_list.removeRow(row)
-            logger.debug(f"테이블에서 사라진 객체 삭제: row={row}")
+            logger.debug(f"테이블에서 사라진 객체 삭제: row={row}, ID={object_id}")
 
         # 테이블에 있는 모든 객체를 리스트로 만듦
         all_objects = []
         for row in range(self.table_object_list.rowCount()):
             object_id = int(self.table_object_list.item(row, 0).text())
-            # 객체 정보를 self.current_object_ids에서 찾아서 추가
+            # 객체 정보를 현재 받은 objects에서 찾아서 추가
             for obj in objects:
                 if obj.object_id == object_id:
                     all_objects.append(obj)
@@ -501,44 +509,12 @@ class MainPage(QWidget):
 
     def update_object_detail(self, obj: DetectedObject):
         """객체 상세 정보 업데이트"""
-        logger.info(f"객체 상세 정보 수신 완료. ID: {obj.object_id}. 상세 보기로 전환합니다.")
-        info = f"객체 ID: {obj.object_id}\n"
-        info += f"종류: {obj.object_type.value}\n"
-        info += f"위치: {obj.area.value}\n"
-        info += f"발견 시각: {obj.timestamp.strftime('%Y-%m-%d %H:%M:%S')}"
-        
-        if obj.state_info:
-            info += f"\n상태 정보: {obj.state_info}"
-            
-        self.object_detail_dialog.detail_info.setText(info)
-        
-        if obj.image_data:
-            pixmap = QPixmap()
-            pixmap.loadFromData(obj.image_data)
-            self.object_detail_dialog.detail_img.setPixmap(
-                pixmap.scaled(
-                    self.object_detail_dialog.detail_img.size(),
-                    Qt.AspectRatioMode.KeepAspectRatio,
-                    Qt.TransformationMode.SmoothTransformation
-                )
-            )
-        else:
-            # 이미지가 없을 경우, 회색 배경에 텍스트가 있는 플레이스홀더 생성
-            img_label = self.object_detail_dialog.detail_img
-            pixmap = QPixmap(img_label.size())
-            pixmap.fill(QColor('lightgray'))
-            
-            painter = QPainter(pixmap)
-            painter.setPen(QPen(QColor('black')))
-            font = painter.font()
-            font.setPointSize(12)
-            painter.setFont(font)
-            
-            painter.drawText(pixmap.rect(), Qt.AlignmentFlag.AlignCenter, "이미지 없음")
-            painter.end()
-            
-            img_label.setPixmap(pixmap)
+        logger.info(f"객체 상세 정보 수신 완료. ID: {obj.object_id}. 상세 보기로 전환합니다.")   
 
+        # ObjectDetailDialog에 객체 정보 전달
+        self.object_detail_dialog.update_object_info(obj)
+        
+        # 상세보기 화면으로 전환
         self.object_area.setCurrentIndex(2)
 
     def handle_object_detail_error(self, error_msg: str):

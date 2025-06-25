@@ -73,6 +73,14 @@ class DynamicMarker(QLabel):
         # 클릭 가능하도록 설정
         self.setCursor(Qt.CursorShape.PointingHandCursor)
         
+        # 마커가 클릭 가능하도록 설정
+        self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, False)
+        self.setFocusPolicy(Qt.FocusPolicy.NoFocus)
+
+        self.raise_()
+        
+        logger.debug(f"마커 설정 완료: ID {self.data.object_id}, 크기: {self.data.size}x{self.data.size}")
+        
     def update_appearance(self):
         """마커 외관 업데이트"""
         # 기본 아이콘 또는 커스텀 아이콘 사용
@@ -110,7 +118,7 @@ class DynamicMarker(QLabel):
             ObjectType.BIRD.value: os.path.join(base_path, 'resources/images/bird.png'),
             ObjectType.FOD.value: os.path.join(base_path, 'resources/images/fod.png'),
             ObjectType.PERSON.value: os.path.join(base_path, 'resources/images/person.png'),
-            ObjectType.ANIMAL.value: os.path.join(base_path, 'resources/images/animal.png'),
+            ObjectType.ANIMAL.value: os.path.join(base_path, 'resources/images/animal2.png'),
             ObjectType.AIRPLANE.value: os.path.join(base_path, 'resources/images/airplane.png'),
             ObjectType.VEHICLE.value: os.path.join(base_path, 'resources/images/vehicle.png'),
             ObjectType.WORK_PERSON.value: os.path.join(base_path, 'resources/images/worker.png'),
@@ -128,14 +136,11 @@ class DynamicMarker(QLabel):
             obj_type_key = str(obj_type)
             
         icon_path = icon_paths.get(obj_type_key)
-        logger.debug(f"마커 아이콘 로드 시도: base_path={base_path}, object_type={obj_type_key}, icon_path={icon_path}")
-        logger.debug(f"사용 가능한 icon_paths 키들: {list(icon_paths.keys())}")
         
         if icon_path and os.path.exists(icon_path):
-            logger.debug(f"아이콘 파일 존재 확인: {icon_path}")
             icon_pixmap = QPixmap(icon_path)
             if not icon_pixmap.isNull():
-                logger.debug(f"아이콘 로드 성공: {icon_path}")
+                # logger.debug(f"아이콘 로드 성공: {icon_path}")
                 # 흰색 배경 그리기
                 painter.setBrush(QBrush(QColor("white")))
                 painter.setPen(Qt.PenStyle.NoPen)
@@ -259,7 +264,9 @@ class DynamicMarker(QLabel):
     
     def mousePressEvent(self, event):
         """마우스 클릭 이벤트"""
+        logger.debug(f"마커 클릭 이벤트 발생: ID {self.data.object_id}, 버튼: {event.button()}")
         if event.button() == Qt.MouseButton.LeftButton:
+            logger.debug(f"마커 클릭 시그널 발생: ID {self.data.object_id}")
             self.clicked.emit(self.data.object_id)
         super().mousePressEvent(event)
 
@@ -272,6 +279,8 @@ class MapMarkerWidget(QWidget):
         self.markers: Dict[int, DynamicMarker] = {}
         self.marker_labels: Dict[int, QLabel] = {}  # 추가
         self.selected_marker_id: Optional[int] = None
+
+        self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, False)
         
         # 기본 지도 크기 설정
         self.map_width = 960
@@ -390,30 +399,44 @@ class MapMarkerWidget(QWidget):
             
         return constrained_position
     
+    def _on_marker_clicked(self, object_id: int):
+        """마커 클릭 시 호출되는 메서드"""
+        logger.debug(f"MapMarkerWidget에서 마커 클릭 처리: ID {object_id}")
+        # 마커 선택
+        self.select_marker(object_id)
+        # 외부로 시그널 전달
+        logger.debug(f"마커 클릭 시그널 전달: ID {object_id}")
+        self.marker_clicked.emit(object_id)
+    
     def add_dynamic_marker(self, marker_data: dict):
         """동적 마커 추가"""
         try:
-            # 기존 마커가 있으면 제거
+            # 기존 마커의 상태 정보 보존
+            existing_state = 'NORMAL'
             if marker_data['object_id'] in self.markers:
+                existing_state = self.markers[marker_data['object_id']].data.state
                 self.remove_marker(marker_data['object_id'])
                 
-            # 새 마커 생성
+            # 새 마커 생성 (기존 상태 보존)
             marker = DynamicMarker(MarkerData(
                 object_id=marker_data['object_id'],
                 x=marker_data['x_coord'],
                 y=marker_data['y_coord'],
                 object_type=marker_data['object_type'],
-                zone=marker_data['area']
+                zone=marker_data['area'],
+                state=existing_state  # 기존 상태 정보 유지
             ), self)
-            marker.clicked.connect(lambda: self.marker_clicked.emit(marker_data['object_id']))
+            marker.clicked.connect(lambda object_id: self._on_marker_clicked(object_id))
             
             # 위치 계산 및 설정 (경계 제약 적용됨)
             x, y = self.calculate_marker_position(marker_data['x_coord'], marker_data['y_coord'], 50)
             marker.move(x, y)
+            
             marker.show()
+            marker.raise_()
             
             self.markers[marker_data['object_id']] = marker
-            logger.debug(f"마커 추가 성공: ID {marker_data['object_id']}, 위치: ({x}, {y})")
+            logger.debug(f"마커 추가 성공: ID {marker_data['object_id']}, 위치: ({x}, {y}), 상태: {existing_state}")
             
             # ID 라벨 추가 (경계 제약 고려)
             id_label = QLabel(f"ID:{marker_data['object_id']}", self)
@@ -438,6 +461,10 @@ class MapMarkerWidget(QWidget):
             
             id_label.move(label_x, label_y)
             id_label.show()
+            id_label.raise_()
+
+            id_label.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
+            
             self.marker_labels[marker_data['object_id']] = id_label
             
         except Exception as e:
@@ -448,12 +475,17 @@ class MapMarkerWidget(QWidget):
         try:
             if marker_data['object_id'] in self.markers:
                 marker = self.markers[marker_data['object_id']]
+                
+                # 기존 상태 정보 보존
+                current_state = marker.data.state
+                
                 marker.data = MarkerData(
                     object_id=marker_data['object_id'],
                     x=marker_data['x_coord'],
                     y=marker_data['y_coord'],
                     object_type=marker_data['object_type'],
-                    zone=marker_data['area']
+                    zone=marker_data['area'],
+                    state=current_state  # 기존 상태 정보 유지
                 )
                 
                 # 위치가 변경되었으면 이동 (경계 제약 적용됨)
@@ -472,11 +504,13 @@ class MapMarkerWidget(QWidget):
                     label_y = self._constrain_position(label_y, 0, self.height() - label.height())
                     
                     label.move(label_x, label_y)
+
+                marker.raise_()
                 
                 # 외관 업데이트
                 marker.update_appearance()
                 
-                logger.debug(f"마커 업데이트 성공: ID {marker_data['object_id']}, 위치: ({x}, {y})")
+                logger.debug(f"마커 업데이트 성공: ID {marker_data['object_id']}, 위치: ({x}, {y}), 상태: {current_state}")
         except Exception as e:
             logger.error(f"마커 업데이트 실패: {str(e)}")
             
@@ -485,13 +519,14 @@ class MapMarkerWidget(QWidget):
         try:
             if object_id in self.markers:
                 marker = self.markers[object_id]
+                
+                # 선택 상태 정보 보존 (selected_marker_id는 유지)
+                # 마커가 선택된 상태였다면 selected_marker_id는 그대로 유지
+                
                 marker.hide()
                 marker.deleteLater()
                 del self.markers[object_id]
                 
-                if self.selected_marker_id == object_id:
-                    self.selected_marker_id = None
-                    
                 # 라벨 제거
                 if object_id in self.marker_labels:
                     self.marker_labels[object_id].hide()

@@ -12,11 +12,39 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
+    <widget class="QLabel" name="title_label">
+     <property name="minimumSize">
+      <size>
+       <width>180</width>
+       <height>30</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>180</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+     <property name="text">
+      <string>객체 상세 정보</string>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QLabel" name="detail_img">
      <property name="minimumSize">
       <size>
        <width>180</width>
        <height>180</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>180</width>
+       <height>16777215</height>
       </size>
      </property>
      <property name="frameShape">
@@ -35,11 +63,11 @@
        <height>30</height>
       </size>
      </property>
-     <property name="frameShape">
-      <enum>QFrame::Box</enum>
-     </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::Box</enum>
      </property>
      <property name="text">
       <string>이벤트 타입</string>

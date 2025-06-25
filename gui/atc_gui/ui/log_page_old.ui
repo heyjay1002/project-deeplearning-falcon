@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>LogPage</class>
+ <widget class="QWidget" name="LogPage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1271</width>
+    <height>691</height>
+   </rect>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="sizeConstraint">
+    <enum>QLayout::SetDefaultConstraint</enum>
+   </property>
+   <item>
+    <widget class="QComboBox" name="combo_log">
+     <item>
+      <property name="text">
+       <string>이상 객체 감지 이력</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>출입 조건 위반 이력</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="group_search">
+     <property name="title">
+      <string>이력 조회</string>
+     </property>
+     <layout class="QHBoxLayout" name="searchLayout">
+      <item>
+       <widget class="QLabel" name="label_start">
+        <property name="text">
+         <string>시작 날짜</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDateEdit" name="start_date">
+        <property name="acceptDrops">
+         <bool>true</bool>
+        </property>
+        <property name="dateTime">
+         <datetime>
+          <hour>0</hour>
+          <minute>0</minute>
+          <second>0</second>
+          <year>2024</year>
+          <month>12</month>
+          <day>31</day>
+         </datetime>
+        </property>
+        <property name="displayFormat">
+         <string>yyyy-MM-dd</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_end">
+        <property name="text">
+         <string>마지막 날짜</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QDateEdit" name="end_date">
+        <property name="acceptDrops">
+         <bool>true</bool>
+        </property>
+        <property name="dateTime">
+         <datetime>
+          <hour>0</hour>
+          <minute>0</minute>
+          <second>0</second>
+          <year>2025</year>
+          <month>6</month>
+          <day>1</day>
+         </datetime>
+        </property>
+        <property name="displayFormat">
+         <string>yyyy-MM-dd</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_type">
+        <property name="text">
+         <string>TYPE</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="combo_type">
+        <item>
+         <property name="text">
+          <string>전체</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>조류</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>기타</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_search">
+        <property name="text">
+         <string>조회</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="table_result">
+     <property name="rowCount">
+      <number>0</number>
+     </property>
+     <property name="columnCount">
+      <number>5</number>
+     </property>
+     <attribute name="horizontalHeaderDefaultSectionSize">
+      <number>200</number>
+     </attribute>
+     <column>
+      <property name="text">
+       <string>일시</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>구역</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>종류</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>상태</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>비고</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="btn_show_img">
+     <property name="text">
+      <string>이미지 보기</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

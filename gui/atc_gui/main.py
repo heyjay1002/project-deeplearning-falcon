@@ -6,8 +6,8 @@ from PyQt6.QtCore import *
 from PyQt6 import uic
 import logging
 from views.main_page import MainPage
-from views.access_page import AccessPage
-from views.log_page import LogPage
+# from views.access_page import AccessPage
+# from views.log_page import LogPage
 from views.notification_dialog import NotificationDialog
 from utils.interface import DetectedObject, BirdRisk, RunwayRisk
 from utils.network_manager import NetworkManager
@@ -21,6 +21,8 @@ class WindowClass(QMainWindow):
         ui_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ui/main_window.ui")
         uic.loadUi(ui_file_path, self)
         self.setWindowTitle("FALCON")
+
+        logger.info("FALCON 시작")
         
         # 창 크기 설정 
         self.resize(1320, 860)
@@ -112,13 +114,13 @@ class WindowClass(QMainWindow):
         self.main_page = MainPage(self, network_manager=self.network_manager)
         self._setup_tab_widget(0, self.main_page)
 
-        # AccessPage 인스턴스 생성 및 셋팅
-        self.access_page = AccessPage(self)
-        self._setup_tab_widget(1, self.access_page)
+        # # AccessPage 인스턴스 생성 및 셋팅
+        # self.access_page = AccessPage(self)
+        # self._setup_tab_widget(1, self.access_page)
 
-        # LogPage 인스턴스 생성 및 셋팅
-        self.log_page = LogPage(self)
-        self._setup_tab_widget(2, self.log_page)
+        # # LogPage 인스턴스 생성 및 셋팅
+        # self.log_page = LogPage(self)
+        # self._setup_tab_widget(2, self.log_page)
 
         # 탭 이름 설정
         self.tabWidget.setTabText(0, "Main")

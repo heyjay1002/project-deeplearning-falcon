@@ -132,7 +132,7 @@ class MessageParser:
     
     @staticmethod
     def parse_object_detail_info(data: str, image_data: bytes) -> DetectedObject:
-        """MR_OD:OK,event_type,object_id,object_type,area,timestamp,image_size + 바이너리"""
+        """MR_OD:OK,event_type,object_id,object_type,area,timestamp,image_size[,image_data]"""
         prefix = f"{MessagePrefix.MR_OD.value}:OK,"
         if not data.startswith(prefix):
             raise ValueError(f"잘못된 메시지 형식: {data}")
@@ -143,8 +143,14 @@ class MessageParser:
         
         if len(fields) < 6:
             logger.error(f"MR_OD: 필드 수 부족: {fields}")
-            raise ValueError(f"필드 수 오류: {len(fields)} != 6")
+            raise ValueError(f"image_data 제외 필드 수 오류: {len(fields)} < 6")
         
+        # fields[0] = event_type
+        # fields[1] = object_id
+        # fields[2] = object_type
+        # fields[3] = area
+        # fields[4] = timestamp
+        # fields[5] = image_size
         event_type = MessageParser._parse_event_type(fields[0])
         object_id = int(fields[1])
         obj_type = MessageParser._parse_object_type(fields[2])
@@ -157,13 +163,14 @@ class MessageParser:
             logger.warning(f"이미지 크기 불일치: {len(image_data)} != {image_size}")
         
         return DetectedObject(
+            event_type=event_type,
             object_id=object_id,
             object_type=obj_type,
             x_coord=0.0,
             y_coord=0.0,
-            area=area,
-            event_type=event_type,
+            area=area,            
             timestamp=timestamp,
+            state_info=None,
             image_data=image_data
         )
     
@@ -288,84 +295,60 @@ class MessageInterface:
         """객체 감지 이벤트 파싱 - 여러 객체 지원 (ME_OD 형식)"""
         objects = []
         
-        logger.debug(f"객체 감지 이벤트 파싱 시작: {payload[:200]}...")
+        # ME_OD: 프리픽스 제거
+        if payload.startswith('ME_OD:'):
+            payload = payload[6:]  # 'ME_OD:' 제거
         
         # 여러 객체가 ;로 구분된 경우 처리
         object_records = payload.split(Constants.Protocol.OBJECT_RECORD_SEPARATOR)
-        logger.debug(f"분리된 객체 레코드 수: {len(object_records)}")
         
         for i, record in enumerate(object_records):
             if not record.strip():
-                logger.debug(f"빈 레코드 건너뜀: 인덱스 {i}")
+                continue
+            
+            # 숫자로만 구성된 레코드 필터링
+            if record.strip().isdigit():
                 continue
                 
-            logger.debug(f"객체 레코드 {i+1} 처리: {record}")
-            
             try:
                 parts = record.split(Constants.Protocol.OBJECT_FIELD_SEPARATOR)
+                
                 if len(parts) < 5:  # 최소 필수 필드 확인 (5개: object_id,object_type,x_coord,y_coord,area)
-                    logger.warning(f"필수 필드 부족: {len(parts)} < 5")
                     continue
                 
-                # ME_OD 형식: object_id,object_type,x_coord,y_coord,area[,timestamp][,state_info]
+                # ME_OD 형식: object_id,object_type,x_coord,y_coord,area[,state_info]
                 object_id = int(parts[0])
                 object_type = MessageParser._parse_object_type(parts[1])
                 x_coord = float(parts[2])
                 y_coord = float(parts[3])
-                area = MessageParser._parse_area(parts[4])
-                
-                # 타임스탬프 처리 (선택적)
-                timestamp = None
-                if len(parts) > 5 and parts[5].strip():
-                    try:
-                        timestamp = MessageParser._parse_timestamp(parts[5])
-                    except Exception as e:
-                        logger.debug(f"타임스탬프 파싱 실패: {e}, 현재 시간 사용")
-                        timestamp = datetime.now()
-                else:
-                    # 타임스탬프가 없으면 현재 시간 사용
-                    timestamp = datetime.now()
+                area = MessageParser._parse_area(parts[4])              
                 
                 # 선택적 필드들
                 state_info = None
-                image_data = None
                 
                 # 상태 정보 처리 (선택적)
-                if len(parts) > 6 and parts[6].strip():
+                if len(parts) > 5 and parts[5].strip():
                     try:
-                        state_info = int(parts[6].strip())
+                        state_info = int(parts[5].strip())
                     except ValueError:
-                        logger.debug(f"상태 정보 파싱 실패: {parts[6]}")
-                
-                # 이미지 데이터 처리 (선택적)
-                if len(parts) > 7 and parts[7].strip():
-                    try:
-                        image_b64 = parts[7].strip()
-                        # Base64 패딩 추가
-                        missing_padding = len(image_b64) % 4
-                        if missing_padding:
-                            image_b64 += '=' * (4 - missing_padding)
-                        image_data = base64.b64decode(image_b64)
-                    except Exception as e:
-                        logger.debug(f"이미지 데이터 파싱 실패: {e}")
+                        pass
                 
                 # DetectedObject 생성 (ME_OD에는 event_type이 없으므로 기본값 사용)
                 obj = DetectedObject(
+                    event_type=None,
                     object_id=object_id,
                     object_type=object_type,
                     x_coord=x_coord,
                     y_coord=y_coord,
-                    area=area,
-                    event_type=EventType.HAZARD,  # 기본값
-                    timestamp=timestamp,
+                    area=area,           
+                    timestamp=None,
                     state_info=state_info,
-                    image_data=image_data
+                    image_data=None
                 )
                 objects.append(obj)
-                logger.debug(f"객체 {i+1} 생성 완료: ID {object_id}")
                 
             except Exception as e:
-                logger.error(f"객체 레코드 {i+1} 파싱 실패: {e}, 레코드: {record}")
+                logger.error(f"객체 레코드 {i+1} 파싱 실패: {e}, 레코드: '{record}'")
                 continue
         
         return objects
@@ -403,10 +386,9 @@ class MessageInterface:
                 area = MessageParser._parse_area(parts[5])
                 timestamp = MessageParser._parse_timestamp(parts[6]) if parts[6].strip() else None
                 image_size = int(parts[7])
-                
-                # 선택적 필드들
                 image_data = None
                 state_info = None
+                
                 
                 # 이미지 데이터 처리 (선택적)
                 if len(parts) > 8 and parts[8].strip():
