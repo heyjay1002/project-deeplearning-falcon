@@ -9,7 +9,7 @@ def InferenceWorker(inference_queue, tcp_queue, mode_queue, settings):
     print("🧠 InferenceWorker started.")
 
     detector = Detector(settings)  # settings 전달
-    current_mode = "object"  # 초기 모드: map
+    current_mode = "map"  # 초기 모드: map
     last_log_time = 0
 
     while True:

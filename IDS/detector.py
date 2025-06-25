@@ -49,7 +49,7 @@ class Detector:
         image_points = np.array([id_corner_map[i][0].mean(axis=0) for i in range(4)])
 
         # 각 마커의 실제 좌표 설정
-        world_points = np.array(self.settings.ARUCO_WORLD, dtype=np.float32)
+        world_points = np.array(self.settings.ARUCO_WORLD_CORNERS, dtype=np.float32)
 
         # Homography 계산
         try:
@@ -74,7 +74,7 @@ class Detector:
             "event": "map_calibration",
             "camera_id": self.settings.CAMERA_ID,
             "matrix": homography.tolist(),
-            "scale": scale
+            "scale": float(scale)  # float32 -> float 변환
         }
     
     # 객체 감지 모드
@@ -152,7 +152,7 @@ class Detector:
                 "object_id": our_id,
                 "class": cls_name,
                 "bbox": bbox,
-                "confidence": round(conf, 2)
+                "confidence": float(round(conf, 2)) # float32 -> float 변환
             }
             if rescue_level is not None:
                 det["rescue_level"] = str(rescue_level)
@@ -210,7 +210,7 @@ class Detector:
         [디버깅용] 계산된 호모그래피 행렬이 정확한지 확인하기 위해,
         실제 세계 좌표계의 구역들을 원본 이미지 위에 투영하여 그립니다.
         """
-        if not self.settings.DEBUG_VISUALIZE_CALIBRATION:
+        if not self.settings.DEBUG_SHOW_ZONES:
             return frame
         
         try:
@@ -225,9 +225,13 @@ class Detector:
             pixel_points = cv2.perspectiveTransform(world_points, H_inv)
 
             if pixel_points is not None:
+                zone_color = self.settings.ZONE_COLORS.get(name, (128, 128, 128))
+                
                 overlay = vis_frame.copy()
-                cv2.fillPoly(overlay, [pixel_points.astype(np.int32)], (0, 255, 0))
-                alpha = 0.3
+                cv2.fillPoly(overlay, [pixel_points.astype(np.int32)], zone_color)
+                
+                # [조절값] config.py의 ZONE_OVERLAY_ALPHA 값으로 반투명도 조절
+                alpha = self.settings.ZONE_OVERLAY_ALPHA 
                 vis_frame = cv2.addWeighted(overlay, alpha, vis_frame, 1 - alpha, 0)
                 
                 text_pos = np.mean(pixel_points[0], axis=0).astype(int)

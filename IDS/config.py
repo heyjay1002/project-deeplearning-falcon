@@ -18,7 +18,7 @@ class Settings:
         self.CLASS_NAME_TO_ID = {v: k for k, v in self.CLASS_NAMES.items()}
 
         # === YOLO 설정 ===
-        self.DETECTING_MODEL_PATH = "models/yolov8n_box_v0.1.0.pt"
+        self.DETECTING_MODEL_PATH = "models/yolov8nv0.2.5.pt"
         self.MODEL_PATH_POSE = "models/pose_model_v1.pt"
         self.TRACKER_CONFIG_FILE = "bytetrack.yaml"  # 또는 "botsort.yaml"
 
@@ -59,12 +59,24 @@ class Settings:
             "GRASS_B": [(350, 950), (1450, 950), (1450, 1350), (350, 1350)],
             "TWY_D":   [(1450, 950),(1800, 950), (1800, 1350), (1450, 1350)],
         }
+        # [추가] 구역별 색상 정의 (BGR 순서)
+        self.ZONE_COLORS = {
+            "RWY_A":   (255, 200, 200),  # 연한 파란색
+            "RWY_B":   (255, 200, 200),  # 연한 파란색
+            "TWY_A":   (220, 220, 220),  # 연한 회색
+            "TWY_B":   (220, 220, 220),  # 연한 회색
+            "TWY_C":   (220, 220, 220),  # 연한 회색
+            "TWY_D":   (220, 220, 220),  # 연한 회색
+            "GRASS_A": (200, 255, 200),  # 연한 초록색
+            "GRASS_B": (200, 255, 200)   # 연한 초록색
+        }
+        
         self.ENABLE_ARUCO_MASK_FILTER = True
 
         # === 카메라 설정 ===
         self.CAMERA_ID = "A"
         # ls /dev/video*
-        self.CAMERA_PATH = 2
+        self.CAMERA_PATH = 5
         self.CAMERA_USE_MJPG = True
         self.CAPTURE_RESOLUTION = (960, 960)
         self.PROCESS_RESOLUTION = (960, 960)
@@ -88,5 +100,6 @@ class Settings:
         self.DISPLAY_DEBUG = False
         self.LOG_LEVEL = "INFO"
         self.DEBUG_SHOW_ZONES = True  #  원본 영상에 구역을 반투명하게 표시
-
+        self.DEBUG_VISUALIZE_CALIBRATION = True 
+        self.ZONE_OVERLAY_ALPHA = 0.7
 settings = Settings() 
