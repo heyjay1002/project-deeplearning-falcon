@@ -83,9 +83,9 @@ class Constants:
     
     # --- 매핑 테이블 ---
     EVENT_TYPE_MAPPING = {
-        0: EventType.HAZARD,
-        1: EventType.UNAUTH,
-        2: EventType.RESCUE
+        1: EventType.HAZARD,
+        2: EventType.UNAUTH,
+        3: EventType.RESCUE
     }
 
     OBJECT_CLASS_MAPPING = {

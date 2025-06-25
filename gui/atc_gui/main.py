@@ -47,7 +47,7 @@ class WindowClass(QMainWindow):
 
     def _connect_network_signals(self):
         nm = self.network_manager
-        nm.first_object_detected.connect(lambda obj: self.show_notification_dialog('object', obj))  # 최초 감지 알림
+        # 최초 감지 알림은 MainPage에서 처리 (중복 연결 제거)
         nm.bird_risk_changed.connect(lambda risk: self.show_notification_dialog('bird', risk) if risk == BirdRiskLevel.HIGH else None)  # 조류 위험도 "경고"일 때만
         nm.runway_a_risk_changed.connect(lambda risk: self.show_notification_dialog('runway_a_risk', risk) if risk == RunwayRiskLevel.HIGH else None)  # 활주로 A 위험도 "경고"일 때만
         nm.runway_b_risk_changed.connect(lambda risk: self.show_notification_dialog('runway_b_risk', risk) if risk == RunwayRiskLevel.HIGH else None)  # 활주로 B 위험도 "경고"일 때만
@@ -159,23 +159,36 @@ class WindowClass(QMainWindow):
 
     def show_notification_dialog(self, dialog_type, data):
         """알림 다이얼로그 표시 - 중복 방지 로직 추가"""
+        # 기존에 삭제된 다이얼로그들 먼저 정리
+        valid_dialogs = []
+        for dialog in self._test_dialogs:
+            try:
+                # 삭제된 객체인지 확인
+                if dialog.isVisible():
+                    valid_dialogs.append(dialog)
+            except RuntimeError:
+                # 이미 삭제된 객체는 무시
+                pass
+        self._test_dialogs = valid_dialogs
+        
         # 기존 알림창 중복 확인
         for existing_dialog in self._test_dialogs:
-            if existing_dialog.isVisible() and existing_dialog.notification_type == dialog_type:
-                # 객체 알림의 경우 ID로 중복 확인
-                if dialog_type == 'object' and hasattr(data, 'object_id') and hasattr(existing_dialog.data, 'object_id'):
-                    if data.object_id == existing_dialog.data.object_id:
-                        logger.debug(f"중복 객체 알림 방지: ID {data.object_id}")
-                        return
-                # 위험도 알림의 경우 값으로 중복 확인
-                elif dialog_type in ['bird', 'runway_a_risk', 'runway_b_risk']:
-                    if hasattr(data, 'value') and hasattr(existing_dialog.data, 'value'):
-                        if data.value == existing_dialog.data.value:
-                            logger.debug(f"중복 위험도 알림 방지: {dialog_type} = {data.value}")
+            try:
+                if existing_dialog.isVisible() and existing_dialog.notification_type == dialog_type:
+                    # 객체 알림의 경우 ID로 중복 확인
+                    if dialog_type == 'object' and hasattr(data, 'object_id') and hasattr(existing_dialog.data, 'object_id'):
+                        if data.object_id == existing_dialog.data.object_id:
+                            logger.debug(f"중복 객체 알림 방지: ID {data.object_id}")
                             return
-        
-        # 기존에 닫힌 다이얼로그들 정리
-        self._test_dialogs = [d for d in self._test_dialogs if d.isVisible()]
+                    # 위험도 알림의 경우 값으로 중복 확인
+                    elif dialog_type in ['bird', 'runway_a_risk', 'runway_b_risk']:
+                        if hasattr(data, 'value') and hasattr(existing_dialog.data, 'value'):
+                            if data.value == existing_dialog.data.value:
+                                logger.debug(f"중복 위험도 알림 방지: {dialog_type} = {data.value}")
+                                return
+            except RuntimeError:
+                # 이미 삭제된 객체는 무시
+                continue
         
         # 새 알림창 생성
         dialog = NotificationDialog(dialog_type, data, self)

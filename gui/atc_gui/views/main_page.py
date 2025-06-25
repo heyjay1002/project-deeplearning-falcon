@@ -124,17 +124,16 @@ class MainPage(QWidget):
         self.network_manager.tcp_client.cctv_a_response.connect(self.on_cctv_a_response)
         self.network_manager.tcp_client.cctv_b_response.connect(self.on_cctv_b_response)
 
-    # [수정] 최초 감지 신호를 처리할 메소드 추가
     def on_first_object_detected(self, obj: DetectedObject):
         """최초 감지 객체(ME_FD)를 처리하여 알림을 발생시킵니다."""
         # 이전에 알림이 발생하지 않은 객체인지 확인하여 중복 방지
         if obj.object_id not in self.first_detected_object_ids:
             self.first_detected_object_ids.add(obj.object_id)
             
-            # 부모 윈도우(메인 윈도우)의 알림 핸들러 직접 호출
+            # 부모 윈도우(메인 윈도우)의 알림 다이얼로그 직접 호출
             main_window = self.window()
-            if hasattr(main_window, '_handle_first_object_detected'):
-                main_window._handle_first_object_detected(obj)
+            if hasattr(main_window, 'show_notification_dialog'):
+                main_window.show_notification_dialog('object', obj)
                 logger.info(f"최초 감지(ME_FD) 알림 발생: ID {obj.object_id} ({obj.object_type.value})")
 
     def on_cctv_a_response(self, response: str):
@@ -329,8 +328,24 @@ class MainPage(QWidget):
 
     def on_marker_clicked(self, object_id: int):
         """마커 클릭 처리"""
+        logger.info(f"=== MainPage 마커 클릭 처리 시작 ===")
+        logger.info(f"클릭된 마커 ID: {object_id}")
+        
+        # 마커 선택
+        logger.info(f"마커 선택 시작: ID {object_id}")
         self.map_marker.select_marker(object_id)
+        logger.info(f"마커 선택 완료: ID {object_id}")
+        
+        # 테이블 행 선택
+        logger.info(f"테이블 행 선택 시작: ID {object_id}")
         self.select_table_row_by_id(object_id)
+        logger.info(f"테이블 행 선택 완료: ID {object_id}")
+        
+        # 상세보기 버튼을 누른 효과 - 객체 상세보기 요청
+        logger.info(f"객체 상세보기 요청 시작: ID {object_id}")
+        self.network_manager.request_object_detail(object_id)
+        logger.info(f"객체 상세보기 요청 완료: ID {object_id}")
+        logger.info(f"=== MainPage 마커 클릭 처리 완료 ===")
 
     def select_table_row_by_id(self, object_id: int):
         """객체 ID로 테이블 행 선택"""

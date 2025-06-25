@@ -4,14 +4,33 @@ from PyQt6.QtWidgets import QDialog, QLabel, QPushButton, QVBoxLayout, QHBoxLayo
 from PyQt6.QtCore import Qt, QSize, QTimer
 from PyQt6.QtGui import QPixmap, QImage
 from utils.logger import logger
+from config.constants import ObjectType
 
 class NotificationDialog(QDialog):
     """알림 다이얼로그"""
 
     def __init__(self, notification_type: str, data: any, parent=None):
         # 속성을 가장 먼저 선언 (팝업 제외 조건에서도 속성이 존재하도록)
-        self.notification_type = notification_type
         self.data = data
+        
+        # 객체 타입에 따라 notification_type 자동 결정
+        if hasattr(data, 'object_type') and data.object_type:
+            obj_type = data.object_type
+            
+            # HAZARD 타입 객체들 (위험요소)
+            hazard_types = [ObjectType.BIRD, ObjectType.FOD, ObjectType.ANIMAL, ObjectType.AIRPLANE]
+            
+            # UNAUTH 타입 객체들 (출입 위반)
+            unauth_types = [ObjectType.PERSON, ObjectType.WORK_PERSON, ObjectType.VEHICLE, ObjectType.WORK_VEHICLE]
+            
+            if obj_type in hazard_types:
+                self.notification_type = 'object'  # 위험요소 감지
+            elif obj_type in unauth_types:
+                self.notification_type = 'violation_access'  # 출입 위반
+            else:
+                self.notification_type = notification_type  # 원래 타입 유지
+        else:
+            self.notification_type = notification_type
         
         super().__init__(parent)
         
@@ -19,13 +38,14 @@ class NotificationDialog(QDialog):
         excluded_types = ['bird', 'runway_a_risk', 'runway_b_risk']
         if notification_type in excluded_types:
             # 해당 알림 타입은 팝업을 표시하지 않고 즉시 종료
-            self.close()
+            self.setVisible(False)
+            self.deleteLater()
             return
             
         self.setWindowTitle("알림")
 
         self.setWindowFlags(self.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
-        self.setFixedSize(300, 300)
+        self.setFixedSize(380, 350)
 
         self.init_ui()
         
@@ -64,7 +84,12 @@ class NotificationDialog(QDialog):
         
         # 아이콘 추가
         icon_label = QLabel()
-        icon_path = os.path.join(os.path.dirname(__file__), '..', 'resources/images/warning_red.png')
+        
+        # notification_type에 따라 아이콘 선택
+        if self.notification_type == 'violation_access':
+            icon_path = os.path.join(os.path.dirname(__file__), '..', 'resources/images/warning_yellow.png')
+        else:
+            icon_path = os.path.join(os.path.dirname(__file__), '..', 'resources/images/warning_red.png')
 
         if icon_path and os.path.exists(icon_path):
             pixmap = QPixmap(icon_path)
@@ -89,6 +114,22 @@ class NotificationDialog(QDialog):
         # 메인 레이아웃에 제목 레이아웃 추가
         main_layout.addLayout(title_layout)
 
+        # ID 라벨 (제목과 본문 사이에 배치)
+        if self.notification_type in ['object', 'violation_access']:
+            id_label = QLabel(f"ID: {self.data.object_id}")
+            id_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            id_label.setStyleSheet("""
+                background-color: #f8f9fa;
+                color: #495057;
+                font-weight: bold;
+                font-size: 16px;
+                padding: 8px 12px;
+                border: 1px solid #dee2e6;
+                border-radius: 4px;
+                margin: 5px 0px;
+            """)
+            main_layout.addWidget(id_label)
+
         # 본문 영역
         if self.notification_type in ['object', 'violation_access']:
             # 객체 감지 이벤트: 이미지 + 정보를 좌우로 배치
@@ -105,60 +146,9 @@ class NotificationDialog(QDialog):
                         image_label.setPixmap(pixmap.scaled(120, 100, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation))
                         image_label.setFixedSize(120, 100)
                         image_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                        image_label.setStyleSheet("border: 1px solid #ccc;")
+                        image_label.setStyleSheet("border: 1px solid #ccc; background-color: #f0f0f0;")
                         
-                        # 이미지 위에 ID 오버레이를 위한 스택 레이아웃
-                        image_stack = QVBoxLayout()
-                        image_stack.setSpacing(0)
-                        image_stack.setContentsMargins(0, 0, 0, 0)
-                        
-                        # ID 라벨 (이미지 상단 오버레이)
-                        id_label = QLabel(f"ID: {self.data.object_id}")
-                        id_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-                        id_label.setStyleSheet("""
-                            background-color: rgba(0, 0, 0, 0.7);
-                            color: white;
-                            font-weight: bold;
-                            font-size: 12px;
-                            padding: 2px 4px;
-                            border-radius: 3px;
-                        """)
-                        id_label.adjustSize()
-                        
-                        # 이미지 위젯에 ID 오버레이 추가
-                        image_widget = QWidget()
-                        image_widget.setFixedSize(120, 100)
-                        image_widget.setStyleSheet("position: relative;")
-                        
-                        # 이미지 배경
-                        image_widget.setStyleSheet("background-color: #f0f0f0; border: 1px solid #ccc;")
-                        
-                        # 이미지와 ID를 같은 위치에 배치 (ID가 위에 오버레이)
-                        image_layout = QVBoxLayout(image_widget)
-                        image_layout.setContentsMargins(0, 0, 0, 0)
-                        image_layout.setSpacing(0)
-                        
-                        # ID를 상단에 배치
-                        id_container = QWidget()
-                        id_container.setFixedHeight(20)
-                        id_layout = QHBoxLayout(id_container)
-                        id_layout.setContentsMargins(0, 0, 0, 0)
-                        id_layout.addStretch()
-                        id_layout.addWidget(id_label)
-                        id_layout.addStretch()
-                        
-                        image_layout.addWidget(id_container)
-                        
-                        # 이미지를 하단에 배치
-                        image_container = QWidget()
-                        image_container.setFixedHeight(80)
-                        image_container_layout = QVBoxLayout(image_container)
-                        image_container_layout.setContentsMargins(0, 0, 0, 0)
-                        image_container_layout.addWidget(image_label)
-                        
-                        image_layout.addWidget(image_container)
-                        
-                        content_layout.addWidget(image_widget)
+                        content_layout.addWidget(image_label)
                         
                 except Exception as e:
                     logger.error(f"이미지 처리 오류: {str(e)}")
@@ -169,9 +159,23 @@ class NotificationDialog(QDialog):
             info_layout.setFormAlignment(Qt.AlignmentFlag.AlignTop)
             info_layout.setHorizontalSpacing(10)
             info_layout.setVerticalSpacing(8)
-
-            info_layout.addRow("종류:", QLabel(str(self.data.object_type.value)))
-            info_layout.addRow("구역:", QLabel(str(self.data.area.value)))
+            
+            # 필드 라벨 스타일 (종류:, 구역: 등)
+            field_label_style = "font-size: 14px; color: black;"
+            
+            # 종류 라벨
+            type_field_label = QLabel("종류:")
+            type_field_label.setStyleSheet(field_label_style)
+            type_label = QLabel(str(self.data.object_type.value))
+            type_label.setStyleSheet("font-size: 14px; color: black;")
+            info_layout.addRow(type_field_label, type_label)
+            
+            # 구역 라벨
+            area_field_label = QLabel("구역:")
+            area_field_label.setStyleSheet(field_label_style)
+            area_label = QLabel(str(self.data.area.value))
+            area_label.setStyleSheet("font-size: 14px; color: black;")
+            info_layout.addRow(area_field_label, area_label)
             
             if hasattr(self.data, 'timestamp'):
                 ts = self.data.timestamp
@@ -179,13 +183,21 @@ class NotificationDialog(QDialog):
                     ts_str = ts.strftime('%Y-%m-%d\n%H:%M:%S')
                 else:
                     ts_str = str(ts)
+                time_field_label = QLabel("발견 시각:")
+                time_field_label.setStyleSheet(field_label_style)
                 timestamp_label = QLabel(ts_str)
-                timestamp_label.setStyleSheet("font-size: 16px;")
-                info_layout.addRow("발견 시각:", timestamp_label)
+                timestamp_label.setStyleSheet("font-size: 14px; color: black; min-height: 40px; min-width: 120px;")
+                timestamp_label.setWordWrap(True)
+                timestamp_label.setAlignment(Qt.AlignmentFlag.AlignTop)
+                info_layout.addRow(time_field_label, timestamp_label)
             
             if hasattr(self.data, 'state_info') and self.data.state_info:
                 value = self.data.state_info
-                info_layout.addRow("상태:", QLabel(str(value)))
+                state_field_label = QLabel("상태:")
+                state_field_label.setStyleSheet(field_label_style)
+                state_label = QLabel(str(value))
+                state_label.setStyleSheet("font-size: 14px; color: black;")
+                info_layout.addRow(state_field_label, state_label)
 
             content_layout.addLayout(info_layout)
             main_layout.addLayout(content_layout)
@@ -206,6 +218,22 @@ class NotificationDialog(QDialog):
         main_layout.addWidget(button, alignment=Qt.AlignmentFlag.AlignHCenter)
 
     def get_title(self) -> str:
+        # 객체 데이터가 있는 경우 객체 타입에 따라 이벤트 타입 결정
+        if hasattr(self.data, 'object_type') and self.data.object_type:
+            obj_type = self.data.object_type
+            
+            # HAZARD 타입 객체들 (위험요소)
+            hazard_types = [ObjectType.BIRD, ObjectType.FOD, ObjectType.ANIMAL, ObjectType.AIRPLANE]
+            
+            # UNAUTH 타입 객체들 (출입 위반)
+            unauth_types = [ObjectType.PERSON, ObjectType.WORK_PERSON, ObjectType.VEHICLE, ObjectType.WORK_VEHICLE]
+            
+            if obj_type in hazard_types:
+                return '위험요소 감지 알림'
+            elif obj_type in unauth_types:
+                return '출입 위반 알림'
+        
+        # 기존 notification_type 기반 매핑 (fallback)
         return {
             'object': '위험요소 감지 알림',
             'violation_access': '출입 위반 알림'

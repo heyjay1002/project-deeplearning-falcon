@@ -264,11 +264,24 @@ class DynamicMarker(QLabel):
     
     def mousePressEvent(self, event):
         """마우스 클릭 이벤트"""
-        logger.debug(f"마커 클릭 이벤트 발생: ID {self.data.object_id}, 버튼: {event.button()}")
+        logger.info(f"=== 마커 마우스 이벤트 발생 ===")
+        logger.info(f"마커 ID: {self.data.object_id}")
+        logger.info(f"마우스 버튼: {event.button()}")
+        logger.info(f"마커 위치: {self.pos()}")
+        logger.info(f"마커 크기: {self.size()}")
+        logger.info(f"클릭 위치: {event.pos()}")
+        logger.info(f"마커 활성화 상태: {self.isEnabled()}")
+        logger.info(f"마커 가시성: {self.isVisible()}")
+        
         if event.button() == Qt.MouseButton.LeftButton:
-            logger.debug(f"마커 클릭 시그널 발생: ID {self.data.object_id}")
+            logger.info(f"좌클릭 감지, 시그널 발생 준비: ID {self.data.object_id}")
             self.clicked.emit(self.data.object_id)
+            logger.info(f"클릭 시그널 발생 완료: ID {self.data.object_id}")
+        else:
+            logger.info(f"좌클릭이 아님: {event.button()}")
+        
         super().mousePressEvent(event)
+        logger.info(f"=== 마커 마우스 이벤트 처리 완료 ===")
 
 class MapMarkerWidget(QWidget):
     """지도 마커 위젯"""
@@ -290,6 +303,7 @@ class MapMarkerWidget(QWidget):
         # 지도 이미지를 표시할 레이블 생성
         self.label_map = QLabel(self)
         self.label_map.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.label_map.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
         
         # 레이아웃 설정
         layout = QVBoxLayout(self)
@@ -401,12 +415,18 @@ class MapMarkerWidget(QWidget):
     
     def _on_marker_clicked(self, object_id: int):
         """마커 클릭 시 호출되는 메서드"""
-        logger.debug(f"MapMarkerWidget에서 마커 클릭 처리: ID {object_id}")
+        logger.info(f"=== MapMarkerWidget 마커 클릭 처리 시작 ===")
+        logger.info(f"클릭된 마커 ID: {object_id}")
+        logger.info(f"현재 선택된 마커 ID: {self.selected_marker_id}")
+        
         # 마커 선택
         self.select_marker(object_id)
+        
         # 외부로 시그널 전달
-        logger.debug(f"마커 클릭 시그널 전달: ID {object_id}")
+        logger.info(f"MainPage로 마커 클릭 시그널 전달 시작: ID {object_id}")
         self.marker_clicked.emit(object_id)
+        logger.info(f"MainPage로 마커 클릭 시그널 전달 완료: ID {object_id}")
+        logger.info(f"=== MapMarkerWidget 마커 클릭 처리 완료 ===")
     
     def add_dynamic_marker(self, marker_data: dict):
         """동적 마커 추가"""
