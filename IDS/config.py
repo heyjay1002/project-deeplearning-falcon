@@ -34,14 +34,31 @@ class Settings:
         self.VEHICLE_BLACK_LOWER = (0, 0, 0)
         self.VEHICLE_BLACK_UPPER = (180, 255, 50)
 
-        # === ArUco 마커 ===
-        self.MARKER_LENGTH = 0.18  # meter
-        self.ARUCO_WORLD = [
-            (0.00, 0.00),
-            (2.00, 0.00),
-            (2.00, 1.50),
-            (0.00, 1.50)
+        # === ArUco 월드 좌표 (mm 단위) ===
+        # 기준 마커 4개의 실제 세계 좌표 (좌상단부터 시계방향)
+        self.ARUCO_WORLD_CORNERS = [
+            (435.0, 390.0),   # ID 0: (43.5, -39)cm -> (435, 390)mm
+            (1375.0, 390.0),  # ID 1: (137.5, -39)cm -> (1375, 390)mm
+            (1375.0, 1290.0), # ID 2: (137.5, -129)cm -> (1375, 1290)mm
+            (435.0, 1290.0)   # ID 3: (43.5, -129)cm -> (435, 1290)mm
         ]
+
+        # === 전체 맵 구역의 실제 세계 좌표 (mm 단위) [디버깅용] ===
+        # 맵의 원점 (0,0)을 기준으로 각 구역의 모서리 좌표를 정의
+        self.WORLD_ZONES = {
+            # RWY 구역: 맵 가로 전체를 포함하는 수평 스트립
+            "RWY_A":   [(0, 0),    (1800, 0),   (1800, 300),  (0, 300)],
+            "RWY_B":   [(0, 650),  (1800, 650), (1800, 950),  (0, 950)],
+
+            # TWY 및 GRASS 구역: 각자의 사각형 칸
+            "TWY_A":   [(0, 300),   (350, 300),  (350, 650),  (0, 650)],
+            "GRASS_A": [(350, 300), (1450, 300), (1450, 650), (350, 650)],
+            "TWY_B":   [(1450, 300),(1800, 300), (1800, 650), (1450, 650)],
+            
+            "TWY_C":   [(0, 950),   (350, 950),  (350, 1350), (0, 1350)],
+            "GRASS_B": [(350, 950), (1450, 950), (1450, 1350), (350, 1350)],
+            "TWY_D":   [(1450, 950),(1800, 950), (1800, 1350), (1450, 1350)],
+        }
         self.ENABLE_ARUCO_MASK_FILTER = True
 
         # === 카메라 설정 ===
@@ -54,7 +71,7 @@ class Settings:
         self.CAMERA_FPS = 30
         self.JPEG_QUALITY = 30
         # === 네트워크 설정 ===
-        self.MAIN_SERVER_IP = "192.168.0.2"
+        self.MAIN_SERVER_IP = "192.168.0.12"
         self.IDS_UDP_PORT = 4000
         self.IDS_TCP_PORT = 5000
         self.TCP_COMM_TIMEOUT_MS = 5000
@@ -70,5 +87,6 @@ class Settings:
         # === 디버깅 ===
         self.DISPLAY_DEBUG = False
         self.LOG_LEVEL = "INFO"
-        
+        self.DEBUG_SHOW_ZONES = True  #  원본 영상에 구역을 반투명하게 표시
+
 settings = Settings() 

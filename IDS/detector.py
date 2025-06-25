@@ -203,3 +203,46 @@ class Detector:
         else:
             self.last_fall_time.pop(key, None)
             return 0
+        
+
+    def visualize_calibration_on_frame(self, frame, homography_matrix):
+        """
+        [디버깅용] 계산된 호모그래피 행렬이 정확한지 확인하기 위해,
+        실제 세계 좌표계의 구역들을 원본 이미지 위에 투영하여 그립니다.
+        """
+        if not self.settings.DEBUG_VISUALIZE_CALIBRATION:
+            return frame
+        
+        try:
+            H_inv = np.linalg.inv(homography_matrix)
+        except np.linalg.LinAlgError:
+            return frame
+
+        vis_frame = frame.copy()
+
+        for name, world_corners in self.settings.WORLD_ZONES.items():
+            world_points = np.array([world_corners], dtype=np.float32)
+            pixel_points = cv2.perspectiveTransform(world_points, H_inv)
+
+            if pixel_points is not None:
+                overlay = vis_frame.copy()
+                cv2.fillPoly(overlay, [pixel_points.astype(np.int32)], (0, 255, 0))
+                alpha = 0.3
+                vis_frame = cv2.addWeighted(overlay, alpha, vis_frame, 1 - alpha, 0)
+                
+                text_pos = np.mean(pixel_points[0], axis=0).astype(int)
+                cv2.putText(vis_frame, name, (text_pos[0]-20, text_pos[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+        
+        return vis_frame
+
+    # [추가 2] 픽셀 좌표 -> 실제 mm 좌표 변환 함수
+    def transform_pixel_to_world(self, pixel_point, homography_matrix):
+        """
+        한 개의 픽셀 좌표를 실제 세계 좌표(mm)로 변환합니다.
+        """
+        px, py = pixel_point
+        pixel_point_np = np.array([[[px, py]]], dtype=np.float32)
+        
+        world_point = cv2.perspectiveTransform(pixel_point_np, homography_matrix)
+        
+        return world_point[0][0]
