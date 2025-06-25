@@ -113,12 +113,15 @@ class UDPVideoSender(UDPBase):
     def send_frame(self, frame: np.ndarray, cam_id: str = "A", img_id: Optional[int] = None) -> bool:
         """비디오 프레임을 인코딩하고 전송 (선택적 이미지 ID 포함)."""
         try:
-            _, encoded = cv2.imencode('.jpg', frame, [cv2.IMWRITE_JPEG_QUALITY, 80])
+            # UDP 전송용 리사이즈 (960x960 -> 640x640)
+            resized_frame = cv2.resize(frame, (960, 960))
+            
+            _, encoded = cv2.imencode('.jpg', resized_frame, [cv2.IMWRITE_JPEG_QUALITY, 30])
             header = f"{cam_id}:{img_id}:".encode() if img_id is not None else f"{cam_id}:".encode()
             final_data = header + encoded.tobytes()
+            print(f"[DEBUG] UDP 전송 시도: 크기={len(final_data)}, 대상={self.host}:{self.port}")
             self.socket.sendto(final_data, (self.host, self.port))
-            # print(f"{cam_id}:{img_id}:")
-            # print(f"{final_data[:len(header)]}")
+            print(f"[DEBUG] UDP 전송 성공")
             return True
         except Exception as e:
             if self.running:

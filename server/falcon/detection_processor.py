@@ -242,7 +242,7 @@ class DetectionProcessor(QThread):
         print(f"[INFO] 이미지 저장: {filepath}, 성공={result}")
         return result
 
-    def cleanup_old_detections(self, current_img_id, max_age_ns=3_000_000_000):
+    def cleanup_old_detections(self, current_img_id, max_age_ns=1_000_000_000):
         """오래된 검출 결과 정리 (5초 이상 or 50개 이상)"""
         current_time = current_img_id
         old_keys = []

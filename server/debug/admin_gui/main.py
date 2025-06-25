@@ -138,7 +138,7 @@ class MainWindow(QMainWindow):
         
         # 상세보기 버튼
         self.detail_button = QPushButton('상세보기')
-        self.detail_button.clicked.connect(lambda: self._send_command('MC_OD:1000\n'))
+        self.detail_button.clicked.connect(lambda: self._send_command('MC_OD:175082570108712\n'))
         button_layout.addWidget(self.detail_button)
         
         layout.addLayout(button_layout)
@@ -192,12 +192,37 @@ class MainWindow(QMainWindow):
     def handle_mr_od_message(self, data: bytes):
         """MR_OD 메시지 처리"""
         try:
-            # ','를 기준으로 헤더와 이미지 분리 ($$에서 ,로 변경됨)
-            parts = data.decode().split(',')
+            # image_size까지 포함한 헤더 찾기 (7번째 쉼표까지)
+            header_end_pos = -1
+            comma_count = 0
+            for i, byte in enumerate(data):
+                if byte == ord(','):
+                    comma_count += 1
+                    if comma_count == 6:  # 6번째 쉼표 다음에 image_size가 있음
+                        # 다음 쉼표(7번째)를 찾아서 image_size까지 포함
+                        for j in range(i + 1, len(data)):
+                            if data[j] == ord(','):
+                                header_end_pos = j
+                                break
+                        break
             
-            # MR_OD:OK,{event_type},{object_id},{class},{area},{timestamp},{image_size},<img_binary>
-            if len(parts) < 7:
-                print(f"[ERROR] MR_OD 메시지 형식 오류: {data}")
+            if header_end_pos == -1:
+                print(f"[ERROR] MR_OD 메시지 형식 오류 - 헤더 구분 실패")
+                return
+                
+            # 헤더 부분만 디코드
+            header_bytes = data[:header_end_pos]
+            header_str = header_bytes.decode('utf-8')
+            
+            # 이미지 바이너리 부분 (다음 쉼표 이후)
+            img_bytes = data[header_end_pos + 1:]
+            
+            # 헤더 파싱
+            parts = header_str.split(',')
+            
+            # MR_OD:OK,{event_type},{object_id},{class},{area},{timestamp},{image_size}
+            if len(parts) != 7:
+                print(f"[ERROR] MR_OD 메시지 형식 오류: {header_str}")
                 return
                 
             event_type = parts[1]
@@ -207,10 +232,12 @@ class MainWindow(QMainWindow):
             timestamp = parts[5]
             image_size = int(parts[6])
             
-            # 이미지 바이너리 추출 (7번째 필드 이후)
-            img_bytes = b','.join(parts[7:]).encode()
-            if len(img_bytes) > image_size:
-                img_bytes = img_bytes[:image_size]
+            # 이미지 크기 체크
+            if len(img_bytes) != image_size:
+                print(f"[WARNING] 이미지 크기 불일치: expected={image_size}, actual={len(img_bytes)}")
+                # 크기가 다르면 예상 크기만큼만 사용
+                if len(img_bytes) > image_size:
+                    img_bytes = img_bytes[:image_size]
 
             self.message_display.append(f"[수신] MR_OD:OK,{event_type},{object_id},{obj_class},{area},{timestamp},{image_size}")
             

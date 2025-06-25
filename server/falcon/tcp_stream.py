@@ -801,6 +801,9 @@ class DetectionCommunicator(QThread):
                 area_id = det.get('area_id')
                 area_name = self.area_id_to_name.get(area_id, 'UNKNOWN') if area_id is not None else 'UNKNOWN'
                 
+                # 클래스명으로 이벤트 타입 ID 계산
+                event_type_id = self.repository._determine_event_type(object_class)
+                
                 # 이미지 크기가 너무 크면 압축
                 if len(img_binary) > 4000:
                     import cv2
@@ -815,26 +818,24 @@ class DetectionCommunicator(QThread):
 
                 # 객체 타입에 따라 다른 메시지 포맷 사용
                 if object_class == 'PERSON':
-                    # 사람: timestamp,state,image_size
+                    # 사람: event_type_id,object_id,object_class,map_x,map_y,area_name,timestamp,state,image_size
                     state = det.get('state', 'N')
-                    event_type = det.get('event_type', 'HAZARD')
-                    gui_msg_header = f"1,{object_id},{object_class},{int(map_x) if map_x is not None else -1},{int(map_y) if map_y is not None else -1},{area_name},{timestamp},{state},{len(img_binary)}"
+                    gui_msg_header = f"{event_type_id},{object_id},{object_class},{int(map_x) if map_x is not None else -1},{int(map_y) if map_y is not None else -1},{area_name},{timestamp},{state},{len(img_binary)}"
                     gui_msg = gui_msg_header.encode() + b"," + img_binary #$$
                     self.gui_server.send_binary_to_client(b"ME_FD:" + gui_msg)
                     # 로그 기록 ('$$' 기준)
                     self._log_gui_communication("SEND", f"ME_FD:{gui_msg_header}")
                     self._log_gui_communication("SEND", f"[Binary Data of size {len(img_binary)}]")
                 else:
-                    # 비사람: timestamp,event_type
-                    event_type = det.get('event_type', 'HAZARD')
-                    gui_msg_header = f"1,{object_id},{object_class},{int(map_x) if map_x is not None else -1},{int(map_y) if map_y is not None else -1},{area_name},{timestamp},{len(img_binary)}"
+                    # 비사람: event_type_id,object_id,object_class,map_x,map_y,area_name,timestamp,image_size
+                    gui_msg_header = f"{event_type_id},{object_id},{object_class},{int(map_x) if map_x is not None else -1},{int(map_y) if map_y is not None else -1},{area_name},{timestamp},{len(img_binary)}"
                     gui_msg = gui_msg_header.encode() + b"," + img_binary #$$
                     self.gui_server.send_binary_to_client(b"ME_FD:" + gui_msg)
                     # 로그 기록 ('$$' 기준)
                     self._log_gui_communication("SEND", f"ME_FD:{gui_msg_header}")
                     self._log_gui_communication("SEND", f"[Binary Data of size {len(img_binary)}]")
             except Exception as e:
-                print(f"[ERROR] ME_FD 전송 실패: {e}") 
+                print(f"[ERROR] ME_FD 전송 실패: {e}")
 
     def _log_gui_communication(self, direction, data):
         """GUI와의 통신 내용을 파일에 로깅"""

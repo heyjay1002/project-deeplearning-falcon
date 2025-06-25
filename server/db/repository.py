@@ -260,7 +260,7 @@ class DetectionRepository:
         
         # 클래스에 따른 이벤트 타입 결정
         if class_name_upper in ['BIRD', 'FOD', 'ANIMAL']:
-            return 1  # RESCUE
+            return 1  # HAZARD
         elif class_name_upper in ['PERSON', 'WORK_PERSON']:
             return 2  # UNAUTH
         elif class_name_upper in ['VEHICLE', 'WORK_VEHICLE']:
