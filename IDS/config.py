@@ -47,11 +47,7 @@ class Settings:
         # === 카메라 설정 ===
         self.CAMERA_ID = "A"
         # ls /dev/video*
-<<<<<<< Updated upstream
         self.CAMERA_PATH = 2
-=======
-        self.CAMERA_PATH = 4
->>>>>>> Stashed changes
         self.CAMERA_USE_MJPG = True
         self.CAPTURE_RESOLUTION = (960, 960)
         self.PROCESS_RESOLUTION = (960, 960)
