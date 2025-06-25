@@ -607,8 +607,6 @@ class TcpClient(QObject):
             timestamp = MessageParser._parse_timestamp(parts[6])
             image_size = int(parts[7])
 
-            logger.debug(f"ME_FD 바이너리 파싱 결과: ID={object_id}, Type={object_type.value}, Pos=({x_coord}, {y_coord}), Area={area.value}, EventType={event_type.value if event_type else 'None'}, ImageSize={image_size}")
-
             # 이미지 크기 검증
             if len(image_data) != image_size:
                 logger.warning(f"ME_FD 이미지 크기 불일치: {len(image_data)} != {image_size}")
@@ -686,7 +684,7 @@ class TcpClient(QObject):
             logger.info(f"이미지 포함 객체 상세보기 응답 처리 완료: ID {object_id}")
 
         except Exception as e:
-            logger.error(f"이미지 포함 객체 상세보기 응답 처리 오류: {e}")
+            logger.error(f"이미지 포함 객체 상세보기 처리 오류: {e}")
             self.object_detail_error.emit(str(e))
 
     def _process_cctv_frame(self, data: bytes):
@@ -806,16 +804,19 @@ class TcpClient(QObject):
                             parts = self.message_buffer.split(';')
                             for i, part in enumerate(parts[:-1]):  # 마지막 부분은 버퍼에 남김
                                 if part.strip():
+                                    logger.debug(f"세미콜론으로 분리된 메시지 처리: '{part.strip()}'")
                                     self._process_single_message(part.strip())
                                     self.stats['messages_received'] += 1
                             
                             # 마지막 부분을 버퍼에 남김
                             self.message_buffer = parts[-1]
+                            logger.debug(f"버퍼에 남은 부분: '{self.message_buffer}'")
                             break
                         else:
                             # 단일 메시지인 경우 처리
                             message = self.message_buffer.strip()
                             if message:
+                                logger.debug(f"단일 메시지 처리: '{message}'")
                                 self._process_single_message(message)
                                 self.stats['messages_received'] += 1
                                 self.message_buffer = ""
@@ -836,12 +837,16 @@ class TcpClient(QObject):
     def _process_single_message(self, message: str):
         """단일 메시지 처리"""
         try:
+            logger.debug(f"단일 메시지 처리 시작: '{message}'")
+            
             # 메시지가 너무 짧거나 잘못된 형식인지 확인
             if len(message) < 3 or ':' not in message:
+                logger.warning(f"잘못된 메시지 형식 무시: '{message}'")
                 return
             
             # 메시지 파싱
             prefix, data = MessageInterface.parse_message(message)
+            logger.debug(f"메시지 파싱 완료: prefix={prefix}, data='{data[:100]}...'")
             
             # 메시지 타입별 처리 - 통합된 핸들러 맵
             handler_map = {
@@ -858,13 +863,14 @@ class TcpClient(QObject):
             
             handler = handler_map.get(prefix)
             if handler:
+                logger.debug(f"핸들러 호출: {prefix}")
                 handler(data)
             else:
                 logger.warning(f"알 수 없는 메시지 타입: {prefix}")
                 
         except ValueError as e:
-            # 메시지 파싱 오류 (잘못된 형식) - 무시
-            pass
+            # 메시지 파싱 오류 (잘못된 형식)
+            logger.warning(f"메시지 파싱 오류 무시: {e}, 메시지: '{message[:100]}'")
         except Exception as e:
             # 기타 오류
             logger.error(f"메시지 처리 실패: {e}, 메시지: '{message[:100]}'")
@@ -922,11 +928,7 @@ class TcpClient(QObject):
     def _handle_first_detection(self, data: str):
         """최초 객체 감지 이벤트 처리 (ME_FD) - 수정된 인터페이스 사용"""
         try:
-            logger.debug(f"ME_FD 이벤트 수신: {data[:200]}...")
             objects = MessageInterface.parse_first_detection_event(data)
-            logger.debug(f"ME_FD 파싱 결과: {len(objects)}개 객체")
-            for i, obj in enumerate(objects):
-                logger.debug(f"ME_FD 객체 {i+1}: ID={obj.object_id}, Type={obj.object_type.value}, Pos=({obj.x_coord}, {obj.y_coord}), Area={obj.area.value}")
             self.first_object_detected.emit(objects)
             logger.info(f"최초 객체 감지 이벤트 처리: {len(objects)}개 객체")
         except Exception as e:
@@ -935,11 +937,7 @@ class TcpClient(QObject):
     def _handle_object_detection(self, data: str):
         """일반 객체 감지 이벤트 처리 (ME_OD)"""
         try:
-            logger.debug(f"ME_OD 이벤트 수신: {data[:200]}...")
             objects = MessageInterface.parse_object_detection_event(data)
-            logger.debug(f"ME_OD 파싱 결과: {len(objects)}개 객체")
-            for i, obj in enumerate(objects):
-                logger.debug(f"ME_OD 객체 {i+1}: ID={obj.object_id}, Type={obj.object_type.value}, Pos=({obj.x_coord}, {obj.y_coord}), Area={obj.area.value}")
             self.object_detected.emit(objects)
             logger.debug(f"일반 객체 감지 이벤트 처리: {len(objects)}개 객체")
         except Exception as e:
@@ -990,7 +988,6 @@ class TcpClient(QObject):
     def _handle_object_detail_response(self, data: str):
         """객체 상세보기 응답 처리"""
         try:
-            logger.debug(f"MR_OD 응답 수신: {data[:200]}...")
             # 응답 성공/실패 여부 확인
             if data.startswith("OK"):
                 self._handle_object_detail_success(data)
@@ -1005,11 +1002,9 @@ class TcpClient(QObject):
     def _handle_object_detail_success(self, data: str):
         """객체 상세보기 성공 응답 처리"""
         try:
-            logger.debug(f"MR_OD 성공 응답 처리: {data[:200]}...")
             # "OK," 접두사 제거
             payload = data.split(',', 1)[1]
             obj = MessageParser.parse_object_detail_info(payload, b'')  # 텍스트만 있는 경우
-            logger.debug(f"MR_OD 파싱 결과: ID={obj.object_id}, Type={obj.object_type.value}, Area={obj.area.value}, EventType={obj.event_type.value if obj.event_type else 'None'}")
             self.object_detail_response.emit(obj)
             logger.info(f"객체 상세보기 응답 처리 완료: ID {obj.object_id}")
         except Exception as e:

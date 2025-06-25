@@ -9,7 +9,10 @@ class NotificationDialog(QDialog):
     """알림 다이얼로그"""
 
     def __init__(self, notification_type: str, data: any, parent=None):
+        # 속성을 가장 먼저 선언 (팝업 제외 조건에서도 속성이 존재하도록)
         self.notification_type = notification_type
+        self.data = data
+        
         super().__init__(parent)
         
         # 활주로 위험도 알림과 조류 위험도 알림은 팝업에서 제외
@@ -20,7 +23,6 @@ class NotificationDialog(QDialog):
             return
             
         self.setWindowTitle("알림")
-        self.data = data
 
         self.setWindowFlags(self.windowFlags() | Qt.WindowType.WindowStaysOnTopHint)
         self.setFixedSize(300, 300)
