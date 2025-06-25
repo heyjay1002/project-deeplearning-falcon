@@ -49,4 +49,4 @@ frame_height = None
 
 # 맵 크기 (좌표 변환용)
 MAP_WIDTH = 960
-MAP_HEIGHT = 720
+MAP_HEIGHT = 960

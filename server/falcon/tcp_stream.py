@@ -10,6 +10,7 @@ import os
 import json
 import queue
 import numpy as np
+import cv2
 
 from network.tcp import TCPServer
 from config import *
@@ -403,6 +404,9 @@ class DetectionCommunicator(QThread):
                     print("[WARNING] 이미지 ID 없음")
                     continue
                 
+                # 카메라 ID 추출 (보정 데이터 적용용)
+                camera_id = message.get('camera_id', 'A')  # 기본값 A
+                
                 # 검출 결과 처리
                 detections = message.get('detections', [])
                 
@@ -415,7 +419,8 @@ class DetectionCommunicator(QThread):
                         x1, y1, x2, y2 = bbox
                         center_x = (x1 + x2) / 2
                         center_y = (y1 + y2) / 2
-                        map_x, map_y, norm_x, norm_y = self.convert_to_map_coords(center_x, center_y, frame_width, frame_height)
+                        # 보정된 좌표 변환 (camera_id 전달)
+                        map_x, map_y, norm_x, norm_y = self.convert_to_map_coords(center_x, center_y, frame_width, frame_height, camera_id)
                         area_id = self.find_area_id(norm_x, norm_y)
                         det['map_x'] = map_x
                         det['map_y'] = map_y
@@ -879,21 +884,73 @@ class DetectionCommunicator(QThread):
         response = f"MR_{cctv_type}:OK\n"
         return response
 
-    def convert_to_map_coords(self, center_x, center_y, frame_width, frame_height):
-        """bbox 중심점 → 맵 좌표 변환
+    def convert_to_map_coords(self, center_x, center_y, frame_width, frame_height, camera_id='A'):
+        """bbox 중심점 → 맵 좌표 변환 (보정 데이터 적용)
         Args:
             center_x (float): bbox 중심 x (픽셀)
             center_y (float): bbox 중심 y (픽셀)
             frame_width (int): 프레임 가로 크기
             frame_height (int): 프레임 세로 크기
+            camera_id (str): 카메라 ID (보정 데이터 키)
         Returns:
             (float, float, float, float): (map_x, map_y, norm_x, norm_y)
         """
+        print(f"[DEBUG] 좌표 변환 시작: camera_id={camera_id}, calibration_data keys={list(calibration_data.keys())}")
+        
+        # 보정 데이터가 있는 경우 올바른 호모그래피 변환 적용
+        if camera_id in calibration_data:
+            try:
+                homography_matrix = calibration_data[camera_id]['homography_matrix']
+                
+                # 1. 픽셀 좌표를 실제 세계 좌표(mm)로 변환 (올바른 방식)
+                pixel_point = np.array([[[center_x, center_y]]], dtype=np.float32)
+                world_point = cv2.perspectiveTransform(pixel_point, homography_matrix)
+                world_x, world_y = world_point[0][0]
+                
+                print(f"[DEBUG] 픽셀({center_x}, {center_y}) -> 세계좌표({world_x:.1f}, {world_y:.1f})")
+                
+                # 2. 실제 세계 좌표를 다시 픽셀로 역변환 (GUI 표시용)
+                inverse_homography = np.linalg.inv(homography_matrix)
+                world_point_for_gui = np.array([[[world_x, world_y]]], dtype=np.float32)
+                gui_pixel_point = cv2.perspectiveTransform(world_point_for_gui, inverse_homography)
+                gui_px, gui_py = gui_pixel_point[0][0]
+                
+                # 3. GUI 픽셀을 정규화 좌표로 변환 (960x960 기준)
+                norm_x = gui_px / 960.0
+                norm_y = gui_py / 960.0
+                
+                # 4. 맵 좌표는 정규화 좌표 * 960
+                map_x = norm_x * config.MAP_WIDTH
+                map_y = norm_y * config.MAP_HEIGHT
+                
+                print(f"[DEBUG] 보정된 좌표 변환: 픽셀({center_x}, {center_y}) -> 세계({world_x:.1f}, {world_y:.1f}) -> GUI픽셀({gui_px:.1f}, {gui_py:.1f}) -> 정규화({norm_x:.3f}, {norm_y:.3f}) -> 맵({map_x:.1f}, {map_y:.1f})")
+                print(f"[DEBUG] 이 좌표의 예상 area: {self._debug_find_area(norm_x, norm_y)}")
+                
+                return map_x, map_y, norm_x, norm_y
+                
+            except Exception as e:
+                print(f"[WARNING] 보정 좌표 변환 실패, 기본 변환 사용: {e}")
+        else:
+            print(f"[WARNING] 카메라 {camera_id}의 보정 데이터 없음, 기본 변환 사용")
+        
+        # 보정 데이터가 없는 경우 기본 변환 (기존 로직)
+        # TODO: 임시로 단위 행렬 사용, 실제로는 map_calibration 이벤트로 설정되어야 함
         norm_x = center_x / frame_width
         norm_y = center_y / frame_height
         map_x = norm_x * config.MAP_WIDTH
         map_y = norm_y * config.MAP_HEIGHT
+        
+        print(f"[DEBUG] 기본 좌표 변환: center({center_x}, {center_y}) / frame({frame_width}, {frame_height}) -> norm({norm_x:.3f}, {norm_y:.3f}) -> map({map_x:.1f}, {map_y:.1f})")
+        print(f"[DEBUG] 이 좌표의 예상 area: {self._debug_find_area(norm_x, norm_y)}")
+        
         return map_x, map_y, norm_x, norm_y
+    
+    def _debug_find_area(self, norm_x, norm_y):
+        """디버깅용 area 찾기"""
+        for area in self.area_list:
+            if area['x1'] <= norm_x <= area['x2'] and area['y1'] <= norm_y <= area['y2']:
+                return f"{area['area_name']}({area['area_id']})"
+        return "UNKNOWN"
 
     def _load_area_table(self):
         """AREA 테이블 전체를 읽어 리스트와 area_id_to_name 딕셔너리로 반환"""
