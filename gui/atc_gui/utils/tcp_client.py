@@ -10,7 +10,7 @@ import re
 
 from config import Settings, Constants, MessagePrefix, BirdRiskLevel, RunwayRiskLevel, EventType
 from utils.interface import (MessageInterface, MessageParser, 
-                           DetectedObject)
+                           DetectedObject, AccessControlSettings)
 from utils.logger import logger
 
 
@@ -208,6 +208,11 @@ class TcpClient(QObject):
     
     # CCTV 프레임 시그널
     cctv_frame_received = pyqtSignal(str, QImage, int)  # (카메라 ID, QImage, 이미지ID)
+    
+    # 출입 제어 시그널
+    access_control_response = pyqtSignal(AccessControlSettings)  # 출입 제어 설정 응답
+    access_control_update_response = pyqtSignal(bool, str)  # 업데이트 응답 (성공여부, 메시지)
+    access_control_error = pyqtSignal(str)  # 출입 제어 오류
 
     def __init__(self):
         super().__init__()
@@ -383,6 +388,25 @@ class TcpClient(QObject):
         logger.info(f"객체 상세보기 요청 결과: {result}, ID={object_id}")
         return result
 
+    def request_access_control_settings(self) -> bool:
+        """출입 제어 설정 요청"""
+        return self._send_request(
+            MessageInterface.create_access_control_request,
+            None,
+            "출입 제어 설정 요청",
+            priority=1
+        )
+
+    def update_access_control_settings(self, settings: AccessControlSettings) -> bool:
+        """출입 제어 설정 업데이트"""
+        logger.info(f"출입 제어 설정 업데이트 요청: {settings.to_dict()}")
+        return self._send_request(
+            MessageInterface.create_access_control_update,
+            settings,
+            "출입 제어 설정 업데이트",
+            priority=1
+        )
+
     # === 소켓 이벤트 핸들러 ===
     def _on_connected(self):
         """연결 성공 처리"""
@@ -519,7 +543,18 @@ class TcpClient(QObject):
                 logger.info(f"CCTV 프레임 수신 시작: {len(data)} bytes")
                 
             else:
-                logger.debug(f"기타 바이너리 데이터: {len(data)} bytes")
+                # 텍스트로 변환 시도해서 출입제어 응답인지 확인
+                try:
+                    text_data = data.decode('utf-8', errors='ignore')
+                    if 'AR_AC' in text_data or 'AR_UA' in text_data:
+                        logger.info(f"출입제어 응답이 바이너리로 처리됨: {text_data}")
+                        # 텍스트 메시지로 재처리
+                        self._process_single_message(text_data)
+                        return
+                    else:
+                        logger.debug(f"기타 바이너리 데이터: {len(data)} bytes, 내용: {text_data[:50]}...")
+                except:
+                    logger.debug(f"기타 바이너리 데이터: {len(data)} bytes")
                 
             # 즉시 처리 가능한지 확인
             self._handle_binary_buffer(b'')  # 빈 데이터로 호출하여 기존 버퍼 확인
@@ -856,7 +891,9 @@ class TcpClient(QObject):
                 MessagePrefix.MR_CA: self._handle_cctv_a_response,
                 MessagePrefix.MR_CB: self._handle_cctv_b_response,
                 MessagePrefix.MR_MP: self._handle_map_response,
-                MessagePrefix.MR_OD: self._handle_object_detail_response
+                MessagePrefix.MR_OD: self._handle_object_detail_response,
+                MessagePrefix.AR_AC: self._handle_access_control_response,
+                MessagePrefix.AR_UA: self._handle_access_control_update_response
             }
             
             handler = handler_map.get(prefix)
@@ -1035,6 +1072,35 @@ class TcpClient(QObject):
             
         except Exception:
             self.object_detail_error.emit("응답 처리 중 오류")
+
+    def _handle_access_control_response(self, data: str):
+        """출입 제어 설정 응답 처리 (AR_AC)"""
+        try:
+            logger.debug(f"AR_AC 응답 수신: {data}")
+            settings = MessageInterface.parse_access_control_response(data)
+            self.access_control_response.emit(settings)
+            logger.info(f"출입 제어 설정 응답 처리 완료: {settings.to_dict()}")
+        except Exception as e:
+            logger.error(f"출입 제어 설정 응답 처리 실패: {e}")
+            self.access_control_error.emit(str(e))
+
+    def _handle_access_control_update_response(self, data: str):
+        """출입 제어 설정 업데이트 응답 처리 (AR_UA)"""
+        try:
+            logger.debug(f"AR_UA 응답 수신: {data}")
+            success = MessageInterface.parse_access_control_update_response(data)
+            
+            if success:
+                self.access_control_update_response.emit(True, "설정이 성공적으로 업데이트되었습니다.")
+                logger.info("출입 제어 설정 업데이트 성공")
+            else:
+                error_msg = data if not data.startswith("ERR") else data[4:]  # "ERR," 제거
+                self.access_control_update_response.emit(False, error_msg)
+                logger.warning(f"출입 제어 설정 업데이트 실패: {error_msg}")
+                
+        except Exception as e:
+            logger.error(f"출입 제어 설정 업데이트 응답 처리 실패: {e}")
+            self.access_control_error.emit(str(e))
 
     # === 내부 유틸리티 메서드 ===
     def _cleanup_previous_connection(self):

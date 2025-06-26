@@ -4,8 +4,8 @@ from typing import List, Dict, Any, Optional
 from datetime import datetime
 import base64
 
-from config.constants import ObjectType, Airportarea, BirdRiskLevel, RunwayRiskLevel, EventType
-from utils.interface import DetectedObject, ConnectionManager, ConnectionState
+from config.constants import ObjectType, AirportArea, BirdRiskLevel, RunwayRiskLevel, EventType
+from utils.interface import DetectedObject, ConnectionManager, ConnectionState, AccessControlSettings
 from utils.tcp_client import TcpClient
 from utils.udp_client import UdpClient
 from utils.logger import logger
@@ -35,6 +35,11 @@ class NetworkManager(QObject):
     tcp_connection_status_changed = pyqtSignal(bool, str)
     udp_connection_status_changed = pyqtSignal(bool, str)
     network_health_updated = pyqtSignal(dict)  # 네트워크 건강 상태
+    
+    # 출입 제어 시그널
+    access_control_settings_received = pyqtSignal(AccessControlSettings)
+    access_control_update_result = pyqtSignal(bool, str)  # (성공여부, 메시지)
+    access_control_error = pyqtSignal(str)
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -74,6 +79,11 @@ class NetworkManager(QObject):
         self.tcp_client.connected.connect(self._on_tcp_connected)
         self.tcp_client.disconnected.connect(self._on_tcp_disconnected)
         self.tcp_client.connection_error.connect(self._on_tcp_connection_error)
+        
+        # 출입 제어 시그널 연결
+        self.tcp_client.access_control_response.connect(self.access_control_settings_received)
+        self.tcp_client.access_control_update_response.connect(self.access_control_update_result)
+        self.tcp_client.access_control_error.connect(self.access_control_error)
 
         # UDP 클라이언트 시그널 연결
         self.udp_client.frame_received.connect(self._handle_udp_frame)
@@ -193,7 +203,7 @@ class NetworkManager(QObject):
             object_type = ObjectType(fields[1])
             x_coord = float(fields[2])
             y_coord = float(fields[3])
-            area = Airportarea(fields[4])
+            area = AirportArea(fields[4])
             
             # 선택적 필드 처리
             timestamp = datetime.now()
@@ -409,3 +419,21 @@ class NetworkManager(QObject):
             self.udp_client.set_max_fps(fps)
         except Exception:
             pass
+
+    def request_access_control_settings(self):
+        """출입 제어 설정 요청"""
+        try:
+            success = self.tcp_client.request_access_control_settings()
+            return success
+        except Exception as e:
+            logger.error(f"출입 제어 설정 요청 실패: {e}")
+            return False
+
+    def update_access_control_settings(self, settings: AccessControlSettings):
+        """출입 제어 설정 업데이트"""
+        try:
+            success = self.tcp_client.update_access_control_settings(settings)
+            return success
+        except Exception as e:
+            logger.error(f"출입 제어 설정 업데이트 실패: {e}")
+            return False

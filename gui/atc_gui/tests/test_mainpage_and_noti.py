@@ -13,7 +13,7 @@ parent_dir = os.path.dirname(current_dir)
 if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
-from config.constants import ObjectType, Airportarea as Zone, EventType
+from config.constants import ObjectType, AirportArea as Zone, EventType
 from main import WindowClass
 from utils.interface import MessageInterface, MessagePrefix, DetectedObject
 from views.notification_dialog import NotificationDialog
