@@ -3,7 +3,7 @@ from typing import Optional, List, Dict, Any
 import base64
 from dataclasses import dataclass
 from enum import Enum
-from config.constants import EventType, ObjectType, BirdRiskLevel, RunwayRiskLevel, Airportarea, MessagePrefix, Constants
+from config.constants import EventType, ObjectType, BirdRiskLevel, RunwayRiskLevel, AirportArea, MessagePrefix, Constants
 from utils.logger import logger
 
 class ConnectionState(Enum):
@@ -21,7 +21,7 @@ class DetectedObject:
     object_type: ObjectType
     x_coord: float
     y_coord: float
-    area: Airportarea
+    area: AirportArea
     event_type: Optional[EventType] = None
     timestamp: Optional[datetime] = None
     state_info: Optional[int] = None
@@ -127,6 +127,58 @@ class RunwayRisk:
             'runway_risk_level': self.runway_risk_level.value
         }
 
+@dataclass
+class AccessControlSettings:
+    """출입 제어 설정 정보"""
+    TWY_A_level: int
+    TWY_B_level: int
+    TWY_C_level: int
+    TWY_D_level: int
+    RWY_A_level: int
+    RWY_B_level: int
+    GRASS_A_level: int
+    GRASS_B_level: int
+    
+    def __post_init__(self):
+        # 유효성 검증 (1-3 범위)
+        for field_name, value in self.__dict__.items():
+            if not isinstance(value, int) or not (1 <= value <= 3):
+                raise ValueError(f"{field_name}은 1-3 범위의 정수여야 합니다: {value}")
+    
+    def to_dict(self) -> dict:
+        return {
+            'TWY_A_level': self.TWY_A_level,
+            'TWY_B_level': self.TWY_B_level,
+            'TWY_C_level': self.TWY_C_level,
+            'TWY_D_level': self.TWY_D_level,
+            'RWY_A_level': self.RWY_A_level,
+            'RWY_B_level': self.RWY_B_level,
+            'GRASS_A_level': self.GRASS_A_level,
+            'GRASS_B_level': self.GRASS_B_level
+        }
+    
+    @classmethod
+    def from_string(cls, data: str) -> 'AccessControlSettings':
+        """문자열에서 AccessControlSettings 생성"""
+        parts = data.split(',')
+        if len(parts) != 8:
+            raise ValueError(f"출입 제어 설정 데이터 형식 오류: {len(parts)}개 필드 (8개 필요)")
+        
+        return cls(
+            TWY_A_level=int(parts[0]),
+            TWY_B_level=int(parts[1]),
+            TWY_C_level=int(parts[2]),
+            TWY_D_level=int(parts[3]),
+            RWY_A_level=int(parts[4]),
+            RWY_B_level=int(parts[5]),
+            GRASS_A_level=int(parts[6]),
+            GRASS_B_level=int(parts[7])
+        )
+    
+    def to_string(self) -> str:
+        """문자열로 변환 (메시지 전송용)"""
+        return f"{self.TWY_A_level},{self.TWY_B_level},{self.TWY_C_level},{self.TWY_D_level},{self.RWY_A_level},{self.RWY_B_level},{self.GRASS_A_level},{self.GRASS_B_level}"
+
 class MessageParser:
     """메시지 파싱 전용 클래스"""
     
@@ -221,22 +273,22 @@ class MessageParser:
                 raise ValueError(f"객체 타입 오류: {obj_type_str}")
     
     @staticmethod
-    def _parse_area(area_str: str) -> Airportarea:
+    def _parse_area(area_str: str) -> AirportArea:
         """구역 파싱 - Constants 매핑 활용"""
         try:
             # 정수인 경우 매핑 테이블 사용
             area_id = int(area_str)
-            if area_id in Constants.area_MAPPING:
-                return Constants.area_MAPPING[area_id]
+            if area_id in Constants.AREA_MAPPING:
+                return Constants.AREA_MAPPING[area_id]
             else:
                 raise ValueError(f"알 수 없는 구역 ID: {area_id}")
         except ValueError:
             # 문자열인 경우
             try:
-                return Airportarea[area_str.upper()]
+                return AirportArea[area_str.upper()]
             except KeyError:
                 # enum value로 시도
-                for area_type in Airportarea:
+                for area_type in AirportArea:
                     if area_type.value == area_str:
                         return area_type
                 raise ValueError(f"구역 이름 오류: {area_str}")
@@ -513,6 +565,60 @@ class MessageInterface:
     def create_map_request() -> str:
         """지도 영상 요청 메시지 생성"""
         return MessageInterface.create_message(MessagePrefix.MC_MP)
+    
+    @staticmethod
+    def parse_access_control_response(data: str) -> AccessControlSettings:
+        """출입 제어 설정 응답 파싱 (AR_AC)"""
+        # AR_AC:OK,TWY_A_level,TWY_B_level,...
+        if not data.startswith("OK,"):
+            raise Exception(f"출입 제어 설정 요청 실패: {data}")
+        
+        settings_data = data[3:]  # "OK," 제거
+        
+        # AREA_MAPPING 순서에 따른 8개 값 파싱 (RAMP 제외)
+        # 1: TWY_A, 2: TWY_B, 3: TWY_C, 4: TWY_D, 5: RWY_A, 6: RWY_B, 7: GRASS_A, 8: GRASS_B
+        levels = [int(x.strip()) for x in settings_data.split(',')]
+        
+        if len(levels) == 8:
+            # 8개 값인 경우 (RAMP 제외)
+            return AccessControlSettings(
+                TWY_A_level=levels[0],    # 1: TWY_A
+                TWY_B_level=levels[1],    # 2: TWY_B  
+                TWY_C_level=levels[2],    # 3: TWY_C
+                TWY_D_level=levels[3],    # 4: TWY_D
+                RWY_A_level=levels[4],    # 5: RWY_A
+                RWY_B_level=levels[5],    # 6: RWY_B
+                GRASS_A_level=levels[6],  # 7: GRASS_A
+                GRASS_B_level=levels[7],  # 8: GRASS_B
+            )
+        else:
+            raise ValueError(f"출입 제어 설정 데이터 형식 오류: {len(levels)}개 필드 (8개 필요)")
+    
+    @staticmethod
+    def create_access_control_request() -> str:
+        """출입 제어 설정 요청 메시지 생성 (AC_AC)"""
+        return MessageInterface.create_message(MessagePrefix.AC_AC)
+    
+    @staticmethod
+    def create_access_control_update(settings: AccessControlSettings) -> str:
+        """출입 제어 설정 업데이트 메시지 생성 (AC_UA)"""
+        return MessageInterface.create_message(
+            MessagePrefix.AC_UA,
+            TWY_A_level=settings.TWY_A_level,
+            TWY_B_level=settings.TWY_B_level,
+            TWY_C_level=settings.TWY_C_level,
+            TWY_D_level=settings.TWY_D_level,
+            RWY_A_level=settings.RWY_A_level,
+            RWY_B_level=settings.RWY_B_level,
+            GRASS_A_level=settings.GRASS_A_level,
+            GRASS_B_level=settings.GRASS_B_level
+        )
+    
+    @staticmethod
+    def parse_access_control_update_response(data: str) -> bool:
+        """출입 제어 설정 업데이트 응답 파싱 (AR_UA)"""
+        # AR_UA:OK 또는 AR_UA:ERR,error_message
+        return data.startswith("OK")
 
 class ErrorHandler:
     """통합 에러 핸들러"""

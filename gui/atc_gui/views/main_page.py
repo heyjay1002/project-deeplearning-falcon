@@ -7,7 +7,7 @@ import os
 from views.object_detail_dialog import ObjectDetailDialog
 from config.constants import BirdRiskLevel, RunwayRiskLevel
 from config.settings import Settings
-from utils.interface import DetectedObject, BirdRisk, RunwayRisk, ObjectType, Airportarea, EventType
+from utils.interface import DetectedObject, BirdRisk, RunwayRisk, ObjectType, AirportArea, EventType
 from utils.logger import logger
 from widgets.map_marker_widget import MapMarkerWidget
 from typing import Optional

@@ -14,7 +14,7 @@ from PyQt6.QtGui import QImage, QPixmap
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from views.notification_dialog import NotificationDialog
-from utils.interface import DetectedObject, ObjectType, Airportarea
+from utils.interface import DetectedObject, ObjectType, AirportArea
 
 class TestData:
     """테스트용 데이터 클래스"""
@@ -101,7 +101,7 @@ class TestWindow(QMainWindow):
         test_data = TestData(
             object_id=12345,
             object_type=ObjectType.PERSON,
-            area=Airportarea.RUNWAY_A,
+            area=AirportArea.RWY_A,
             timestamp=datetime.now(),
             image_data=self.create_test_image(),
             state_info="정상"
@@ -115,7 +115,7 @@ class TestWindow(QMainWindow):
         test_data = TestData(
             object_id=67890,
             object_type=ObjectType.BIRD,
-            area=Airportarea.RUNWAY_B,
+            area=AirportArea.RWY_B,
             timestamp=datetime.now(),
             image_data=None,
             state_info="위험"
@@ -129,7 +129,7 @@ class TestWindow(QMainWindow):
         test_data = TestData(
             object_id=11111,
             object_type=ObjectType.PERSON,
-            area=Airportarea.RESTRICTED,
+            area=AirportArea.GRASS_A,
             timestamp=datetime.now(),
             image_data=self.create_test_image(),
             state_info="출입 위반"

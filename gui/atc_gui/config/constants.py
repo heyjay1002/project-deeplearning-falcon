@@ -10,10 +10,10 @@ class ObjectType(Enum):
     """지상 위험 요소 타입"""
     BIRD = "조류"
     FOD = "FOD"
-    PERSON = "인간"
+    PERSON = "일반인"
     ANIMAL = "동물"
     AIRPLANE = "비행기"
-    VEHICLE = "차량"
+    VEHICLE = "일반차량"
     WORK_PERSON = "작업자"
     WORK_VEHICLE = "작업차량"
     UNKNOWN = "알 수 없음"
@@ -29,7 +29,7 @@ class RunwayRiskLevel(Enum):
     LOW = "안전"
     HIGH = "경고"
 
-class Airportarea(Enum):
+class AirportArea(Enum):
     """공항 구역 식별자"""    
     TWY_A = "TWY_A"
     TWY_B = "TWY_B"
@@ -39,13 +39,12 @@ class Airportarea(Enum):
     RWY_B = "RWY_B"
     GRASS_A = "GRASS_A"
     GRASS_B = "GRASS_B"
-    RAMP = "RAMP"
 
 class SecurityLevel(Enum):
     """보안 등급"""
-    LEVEL_1 = "무제한"
-    LEVEL_2 = "제한"
-    LEVEL_3 = "금지"
+    OPEN = "출입 허가"
+    AUTH_ONLY = "작업자 출입 허가"
+    NO_ENTQ = "출입 불가"
 
 class AccessTarget(Enum):
     """출입 대상"""
@@ -59,24 +58,44 @@ class CameraID(Enum):
 
 class MessagePrefix(Enum):
     """메시지 프리픽스"""
-    # 이벤트 메시지 (서버 -> GUI)
+    # 메인 페이지 이벤트 메시지 (서버 -> GUI)
     ME_OD = "ME_OD"      # 객체 감지 이벤트
     ME_FD = "ME_FD"      # 최초 객체 감지 이벤트
     ME_BR = "ME_BR"      # 조류 위험도 변경 이벤트
     ME_RA = "ME_RA"      # 활주로 A 위험도 변경 이벤트
     ME_RB = "ME_RB"      # 활주로 B 위험도 변경 이벤트
     
-    # 명령 메시지 (GUI -> 서버)
+    # 메인 페이지 명령 메시지 (GUI -> 서버)
     MC_CA = "MC_CA"      # CCTV A 영상 요청
     MC_CB = "MC_CB"      # CCTV B 영상 요청
     MC_MP = "MC_MP"      # 지도 영상 요청
     MC_OD = "MC_OD"      # 객체 상세보기 요청
     
-    # 응답 메시지 (서버 -> GUI)
+    # 메인 페이지 응답 메시지 (서버 -> GUI)
     MR_CA = "MR_CA"      # CCTV A 응답
     MR_CB = "MR_CB"      # CCTV B 응답
     MR_MP = "MR_MP"      # 지도 응답
     MR_OD = "MR_OD"      # 객체 상세보기 응답
+
+    # 출입 페이지 명령/이벤트 메시지 (GUI -> 서버)
+    AC_AC = "AC_AC"      # 구역별 출입 등급 요청
+    AC_UA = "AC_UA"      # 구역별 출입 등급 업데이트 요청
+
+    # 출입 페이지 응답 메시지 (서버 -> GUI)
+    AR_AC = "AR_AC"      # 구역별 출입 등급 응답
+    AR_UA = "AR_UA"      # 구역별 출입 등급 업데이트 응답
+
+    # 로그 페이지 명령 메시지 (GUI -> 서버)
+    LC_OL = "LC_OL"      # 객체 감지 이력 조회 요청
+    LC_OI = "LC_OI"      # 객체 이미지 조회 요청
+    LC_BL = "LC_BL"      # 조류 위험도 등급 변화 이력 조회 요청
+    LC_RL = "LC_RL"      # 활주로 요청 응답 이력 조회 요청
+
+    # 로그 페이지 응답 메시지 (서버 -> GUI)
+    LR_OL = "LR_OL"      # 객체 감지 이력 응답
+    LR_OI = "LR_OI"      # 객체 이미지 응답
+    LR_BL = "LR_BL"      # 조류 위험도 등급 변화 이력 응답
+    LR_RL = "LR_RL"      # 활주로 요청 응답 이력 응답
 
 class Constants:
     """상수 정의 클래스"""
@@ -111,22 +130,21 @@ class Constants:
         1: RunwayRiskLevel.HIGH
     }
     
-    area_MAPPING = {    
-        1: Airportarea.TWY_A,
-        2: Airportarea.TWY_B,
-        3: Airportarea.TWY_C,
-        4: Airportarea.TWY_D,
-        5: Airportarea.RWY_A,
-        6: Airportarea.RWY_B,
-        7: Airportarea.GRASS_A,
-        8: Airportarea.GRASS_B,
-        9: Airportarea.RAMP
+    AREA_MAPPING = {    
+        1: AirportArea.TWY_A,
+        2: AirportArea.TWY_B,
+        3: AirportArea.TWY_C,
+        4: AirportArea.TWY_D,
+        5: AirportArea.RWY_A,
+        6: AirportArea.RWY_B,
+        7: AirportArea.GRASS_A,
+        8: AirportArea.GRASS_B
     }
     
     SECURITY_LEVEL_MAPPING = {
-        0: SecurityLevel.LEVEL_1,
-        1: SecurityLevel.LEVEL_2,
-        2: SecurityLevel.LEVEL_3,
+        1: SecurityLevel.OPEN,
+        2: SecurityLevel.AUTH_ONLY,
+        3: SecurityLevel.NO_ENTQ,
     }
 
     # --- 통신 프로토콜 관련 ---
@@ -158,5 +176,25 @@ class Constants:
             MessagePrefix.MR_CA: "{prefix}:{response}",
             MessagePrefix.MR_CB: "{prefix}:{response}",
             MessagePrefix.MR_MP: "{prefix}:{response}",
-            MessagePrefix.MR_OD: "{prefix}:{response},{event_type},{object_id},{object_type},{area},{timestamp},{image_size},{image_data}"
+            MessagePrefix.MR_OD: "{prefix}:{response},{event_type},{object_id},{object_type},{area},{timestamp},{image_size},{image_data}",
+
+            # 출입 페이지 명령/이벤트 메시지 (GUI -> 서버)
+            MessagePrefix.AC_AC: "{prefix}",
+            MessagePrefix.AC_UA: "{prefix}:{TWY_A_level},{TWY_B_level},{TWY_C_level},{TWY_D_level},{RWY_A_level},{RWY_B_level},{GRASS_A_level},{GRASS_B_level}",
+
+            # 출입 페이지 응답 메시지 (서버 -> GUI)
+            MessagePrefix.AR_AC: "{prefix}:{response},{TWY_A_level},{TWY_B_level},{TWY_C_level},{TWY_D_level},{RWY_A_level},{RWY_B_level},{GRASS_A_level},{GRASS_B_level}",
+            MessagePrefix.AR_UA: "{prefix}:{response}",
+
+            # 로그 페이지 명령 메시지 (GUI -> 서버)
+            MessagePrefix.LC_OL: "{prefix}:{start_time},{end_time}",
+            MessagePrefix.LC_OI: "{prefix}:{object_id}",
+            MessagePrefix.LC_BL: "{prefix}:{start_time},{end_time}",
+            MessagePrefix.LC_RL: "{prefix}:{start_time},{end_time}",
+
+            # 로그 페이지 응답 메시지 (서버 -> GUI)
+            MessagePrefix.LR_OL: "{prefix}:{response},{event_type},{object_id},{object_type},{area},{timestamp}[;{event_type},{object_id},{object_type},{area},{timestamp}]*",
+            MessagePrefix.LR_OI: "{prefix}:{response},{image_size},{image_data}",
+            MessagePrefix.LR_BL: "{prefix}:{response},{bird_risk_level},{timestamp}[;{bird_risk_level},{timestamp}]*",
+            MessagePrefix.LR_RL: "{prefix}:{response},{request_type},{response_type},{timestamp},{timestamp}[;{request_type},{response_type},{timestamp},{timestamp}]*"
         }

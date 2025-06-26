@@ -16,7 +16,7 @@ from datetime import datetime
 # 프로젝트 루트 경로 추가
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
-from utils.interface import DetectedObject, ObjectType, Airportarea, EventType
+from utils.interface import DetectedObject, ObjectType, AirportArea, EventType
 from views.notification_dialog import NotificationDialog
 from views.main_page import MainPage
 from main import WindowClass
@@ -49,12 +49,12 @@ class FirstDetectionTester(QWidget):
         layout.addWidget(self.open_main_btn)
         
         # 테스트 버튼들
-        self.test_person_btn = QPushButton("사람 최초 감지 테스트")
+        self.test_person_btn = QPushButton("일반인 최초 감지 테스트")
         self.test_person_btn.clicked.connect(self.test_person_detection)
         self.test_person_btn.setEnabled(False)
         layout.addWidget(self.test_person_btn)
         
-        self.test_vehicle_btn = QPushButton("차량 최초 감지 테스트")
+        self.test_vehicle_btn = QPushButton("일반차량 최초 감지 테스트")
         self.test_vehicle_btn.clicked.connect(self.test_vehicle_detection)
         self.test_vehicle_btn.setEnabled(False)
         layout.addWidget(self.test_vehicle_btn)
@@ -101,7 +101,7 @@ class FirstDetectionTester(QWidget):
             self.status_label.setText(f"메인 윈도우 열기 실패: {e}")
             self.status_label.setStyleSheet("color: red; margin: 10px;")
     
-    def create_test_object(self, object_type: ObjectType, area: Airportarea) -> DetectedObject:
+    def create_test_object(self, object_type: ObjectType, area: AirportArea) -> DetectedObject:
         """테스트용 DetectedObject 생성"""
         obj = DetectedObject(
             event_type=EventType.UNAUTH,  # "출입 위반"
@@ -118,29 +118,29 @@ class FirstDetectionTester(QWidget):
         return obj
     
     def test_person_detection(self):
-        """사람 최초 감지 테스트"""
+        """일반인 최초 감지 테스트"""
         if not self.main_window:
             return
             
-        obj = self.create_test_object(ObjectType.PERSON, Airportarea.RWY_A)
+        obj = self.create_test_object(ObjectType.PERSON, AirportArea.RWY_A)
         self.simulate_first_detection([obj])
-        self.status_label.setText(f"사람 최초 감지 테스트 실행 (ID: {obj.object_id})")
+        self.status_label.setText(f"일반인 최초 감지 테스트 실행 (ID: {obj.object_id})")
     
     def test_vehicle_detection(self):
-        """차량 최초 감지 테스트"""
+        """일반차량 최초 감지 테스트"""
         if not self.main_window:
             return
             
-        obj = self.create_test_object(ObjectType.VEHICLE, Airportarea.TWY_A)
+        obj = self.create_test_object(ObjectType.VEHICLE, AirportArea.TWY_A)
         self.simulate_first_detection([obj])
-        self.status_label.setText(f"차량 최초 감지 테스트 실행 (ID: {obj.object_id})")
+        self.status_label.setText(f"일반차량 최초 감지 테스트 실행 (ID: {obj.object_id})")
     
     def test_bird_detection(self):
         """조류 최초 감지 테스트"""
         if not self.main_window:
             return
             
-        obj = self.create_test_object(ObjectType.BIRD, Airportarea.RWY_B)
+        obj = self.create_test_object(ObjectType.BIRD, AirportArea.RWY_B)
         self.simulate_first_detection([obj])
         self.status_label.setText(f"조류 최초 감지 테스트 실행 (ID: {obj.object_id})")
     
@@ -150,9 +150,9 @@ class FirstDetectionTester(QWidget):
             return
             
         objects = [
-            self.create_test_object(ObjectType.PERSON, Airportarea.RWY_A),
-            self.create_test_object(ObjectType.VEHICLE, Airportarea.TWY_A),
-            self.create_test_object(ObjectType.BIRD, Airportarea.RWY_B)
+            self.create_test_object(ObjectType.PERSON, AirportArea.RWY_A),
+            self.create_test_object(ObjectType.VEHICLE, AirportArea.TWY_A),
+            self.create_test_object(ObjectType.BIRD, AirportArea.RWY_B)
         ]
         
         self.simulate_first_detection(objects)
@@ -180,7 +180,7 @@ class FirstDetectionTester(QWidget):
         """알림 다이얼로그 직접 테스트"""
         try:
             # 테스트용 객체 생성
-            test_obj = self.create_test_object(ObjectType.PERSON, Airportarea.RWY_A)
+            test_obj = self.create_test_object(ObjectType.PERSON, AirportArea.RWY_A)
             
             # NotificationDialog 직접 생성 및 표시
             dialog = NotificationDialog(

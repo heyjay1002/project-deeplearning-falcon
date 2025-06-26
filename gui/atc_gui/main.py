@@ -6,7 +6,7 @@ from PyQt6.QtCore import *
 from PyQt6 import uic
 import logging
 from views.main_page import MainPage
-# from views.access_page import AccessPage
+from views.access_page import AccessPage
 # from views.log_page import LogPage
 from views.notification_dialog import NotificationDialog
 from utils.interface import DetectedObject, BirdRisk, RunwayRisk
@@ -114,9 +114,9 @@ class WindowClass(QMainWindow):
         self.main_page = MainPage(self, network_manager=self.network_manager)
         self._setup_tab_widget(0, self.main_page)
 
-        # # AccessPage 인스턴스 생성 및 셋팅
-        # self.access_page = AccessPage(self)
-        # self._setup_tab_widget(1, self.access_page)
+        # AccessPage 인스턴스 생성 및 셋팅
+        self.access_page = AccessPage(self, network_manager=self.network_manager)
+        self._setup_tab_widget(1, self.access_page)
 
         # # LogPage 인스턴스 생성 및 셋팅
         # self.log_page = LogPage(self)
@@ -126,6 +126,9 @@ class WindowClass(QMainWindow):
         self.tabWidget.setTabText(0, "Main")
         self.tabWidget.setTabText(1, "Access")
         self.tabWidget.setTabText(2, "Log")
+        
+        # 탭 전환 이벤트 연결
+        self.tabWidget.currentChanged.connect(self._on_tab_changed)
         
         # 탭 스타일 설정
         self._setup_tab_style()
@@ -156,6 +159,13 @@ class WindowClass(QMainWindow):
                 min-width: 150px;
             }
         """)
+
+    def _on_tab_changed(self, index):
+        """탭 전환 이벤트 처리"""
+        if index == 1:  # Access 탭이 선택된 경우
+            logger.info("Access 탭 전환")
+            if hasattr(self, 'access_page') and self.access_page:
+                self.access_page.request_current_settings()
 
     def show_notification_dialog(self, dialog_type, data):
         """알림 다이얼로그 표시 - 중복 방지 로직 추가"""

@@ -322,7 +322,7 @@ class MapMarkerWidget(QWidget):
     def set_map_image(self):
         """지도 이미지 설정"""
         # 지도 이미지 경로 설정
-        self.map_path = os.path.join(os.path.dirname(__file__), '../resources/images/map_crop.png')
+        self.map_path = os.path.join(os.path.dirname(__file__), '../resources/images/map.png')
         self.map_pixmap = QPixmap()
         
         if os.path.exists(self.map_path):

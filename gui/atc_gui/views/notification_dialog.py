@@ -59,7 +59,7 @@ class NotificationDialog(QDialog):
                 background-color: #FFFFFF;
                 border: 1px solid #AAAAAA;
             }
-            QLabel {
+            QDialog QLabel {
                 color: #222222;
                 font-size: 18px;
             }

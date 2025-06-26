@@ -1,7 +1,7 @@
 import pytest
 from PyQt6.QtWidgets import QApplication, QPushButton, QTableWidgetItem
 from views.main_page import MainPage
-from utils.interface import DetectedObject, ObjectType, Airportarea, EventType
+from utils.interface import DetectedObject, ObjectType, AirportArea, EventType
 from datetime import datetime
 import sys
 from PyQt6.QtCore import QObject, pyqtSignal
@@ -26,7 +26,7 @@ def test_detail_view_shows_object_info(main_page, qtbot):
             object_type=ObjectType.BIRD,
             x_coord=10.0,
             y_coord=20.0,
-            area=Airportarea.GRASS_A,
+            area=AirportArea.GRASS_A,
             event_type=EventType.HAZARD,
             timestamp=datetime.now(),
             state_info=80,
@@ -63,7 +63,7 @@ def add_test_object(main_page):
         object_type=ObjectType.BIRD,
         x_coord=10.0,
         y_coord=20.0,
-        area=Airportarea.GRASS_A,
+        area=AirportArea.GRASS_A,
         event_type=EventType.HAZARD,
         timestamp=datetime.now(),
         state_info=80,
@@ -101,7 +101,7 @@ class DummyNetworkManager(QObject):
     def request_object_detail(self, object_id: int) -> bool:
         """객체 상세보기 요청 (더미 구현)"""
         # 테스트용 더미 응답 생성
-        from utils.interface import DetectedObject, ObjectType, Airportarea, EventType
+        from utils.interface import DetectedObject, ObjectType, AirportArea, EventType
         from datetime import datetime
         
         obj = DetectedObject(
@@ -109,7 +109,7 @@ class DummyNetworkManager(QObject):
             object_type=ObjectType.BIRD,
             x_coord=10.0,
             y_coord=20.0,
-            area=Airportarea.GRASS_A,
+            area=AirportArea.GRASS_A,
             event_type=EventType.HAZARD,
             timestamp=datetime.now(),
             state_info=80,
