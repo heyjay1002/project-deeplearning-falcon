@@ -29,6 +29,7 @@ class Settings:
         # === 색상 분류 HSV 범위 ===
         # [수정] 형광 주황과 형광 노랑 범위를 모두 포함하도록 VEST_HSV_RANGES 정의
         self.VEST_HSV_RANGES = {
+            'fluorescent_green':  [(40, 150, 150), (85, 255, 255)],
             'fluorescent_orange': [(5, 150, 150), (15, 255, 255)],
             'fluorescent_yellow': [(20, 150, 150), (35, 255, 255)]
         }
