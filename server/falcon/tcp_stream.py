@@ -18,24 +18,7 @@ import config
 from db.repository import DetectionRepository
 import pymysql
 
-# === 보정 데이터 저장 ===
-calibration_data = {}
-
-def handle_map_calibration(event_data):
-    """맵 보정 데이터를 전역 변수에 저장"""
-    camera_id = event_data.get("camera_id")
-    matrix_data = event_data.get("matrix")
-    scale_data = event_data.get("scale")
-    
-    if not all([camera_id, matrix_data, scale_data is not None]):
-        print("[ERROR] map_calibration 이벤트 데이터 부족")
-        return
-        
-    calibration_data[camera_id] = {
-        "homography_matrix": np.array(matrix_data, dtype=np.float64),
-        "scale": scale_data
-    }
-    print(f"[INFO] 카메라 '{camera_id}' 보정 데이터 저장 완료")
+# === 보정 데이터는 CalibrationThread 클래스에서 관리 ===
 
 class RunwayStatus:
     """활주로 상태 관리 클래스"""
@@ -122,6 +105,7 @@ class CalibrationThread(QThread):
         super().__init__()
         self.calibration_queue = queue.Queue()
         self.running = True
+        self.calibration_data = {}  # 인스턴스 변수로 보정 데이터 관리
         
     def run(self):
         """메인 실행 루프"""
@@ -166,8 +150,11 @@ class CalibrationThread(QThread):
                 self.calibration_failed.emit(camera_id or "UNKNOWN", error_msg)
                 return
                 
-            # 보정 데이터 저장
-            handle_map_calibration(message)
+            # 보정 데이터 저장 (인스턴스 변수에 직접 저장)
+            self.calibration_data[camera_id] = {
+                "homography_matrix": np.array(matrix, dtype=np.float64),
+                "scale": scale
+            }
             
             print(f"[INFO] 카메라 {camera_id} 맵 보정 완료")
             
@@ -179,6 +166,14 @@ class CalibrationThread(QThread):
             print(f"[ERROR] {error_msg}")
             camera_id = message.get('camera_id', 'UNKNOWN')
             self.calibration_failed.emit(camera_id, error_msg)
+    
+    def get_calibration_data(self, camera_id):
+        """보정 데이터 조회"""
+        return self.calibration_data.get(camera_id)
+    
+    def has_calibration_data(self, camera_id):
+        """보정 데이터 존재 여부 확인"""
+        return camera_id in self.calibration_data
     
     def stop(self):
         """스레드 종료"""
@@ -236,7 +231,45 @@ class DetectionCommunicator(QThread):
         #     level_map = {'BR_HIGH': 1, 'BR_MEDIUM': 2, 'BR_LOW': 3}
         #     level_id = level_map.get(self.current_bird_risk, 3)
         #     self.repository.save_bird_risk_log(level_id)
+        
+        # 출입 제어 캐시 초기화
+        self.access_cache = {}  # {area_id: authority_level}
+        self.cache_timestamp = 0
+        
+        # 시스템 시작 시 DB에서 출입 권한 설정 로드
+        self._load_access_conditions_from_db()
     
+    def _load_access_conditions_from_db(self):
+        """시스템 시작 시 DB에서 출입 권한 설정 로드"""
+        try:
+            conn = pymysql.connect(
+                host=config.DB_HOST, port=config.DB_PORT,
+                user=config.DB_USER, password=config.DB_PASSWORD,
+                database=config.DB_NAME, charset='utf8'
+            )
+            
+            cur = conn.cursor()
+            cur.execute("SELECT area_id, authority_level_id FROM ACCESS_CONDITIONS ORDER BY area_id")
+            
+            # 기본값으로 초기화 (DB에 없는 구역 대비)
+            self.access_cache = {i: 2 for i in range(1, 9)}  # 기본값: AUTH_ONLY
+            
+            # DB 값으로 업데이트
+            for area_id, authority_level_id in cur.fetchall():
+                if 1 <= area_id <= 8:
+                    self.access_cache[area_id] = authority_level_id
+                    
+            conn.close()
+            self.cache_timestamp = time.time()
+            
+            print(f"[INFO] 출입 권한 초기 로드 완료: {self.access_cache}")
+            
+        except Exception as e:
+            print(f"[ERROR] 출입 권한 초기 로드 실패: {e}")
+            # DB 로드 실패 시 기본값 사용
+            self.access_cache = {i: 2 for i in range(1, 9)}  # 모든 구역 AUTH_ONLY
+            self.cache_timestamp = time.time()
+
     def set_video_communicator(self, video_comm):
         """비디오 통신기 설정
         Args:
@@ -291,7 +324,7 @@ class DetectionCommunicator(QThread):
                 try:
                     command_str = command.decode().strip()
                     self._log_gui_communication("RECV", command_str) # 수신 로그
-                    if command_str.startswith('MC_'):
+                    if command_str.startswith('MC_') or command_str.startswith('AC_'):
                         response = self._handle_command(command_str)
                         
                         # 응답 로깅 및 전송
@@ -771,13 +804,22 @@ class DetectionCommunicator(QThread):
     def _handle_command(self, command: str) -> str:
         """GUI로부터 받은 명령 처리
         Args:
-            command: 명령 문자열 (예: "MC_OD:2223")
+            command: 명령 문자열 (예: "MC_OD:2223" 또는 "AC_AC")
         Returns:
             str: 응답 메시지
         """
         print(f"[DEBUG] ATS_GUI - {command}")
         
-        # 명령 파싱
+        # AC_ 명령어 처리 (출입 제어)
+        if command.startswith('AC_'):
+            if command == "AC_AC":
+                return self._handle_ac_ac()
+            elif command.startswith("AC_UA:"):
+                return self._handle_ac_ua(command[6:])
+            else:
+                return "AR_ERROR:Unknown access command\n"
+        
+        # 기존 MC_ 명령어 처리
         if not command.startswith('MC_'):
             return "MR_ERROR:Invalid command format\n"
         
@@ -884,6 +926,95 @@ class DetectionCommunicator(QThread):
         response = f"MR_{cctv_type}:OK\n"
         return response
 
+    def _handle_ac_ac(self) -> str:
+        """AC_AC: 8개 구역 권한 조회"""
+        try:
+            # 캐시가 5분 이내면 캐시 사용
+            if time.time() - self.cache_timestamp < 300 and self.access_cache:
+                levels = [self.access_cache.get(i, 2) for i in range(1, 9)]
+            else:
+                # 캐시 만료 시 DB에서 새로 로드
+                conn = pymysql.connect(
+                    host=config.DB_HOST, port=config.DB_PORT,
+                    user=config.DB_USER, password=config.DB_PASSWORD,
+                    database=config.DB_NAME, charset='utf8'
+                )
+                
+                cur = conn.cursor()
+                cur.execute("SELECT area_id, authority_level_id FROM ACCESS_CONDITIONS ORDER BY area_id")
+                
+                # 8개 구역 권한 배열 생성
+                levels = [2] * 8  # 기본값: AUTH_ONLY
+                for area_id, authority_level_id in cur.fetchall():
+                    if 1 <= area_id <= 8:
+                        levels[area_id-1] = authority_level_id
+                        
+                conn.close()
+                
+                # 캐시 업데이트
+                self.access_cache = {i+1: levels[i] for i in range(8)}
+                self.cache_timestamp = time.time()
+            
+            # 응답 생성
+            levels_str = ','.join(map(str, levels))
+            response = f"AR_AC:OK,{levels_str}\n"
+            print(f"[INFO] AC_AC 응답: {response.strip()}")
+            return response
+            
+        except Exception as e:
+            print(f"[ERROR] AC_AC 처리 실패: {e}")
+            return "AR_AC:ERR,1\n"
+
+    def _handle_ac_ua(self, levels_str: str) -> str:
+        """AC_UA: 8개 구역 권한 업데이트"""
+        try:
+            # 파라미터 검증
+            levels = levels_str.split(',')
+            if len(levels) != 8:
+                print(f"[ERROR] AC_UA 파라미터 개수 오류: {len(levels)}개 (8개 필요)")
+                return "AR_UA:ERR,2\n"
+                
+            # 권한 레벨 유효성 검사
+            for level in levels:
+                if int(level) not in [1, 2, 3]:
+                    print(f"[ERROR] AC_UA 잘못된 권한 레벨: {level}")
+                    return "AR_UA:ERR,3\n"
+            
+            # DB 업데이트
+            conn = pymysql.connect(
+                host=config.DB_HOST, port=config.DB_PORT,
+                user=config.DB_USER, password=config.DB_PASSWORD,
+                database=config.DB_NAME, charset='utf8'
+            )
+            
+            cur = conn.cursor()
+            # 기존 데이터 삭제 후 재입력
+            cur.execute("DELETE FROM ACCESS_CONDITIONS")
+            for i, level in enumerate(levels):
+                cur.execute(
+                    "INSERT INTO ACCESS_CONDITIONS (area_id, authority_level_id) VALUES (%s, %s)",
+                    (i+1, int(level))
+                )
+            conn.commit()
+            conn.close()
+            
+            # 캐시 업데이트
+            self.access_cache = {i+1: int(levels[i]) for i in range(8)}
+            self.cache_timestamp = time.time()
+            
+            print(f"[INFO] 출입 권한 업데이트 완료: {levels_str}")
+            print(f"[INFO] 캐시 업데이트: {self.access_cache}")
+            return "AR_UA:OK\n"
+            
+        except ValueError:
+            print(f"[ERROR] AC_UA 숫자 변환 실패: {levels_str}")
+            return "AR_UA:ERR,3\n"
+        except Exception as e:
+            print(f"[ERROR] AC_UA 처리 실패: {e}")
+            return "AR_UA:ERR,4\n"
+
+
+
     def convert_to_map_coords(self, center_x, center_y, frame_width, frame_height, camera_id='A'):
         """bbox 중심점 → 맵 좌표 변환 (보정 데이터 적용)
         Args:
@@ -895,36 +1026,30 @@ class DetectionCommunicator(QThread):
         Returns:
             (float, float, float, float): (map_x, map_y, norm_x, norm_y)
         """
-        print(f"[DEBUG] 좌표 변환 시작: camera_id={camera_id}, calibration_data keys={list(calibration_data.keys())}")
+        # print(f"[DEBUG] 좌표변환: camera={camera_id}, center=({center_x:.0f},{center_y:.0f}), frame=({frame_width},{frame_height}), 보정데이터={list(self.calibration_thread.calibration_data.keys())}")
         
-        # 보정 데이터가 있는 경우 올바른 호모그래피 변환 적용
-        if camera_id in calibration_data:
+        # 보정 데이터가 있는 경우 호모그래피 변환 적용
+        if self.calibration_thread.has_calibration_data(camera_id):
             try:
-                homography_matrix = calibration_data[camera_id]['homography_matrix']
+                calibration_data = self.calibration_thread.get_calibration_data(camera_id)
+                homography_matrix = calibration_data['homography_matrix']
                 
-                # 1. 픽셀 좌표를 실제 세계 좌표(mm)로 변환 (올바른 방식)
+                # 1. 픽셀 좌표를 실제 세계 좌표(mm)로 변환
                 pixel_point = np.array([[[center_x, center_y]]], dtype=np.float32)
                 world_point = cv2.perspectiveTransform(pixel_point, homography_matrix)
                 world_x, world_y = world_point[0][0]
                 
-                print(f"[DEBUG] 픽셀({center_x}, {center_y}) -> 세계좌표({world_x:.1f}, {world_y:.1f})")
+                # 2. 실제 세계 좌표를 정규화 좌표로 직접 변환
+                norm_x = float(world_x / config.REAL_MAP_WIDTH)
+                norm_y = float(world_y / config.REAL_MAP_HEIGHT)
                 
-                # 2. 실제 세계 좌표를 다시 픽셀로 역변환 (GUI 표시용)
-                inverse_homography = np.linalg.inv(homography_matrix)
-                world_point_for_gui = np.array([[[world_x, world_y]]], dtype=np.float32)
-                gui_pixel_point = cv2.perspectiveTransform(world_point_for_gui, inverse_homography)
-                gui_px, gui_py = gui_pixel_point[0][0]
+                # 3. 맵 좌표 계산
+                map_x = float(norm_x * config.MAP_WIDTH)
+                map_y = float(norm_y * config.MAP_HEIGHT)
                 
-                # 3. GUI 픽셀을 정규화 좌표로 변환 (960x960 기준)
-                norm_x = gui_px / 960.0
-                norm_y = gui_py / 960.0
-                
-                # 4. 맵 좌표는 정규화 좌표 * 960
-                map_x = norm_x * config.MAP_WIDTH
-                map_y = norm_y * config.MAP_HEIGHT
-                
-                print(f"[DEBUG] 보정된 좌표 변환: 픽셀({center_x}, {center_y}) -> 세계({world_x:.1f}, {world_y:.1f}) -> GUI픽셀({gui_px:.1f}, {gui_py:.1f}) -> 정규화({norm_x:.3f}, {norm_y:.3f}) -> 맵({map_x:.1f}, {map_y:.1f})")
-                print(f"[DEBUG] 이 좌표의 예상 area: {self._debug_find_area(norm_x, norm_y)}")
+                # 디버깅: 핵심 정보만 간결하게
+                area_result = self.find_area_info(norm_x, norm_y, debug=True)
+                # print(f"[DEBUG] 호모그래피: 중심점({center_x:.0f},{center_y:.0f}) → 맵({map_x:.0f},{map_y:.0f}) → {area_result}")
                 
                 return map_x, map_y, norm_x, norm_y
                 
@@ -934,23 +1059,47 @@ class DetectionCommunicator(QThread):
             print(f"[WARNING] 카메라 {camera_id}의 보정 데이터 없음, 기본 변환 사용")
         
         # 보정 데이터가 없는 경우 기본 변환 (기존 로직)
-        # TODO: 임시로 단위 행렬 사용, 실제로는 map_calibration 이벤트로 설정되어야 함
-        norm_x = center_x / frame_width
-        norm_y = center_y / frame_height
-        map_x = norm_x * config.MAP_WIDTH
-        map_y = norm_y * config.MAP_HEIGHT
+        norm_x = float(center_x / frame_width)
+        norm_y = float(center_y / frame_height)
+        map_x = float(norm_x * config.MAP_WIDTH)
+        map_y = float(norm_y * config.MAP_HEIGHT)
         
-        print(f"[DEBUG] 기본 좌표 변환: center({center_x}, {center_y}) / frame({frame_width}, {frame_height}) -> norm({norm_x:.3f}, {norm_y:.3f}) -> map({map_x:.1f}, {map_y:.1f})")
-        print(f"[DEBUG] 이 좌표의 예상 area: {self._debug_find_area(norm_x, norm_y)}")
+        # 디버깅: 핵심 정보만 간결하게
+        area_result = self.find_area_info(norm_x, norm_y, debug=True)
+        print(f"[DEBUG] 기본변환: ({center_x:.0f},{center_y:.0f}) → 정규화({norm_x:.3f},{norm_y:.3f}) → 맵({map_x:.0f},{map_y:.0f}) → {area_result}")
         
         return map_x, map_y, norm_x, norm_y
     
-    def _debug_find_area(self, norm_x, norm_y):
-        """디버깅용 area 찾기"""
+    def find_area_info(self, norm_x, norm_y, debug=False):
+        """정규화 좌표에 해당하는 area 정보 반환 (디버깅 기능 포함)"""
+        matched_areas = []
         for area in self.area_list:
             if area['x1'] <= norm_x <= area['x2'] and area['y1'] <= norm_y <= area['y2']:
-                return f"{area['area_name']}({area['area_id']})"
-        return "UNKNOWN"
+                matched_areas.append(area)
+        
+        if matched_areas:
+            result_area = matched_areas[0]  # 첫 번째 매칭 사용
+            
+            if debug:
+                # 디버깅 모드: 문자열 반환 + 경고 출력
+                area_str = f"{result_area['area_name']}({result_area['area_id']})"
+                if len(matched_areas) > 1:
+                    all_areas = [f"{a['area_name']}({a['area_id']})" for a in matched_areas]
+                    print(f"[DEBUG] 경고: 여러 Area 매칭됨 {all_areas}, 첫 번째 사용: {area_str}")
+                return area_str
+            else:
+                # 일반 모드: area_id 반환
+                return result_area['area_id']
+        else:
+            if debug:
+                print(f"[DEBUG] 경고: 좌표({norm_x:.3f}, {norm_y:.3f})에 매칭되는 Area 없음")
+                return "UNKNOWN"
+            else:
+                return None
+
+    def find_area_id(self, norm_x, norm_y):
+        """정규화 좌표(norm_x, norm_y)에 해당하는 area_id 반환"""
+        return self.find_area_info(norm_x, norm_y, debug=False)
 
     def _load_area_table(self):
         """AREA 테이블 전체를 읽어 리스트와 area_id_to_name 딕셔너리로 반환"""
@@ -982,13 +1131,6 @@ class DetectionCommunicator(QThread):
             conn.close()
         self.area_id_to_name = area_id_to_name
         return area_list
-
-    def find_area_id(self, norm_x, norm_y):
-        """정규화 좌표(norm_x, norm_y)에 해당하는 area_id 반환"""
-        for area in self.area_list:
-            if area['x1'] <= norm_x <= area['x2'] and area['y1'] <= norm_y <= area['y2']:
-                return area['area_id']
-        return None
 
     def send_first_detection_to_gui(self, detections, crop_imgs):
         """최초 감지된 객체에 대해 ME_FD 메시지 생성 및 전송 (crop_imgs 사용)"""

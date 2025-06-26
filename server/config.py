@@ -26,7 +26,7 @@ DB_HOST = "localhost"
 DB_PORT = 3306
 DB_NAME = "falcon_db"
 DB_USER = "root"
-DB_PASSWORD = "134679"
+DB_PASSWORD = "1234"
 
 # 시스템 설정
 MAX_QUEUE_SIZE = 100
@@ -49,4 +49,8 @@ frame_height = None
 
 # 맵 크기 (좌표 변환용)
 MAP_WIDTH = 960
-MAP_HEIGHT = 960
+MAP_HEIGHT = 720
+
+# 실제 맵 크기 (mm 단위)
+REAL_MAP_WIDTH = 1800.0   # mm
+REAL_MAP_HEIGHT = 1350.0  # mm

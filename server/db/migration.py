@@ -71,12 +71,10 @@ class DatabaseMigration:
                 level_name VARCHAR(16) NOT NULL
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4''')
             cur.execute('''CREATE TABLE IF NOT EXISTS ACCESS_CONDITIONS (
-                area_id INT PRIMARY KEY,
-                vehicle_authority_level_id INT,
-                person_authority_level_id INT,
+                area_id INT,
+                authority_level_id INT,
                 FOREIGN KEY(area_id) REFERENCES AREA(area_id),
-                FOREIGN KEY(vehicle_authority_level_id) REFERENCES AUTHORITY_LEVEL(level_id),
-                FOREIGN KEY(person_authority_level_id) REFERENCES AUTHORITY_LEVEL(level_id)
+                FOREIGN KEY(authority_level_id) REFERENCES AUTHORITY_LEVEL(level_id)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4''')
 
             # 2. 조류 위험도 분석
@@ -142,7 +140,7 @@ class DatabaseMigration:
             ])
             # AUTHORITY_LEVEL
             cur.executemany('INSERT IGNORE INTO AUTHORITY_LEVEL (level_id, level_name) VALUES (%s, %s)', [
-                (0, 'OPEN'), (1, 'AUTH_ONLY'), (2, 'NO_ENTRY')
+                (1, 'OPEN'), (2, 'AUTH_ONLY'), (3, 'NO_ENTRY')
             ])
             # REQUEST_TYPE
             cur.executemany('INSERT IGNORE INTO REQUEST_TYPE (request_id, request_code) VALUES (%s, %s)', [
@@ -162,14 +160,18 @@ class DatabaseMigration:
             ])
             # AREA
             cur.executemany('INSERT IGNORE INTO AREA (area_id, area_name, x1, y1, x2, y2) VALUES (%s, %s, %s, %s, %s, %s)', [
-                (1, 'TWY_A', 0.00, 0.22, 0.19, 0.52),
-                (2, 'TWY_B', 0.81, 0.22, 1.00, 0.52),
-                (3, 'TWY_C', 0.00, 0.70, 0.19, 1.00),
-                (4, 'TWY_D', 0.81, 0.70, 1.00, 1.00),
-                (5, 'RWY_A', 0.00, 0.00, 1.00, 0.22),
-                (6, 'RWY_B', 0.00, 0.52, 1.00, 0.70),
-                (7, 'GRASS_A', 0.19, 0.22, 0.81, 0.52),
-                (8, 'GRASS_B', 0.19, 0.70, 0.81, 1.00)
+                (1, 'TWY_A', 0.00, 0.23, 0.19, 0.52),
+                (2, 'TWY_B', 0.81, 0.23, 1.00, 0.52),
+                (3, 'TWY_C', 0.00, 0.73, 0.19, 1.00),
+                (4, 'TWY_D', 0.81, 0.73, 1.00, 1.00),
+                (5, 'RWY_A', 0.00, 0.00, 1.00, 0.23),
+                (6, 'RWY_B', 0.00, 0.52, 1.00, 0.73),
+                (7, 'GRASS_A', 0.19, 0.23, 0.81, 0.52),
+                (8, 'GRASS_B', 0.19, 0.73, 0.81, 1.00)
+            ])
+            # ACCESS_CONDITIONS
+            cur.executemany('INSERT IGNORE INTO ACCESS_CONDITIONS (area_id, authority_level_id) VALUES (%s, %s)', [
+                (1, 2), (2, 2), (3, 2), (4, 2), (5, 2), (6, 2), (7, 2), (8, 2)
             ])
             self.conn.commit()
             logger.info('초기 마스터 데이터 삽입 완료')
