@@ -2,6 +2,8 @@
 
 import time
 import logging
+import numpy as np
+import math
 
 class FPSMeter:
     def __init__(self):
@@ -32,16 +34,7 @@ def setup_logger(name='IDS', level='INFO'):
     logger.setLevel(level)
     return logger
 
-
 def bbox_iou(boxA, boxB):
-    '''
-    목적: 두 개의 바운딩 박스 간 IoU(Intersection over Union) 계산
-    boxA, boxB는 [x1, y1, x2, y2] 형식
-    두 박스의 겹치는 영역(interArea) 넓이 계산
-    각각의 박스 넓이(boxAArea, boxBArea) 계산
-    IoU = inter / (A + B - inter) 공식 적용
-    사용 위치:  detector.py에서 ArUco 마커와 감지된 객체가 겹치는지 필터링할 때 사용
-    '''
     xA = max(boxA[0], boxB[0])
     yA = max(boxA[1], boxB[1])
     xB = min(boxA[2], boxB[2])
@@ -54,23 +47,28 @@ def bbox_iou(boxA, boxB):
     iou = interArea / float(boxAArea + boxBArea - interArea)
     return iou
 
-def estimate_pose_status(pose_result):
-    '''
-    목적: YOLO pose 모델의 keypoints를 바탕으로 사람이 서 있는지/넘어진 상태인지 판정
-    keypoints의 y 좌표값만 추출
-    최대값과 최소값 차이(y_vals.max() - y_vals.min())를 기준으로
-    40px 미만이면 넘어진 것(FALLEN) 으로 판단
-    그렇지 않으면 서 있음(STAND)
-    '''
+# [수정] 쓰러짐 판단 기준으로 bbox 비율 함수만 남기고 나머지 제거
+def estimate_by_bbox_ratio(bbox):
+    """
+    Bbox의 가로/세로 비율로 쓰러짐 상태를 판정합니다.
+    - 너비가 높이보다 1.3배 이상 크면 'FALLEN'으로 간주합니다.
+    """
     try:
-        keypoints = pose_result.keypoints[0].xy.cpu().numpy()
-        y_vals = keypoints[:, 1]
-        if (y_vals.max() - y_vals.min()) < 40:
+        x1, y1, x2, y2 = bbox
+        bbox_width = x2 - x1
+        bbox_height = y2 - y1
+        
+        # 높이가 0인 경우의 예외 처리
+        if bbox_height == 0:
             return "FALLEN"
-        else:
-            return "STAND"
+            
+        aspect_ratio = bbox_width / bbox_height
+        
+        # 비율 임계값(1.3)은 실험을 통해 조정 가능
+        return "FALLEN" if aspect_ratio > 1.3 else "STAND"
     except:
-        return "STAND"
-# 고유 id 생성
+        # 오류 발생 시 기본값 'N/A' 반환
+        return "N/A"
+
 def generate_our_id(tracker_id):
     return int(str(int(time.time() * 1000)) + str(tracker_id))

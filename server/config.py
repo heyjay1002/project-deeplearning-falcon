@@ -26,7 +26,7 @@ DB_HOST = "localhost"
 DB_PORT = 3306
 DB_NAME = "falcon_db"
 DB_USER = "root"
-DB_PASSWORD = "1234"
+DB_PASSWORD = "134679"
 
 # 시스템 설정
 MAX_QUEUE_SIZE = 100

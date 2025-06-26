@@ -5,12 +5,13 @@ import numpy as np
 from config import Settings
 from detector import Detector
 import time
+# [수정] utils에서 우리가 만든 3개의 새로운 함수를 모두 import 합니다.
+from utils import estimate_by_bbox_ratio, estimate_by_keypoint_std_dev, estimate_by_torso_angle
 
 def main():
     settings = Settings()
     detector = Detector(settings)
 
-    # 비디오 소스 (웹캠 또는 파일 경로)
     cap = cv2.VideoCapture(settings.CAMERA_PATH)
     if not cap.isOpened():
         print(f"카메라를 열 수 없습니다: {settings.CAMERA_PATH}")
@@ -18,64 +19,62 @@ def main():
 
     print("통합 시스템 흐름 테스트를 시작합니다. 'q'를 누르면 종료됩니다.")
     
-    homography_matrix = None # 보정 전에는 H 행렬이 없음
+    homography_matrix = None
 
     while True:
         ret, frame = cap.read()
         if not ret:
-            print("프레임을 읽을 수 없습니다.")
-            time.sleep(1)
-            continue
+            print("프레임을 읽을 수 없습니다."); time.sleep(1); continue
         
-        # 설정된 해상도로 리사이즈
         frame = cv2.resize(frame, settings.PROCESS_RESOLUTION)
         display_frame = frame.copy()
 
-        # 1. 보정(Calibration) 단계
         if homography_matrix is None:
-            # 아직 보정이 안된 상태이므로, Map 모드를 실행
             calibration_result = detector.process_map_mode(frame)
-            
             if calibration_result:
-                # 보정 성공! H 행렬 저장 및 시각화
                 homography_matrix = np.array(calibration_result['matrix'])
                 print("✅ [보정 성공] Homography Matrix가 계산되었습니다.")
-
-                # 디버그 플래그가 켜져 있으면, 보정 결과를 프레임에 그림
+            if settings.DEBUG_VISUALIZE_CALIBRATION and homography_matrix is not None:
                 display_frame = detector.visualize_calibration_on_frame(display_frame, homography_matrix)
             else:
-                # 보정 실패 시 메시지 표시
-                cv2.putText(display_frame, "CALIBRATION FAILED: Check ArUco Markers", 
-                            (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
-
-        # 2. 객체 탐지(Object Detection) 단계
+                cv2.putText(display_frame, "CALIBRATION FAILED", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2)
         else:
-            # 보정이 완료된 상태이므로, Object 모드를 실행
             object_result = detector.process_object_mode(frame, time.time_ns())
 
-            if object_result and object_result.get("detections"):
-                for det in object_result["detections"]:
-                    # 각 객체의 bbox를 프레임에 그림
-                    x1, y1, x2, y2 = det["bbox"]
-                    cv2.rectangle(display_frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
-                    
-                    # 객체의 하단 중앙점을 기준으로 실제 mm 좌표 계산 (디버깅용)
-                    bottom_center_pixel = ((x1 + x2) / 2, y2)
-                    world_coords = detector.transform_pixel_to_world(bottom_center_pixel, homography_matrix)
-                    
-                    # 화면에 정보 표시
-                    label = f"{det['class']} ID:{det['object_id']} "
-                    label += f"({int(world_coords[0])}, {int(world_coords[1])})mm"
-                    cv2.putText(display_frame, label, (x1, y1 - 10), 
-                                cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+            if object_result:
+                if object_result.get("detections"):
+                    for det in object_result["detections"]:
+                        x1, y1, x2, y2 = det["bbox"]
+                        cv2.rectangle(display_frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
+                        label = f"{det['class']} ID:{det['object_id']}"
+                        cv2.putText(display_frame, label, (x1, y1 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+                
+                # [핵심] 다중 로직 동시 테스트 및 시각화
+                if settings.DEBUG_SHOW_POSE and object_result.get("pose_debug_data"):
+                    for pose_info in object_result["pose_debug_data"]:
+                        kpts, bbox = pose_info["keypoints"], pose_info["bbox"]
+                        
+                        # [수정] 각 함수에 필요한 데이터를 직접 전달합니다.
+                        status_bbox = estimate_by_bbox_ratio(bbox)
+                        status_std = estimate_by_keypoint_std_dev(kpts)
+                        status_angle = estimate_by_torso_angle(kpts)
+                        
+                        # 3. 각 로직의 결과를 화면에 모두 표시
+                        results_to_display = {
+                            f"BBOX: {status_bbox}": status_bbox == "FALLEN",
+                            f"STD_DEV: {status_std}": status_std == "FALLEN",
+                            f"ANGLE: {status_angle}": status_angle == "FALLEN"
+                        }
+                        y_offset = 30
+                        for text, is_fallen in results_to_display.items():
+                            color = (0, 0, 255) if is_fallen else (0, 255, 0)
+                            cv2.putText(display_frame, text, (bbox[0], bbox[1] - y_offset), cv2.FONT_HERSHEY_SIMPLEX, 0.6, color, 2)
+                            y_offset += 25
             
-            # 보정이 완료되었음을 시각적으로 계속 표시
-            display_frame = detector.visualize_calibration_on_frame(display_frame, homography_matrix)
+            if settings.DEBUG_SHOW_ZONES:
+                display_frame = detector.visualize_calibration_on_frame(display_frame, homography_matrix)
 
-
-        # 3. 최종 결과 화면에 표시
-        cv2.imshow("FALCON IDS - System Flow Test", display_frame)
-
+        cv2.imshow("FALCON IDS - Multi-Logic Test", display_frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
 

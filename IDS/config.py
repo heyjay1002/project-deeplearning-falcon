@@ -23,12 +23,15 @@ class Settings:
         self.TRACKER_CONFIG_FILE = "bytetrack.yaml"  # 또는 "botsort.yaml"
 
 
-        self.YOLO_CONFIDENCE_THRESHOLD = 0.6
+        self.YOLO_CONFIDENCE_THRESHOLD = 0.5
         self.YOLO_IOU_THRESHOLD = 0.5
 
         # === 색상 분류 HSV 범위 ===
-        self.VEST_HSV_LOWER = (10, 100, 150)
-        self.VEST_HSV_UPPER = (25, 255, 255)
+        # [수정] 형광 주황과 형광 노랑 범위를 모두 포함하도록 VEST_HSV_RANGES 정의
+        self.VEST_HSV_RANGES = {
+            'fluorescent_orange': [(5, 150, 150), (15, 255, 255)],
+            'fluorescent_yellow': [(20, 150, 150), (35, 255, 255)]
+        }
         self.VEHICLE_YELLOW_LOWER = (20, 100, 100)
         self.VEHICLE_YELLOW_UPPER = (30, 255, 255)
         self.VEHICLE_BLACK_LOWER = (0, 0, 0)
@@ -48,16 +51,13 @@ class Settings:
         self.WORLD_ZONES = {
             # RWY 구역: 맵 가로 전체를 포함하는 수평 스트립
             "RWY_A":   [(0, 0),    (1800, 0),   (1800, 300),  (0, 300)],
-            "RWY_B":   [(0, 650),  (1800, 650), (1800, 950),  (0, 950)],
-
-            # TWY 및 GRASS 구역: 각자의 사각형 칸
-            "TWY_A":   [(0, 300),   (350, 300),  (350, 650),  (0, 650)],
-            "GRASS_A": [(350, 300), (1450, 300), (1450, 650), (350, 650)],
-            "TWY_B":   [(1450, 300),(1800, 300), (1800, 650), (1450, 650)],
-            
-            "TWY_C":   [(0, 950),   (350, 950),  (350, 1350), (0, 1350)],
-            "GRASS_B": [(350, 950), (1450, 950), (1450, 1350), (350, 1350)],
-            "TWY_D":   [(1450, 950),(1800, 950), (1800, 1350), (1450, 1350)],
+            "RWY_B":   [(0, 685),  (1800, 685), (1800, 975),  (0, 975)],
+            "TWY_A":   [(0, 300),   (350, 300),  (350, 685),  (0, 685)],
+            "GRASS_A": [(350, 300), (1450, 300), (1450, 685), (350, 685)],
+            "TWY_B":   [(1450, 300),(1800, 300), (1800, 685), (1450, 685)],
+            "TWY_C":   [(0, 975),   (350, 975),  (350, 1350), (0, 1350)],
+            "GRASS_B": [(350, 975), (1450, 975), (1450, 1350), (350, 1350)],
+            "TWY_D":   [(1450, 975),(1800, 975), (1800, 1350), (1450, 1350)],
         }
         # [추가] 구역별 색상 정의 (BGR 순서)
         self.ZONE_COLORS = {
@@ -76,12 +76,12 @@ class Settings:
         # === 카메라 설정 ===
         self.CAMERA_ID = "A"
         # ls /dev/video*
-        self.CAMERA_PATH = 5
+        self.CAMERA_PATH = 4
         self.CAMERA_USE_MJPG = True
         self.CAPTURE_RESOLUTION = (960, 960)
         self.PROCESS_RESOLUTION = (960, 960)
         self.CAMERA_FPS = 30
-        self.JPEG_QUALITY = 30
+        self.JPEG_QUALITY = 43
         # === 네트워크 설정 ===
         self.MAIN_SERVER_IP = "192.168.0.12"
         self.IDS_UDP_PORT = 4000
@@ -98,8 +98,10 @@ class Settings:
 
         # === 디버깅 ===
         self.DISPLAY_DEBUG = False
+        self.YOLO_VERBOSE = False
         self.LOG_LEVEL = "INFO"
+        self.DEBUG_SHOW_POSE = True
         self.DEBUG_SHOW_ZONES = True  #  원본 영상에 구역을 반투명하게 표시
         self.DEBUG_VISUALIZE_CALIBRATION = True 
         self.ZONE_OVERLAY_ALPHA = 0.7
-settings = Settings() 
+settings = Settings()
