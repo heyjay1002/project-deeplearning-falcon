@@ -120,9 +120,9 @@ class DynamicMarker(QLabel):
             ObjectType.PERSON.value: os.path.join(base_path, 'resources/images/person.png'),
             ObjectType.ANIMAL.value: os.path.join(base_path, 'resources/images/animal2.png'),
             ObjectType.AIRPLANE.value: os.path.join(base_path, 'resources/images/airplane.png'),
-            ObjectType.VEHICLE.value: os.path.join(base_path, 'resources/images/vehicle.png'),
+            ObjectType.VEHICLE.value: os.path.join(base_path, 'resources/images/vehicle_work.png'),
             ObjectType.WORK_PERSON.value: os.path.join(base_path, 'resources/images/worker.png'),
-            ObjectType.WORK_VEHICLE.value: os.path.join(base_path, 'resources/images/vehicle_work.png'),
+            ObjectType.WORK_VEHICLE.value: os.path.join(base_path, 'resources/images/vehicle.png'),
             ObjectType.UNKNOWN.value: os.path.join(base_path, 'resources/images/unknown.png')
         }
         

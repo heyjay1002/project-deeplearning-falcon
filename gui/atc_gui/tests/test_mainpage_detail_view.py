@@ -77,6 +77,7 @@ def add_test_object(main_page):
     main_page.object_area.setCurrentIndex(2)
 
 class DummyNetworkManager(QObject):
+    first_object_detected = pyqtSignal(object)  # 누락된 시그널 추가
     object_detected = pyqtSignal(object)
     bird_risk_changed = pyqtSignal(object)
     runway_a_risk_changed = pyqtSignal(object)

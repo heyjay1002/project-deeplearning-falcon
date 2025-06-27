@@ -7,7 +7,7 @@ from PyQt6 import uic
 import logging
 from views.main_page import MainPage
 from views.access_page import AccessPage
-# from views.log_page import LogPage
+from views.log_page import LogPage
 from views.notification_dialog import NotificationDialog
 from utils.interface import DetectedObject, BirdRisk, RunwayRisk
 from utils.network_manager import NetworkManager
@@ -118,9 +118,9 @@ class WindowClass(QMainWindow):
         self.access_page = AccessPage(self, network_manager=self.network_manager)
         self._setup_tab_widget(1, self.access_page)
 
-        # # LogPage 인스턴스 생성 및 셋팅
-        # self.log_page = LogPage(self)
-        # self._setup_tab_widget(2, self.log_page)
+        # LogPage 인스턴스 생성 및 셋팅
+        self.log_page = LogPage(self, network_manager=self.network_manager)
+        self._setup_tab_widget(2, self.log_page)
 
         # 탭 이름 설정
         self.tabWidget.setTabText(0, "Main")
@@ -166,6 +166,11 @@ class WindowClass(QMainWindow):
             logger.info("Access 탭 전환")
             if hasattr(self, 'access_page') and self.access_page:
                 self.access_page.request_current_settings()
+
+        elif index == 2:  # Log 탭이 선택된 경우
+            logger.info("Log 탭 전환")
+            if hasattr(self, 'log_page') and self.log_page:
+                self.log_page.request_current_settings()
 
     def show_notification_dialog(self, dialog_type, data):
         """알림 다이얼로그 표시 - 중복 방지 로직 추가"""

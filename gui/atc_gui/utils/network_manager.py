@@ -437,3 +437,13 @@ class NetworkManager(QObject):
         except Exception as e:
             logger.error(f"출입 제어 설정 업데이트 실패: {e}")
             return False
+
+    def send_tcp_message(self, message: str):
+        """TCP 메시지 전송"""
+        try:
+            success = self.tcp_client._send_message_direct(message, f"로그 요청: {message}")
+            logger.info(f"TCP 메시지 전송: {message}")
+            return success
+        except Exception as e:
+            logger.error(f"TCP 메시지 전송 실패: {e}")
+            raise e

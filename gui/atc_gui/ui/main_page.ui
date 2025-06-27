@@ -233,11 +233,30 @@
     </property>
    </widget>
   </widget>
+  <widget class="QLabel" name="label_current_time">
+   <property name="geometry">
+    <rect>
+     <x>990</x>
+     <y>5</y>
+     <width>291</width>
+     <height>35</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">font-weight: bold; font-size: 16px; color: #333;</string>
+   </property>
+   <property name="text">
+    <string>현재 시간: 2024-01-01 12:00:00</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
   <widget class="QPushButton" name="btn_show_map">
    <property name="geometry">
     <rect>
      <x>990</x>
-     <y>20</y>
+     <y>45</y>
      <width>291</width>
      <height>31</height>
     </rect>
@@ -246,46 +265,26 @@
     <string>지도 보기</string>
    </property>
   </widget>
-  <widget class="QComboBox" name="combo_cctv">
-   <property name="geometry">
-    <rect>
-     <x>990</x>
-     <y>80</y>
-     <width>201</width>
-     <height>31</height>
-    </rect>
-   </property>
-   <item>
-    <property name="text">
-     <string>CCTV A</string>
-    </property>
-   </item>
-   <item>
-    <property name="text">
-     <string>CCTV B</string>
-    </property>
-   </item>
-  </widget>
   <widget class="QPushButton" name="btn_show_cctv">
    <property name="geometry">
     <rect>
-     <x>1200</x>
-     <y>80</y>
-     <width>80</width>
+     <x>989</x>
+     <y>85</y>
+     <width>291</width>
      <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>보기</string>
+    <string>CCTV 보기</string>
    </property>
   </widget>
   <widget class="QStackedWidget" name="object_area">
    <property name="geometry">
     <rect>
      <x>980</x>
-     <y>120</y>
+     <y>125</y>
      <width>309</width>
-     <height>671</height>
+     <height>666</height>
     </rect>
    </property>
    <property name="currentIndex">

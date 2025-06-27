@@ -20,14 +20,14 @@ class ObjectType(Enum):
 
 class BirdRiskLevel(Enum):
     """조류 위험도 등급"""
-    LOW = "안전"
-    MEDIUM = "주의"
-    HIGH = "경고"
+    LOW = "CLEAR"
+    MEDIUM = "CAUTION"
+    HIGH = "WARNING"
 
 class RunwayRiskLevel(Enum):
     """활주로 위험도 등급"""
-    LOW = "안전"
-    HIGH = "경고"
+    LOW = "CLEAR"
+    HIGH = "WARNING"
 
 class AirportArea(Enum):
     """공항 구역 식별자"""    
@@ -55,6 +55,25 @@ class CameraID(Enum):
     """CCTV 카메라 식별자"""
     A = "A"
     B = "B"
+
+class PilotRequestType(Enum):
+    """파일럿 요청 타입"""
+    BR_INQ = "BR_INQ"
+    RWY_A_STATUS = "RWY_A_STATUS"
+    RWY_B_STATUS = "RWY_B_STATUS"
+    RWY_AVAIL_IN = "RWY_AVAIL_IN"
+
+class PilotResponseType(Enum):
+    """파일럿 응답 타입"""
+    BR_HIGH = "BR_HIGH"
+    BR_MEDIUM = "BR_MEDIUM"
+    BR_LOW = "BR_LOW"
+    CLEAR = "CLEAR"
+    BLOCKED = "BLOCKED"
+    ALL = "ALL"
+    A_ONLY = "A_ONLY"
+    B_ONLY = "B_ONLY"
+    NONE = "NONE"
 
 class MessagePrefix(Enum):
     """메시지 프리픽스"""
@@ -120,9 +139,9 @@ class Constants:
     }
     
     BIRD_RISK_MAPPING = {
-        0: BirdRiskLevel.LOW,
-        1: BirdRiskLevel.MEDIUM,
-        2: BirdRiskLevel.HIGH
+        1: BirdRiskLevel.HIGH,
+        2: BirdRiskLevel.MEDIUM,
+        3: BirdRiskLevel.LOW
     }
     
     RUNWAY_RISK_MAPPING = {
@@ -145,6 +164,25 @@ class Constants:
         1: SecurityLevel.OPEN,
         2: SecurityLevel.AUTH_ONLY,
         3: SecurityLevel.NO_ENTQ,
+    }
+
+    PILOT_REQUEST_MAPPING = {
+        1: PilotRequestType.BR_INQ,
+        2: PilotRequestType.RWY_A_STATUS,
+        3: PilotRequestType.RWY_B_STATUS,
+        4: PilotRequestType.RWY_AVAIL_IN
+    }
+    
+    PILOT_RESPONSE_MAPPING = {
+        1: PilotResponseType.BR_HIGH,
+        2: PilotResponseType.BR_MEDIUM,
+        3: PilotResponseType.BR_LOW,
+        4: PilotResponseType.CLEAR,
+        5: PilotResponseType.BLOCKED,
+        6: PilotResponseType.ALL,
+        7: PilotResponseType.A_ONLY,
+        8: PilotResponseType.B_ONLY,
+        9: PilotResponseType.NONE
     }
 
     # --- 통신 프로토콜 관련 ---

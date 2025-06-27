@@ -72,6 +72,9 @@ class MainPage(QWidget):
         self.timeout_timer.timeout.connect(self.check_object_timeouts)
         self.timeout_timer.start(1000)
 
+        # 현재 시간 업데이트 설정
+        self.setup_current_time()
+
         # 스택 위젯 초기 상태 설정
         self.map_cctv_stack.setCurrentIndex(0)
 
@@ -92,6 +95,90 @@ class MainPage(QWidget):
         self.table_object_list.horizontalHeader().setSectionResizeMode(2, self.table_object_list.horizontalHeader().ResizeMode.Stretch)
         self.table_object_list.setRowCount(0)
         self.table_object_list.cellClicked.connect(self.on_table_object_clicked)
+        
+        # LogPage와 동일한 테이블 스타일 적용
+        self.apply_table_style()
+
+    def apply_table_style(self):
+        """테이블 스타일 적용 (LogPage와 동일)"""
+        try:
+            table = self.table_object_list
+            
+            table_style = """
+                QTableWidget {
+                    gridline-color: #e0e0e0;
+                    background-color: #ffffff;
+                    alternate-background-color: #f8f9fa;
+                    selection-background-color: #007acc;
+                    selection-color: white;
+                    border: 1px solid #d0d7de;
+                    border-radius: 6px;
+                }                
+                QHeaderView::section {
+                    background-color: #f6f8fa;
+                    padding: 10px;
+                    border: none;
+                    border-bottom: 2px solid #e1e4e8;
+                    border-right: 1px solid #e1e4e8;
+                    font-weight: bold;
+                    color: #24292f;
+                    text-align: center;
+                }
+                QHeaderView::section:hover {
+                    background-color: #eaeef2;
+                }
+                QScrollBar:vertical {
+                    background: #f6f8fa;
+                    width: 12px;
+                    border-radius: 6px;
+                }
+                QScrollBar::handle:vertical {
+                    background: #d0d7de;
+                    border-radius: 6px;
+                    min-height: 20px;
+                }
+                QScrollBar::handle:vertical:hover {
+                    background: #656d76;
+                }
+                QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+                    border: none;
+                    background: none;
+                }
+                QScrollBar:horizontal {
+                    background: #f6f8fa;
+                    height: 12px;
+                    border-radius: 6px;
+                }
+                QScrollBar::handle:horizontal {
+                    background: #d0d7de;
+                    border-radius: 6px;
+                    min-width: 20px;
+                }
+                QScrollBar::handle:horizontal:hover {
+                    background: #656d76;
+                }
+                QScrollBar::add-line:horizontal, QScrollBar::sub-line:horizontal {
+                    border: none;
+                    background: none;
+                }
+            """
+            table.setStyleSheet(table_style)
+            
+            # 폰트 크기 설정
+            font = table.font()
+            font.setPointSize(12)
+            table.setFont(font)
+            
+            # 행 높이 설정
+            table.verticalHeader().setDefaultSectionSize(40)
+            
+            # 테이블 속성 설정
+            table.setAlternatingRowColors(True)  # 행 색상 교대로 표시
+            table.setShowGrid(True)
+            table.verticalHeader().setVisible(False)  # 행 번호 숨기기
+            
+        except Exception as e:
+            logger.error(f"테이블 스타일 적용 오류: {e}")
 
     def on_table_object_clicked(self, row, column):
         """테이블에서 객체 클릭 시 마커 선택 효과 적용"""
@@ -203,16 +290,83 @@ class MainPage(QWidget):
         self.map_marker.marker_clicked.connect(self.on_marker_clicked)
 
     def setup_buttons(self):
-        """버튼 시그널 연결"""
+        """버튼 시그널 연결 및 스타일 설정"""
         self.btn_show_map.clicked.connect(self.show_map)
         self.btn_show_cctv.clicked.connect(self.show_cctv)
         self.btn_detail.clicked.connect(self.show_detail)
+
+        self.btn_show_map.setStyleSheet("""
+            QPushButton {
+                    background-color: #17a2b8;
+                    border: none;
+                    color: white;
+                    padding: 8px 16px;
+                    font-size: 16px;
+                    border-radius: 4px;
+                }
+                QPushButton:hover {
+                    background-color: #138496;
+                }
+                QPushButton:pressed {
+                    background-color: #11707f;
+                }
+        """)
+
+        self.btn_show_cctv.setStyleSheet("""
+            QPushButton {
+                background-color: #17a2b8;
+                border: none;
+                color: white;
+                padding: 8px 16px;
+                font-size: 16px;
+                border-radius: 4px;
+            }
+            QPushButton:hover {
+                background-color: #138496;
+            }
+            QPushButton:pressed {
+                background-color: #11707f;
+            }
+        """)
+        
+        # 상세보기 버튼 스타일 설정
+        self.btn_detail.setStyleSheet("""
+            QPushButton {
+                background-color: #484848;
+                border: none;
+                color: white;
+                padding: 8px 16px;
+                font-size: 16px;
+                border-radius: 4px;
+            }
+            QPushButton:hover {
+                background-color: #5c5c5c;
+            }
+            QPushButton:pressed {
+                background-color: #3a3a3a;
+            }
+        """)
 
     def setup_detail_dialog(self):
         """상세보기 다이얼로그 설정"""
         self.object_detail_dialog = ObjectDetailDialog(self)
         self.object_area.addWidget(self.object_detail_dialog)
         self.object_detail_dialog.btn_back.clicked.connect(self.show_table)
+
+    def setup_current_time(self):
+        """현재 시간 업데이트 설정"""
+        # 현재 시간 업데이트 타이머 설정
+        self.time_update_timer = QTimer(self)
+        self.time_update_timer.timeout.connect(self.update_current_time)
+        self.time_update_timer.start(1000)  # 1초마다 업데이트
+        
+        # 초기 시간 설정
+        self.update_current_time()
+
+    def update_current_time(self):
+        """현재 시간 업데이트"""
+        current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        self.label_current_time.setText(f"현재 시간: {current_time}")
 
     def process_pending_updates(self):
         """대기 중인 객체 업데이트 처리"""
@@ -418,14 +572,9 @@ class MainPage(QWidget):
             self.network_manager.request_map()
 
     def show_cctv(self):
-        """CCTV 보기"""
-        idx = self.combo_cctv.currentIndex()
-        if idx == 0:
-            if self.network_manager:
-                self.network_manager.request_cctv_a()
-        elif idx == 1:
-            if self.network_manager:
-                self.network_manager.request_cctv_b()
+        """CCTV 보기 (CCTV A 직접 연결)"""
+        if self.network_manager:
+            self.network_manager.request_cctv_a()
 
     def show_table(self):
         """테이블 보기"""
@@ -498,47 +647,167 @@ class MainPage(QWidget):
         """위젯 종료 시 처리"""
         if hasattr(self, 'map_marker'):
             self.map_marker.clear_markers()
+        
+        # 시간 업데이트 타이머 정리
+        if hasattr(self, 'time_update_timer'):
+            self.time_update_timer.stop()
+            
         super().closeEvent(event)
 
     def clear_object_list(self):
-        """객체 목록 초기화"""
-        self.current_object_ids.clear()
-        self.first_detected_object_ids.clear()
-        self.object_last_seen.clear()
-        self.pending_objects.clear()
-        self.table_object_list.setRowCount(0)
-        if hasattr(self, 'map_marker'):
-            self.map_marker.clear_markers()
+        """객체 목록 테이블을 완전히 초기화"""
+        try:
+            self.table_object_list.setRowCount(0)
+            self.current_object_ids.clear()
+            self.first_detected_object_ids.clear()
+            self.object_last_seen.clear()
+            
+            if hasattr(self, 'map_marker'):
+                self.map_marker.clear_all_markers()
+            
+            self.object_list_updated.emit(self.current_object_ids)
+            logger.debug("객체 목록 테이블 초기화 완료")
+            
+        except Exception as e:
+            logger.error(f"객체 목록 테이블 초기화 오류: {e}")
+
+    def remove_object_from_table(self, object_id: int):
+        """테이블에서 특정 객체 제거"""
+        try:
+            for row in range(self.table_object_list.rowCount()):
+                item = self.table_object_list.item(row, 0)
+                if item and int(item.text()) == object_id:
+                    self.table_object_list.removeRow(row)
+                    logger.debug(f"테이블에서 객체 ID {object_id} 제거")
+                    break
+        except Exception as e:
+            logger.error(f"테이블에서 객체 제거 오류: {e}")
 
     def check_object_timeouts(self):
-        """객체 타임아웃 체크"""
-        current_time = datetime.now().timestamp()
-        objects_to_remove = [
-            obj_id for obj_id, last_seen in self.object_last_seen.items()
-            if current_time - last_seen > self.object_timeout_seconds
-        ]
+        """객체 타임아웃 확인 및 제거"""
+        current_time = time.time()
+        timeout_objects = []
         
-        if not objects_to_remove:
-            return
-
-        # 타임아웃된 객체 제거
-        for object_id in objects_to_remove:
-            self.current_object_ids.discard(object_id)
-            self.first_detected_object_ids.discard(object_id)
-            self.object_last_seen.pop(object_id, None)
-
-        # 테이블과 마커에서 제거
-        rows_to_remove = []
-        for row in range(self.table_object_list.rowCount()):
-            item = self.table_object_list.item(row, 0)
-            if item and int(item.text()) in objects_to_remove:
-                rows_to_remove.append(row)
+        for object_id, last_seen in self.object_last_seen.items():
+            if current_time - last_seen > self.object_timeout_seconds:
+                timeout_objects.append(object_id)
         
-        for row in reversed(rows_to_remove):
-            self.table_object_list.removeRow(row)
+        if timeout_objects:
+            for object_id in timeout_objects:
+                if object_id in self.current_object_ids:
+                    self.current_object_ids.remove(object_id)
+                    self.map_marker.remove_marker(object_id)
+                    self.remove_object_from_table(object_id)
+                    self.object_last_seen.pop(object_id, None)
+                    
+            logger.debug(f"타임아웃된 객체 제거: {timeout_objects}")
 
-        if hasattr(self, 'map_marker'):
-            for object_id in objects_to_remove:
-                self.map_marker.remove_marker(object_id)
+    def request_current_settings(self):
+        """Main 탭 활성화 시 호출되는 메서드 - 현재 상태 새로고침"""
+        try:
+            logger.info("Main 페이지 활성화 - 현재 상태 새로고침")
+            
+            # 현재 객체 목록 새로고침 (필요시)
+            if hasattr(self, 'current_object_ids') and self.current_object_ids:
+                logger.debug(f"현재 감지된 객체 수: {len(self.current_object_ids)}")
+            
+            # 지도 뷰로 초기화 (기본 상태)
+            self.show_map()
+            
+            # 조류/활주로 위험도 표시 새로고침
+            self.refresh_risk_displays()
+            
+            # 현재 시간 업데이트
+            self.update_current_time()
+            
+            logger.info("Main 페이지 새로고침 완료")
+            
+        except Exception as e:
+            logger.error(f"Main 페이지 설정 요청 오류: {e}")
 
-        self.object_list_updated.emit(self.current_object_ids)
+    def refresh_risk_displays(self):
+        """위험도 표시 새로고침"""
+        try:
+            # 현재 설정된 위험도 다시 표시
+            # 조류 위험도는 현재 값이 없으면 기본값으로 표시
+            if not hasattr(self, '_current_bird_risk'):
+                self.update_bird_risk(None)
+            
+            if not hasattr(self, '_current_runway_a_risk'):
+                self.update_runway_a_risk(None)
+                
+            if not hasattr(self, '_current_runway_b_risk'):
+                self.update_runway_b_risk(None)
+                
+            logger.debug("위험도 표시 새로고침 완료")
+            
+        except Exception as e:
+            logger.error(f"위험도 표시 새로고침 오류: {e}")
+
+    def clear_all_data(self):
+        """모든 데이터 초기화"""
+        try:
+            # 객체 목록 초기화
+            self.clear_object_list()
+            
+            # 마커 초기화
+            if hasattr(self, 'map_marker'):
+                self.map_marker.clear_all_markers()
+            
+            # 객체 ID 추적 초기화
+            self.current_object_ids.clear()
+            self.first_detected_object_ids.clear()
+            self.object_last_seen.clear()
+            
+            # CCTV 프레임 초기화
+            self.reset_cctv_displays()
+            
+            logger.info("Main 페이지 모든 데이터 초기화 완료")
+            
+        except Exception as e:
+            logger.error(f"데이터 초기화 오류: {e}")
+
+    def reset_cctv_displays(self):
+        """CCTV 디스플레이 초기화"""
+        try:
+            # CCTV 라벨 초기화
+            if hasattr(self, 'label_cctv_1'):
+                self.label_cctv_1.clear()
+                self.label_cctv_1.setText("CCTV A\n연결되지 않음")
+                self.label_cctv_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                self.label_cctv_1.setStyleSheet("background-color: #f5f5f5; border: 1px solid #ddd; color: #666;")
+            
+            if hasattr(self, 'label_cctv_2'):
+                self.label_cctv_2.clear()
+                self.label_cctv_2.setText("CCTV B\n연결되지 않음")
+                self.label_cctv_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                self.label_cctv_2.setStyleSheet("background-color: #f5f5f5; border: 1px solid #ddd; color: #666;")
+            
+            # FPS 카운터 초기화
+            self.cctv_a_fps = 0
+            self.cctv_b_fps = 0
+            self.cctv_a_frame_count = 0
+            self.cctv_b_frame_count = 0
+            self.cctv_a_last_time = 0
+            self.cctv_b_last_time = 0
+            
+            logger.debug("CCTV 디스플레이 초기화 완료")
+            
+        except Exception as e:
+            logger.error(f"CCTV 디스플레이 초기화 오류: {e}")
+
+    def get_current_status(self):
+        """현재 페이지 상태 반환"""
+        try:
+            return {
+                'object_count': len(self.current_object_ids),
+                'current_view': 'map' if self.map_cctv_stack.currentIndex() == 0 else 'cctv',
+                'bird_risk': getattr(self, '_current_bird_risk', None),
+                'runway_a_risk': getattr(self, '_current_runway_a_risk', None),
+                'runway_b_risk': getattr(self, '_current_runway_b_risk', None),
+                'cctv_a_fps': self.cctv_a_fps,
+                'cctv_b_fps': self.cctv_b_fps
+            }
+        except Exception as e:
+            logger.error(f"현재 상태 확인 오류: {e}")
+            return {}

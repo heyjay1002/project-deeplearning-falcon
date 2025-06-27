@@ -1,10 +1,7 @@
-import sys
 import os
-from PyQt6.QtWidgets import QWidget, QApplication, QMessageBox
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtWidgets import QWidget, QMessageBox
 from PyQt6.uic import loadUi
 from utils.interface import AccessControlSettings
-from utils.network_manager import NetworkManager
 from utils.logger import logger
 
 class AccessPage(QWidget):
@@ -65,8 +62,11 @@ class AccessPage(QWidget):
         
     def setup_ui_styles(self):
         """UI 요소들의 스타일 설정"""
+
+        self.label.setStyleSheet("color: #333; font-size: 24px; font-weight: bold;")
+
         # horizontalLayoutWidget 초기에 숨김 (설정 페이지에서만 표시)
-        self.horizontalLayoutWidget.setVisible(False)
+        self.horizontalLayoutWidget.setVisible(False)      
         
         # apply, cancel 버튼 스타일 (normal_style 적용)
         button_style = """
@@ -113,6 +113,10 @@ class AccessPage(QWidget):
         self.label_level0_title.setStyleSheet(level_title_style)
         self.label_level1_title.setStyleSheet(level_title_style)
         self.label_level2_title.setStyleSheet(level_title_style)
+
+        self.label_level_0.setStyleSheet(level_title_style)
+        self.label_level_1.setStyleSheet(level_title_style)
+        self.label_level_2.setStyleSheet(level_title_style)
         
         # 설정 패널 스타일 (동적 적용)
         panel_style = """
@@ -226,7 +230,7 @@ class AccessPage(QWidget):
         for zone, widget in zone_widgets.items():
             level = self.zone_levels[zone]
             color = self.level_colors[level]
-            widget.setStyleSheet(f"background-color: {color};")
+            widget.setStyleSheet(f"background-color: {color}; border: 1px solid #555; font-weight: bold;")
 
     def request_current_settings(self):
         """서버에서 현재 출입 제어 설정 요청"""

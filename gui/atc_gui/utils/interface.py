@@ -3,7 +3,7 @@ from typing import Optional, List, Dict, Any
 import base64
 from dataclasses import dataclass
 from enum import Enum
-from config.constants import EventType, ObjectType, BirdRiskLevel, RunwayRiskLevel, AirportArea, MessagePrefix, Constants
+from config.constants import EventType, ObjectType, BirdRiskLevel, RunwayRiskLevel, AirportArea, MessagePrefix, Constants, PilotRequestType, PilotResponseType
 from utils.logger import logger
 
 class ConnectionState(Enum):
@@ -179,6 +179,70 @@ class AccessControlSettings:
         """문자열로 변환 (메시지 전송용)"""
         return f"{self.TWY_A_level},{self.TWY_B_level},{self.TWY_C_level},{self.TWY_D_level},{self.RWY_A_level},{self.RWY_B_level},{self.GRASS_A_level},{self.GRASS_B_level}"
 
+@dataclass
+class PilotLog:
+    """파일럿 요청/응답 로그 정보"""
+    request_type: PilotRequestType
+    response_type: PilotResponseType
+    request_timestamp: datetime
+    response_timestamp: datetime
+    
+    def __post_init__(self):
+        if not isinstance(self.request_type, PilotRequestType):
+            raise ValueError(f"request_type은 PilotRequestType enum이어야 합니다: {self.request_type}")
+        if not isinstance(self.response_type, PilotResponseType):
+            raise ValueError(f"response_type은 PilotResponseType enum이어야 합니다: {self.response_type}")
+    
+    def to_dict(self) -> dict:
+        return {
+            'request_type': self.request_type.value,
+            'response_type': self.response_type.value,
+            'request_timestamp': self.request_timestamp.isoformat() if self.request_timestamp else None,
+            'response_timestamp': self.response_timestamp.isoformat() if self.response_timestamp else None
+        }
+
+@dataclass
+class ObjectDetectionLog:
+    """객체 감지 로그 정보"""
+    event_type: EventType
+    object_id: int
+    object_type: ObjectType
+    area: AirportArea
+    timestamp: datetime
+    
+    def __post_init__(self):
+        if not isinstance(self.event_type, EventType):
+            raise ValueError(f"event_type은 EventType enum이어야 합니다: {self.event_type}")
+        if not isinstance(self.object_type, ObjectType):
+            raise ValueError(f"object_type은 ObjectType enum이어야 합니다: {self.object_type}")
+        if not isinstance(self.area, AirportArea):
+            raise ValueError(f"area는 AirportArea enum이어야 합니다: {self.area}")
+    
+    def to_dict(self) -> dict:
+        return {
+            'event_type': self.event_type.value,
+            'object_id': self.object_id,
+            'object_type': self.object_type.value,
+            'area': self.area.value,
+            'timestamp': self.timestamp.isoformat() if self.timestamp else None
+        }
+
+@dataclass
+class BirdRiskLog:
+    """조류 위험도 등급 변화 로그 정보"""
+    bird_risk_level: BirdRiskLevel
+    timestamp: datetime
+    
+    def __post_init__(self):
+        if not isinstance(self.bird_risk_level, BirdRiskLevel):
+            raise ValueError(f"bird_risk_level은 BirdRiskLevel enum이어야 합니다: {self.bird_risk_level}")
+    
+    def to_dict(self) -> dict:
+        return {
+            'bird_risk_level': self.bird_risk_level.value,
+            'timestamp': self.timestamp.isoformat() if self.timestamp else None
+        }
+
 class MessageParser:
     """메시지 파싱 전용 클래스"""
     
@@ -228,83 +292,302 @@ class MessageParser:
     
     @staticmethod
     def _parse_event_type(event_type_str: str) -> EventType:
-        """이벤트 타입 파싱 - Constants 매핑 활용"""
+        """이벤트 타입 파싱 - Constants 매핑 활용 (Robust 버전)"""
         try:
+            # 공백 제거
+            event_type_str = event_type_str.strip()
+            
             # 정수인 경우 매핑 테이블 사용
             event_type_id = int(event_type_str)
             if event_type_id in Constants.EVENT_TYPE_MAPPING:
                 return Constants.EVENT_TYPE_MAPPING[event_type_id]
             else:
-                raise ValueError(f"알 수 없는 이벤트 타입 ID: {event_type_id}")
+                # 알 수 없는 ID인 경우 기본값 매핑
+                logger.warning(f"알 수 없는 이벤트 타입 ID: {event_type_id}, HAZARD로 기본 설정")
+                return EventType.HAZARD
+                
         except ValueError:
             # 문자열인 경우 enum 이름으로 시도
+            event_type_str_upper = event_type_str.upper()
             try:
-                return EventType[event_type_str.upper()]
+                return EventType[event_type_str_upper]
             except KeyError:
                 # enum value로 시도
                 for event_type in EventType:
-                    if event_type.value == event_type_str:
+                    if event_type.value.upper() == event_type_str_upper:
                         return event_type
-                raise ValueError(f"알 수 없는 이벤트 타입: {event_type_str}")
-    
+                        
+                # 일반적인 문자열 매핑
+                string_mapping = {
+                    'DETECT': EventType.HAZARD,
+                    'DETECTION': EventType.HAZARD,
+                    '위험': EventType.HAZARD,
+                    '위험요소': EventType.HAZARD,
+                    'UNAUTHORIZED': EventType.UNAUTH,
+                    'VIOLATION': EventType.UNAUTH,
+                    '출입': EventType.UNAUTH,
+                    '구조': EventType.RESCUE,
+                    'EMERGENCY': EventType.RESCUE
+                }
+                
+                if event_type_str_upper in string_mapping:
+                    logger.info(f"문자열 매핑 사용: {event_type_str} -> {string_mapping[event_type_str_upper].value}")
+                    return string_mapping[event_type_str_upper]
+                else:
+                    logger.warning(f"알 수 없는 이벤트 타입: {event_type_str}, HAZARD로 기본 설정")
+                    return EventType.HAZARD
+
     @staticmethod
     def _parse_object_type(obj_type_str: str) -> ObjectType:
-        """객체 타입 파싱 - Constants 매핑 활용"""
+        """객체 타입 파싱 - Constants 매핑 활용 (Robust 버전)"""
         try:
+            # 공백 제거
+            obj_type_str = obj_type_str.strip()
+            
             # 정수인 경우 매핑 테이블 사용
             obj_type_id = int(obj_type_str)
             if obj_type_id in Constants.OBJECT_CLASS_MAPPING:
                 return Constants.OBJECT_CLASS_MAPPING[obj_type_id]
             else:
-                raise ValueError(f"알 수 없는 객체 타입 ID: {obj_type_id}")
+                logger.warning(f"알 수 없는 객체 타입 ID: {obj_type_id}, UNKNOWN으로 기본 설정")
+                return ObjectType.UNKNOWN
+                
         except ValueError:
             # 문자열인 경우
-            obj_type_str_lower = obj_type_str.lower()
+            obj_type_str_upper = obj_type_str.upper()
             
             # ObjectType enum value와 매칭
             for obj_type in ObjectType:
-                if obj_type.value.lower() == obj_type_str_lower:
+                if obj_type.value.upper() == obj_type_str_upper:
                     return obj_type
             
             # enum 이름으로 시도
             try:
-                return ObjectType[obj_type_str.upper()]
+                return ObjectType[obj_type_str_upper]
             except KeyError:
-                raise ValueError(f"객체 타입 오류: {obj_type_str}")
-    
+                # 일반적인 문자열 매핑
+                string_mapping = {
+                    '조류': ObjectType.BIRD,
+                    'BIRDS': ObjectType.BIRD,
+                    '새': ObjectType.BIRD,
+                    '동물': ObjectType.ANIMAL,
+                    'ANIMALS': ObjectType.ANIMAL,
+                    '사람': ObjectType.PERSON,
+                    'PEOPLE': ObjectType.PERSON,
+                    'HUMAN': ObjectType.PERSON,
+                    '일반인': ObjectType.PERSON,
+                    '작업자': ObjectType.WORK_PERSON,
+                    'WORKER': ObjectType.WORK_PERSON,
+                    '차량': ObjectType.VEHICLE,
+                    'CAR': ObjectType.VEHICLE,
+                    'CARS': ObjectType.VEHICLE,
+                    '작업차량': ObjectType.WORK_VEHICLE,
+                    'WORK_CAR': ObjectType.WORK_VEHICLE,
+                    '비행기': ObjectType.AIRPLANE,
+                    'AIRCRAFT': ObjectType.AIRPLANE,
+                    'PLANE': ObjectType.AIRPLANE
+                }
+                
+                if obj_type_str_upper in string_mapping:
+                    logger.info(f"문자열 매핑 사용: {obj_type_str} -> {string_mapping[obj_type_str_upper].value}")
+                    return string_mapping[obj_type_str_upper]
+                else:
+                    logger.warning(f"알 수 없는 객체 타입: {obj_type_str}, UNKNOWN으로 기본 설정")
+                    return ObjectType.UNKNOWN
+
     @staticmethod
     def _parse_area(area_str: str) -> AirportArea:
-        """구역 파싱 - Constants 매핑 활용"""
+        """구역 파싱 - Constants 매핑 활용 (Robust 버전)"""
         try:
+            # 공백 제거
+            area_str = area_str.strip()
+            
             # 정수인 경우 매핑 테이블 사용
             area_id = int(area_str)
             if area_id in Constants.AREA_MAPPING:
                 return Constants.AREA_MAPPING[area_id]
             else:
-                raise ValueError(f"알 수 없는 구역 ID: {area_id}")
+                logger.warning(f"알 수 없는 구역 ID: {area_id}, TWY_A로 기본 설정")
+                return AirportArea.TWY_A
+                
         except ValueError:
             # 문자열인 경우
+            area_str_upper = area_str.upper()
             try:
-                return AirportArea[area_str.upper()]
+                return AirportArea[area_str_upper]
             except KeyError:
                 # enum value로 시도
                 for area_type in AirportArea:
-                    if area_type.value == area_str:
+                    if area_type.value.upper() == area_str_upper:
                         return area_type
-                raise ValueError(f"구역 이름 오류: {area_str}")
-    
+                        
+                logger.warning(f"알 수 없는 구역 이름: {area_str}, TWY_A로 기본 설정")
+                return AirportArea.TWY_A
+
     @staticmethod
     def _parse_timestamp(timestamp_str: str) -> datetime:
-        """타임스탬프 파싱"""
+        """타임스탬프 파싱 (Robust 버전)"""
         try:
-            # ISO 8601 형식 처리
+            # 공백 제거
+            timestamp_str = timestamp_str.strip()
+            
+            # ISO 8601 형식 처리 (다양한 형식 지원)
             if 'T' in timestamp_str:
-                return datetime.fromisoformat(timestamp_str.replace('Z', '+00:00'))
+                # Z 또는 +00:00 처리
+                if timestamp_str.endswith('Z'):
+                    timestamp_str = timestamp_str[:-1] + '+00:00'
+                elif not ('+' in timestamp_str or '-' in timestamp_str[-6:]):
+                    # 타임존 정보가 없으면 로컬 시간으로 처리
+                    timestamp_str += '+00:00'
+                    
+                return datetime.fromisoformat(timestamp_str)
             else:
                 # Unix timestamp 처리
-                return datetime.fromtimestamp(float(timestamp_str))
-        except (ValueError, OSError) as e:
-            raise ValueError(f"타임스탬프 형식 오류: {timestamp_str}") from e
+                try:
+                    timestamp_float = float(timestamp_str)
+                    return datetime.fromtimestamp(timestamp_float)
+                except (ValueError, OSError):
+                    # 일반 날짜 형식 시도
+                    common_formats = [
+                        '%Y-%m-%d %H:%M:%S',
+                        '%Y/%m/%d %H:%M:%S',
+                        '%Y-%m-%d',
+                        '%Y/%m/%d'
+                    ]
+                    
+                    for fmt in common_formats:
+                        try:
+                            return datetime.strptime(timestamp_str, fmt)
+                        except ValueError:
+                            continue
+                    
+                    # 모든 형식 실패 시 현재 시간 반환
+                    logger.warning(f"타임스탬프 파싱 실패: {timestamp_str}, 현재 시간 사용")
+                    return datetime.now()
+                    
+        except Exception as e:
+            logger.warning(f"타임스탬프 파싱 오류: {timestamp_str}, 현재 시간 사용: {e}")
+            return datetime.now()
+
+    @staticmethod
+    def _parse_pilot_request_type(request_type_str: str) -> PilotRequestType:
+        """파일럿 요청 타입 파싱 - Constants 매핑 활용 (Robust 버전)"""
+        try:
+            # 공백 제거
+            request_type_str = request_type_str.strip()
+            
+            # 정수인 경우 매핑 테이블 사용
+            request_type_id = int(request_type_str)
+            if request_type_id in Constants.PILOT_REQUEST_MAPPING:
+                return Constants.PILOT_REQUEST_MAPPING[request_type_id]
+            else:
+                logger.warning(f"알 수 없는 파일럿 요청 타입 ID: {request_type_id}, BR_INQ로 기본 설정")
+                return PilotRequestType.BR_INQ
+                
+        except ValueError:
+            # 문자열인 경우 enum 이름으로 시도
+            request_type_str_upper = request_type_str.upper()
+            try:
+                return PilotRequestType[request_type_str_upper]
+            except KeyError:
+                # enum value로 시도
+                for request_type in PilotRequestType:
+                    if request_type.value.upper() == request_type_str_upper:
+                        return request_type
+                        
+                logger.warning(f"알 수 없는 파일럿 요청 타입: {request_type_str}, BR_INQ로 기본 설정")
+                return PilotRequestType.BR_INQ
+    
+    @staticmethod
+    def _parse_pilot_response_type(response_type_str: str) -> PilotResponseType:
+        """파일럿 응답 타입 파싱 - Constants 매핑 활용 (Robust 버전)"""
+        try:
+            # 공백 제거
+            response_type_str = response_type_str.strip()
+            
+            # 정수인 경우 매핑 테이블 사용
+            response_type_id = int(response_type_str)
+            if response_type_id in Constants.PILOT_RESPONSE_MAPPING:
+                return Constants.PILOT_RESPONSE_MAPPING[response_type_id]
+            else:
+                logger.warning(f"알 수 없는 파일럿 응답 타입 ID: {response_type_id}, CLEAR로 기본 설정")
+                return PilotResponseType.CLEAR
+                
+        except ValueError:
+            # 문자열인 경우 enum 이름으로 시도
+            response_type_str_upper = response_type_str.upper()
+            try:
+                return PilotResponseType[response_type_str_upper]
+            except KeyError:
+                # enum value로 시도
+                for response_type in PilotResponseType:
+                    if response_type.value.upper() == response_type_str_upper:
+                        return response_type
+                        
+                logger.warning(f"알 수 없는 파일럿 응답 타입: {response_type_str}, CLEAR로 기본 설정")
+                return PilotResponseType.CLEAR
+
+    @staticmethod
+    def _parse_bird_risk_level(risk_level_str: str) -> BirdRiskLevel:
+        """조류 위험도 파싱 - Constants 매핑 활용 (Robust 버전)"""
+        try:
+            # 공백 제거
+            risk_level_str = risk_level_str.strip()
+            
+            # 정수인 경우 매핑 테이블 사용
+            risk_level_id = int(risk_level_str)
+            if risk_level_id in Constants.BIRD_RISK_MAPPING:
+                return Constants.BIRD_RISK_MAPPING[risk_level_id]
+            else:
+                # 알 수 없는 ID인 경우 기본값 매핑 시도
+                logger.warning(f"알 수 없는 조류 위험도 ID: {risk_level_id}, 기본 매핑 시도")
+                # 일반적인 매핑: 1=HIGH, 2=MEDIUM, 3=LOW 또는 3=HIGH, 2=MEDIUM, 1=LOW
+                alt_mapping = {
+                    0: BirdRiskLevel.LOW,
+                    1: BirdRiskLevel.HIGH if risk_level_id == 1 else BirdRiskLevel.LOW,
+                    2: BirdRiskLevel.MEDIUM,
+                    3: BirdRiskLevel.HIGH if risk_level_id == 3 else BirdRiskLevel.LOW,
+                    4: BirdRiskLevel.HIGH,
+                    5: BirdRiskLevel.HIGH
+                }
+                if risk_level_id in alt_mapping:
+                    logger.info(f"대체 매핑 사용: {risk_level_id} -> {alt_mapping[risk_level_id].value}")
+                    return alt_mapping[risk_level_id]
+                else:
+                    logger.warning(f"조류 위험도 ID {risk_level_id}를 LOW로 기본 설정")
+                    return BirdRiskLevel.LOW
+                    
+        except ValueError:
+            # 문자열인 경우
+            risk_level_str_upper = risk_level_str.upper()
+            
+            # 직접 enum value 매칭 (CLEAR, CAUTION, WARNING)
+            for risk_level in BirdRiskLevel:
+                if risk_level.value.upper() == risk_level_str_upper:
+                    return risk_level
+            
+            # 기존 enum 이름으로 시도 (LOW, MEDIUM, HIGH)
+            try:
+                return BirdRiskLevel[risk_level_str_upper]
+            except KeyError:
+                # 일반적인 문자열 매핑 시도
+                string_mapping = {
+                    'CLEAR': BirdRiskLevel.LOW,
+                    'SAFE': BirdRiskLevel.LOW,
+                    'LOW': BirdRiskLevel.LOW,
+                    'CAUTION': BirdRiskLevel.MEDIUM,
+                    'MEDIUM': BirdRiskLevel.MEDIUM,
+                    'WARNING': BirdRiskLevel.HIGH,
+                    'HIGH': BirdRiskLevel.HIGH,
+                    'DANGER': BirdRiskLevel.HIGH
+                }
+                
+                if risk_level_str_upper in string_mapping:
+                    logger.info(f"문자열 매핑 사용: {risk_level_str} -> {string_mapping[risk_level_str_upper].value}")
+                    return string_mapping[risk_level_str_upper]
+                else:
+                    logger.warning(f"알 수 없는 조류 위험도: {risk_level_str}, LOW로 기본 설정")
+                    return BirdRiskLevel.LOW
 
 class MessageInterface:
     """TCP 메시지 인터페이스 클래스"""
@@ -619,6 +902,175 @@ class MessageInterface:
         """출입 제어 설정 업데이트 응답 파싱 (AR_UA)"""
         # AR_UA:OK 또는 AR_UA:ERR,error_message
         return data.startswith("OK")
+
+    @staticmethod
+    def parse_pilot_log_response(data: str) -> List[PilotLog]:
+        """파일럿 로그 응답 파싱 (LR_RL) - Robust 버전"""
+        try:
+            # LR_RL:OK,request_type,response_type,request_timestamp,response_timestamp[;request_type,response_type,request_timestamp,response_timestamp]*
+            if not data.startswith("OK,"):
+                raise Exception(f"파일럿 로그 요청 실패: {data}")
+            
+            log_data = data[3:]  # "OK," 제거
+            pilot_logs = []
+            
+            if not log_data.strip():
+                logger.info("파일럿 로그 응답: 빈 결과")
+                return pilot_logs  # 빈 결과
+            
+            # 여러 로그가 ;로 구분된 경우 처리
+            log_records = log_data.split(';')
+            logger.info(f"파일럿 로그 파싱: {len(log_records)}개 레코드")
+            
+            for i, record in enumerate(log_records):
+                if not record.strip():
+                    continue
+                    
+                try:
+                    parts = record.split(',')
+                    if len(parts) < 4:
+                        logger.warning(f"파일럿 로그 레코드 {i+1} 필드 부족: {len(parts)} < 4, 레코드: '{record}'")
+                        continue
+                    
+                    # request_type,response_type,request_timestamp,response_timestamp
+                    request_type = MessageParser._parse_pilot_request_type(parts[0])
+                    response_type = MessageParser._parse_pilot_response_type(parts[1])
+                    request_timestamp = MessageParser._parse_timestamp(parts[2])
+                    response_timestamp = MessageParser._parse_timestamp(parts[3])
+                    
+                    pilot_log = PilotLog(
+                        request_type=request_type,
+                        response_type=response_type,
+                        request_timestamp=request_timestamp,
+                        response_timestamp=response_timestamp
+                    )
+                    pilot_logs.append(pilot_log)
+                    logger.debug(f"파일럿 로그 레코드 {i+1} 파싱 성공: {request_type.value} -> {response_type.value}")
+                    
+                except Exception as e:
+                    logger.error(f"파일럿 로그 레코드 {i+1} 파싱 실패: {e}, 레코드: '{record}'")
+                    continue
+            
+            logger.info(f"파일럿 로그 파싱 완료: 성공 {len(pilot_logs)}개/{len(log_records)}개")
+            return pilot_logs
+            
+        except Exception as e:
+            logger.error(f"파일럿 로그 응답 파싱 오류: {e}, 데이터: {data[:200]}...")
+            return []
+
+    @staticmethod
+    def parse_object_detection_log_response(data: str) -> List[ObjectDetectionLog]:
+        """객체 감지 로그 응답 파싱 (LR_OL) - Robust 버전"""
+        try:
+            # LR_OL:OK,event_type,object_id,object_type,area,timestamp[;event_type,object_id,object_type,area,timestamp]*
+            if not data.startswith("OK,"):
+                raise Exception(f"객체 감지 로그 요청 실패: {data}")
+            
+            log_data = data[3:]  # "OK," 제거
+            detection_logs = []
+            
+            if not log_data.strip():
+                logger.info("객체 감지 로그 응답: 빈 결과")
+                return detection_logs  # 빈 결과
+            
+            # 여러 로그가 ;로 구분된 경우 처리
+            log_records = log_data.split(';')
+            logger.info(f"객체 감지 로그 파싱: {len(log_records)}개 레코드")
+            
+            for i, record in enumerate(log_records):
+                if not record.strip():
+                    continue
+                    
+                try:
+                    parts = record.split(',')
+                    if len(parts) < 5:
+                        logger.warning(f"객체 감지 로그 레코드 {i+1} 필드 부족: {len(parts)} < 5, 레코드: '{record}'")
+                        continue
+                    
+                    # event_type,object_id,object_type,area,timestamp
+                    event_type = MessageParser._parse_event_type(parts[0])
+                    
+                    try:
+                        object_id = int(parts[1])
+                    except ValueError:
+                        logger.warning(f"객체 감지 로그 레코드 {i+1} 잘못된 object_id: {parts[1]}")
+                        object_id = 0
+                    
+                    object_type = MessageParser._parse_object_type(parts[2])
+                    area = MessageParser._parse_area(parts[3])
+                    timestamp = MessageParser._parse_timestamp(parts[4])
+                    
+                    detection_log = ObjectDetectionLog(
+                        event_type=event_type,
+                        object_id=object_id,
+                        object_type=object_type,
+                        area=area,
+                        timestamp=timestamp
+                    )
+                    detection_logs.append(detection_log)
+                    logger.debug(f"객체 감지 로그 레코드 {i+1} 파싱 성공: ID={object_id}, Type={object_type.value}, Area={area.value}")
+                    
+                except Exception as e:
+                    logger.error(f"객체 감지 로그 레코드 {i+1} 파싱 실패: {e}, 레코드: '{record}'")
+                    continue
+            
+            logger.info(f"객체 감지 로그 파싱 완료: 성공 {len(detection_logs)}개/{len(log_records)}개")
+            return detection_logs
+            
+        except Exception as e:
+            logger.error(f"객체 감지 로그 응답 파싱 오류: {e}, 데이터: {data[:200]}...")
+            return []
+    
+    @staticmethod
+    def parse_bird_risk_log_response(data: str) -> List[BirdRiskLog]:
+        """조류 위험도 등급 변화 로그 응답 파싱 (LR_BL) - Robust 버전"""
+        try:
+            # LR_BL:OK,bird_risk_level,timestamp[;bird_risk_level,timestamp]*
+            if not data.startswith("OK,"):
+                raise Exception(f"조류 위험도 로그 요청 실패: {data}")
+            
+            log_data = data[3:]  # "OK," 제거
+            bird_risk_logs = []
+            
+            if not log_data.strip():
+                logger.info("조류 위험도 로그 응답: 빈 결과")
+                return bird_risk_logs  # 빈 결과
+            
+            # 여러 로그가 ;로 구분된 경우 처리
+            log_records = log_data.split(';')
+            logger.info(f"조류 위험도 로그 파싱: {len(log_records)}개 레코드")
+            
+            for i, record in enumerate(log_records):
+                if not record.strip():
+                    continue
+                    
+                try:
+                    parts = record.split(',')
+                    if len(parts) < 2:
+                        logger.warning(f"조류 위험도 로그 레코드 {i+1} 필드 부족: {len(parts)} < 2, 레코드: '{record}'")
+                        continue
+                    
+                    # bird_risk_level,timestamp
+                    bird_risk_level = MessageParser._parse_bird_risk_level(parts[0])
+                    timestamp = MessageParser._parse_timestamp(parts[1])
+                    
+                    bird_risk_log = BirdRiskLog(
+                        bird_risk_level=bird_risk_level,
+                        timestamp=timestamp
+                    )
+                    bird_risk_logs.append(bird_risk_log)
+                    logger.debug(f"조류 위험도 로그 레코드 {i+1} 파싱 성공: {bird_risk_level.value}")
+                    
+                except Exception as e:
+                    logger.error(f"조류 위험도 로그 레코드 {i+1} 파싱 실패: {e}, 레코드: '{record}'")
+                    continue
+            
+            logger.info(f"조류 위험도 로그 파싱 완료: 성공 {len(bird_risk_logs)}개/{len(log_records)}개")
+            return bird_risk_logs
+            
+        except Exception as e:
+            logger.error(f"조류 위험도 로그 응답 파싱 오류: {e}, 데이터: {data[:200]}...")
+            return []
 
 class ErrorHandler:
     """통합 에러 핸들러"""

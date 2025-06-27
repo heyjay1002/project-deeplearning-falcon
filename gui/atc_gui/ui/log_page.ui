@@ -1,184 +1,519 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>LogPage</class>
- <widget class="QWidget" name="LogPage">
+ <class>Form</class>
+ <widget class="QWidget" name="Form">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1271</width>
-    <height>691</height>
+    <width>1300</width>
+    <height>800</height>
    </rect>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="sizeConstraint">
-    <enum>QLayout::SetDefaultConstraint</enum>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QGroupBox" name="groupBox">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>10</y>
+     <width>1251</width>
+     <height>80</height>
+    </rect>
    </property>
-   <item>
-    <widget class="QComboBox" name="combo_log">
-     <item>
-      <property name="text">
-       <string>이상 객체 감지 이력</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>출입 조건 위반 이력</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item>
-    <widget class="QGroupBox" name="group_search">
-     <property name="title">
-      <string>이력 조회</string>
+   <property name="title">
+    <string/>
+   </property>
+   <widget class="QLabel" name="label_log">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>101</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>이력 종류 :</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QComboBox" name="combo_log">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>20</y>
+      <width>281</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <item>
+     <property name="text">
+      <string>위험요소 감지 이력</string>
      </property>
-     <layout class="QHBoxLayout" name="searchLayout">
-      <item>
-       <widget class="QLabel" name="label_start">
-        <property name="text">
-         <string>시작 날짜</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QDateEdit" name="start_date">
-        <property name="acceptDrops">
-         <bool>true</bool>
-        </property>
-        <property name="dateTime">
-         <datetime>
-          <hour>0</hour>
-          <minute>0</minute>
-          <second>0</second>
-          <year>2024</year>
-          <month>12</month>
-          <day>31</day>
-         </datetime>
-        </property>
-        <property name="displayFormat">
-         <string>yyyy-MM-dd</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_end">
-        <property name="text">
-         <string>마지막 날짜</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QDateEdit" name="end_date">
-        <property name="acceptDrops">
-         <bool>true</bool>
-        </property>
-        <property name="dateTime">
-         <datetime>
-          <hour>0</hour>
-          <minute>0</minute>
-          <second>0</second>
-          <year>2025</year>
-          <month>6</month>
-          <day>1</day>
-         </datetime>
-        </property>
-        <property name="displayFormat">
-         <string>yyyy-MM-dd</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QLabel" name="label_type">
-        <property name="text">
-         <string>TYPE</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="combo_type">
-        <item>
-         <property name="text">
-          <string>전체</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>조류</string>
-         </property>
-        </item>
-        <item>
-         <property name="text">
-          <string>기타</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item>
-       <widget class="QPushButton" name="btn_search">
-        <property name="text">
-         <string>조회</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-   <item>
-    <widget class="QTableWidget" name="table_result">
-     <property name="rowCount">
-      <number>0</number>
+    </item>
+    <item>
+     <property name="text">
+      <string>조류 위험도 등급 변화 이력</string>
      </property>
-     <property name="columnCount">
-      <number>5</number>
+    </item>
+    <item>
+     <property name="text">
+      <string>조종사 요청 응답 이력</string>
      </property>
-     <attribute name="horizontalHeaderDefaultSectionSize">
-      <number>200</number>
-     </attribute>
-     <column>
-      <property name="text">
-       <string>일시</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>구역</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>종류</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>상태</string>
-      </property>
-     </column>
-     <column>
-      <property name="text">
-       <string>비고</string>
-      </property>
-     </column>
+    </item>
+   </widget>
+   <widget class="QDateEdit" name="start_date">
+    <property name="geometry">
+     <rect>
+      <x>540</x>
+      <y>20</y>
+      <width>200</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="acceptDrops">
+     <bool>true</bool>
+    </property>
+    <property name="dateTime">
+     <datetime>
+      <hour>0</hour>
+      <minute>0</minute>
+      <second>0</second>
+      <year>2024</year>
+      <month>12</month>
+      <day>31</day>
+     </datetime>
+    </property>
+    <property name="displayFormat">
+     <string>yyyy-MM-dd</string>
+    </property>
+    <property name="calendarPopup">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_start">
+    <property name="geometry">
+     <rect>
+      <x>429</x>
+      <y>20</y>
+      <width>101</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>시작 날짜 :</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_end">
+    <property name="geometry">
+     <rect>
+      <x>789</x>
+      <y>20</y>
+      <width>101</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>마지막 날짜 :</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+   </widget>
+   <widget class="QDateEdit" name="end_date">
+    <property name="geometry">
+     <rect>
+      <x>900</x>
+      <y>20</y>
+      <width>171</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="acceptDrops">
+     <bool>true</bool>
+    </property>
+    <property name="dateTime">
+     <datetime>
+      <hour>0</hour>
+      <minute>0</minute>
+      <second>0</second>
+      <year>2025</year>
+      <month>6</month>
+      <day>1</day>
+     </datetime>
+    </property>
+    <property name="displayFormat">
+     <string>yyyy-MM-dd</string>
+    </property>
+    <property name="calendarPopup">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QFrame" name="frame">
+    <property name="geometry">
+     <rect>
+      <x>410</x>
+      <y>10</y>
+      <width>21</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::VLine</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+   </widget>
+   <widget class="QFrame" name="frame_2">
+    <property name="geometry">
+     <rect>
+      <x>750</x>
+      <y>10</y>
+      <width>21</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::VLine</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="btn_search">
+    <property name="geometry">
+     <rect>
+      <x>1110</x>
+      <y>20</y>
+      <width>121</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>13</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>조회</string>
+    </property>
+   </widget>
+   <widget class="QFrame" name="frame_3">
+    <property name="geometry">
+     <rect>
+      <x>1080</x>
+      <y>10</y>
+      <width>21</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="frameShape">
+     <enum>QFrame::VLine</enum>
+    </property>
+    <property name="frameShadow">
+     <enum>QFrame::Raised</enum>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QStackedWidget" name="stackedWidget">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>100</y>
+     <width>1251</width>
+     <height>671</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>0</number>
+   </property>
+   <widget class="QWidget" name="page_object">
+    <widget class="QTableWidget" name="tableWidget_object">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>51</y>
+       <width>1231</width>
+       <height>561</height>
+      </rect>
+     </property>
     </widget>
-   </item>
-   <item>
     <widget class="QPushButton" name="btn_show_img">
+     <property name="geometry">
+      <rect>
+       <x>1070</x>
+       <y>626</y>
+       <width>171</width>
+       <height>31</height>
+      </rect>
+     </property>
      <property name="text">
       <string>이미지 보기</string>
      </property>
     </widget>
-   </item>
-  </layout>
+    <widget class="QLabel" name="label_filter_area">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>91</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>13</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>구역 필터 :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combo_filter_area">
+     <property name="geometry">
+      <rect>
+       <x>110</x>
+       <y>10</y>
+       <width>151</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>13</pointsize>
+      </font>
+     </property>
+     <item>
+      <property name="text">
+       <string>전체</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>TWY_A</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>TWY_B</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>TWY_C</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>TWY_D</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>RWY_A</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>RWY_B</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>GRASS_A</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>GRASS_B</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QLabel" name="label_filter_type">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>10</y>
+       <width>91</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>13</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>종류 필터 :</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+    <widget class="QComboBox" name="combo_filter_type">
+     <property name="geometry">
+      <rect>
+       <x>380</x>
+       <y>10</y>
+       <width>151</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>13</pointsize>
+      </font>
+     </property>
+     <item>
+      <property name="text">
+       <string>전체</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>조류</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>FOD</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>일반인</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>동물</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>비행기</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>일반차량</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>작업자</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>작업차량</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>알 수 없음</string>
+      </property>
+     </item>
+    </widget>
+    <widget class="QPushButton" name="btn_filter_on">
+     <property name="geometry">
+      <rect>
+       <x>570</x>
+       <y>10</y>
+       <width>111</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>필터 적용</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btn_reset">
+     <property name="geometry">
+      <rect>
+       <x>700</x>
+       <y>10</y>
+       <width>111</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true"/>
+     </property>
+     <property name="text">
+      <string>필터 초기화</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="page_bird">
+    <widget class="QTableWidget" name="tableWidget_bird">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>51</y>
+       <width>1231</width>
+       <height>561</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="page_pilot">
+    <widget class="QTableWidget" name="tableWidget_pilot">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>51</y>
+       <width>1231</width>
+       <height>561</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+  </widget>
  </widget>
  <resources/>
  <connections/>
