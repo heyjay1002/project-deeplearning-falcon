@@ -138,7 +138,11 @@ class DetectionRepository:
                 map_x = detection.get('map_x')
                 map_y = detection.get('map_y')
                 area_id = detection.get('area_id')
-                event_type_id = self._determine_event_type(class_name)
+                # detection 객체에 event_type이 있으면 사용, 없으면 기존 방식 사용
+                event_type_id = detection.get('event_type', self._determine_event_type(class_name))
+                
+                # 실제 저장된 이미지 경로 사용 (detection에서 img_path 가져오기)
+                img_path = detection.get('img_path', f"img/img_{object_id}.jpg")
                 
                 cur.execute("""
                     INSERT INTO DETECT_EVENT 
@@ -153,7 +157,7 @@ class DetectionRepository:
                     map_y,
                     area_id,
                     event_time,
-                    f"img/img_{object_id}.jpg"
+                    img_path
                 ))
                 
                 # max_object_id 갱신 로직
@@ -327,3 +331,104 @@ class DetectionRepository:
                 self.conn.rollback()
             logger.error(f"상호작용 로그 저장 중 오류: {str(e)}")
             return False
+
+    def get_detect_events_by_date(self, start_date: str, end_date: str) -> List[Dict[str, Any]]:
+        """날짜 범위로 DETECT_EVENT 조회 (위험 요소 감지 이력)
+        Args:
+            start_date: 시작 날짜 (YYYY-MM-DD)
+            end_date: 끝 날짜 (YYYY-MM-DD)
+        Returns:
+            List[Dict]: 감지 이벤트 목록
+        """
+        if not self.conn:
+            self.connect()
+
+        query = """
+            SELECT
+                et.event_type_name,
+                de.object_id,
+                ot.object_type_name,
+                a.area_name,
+                de.timestamp
+            FROM DETECT_EVENT de
+            JOIN EVENT_TYPE et ON de.event_type_id = et.event_type_id
+            JOIN OBJECT_TYPE ot ON de.object_type_id = ot.object_type_id
+            LEFT JOIN AREA a ON de.area_id = a.area_id
+            WHERE DATE(de.timestamp) BETWEEN %s AND %s
+            ORDER BY de.timestamp DESC
+        """
+        
+        cur = self.conn.cursor(dictionary=True)
+        try:
+            cur.execute(query, (start_date, end_date))
+            results = cur.fetchall()
+            return results
+        except Exception as e:
+            logger.error(f"감지 이벤트 조회 중 오류: {e}")
+            return []
+        finally:
+            cur.close()
+
+    def get_bird_risk_logs_by_date(self, start_date: str, end_date: str) -> List[Dict[str, Any]]:
+        """날짜 범위로 BIRD_RISK_LOG 조회 (조류 위험도 등급 변화 이력)
+        Args:
+            start_date: 시작 날짜 (YYYY-MM-DD)
+            end_date: 끝 날짜 (YYYY-MM-DD)
+        Returns:
+            List[Dict]: 조류 위험도 로그 목록
+        """
+        if not self.conn:
+            self.connect()
+
+        query = """
+            SELECT
+                br.bird_risk_level_id,
+                br.timestamp
+            FROM BIRD_RISK_LOG br
+            WHERE DATE(br.timestamp) BETWEEN %s AND %s
+            ORDER BY br.timestamp DESC
+        """
+        
+        cur = self.conn.cursor(dictionary=True)
+        try:
+            cur.execute(query, (start_date, end_date))
+            results = cur.fetchall()
+            return results
+        except Exception as e:
+            logger.error(f"조류 위험도 로그 조회 중 오류: {e}")
+            return []
+        finally:
+            cur.close()
+
+    def get_interaction_logs_by_date(self, start_date: str, end_date: str) -> List[Dict[str, Any]]:
+        """날짜 범위로 INTERACTION_LOG 조회 (조종사 요청 응답 이력)
+        Args:
+            start_date: 시작 날짜 (YYYY-MM-DD)
+            end_date: 끝 날짜 (YYYY-MM-DD)
+        Returns:
+            List[Dict]: 상호작용 로그 목록
+        """
+        if not self.conn:
+            self.connect()
+
+        query = """
+            SELECT
+                il.request_id,
+                il.response_id,
+                il.request_time,
+                il.response_time
+            FROM INTERACTION_LOG il
+            WHERE DATE(il.request_time) BETWEEN %s AND %s
+            ORDER BY il.request_time DESC
+        """
+        
+        cur = self.conn.cursor(dictionary=True)
+        try:
+            cur.execute(query, (start_date, end_date))
+            results = cur.fetchall()
+            return results
+        except Exception as e:
+            logger.error(f"상호작용 로그 조회 중 오류: {e}")
+            return []
+        finally:
+            cur.close()

@@ -53,6 +53,9 @@ class DetectionProcessor(QThread):
         self.last_detection = None
         self.last_detection_img_id = None
         
+        # 경고 전송된 객체 ID 추적 (메모리 캐시)
+        self.alerted_object_ids = set()
+        
         # 데이터베이스 리포지토리 초기화
         self.repository = DetectionRepository(
             host=DB_HOST,
@@ -106,22 +109,27 @@ class DetectionProcessor(QThread):
         try:
             # 데이터베이스에 저장
             if detections:
-                # 최초 감지된 객체들만 필터링 (max_object_id보다 큰 ID만)
+                # 최초 경고된 객체들만 필터링 (alerted_object_ids에 없는 ID만)
                 new_detections = []
-                max_id = self.repository.max_object_id
                 for detection in detections:
                     object_id = detection['object_id']
-                    if max_id is None or object_id > max_id:
+                    if object_id not in self.alerted_object_ids:
                         new_detections.append(detection)
+                        self.alerted_object_ids.add(object_id)  # 경고 목록에 추가
                 
-                # 최초 감지된 객체들에 대해서만 이미지 생성 및 DB 저장
+                # 최초 경고된 객체들에 대해서만 이미지 생성 및 DB 저장
                 if new_detections and self.video_processor:
                     frame = self.video_processor.get_frame(img_id)
                     if frame is not None:
                         saved_detections = []
                         crop_imgs = []
                         for detection in new_detections:
-                            if self.save_cropped_frame(frame, detection, img_id):
+                            # 이미지 저장 후 실제 파일 경로 받기
+                            saved_img_path = self.save_cropped_frame(frame, detection, img_id)
+                            if saved_img_path:
+                                # detection에 실제 저장된 파일 경로 추가
+                                detection['img_path'] = saved_img_path
+                                
                                 bbox = detection.get('bbox', [])
                                 if bbox and len(bbox) == 4:
                                     x1, y1, x2, y2 = map(int, bbox)
@@ -233,14 +241,18 @@ class DetectionProcessor(QThread):
         cropped_frame = self.crop_frame(frame, detection)
         if cropped_frame is None:
             print(f"[ERROR] Crop 실패: object_id={detection.get('object_id')}, bbox={detection.get('bbox')}")
-            return False
+            return None
         img_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'img')
         os.makedirs(img_dir, exist_ok=True)
-        filename = f"img_{detection['object_id']}.jpg"
+        filename = f"img_{detection['object_id']}_{datetime.now().strftime('%Y%m%d%H%M%S')}.jpg"
         filepath = os.path.join(img_dir, filename)
         result = cv2.imwrite(filepath, cropped_frame)
-        print(f"[INFO] 이미지 저장: {filepath}, 성공={result}")
-        return result
+        if result:
+            print(f"[INFO] 이미지 저장 완료: {filename}")
+            return f"img/{filename}"  # DB에 저장할 상대 경로 반환
+        else:
+            print(f"[ERROR] 이미지 저장 실패: {filename}")
+            return None
 
     def cleanup_old_detections(self, current_img_id, max_age_ns=1_000_000_000):
         """오래된 검출 결과 정리 (5초 이상 or 50개 이상)"""

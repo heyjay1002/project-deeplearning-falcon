@@ -40,7 +40,7 @@ DEFAULT_HEIGHT = 480
 VIDEO_FRAME_BUFFER = 10  # 1초 분량 (15fps 기준)
 
 # 디버그 설정
-AUTO_DELETE_DB_ON_START = True  # 서버 시작 시 DB의 탐지 이벤트 초기화 여부
+AUTO_DELETE_DB_ON_START = False  # 서버 시작 시 DB의 탐지 이벤트 초기화 여부
 DEBUG_OBJECT_ID_START = False  # True면 object_id를 1000부터 시작
 
 # 프레임 크기 (실제 크기로 업데이트됨)

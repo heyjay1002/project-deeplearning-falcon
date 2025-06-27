@@ -324,7 +324,7 @@ class DetectionCommunicator(QThread):
                 try:
                     command_str = command.decode().strip()
                     self._log_gui_communication("RECV", command_str) # 수신 로그
-                    if command_str.startswith('MC_') or command_str.startswith('AC_'):
+                    if command_str.startswith('MC_') or command_str.startswith('AC_') or command_str.startswith('LC_'):
                         response = self._handle_command(command_str)
                         
                         # 응답 로깅 및 전송
@@ -469,14 +469,7 @@ class DetectionCommunicator(QThread):
                         det['rescue_level'] = rescue_level
                     # 비사람 객체는 rescue_level 필드를 만들지 않음
                 
-                # 검출 결과 전달
-                detection_data = {
-                    'img_id': img_id,
-                    'detections': detections
-                }
-                self.detection_received.emit(detection_data)
-                
-                # 활주로 상태 업데이트
+                # 활주로 상태 업데이트 (모든 객체 대상)
                 self.runway_status.update_runway_status(detections)
                 
                 # 활주로 상태 변경 알림 전송
@@ -485,8 +478,16 @@ class DetectionCommunicator(QThread):
                     self._send_runway_status_change(runway_id, status)      # 조종사 GUI
                     self._send_runway_status_to_admin(runway_id, status)    # 관제사 GUI
                 
-                # GUI로 검출 결과 전송
-                self._send_to_gui(detections)
+                # 1. 권한 검증 및 ME_OD 전송 (위반 객체만)
+                violation_objects = self._process_detection_with_access_control(detections)
+                
+                # 2. DB 저장 및 ME_FD 전송 (위반 객체만)
+                if violation_objects:
+                    detection_data = {
+                        'img_id': img_id,
+                        'detections': violation_objects
+                    }
+                    self.detection_received.emit(detection_data)
 
             # map_calibration 처리 (새로 추가)
             elif event_type == 'map_calibration':
@@ -495,6 +496,107 @@ class DetectionCommunicator(QThread):
             else:
                 print(f"[WARNING] 알 수 없는 이벤트: {event_type}")
     
+    def _process_detection_with_access_control(self, detections):
+        """출입 제어를 고려한 감지 결과 처리 및 ME_OD 전송
+        Args:
+            detections: 검출 결과 리스트
+        Returns:
+            list: 위반 객체 리스트 (DB 저장 및 ME_FD 전송용)
+        """
+        if not detections:
+            return []
+        
+        # 객체 분류
+        dangerous_objects = []   # 위험요소 (FOD, 새, 동물)
+        access_objects = []      # 출입위반 (사람, 차, 작업차, 작업자)
+        
+        for det in detections:
+            obj_class = det.get('class', '').upper()
+            
+            # 위험요소: FOD, 새, 동물
+            if obj_class in ['FOD', 'BIRD', 'ANIMAL']:
+                det['event_type'] = 1  # HAZARD
+                dangerous_objects.append(det)
+            
+            # 출입 대상: 사람, 차, 작업차, 작업자
+            elif obj_class in ['PERSON', 'VEHICLE', 'WORK_PERSON', 'WORK_VEHICLE']:
+                # 일단 기본값 설정 (권한 검증 후 변경될 수 있음)
+                det['event_type'] = 2  # UNAUTH (출입위반)
+                access_objects.append(det)
+            
+            # 항공기는 정상 운영 객체 - 경고하지 않음
+            elif obj_class == 'AIRCRAFT' or obj_class == 'AIRPLANE':
+                print(f"[INFO] 항공기 감지 (경고 없음): {obj_class} ID={det.get('object_id')}")
+                continue  # ME_OD 전송하지 않음
+            
+            else:
+                # 알 수 없는 클래스는 위험요소로 분류
+                print(f"[WARNING] 알 수 없는 객체 클래스: {obj_class}, 위험요소로 분류")
+                det['event_type'] = 1  # HAZARD
+                dangerous_objects.append(det)
+        
+        # 위험요소는 바로 전송
+        final_objects_to_send = dangerous_objects.copy()
+        
+        # 출입위반 객체는 권한 검증 후 추가
+        for det in access_objects:
+            obj_class = det.get('class', '').upper()
+            area_id = det.get('area_id')
+            
+            if area_id is None:
+                # 구역을 알 수 없으면 위반으로 간주하여 전송
+                det['event_type'] = 2  # UNAUTH (구역 불명으로 인한 위반)
+                final_objects_to_send.append(det)
+                print(f"[INFO] 구역 불명 객체 전송: {obj_class} ID={det.get('object_id')}")
+                continue
+            
+            # 해당 구역의 권한 레벨 확인
+            authority_level = self.access_cache.get(area_id, 2)  # 기본값: AUTH_ONLY
+            print(f"[DEBUG] 권한 검증: Area {area_id} -> 레벨 {authority_level}, 객체: {obj_class} ID={det.get('object_id')}")
+            
+            # 권한 레벨에 따른 판단
+            if authority_level == 1:  # OPEN: 모든 접근 허용
+                print(f"[INFO] 접근 허용 (OPEN): {obj_class} ID={det.get('object_id')} in Area {area_id}")
+                # OPEN 구역이므로 ME_OD 전송하지 않음 (위반 아님)
+                continue
+            
+            elif authority_level == 2:  # AUTH_ONLY: 작업용만 허가, 일반용은 위반
+                print(f"[DEBUG] AUTH_ONLY 권한 검증: {obj_class} ID={det.get('object_id')} in Area {area_id}")
+                # 작업용 객체는 허용 (경고 없음)
+                if obj_class in ['WORK_PERSON', 'WORK_VEHICLE']:
+                    print(f"[INFO] 작업용 접근 허용 (AUTH_ONLY): {obj_class} ID={det.get('object_id')} in Area {area_id}")
+                    continue  # ME_OD 전송하지 않음
+                
+                # 일반 객체는 위반 (경고)
+                elif obj_class in ['PERSON', 'VEHICLE']:
+                    det['event_type'] = 2  # UNAUTH (출입위반)
+                    final_objects_to_send.append(det)
+                    print(f"[INFO] 일반용 출입 위반 (AUTH_ONLY): {obj_class} ID={det.get('object_id')} in Area {area_id}")
+                
+                else:
+                    # 알 수 없는 클래스는 위반으로 간주
+                    det['event_type'] = 2  # UNAUTH
+                    final_objects_to_send.append(det)
+                    print(f"[WARNING] 알 수 없는 접근 객체 클래스 (AUTH_ONLY): {obj_class}, 위반으로 간주")
+                
+            elif authority_level == 3:  # NO_ENTRY: 모든 접근 금지
+                det['event_type'] = 2  # UNAUTH (출입위반)
+                final_objects_to_send.append(det)
+                print(f"[INFO] 출입 위반 (NO_ENTRY): {obj_class} ID={det.get('object_id')} in Area {area_id}")
+            
+            else:
+                # 알 수 없는 권한 레벨은 위반으로 간주
+                det['event_type'] = 2  # UNAUTH (알 수 없는 권한 레벨로 인한 위반)
+                final_objects_to_send.append(det)
+                print(f"[WARNING] 알 수 없는 권한 레벨 {authority_level}, 위반으로 간주")
+        
+        # 최종 ME_OD 전송 (위험요소 + 출입위반)
+        if final_objects_to_send:
+            self._send_to_gui(final_objects_to_send)
+        
+        # 위반 객체 반환 (DB 저장 및 ME_FD 전송용)
+        return final_objects_to_send
+
     def _handle_map_calibration(self, message):
         """맵 보정 이벤트 처리 (CalibrationThread로 전달)"""
         camera_id = message.get('camera_id')
@@ -606,12 +708,12 @@ class DetectionCommunicator(QThread):
         """
         # 위험도 레벨을 숫자로 변환 # 별도로 0(LOW), 1(MEDIUM), 2(HIGH)
         level_map = {
-            'BR_HIGH': '2',
-            'BR_MEDIUM': '1', 
-            'BR_LOW': '0'
+            'BR_HIGH': '1',
+            'BR_MEDIUM': '2', 
+            'BR_LOW': '3'
         }
         
-        level_number = level_map.get(risk_level, '0')
+        level_number = level_map.get(risk_level, '3')
         message = f"ME_BR:{level_number}\n"
         
         # GUI로 전송 (바이너리로 변환)
@@ -819,6 +921,19 @@ class DetectionCommunicator(QThread):
             else:
                 return "AR_ERROR:Unknown access command\n"
         
+        # LC_ 명령어 처리 (이력 조회)
+        if command.startswith('LC_'):
+            if command.startswith('LC_OL:'):
+                return self._handle_lc_ol(command[6:])
+            elif command.startswith('LC_OI:'):
+                return self._handle_lc_oi(command[6:])
+            elif command.startswith('LC_BL:'):
+                return self._handle_lc_bl(command[6:])
+            elif command.startswith('LC_RL:'):
+                return self._handle_lc_rl(command[6:])
+            else:
+                return "LR_ERROR:Unknown log command\n"
+        
         # 기존 MC_ 명령어 처리
         if not command.startswith('MC_'):
             return "MR_ERROR:Invalid command format\n"
@@ -870,9 +985,26 @@ class DetectionCommunicator(QThread):
         try:
             full_img_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), img_path)
             
+            # 기본 파일명으로 먼저 찾기
             if not os.path.exists(full_img_path):
-                print(f"[ERROR] 이미지 파일 없음: {full_img_path}")
-                return b"MR_OD:ERR,5\n"
+                # 타임스탬프가 포함된 파일명으로 찾기
+                img_dir = os.path.dirname(full_img_path)
+                base_filename = os.path.basename(img_path)
+                object_id_from_path = base_filename.replace('img_', '').replace('.jpg', '')
+                
+                # img_dir에서 해당 object_id로 시작하는 파일 찾기
+                if os.path.exists(img_dir):
+                    for filename in os.listdir(img_dir):
+                        if filename.startswith(f"img_{object_id_from_path}_") and filename.endswith('.jpg'):
+                            full_img_path = os.path.join(img_dir, filename)
+                            print(f"[INFO] 타임스탬프 파일 발견: {filename}")
+                            break
+                    else:
+                        print(f"[ERROR] 이미지 파일 없음: {full_img_path}")
+                        return b"MR_OD:ERR,5\n"
+                else:
+                    print(f"[ERROR] 이미지 디렉토리 없음: {img_dir}")
+                    return b"MR_OD:ERR,5\n"
 
             img_size = os.path.getsize(full_img_path)
             with open(full_img_path, 'rb') as f:
@@ -1013,6 +1145,209 @@ class DetectionCommunicator(QThread):
             print(f"[ERROR] AC_UA 처리 실패: {e}")
             return "AR_UA:ERR,4\n"
 
+    def _handle_lc_ol(self, date_range: str) -> str:
+        """LC_OL: 위험 요소 감지 이력 조회
+        Args:
+            date_range: "start_date,end_date" 형식 (YYYY-MM-DD,YYYY-MM-DD)
+        Returns:
+            str: LR_OL 응답 메시지
+        """
+        try:
+            dates = date_range.split(',')
+            if len(dates) != 2:
+                print(f"[ERROR] LC_OL 날짜 형식 오류: {date_range}")
+                return "LR_OL:ERR,1\n"
+            
+            start_date, end_date = dates
+            
+            if not self.repository:
+                return "LR_OL:ERR,2\n"
+            
+            # DB에서 감지 이벤트 조회
+            events = self.repository.get_detect_events_by_date(start_date, end_date)
+            
+            if not events:
+                return "LR_OL:OK,\n"  # 데이터 없음
+            
+            # 응답 메시지 생성
+            event_messages = []
+            for event in events:
+                event_type_name = event.get('event_type_name', 'UNKNOWN')
+                object_id = event.get('object_id', 0)
+                object_type_name = event.get('object_type_name', 'UNKNOWN')
+                area_name = event.get('area_name', 'UNKNOWN')
+                timestamp = event.get('timestamp')
+                
+                # 타임스탬프를 ISO 형식으로 변환
+                if timestamp:
+                    timestamp_str = timestamp.strftime('%Y-%m-%dT%H:%M:%SZ')
+                else:
+                    timestamp_str = ''
+                
+                event_msg = f"{event_type_name},{object_id},{object_type_name},{area_name},{timestamp_str}"
+                event_messages.append(event_msg)
+            
+            response = "LR_OL:OK," + ";".join(event_messages) + "\n"
+            print(f"[INFO] LC_OL 처리 완료: {len(events)}개 이벤트")
+            return response
+            
+        except Exception as e:
+            print(f"[ERROR] LC_OL 처리 실패: {e}")
+            return "LR_OL:ERR,3\n"
+
+    def _handle_lc_oi(self, object_id: str) -> bytes:
+        """LC_OI: 이미지 요청
+        Args:
+            object_id: 객체 ID
+        Returns:
+            bytes: LR_OI 응답 메시지 (헤더 + 바이너리 이미지)
+        """
+        try:
+            object_id_int = int(object_id)
+        except (ValueError, TypeError):
+            return b"LR_OI:ERR,1\n"
+        
+        if not self.repository:
+            return b"LR_OI:ERR,2\n"
+        
+        # 기존 _handle_object_detail과 유사하지만 응답 형식이 다름
+        event_data = self.repository.get_event_by_object_id(object_id_int)
+        
+        if not event_data:
+            return b"LR_OI:ERR,3\n"
+        
+        img_path = event_data.get('img_path')
+        if not img_path:
+            return b"LR_OI:ERR,4\n"
+        
+        # 이미지 파일 처리 (기존 로직 재사용)
+        try:
+            full_img_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), img_path)
+            
+            # 기본 파일명으로 먼저 찾기
+            if not os.path.exists(full_img_path):
+                # 타임스탬프가 포함된 파일명으로 찾기
+                img_dir = os.path.dirname(full_img_path)
+                base_filename = os.path.basename(img_path)
+                object_id_from_path = base_filename.replace('img_', '').replace('.jpg', '')
+                
+                if os.path.exists(img_dir):
+                    for filename in os.listdir(img_dir):
+                        if filename.startswith(f"img_{object_id_from_path}_") and filename.endswith('.jpg'):
+                            full_img_path = os.path.join(img_dir, filename)
+                            print(f"[INFO] 타임스탬프 파일 발견: {filename}")
+                            break
+                    else:
+                        return b"LR_OI:ERR,5\n"
+                else:
+                    return b"LR_OI:ERR,5\n"
+
+            img_size = os.path.getsize(full_img_path)
+            with open(full_img_path, 'rb') as f:
+                img_data = f.read()
+
+        except Exception as e:
+            print(f"[ERROR] 이미지 파일 처리 오류: {e}")
+            return b"LR_OI:ERR,5\n"
+
+        # LR_OI 응답 형식: "LR_OI:OK,img_size,바이너리이미지"
+        response_header = f"LR_OI:OK,{img_size},"
+        return response_header.encode() + img_data
+
+    def _handle_lc_bl(self, date_range: str) -> str:
+        """LC_BL: 조류 위험도 등급 변화 이력 조회
+        Args:
+            date_range: "start_date,end_date" 형식 (YYYY-MM-DD,YYYY-MM-DD)
+        Returns:
+            str: LR_BL 응답 메시지
+        """
+        try:
+            dates = date_range.split(',')
+            if len(dates) != 2:
+                print(f"[ERROR] LC_BL 날짜 형식 오류: {date_range}")
+                return "LR_BL:ERR,1\n"
+            
+            start_date, end_date = dates
+            
+            if not self.repository:
+                return "LR_BL:ERR,2\n"
+            
+            # DB에서 조류 위험도 로그 조회
+            logs = self.repository.get_bird_risk_logs_by_date(start_date, end_date)
+            
+            if not logs:
+                return "LR_BL:OK,\n"  # 데이터 없음
+            
+            # 응답 메시지 생성
+            log_messages = []
+            for log in logs:
+                bird_risk_level_id = log.get('bird_risk_level_id', 3)
+                timestamp = log.get('timestamp')
+                
+                # 타임스탬프를 ISO 형식으로 변환
+                if timestamp:
+                    timestamp_str = timestamp.strftime('%Y-%m-%dT%H:%M:%SZ')
+                else:
+                    timestamp_str = ''
+                
+                log_msg = f"{bird_risk_level_id},{timestamp_str}"
+                log_messages.append(log_msg)
+            
+            response = "LR_BL:OK," + ";".join(log_messages) + "\n"
+            print(f"[INFO] LC_BL 처리 완료: {len(logs)}개 로그")
+            return response
+            
+        except Exception as e:
+            print(f"[ERROR] LC_BL 처리 실패: {e}")
+            return "LR_BL:ERR,3\n"
+
+    def _handle_lc_rl(self, date_range: str) -> str:
+        """LC_RL: 조종사 요청 응답 이력 조회
+        Args:
+            date_range: "start_date,end_date" 형식 (YYYY-MM-DD,YYYY-MM-DD)
+        Returns:
+            str: LR_RL 응답 메시지
+        """
+        try:
+            dates = date_range.split(',')
+            if len(dates) != 2:
+                print(f"[ERROR] LC_RL 날짜 형식 오류: {date_range}")
+                return "LR_RL:ERR,1\n"
+            
+            start_date, end_date = dates
+            
+            if not self.repository:
+                return "LR_RL:ERR,2\n"
+            
+            # DB에서 상호작용 로그 조회
+            logs = self.repository.get_interaction_logs_by_date(start_date, end_date)
+            
+            if not logs:
+                return "LR_RL:OK,\n"  # 데이터 없음
+            
+            # 응답 메시지 생성
+            log_messages = []
+            for log in logs:
+                request_id = log.get('request_id', 1)
+                response_id = log.get('response_id', 1)
+                request_time = log.get('request_time')
+                response_time = log.get('response_time')
+                
+                # 타임스탬프를 ISO 형식으로 변환
+                request_time_str = request_time.strftime('%Y-%m-%dT%H:%M:%SZ') if request_time else ''
+                response_time_str = response_time.strftime('%Y-%m-%dT%H:%M:%SZ') if response_time else ''
+                
+                log_msg = f"{request_id},{response_id},{request_time_str},{response_time_str}"
+                log_messages.append(log_msg)
+            
+            response = "LR_RL:OK," + ";".join(log_messages) + "\n"
+            print(f"[INFO] LC_RL 처리 완료: {len(logs)}개 로그")
+            return response
+            
+        except Exception as e:
+            print(f"[ERROR] LC_RL 처리 실패: {e}")
+            return "LR_RL:ERR,3\n"
+
 
 
     def convert_to_map_coords(self, center_x, center_y, frame_width, frame_height, camera_id='A'):
@@ -1101,6 +1436,45 @@ class DetectionCommunicator(QThread):
         """정규화 좌표(norm_x, norm_y)에 해당하는 area_id 반환"""
         return self.find_area_info(norm_x, norm_y, debug=False)
 
+    def _should_send_alert(self, obj_class, area_id):
+        """객체와 구역에 따라 경고 전송 여부 결정
+        Args:
+            obj_class: 객체 클래스 (대문자)
+            area_id: 구역 ID
+        Returns:
+            bool: True면 경고 전송, False면 전송하지 않음
+        """
+        # 위험요소는 항상 경고
+        if obj_class in ['FOD', 'BIRD', 'ANIMAL']:
+            return True
+        
+        # 항공기는 경고하지 않음
+        if obj_class in ['AIRCRAFT', 'AIRPLANE']:
+            return False
+        
+        # 출입 대상 객체 권한 검증
+        if obj_class in ['PERSON', 'VEHICLE', 'WORK_PERSON', 'WORK_VEHICLE']:
+            if area_id is None:
+                return True  # 구역 불명은 위반으로 간주
+            
+            # 해당 구역의 권한 레벨 확인
+            authority_level = self.access_cache.get(area_id, 2)  # 기본값: AUTH_ONLY
+            
+            if authority_level == 1:  # OPEN: 모든 접근 허용
+                return False  # 경고하지 않음
+            elif authority_level == 2:  # AUTH_ONLY: 작업용만 허가
+                if obj_class in ['WORK_PERSON', 'WORK_VEHICLE']:
+                    return False  # 작업용은 경고하지 않음
+                else:
+                    return True  # 일반용은 경고
+            elif authority_level == 3:  # NO_ENTRY: 모든 접근 금지
+                return True  # 모든 접근 경고
+            else:
+                return True  # 알 수 없는 권한 레벨은 경고
+        
+        # 알 수 없는 객체 클래스는 경고
+        return True
+
     def _load_area_table(self):
         """AREA 테이블 전체를 읽어 리스트와 area_id_to_name 딕셔너리로 반환"""
         area_list = []
@@ -1146,8 +1520,11 @@ class DetectionCommunicator(QThread):
                 area_id = det.get('area_id')
                 area_name = self.area_id_to_name.get(area_id, 'UNKNOWN') if area_id is not None else 'UNKNOWN'
                 
-                # 클래스명으로 이벤트 타입 ID 계산
-                event_type_id = self.repository._determine_event_type(object_class)
+                # 이미 _process_detection_with_access_control에서 권한 검증 완료
+                # 여기까지 온 객체들은 모두 위반 객체이므로 ME_FD 전송
+                
+                # detection 객체에서 event_type 사용 (출입 제어 검증 결과 반영)
+                event_type_id = det.get('event_type', 1)  # 기본값: HAZARD
                 
                 # 이미지 크기가 너무 크면 압축
                 if len(img_binary) > 4000:
