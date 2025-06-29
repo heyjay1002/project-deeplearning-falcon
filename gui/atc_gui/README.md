@@ -33,7 +33,7 @@ falcon_gui/
 │   ├── network_manager.py
 │   ├── tcp_client.py
 │   ├── udp_client.py
-│   ├── interface.py             # signal 포함 인터페이스 클래스
+│   ├── interface.py
 │   └── logger.py
 ├── resources/
 │   ├── images/

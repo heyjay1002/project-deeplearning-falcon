@@ -193,7 +193,7 @@ class NotificationDialog(QDialog):
             
             if hasattr(self.data, 'state_info') and self.data.state_info:
                 value = self.data.state_info
-                state_field_label = QLabel("상태:")
+                state_field_label = QLabel("위험도:")
                 state_field_label.setStyleSheet(field_label_style)
                 state_label = QLabel(str(value))
                 state_label.setStyleSheet("font-size: 14px; color: black;")

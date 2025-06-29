@@ -166,10 +166,12 @@ class NetworkManager(QObject):
     def _handle_first_object_detected(self, objects: List[DetectedObject]):
         """최초 객체 감지 이벤트를 개별 객체로 처리 (알림용)"""
         try:
+            logger.info(f"NetworkManager: 최초 객체 감지 이벤트 수신 - {len(objects)}개 객체")
             for obj in objects:
+                logger.info(f"NetworkManager: 최초 감지 객체 처리 중 - ID {obj.object_id}, Type {obj.object_type.value}, Area {obj.area.value}")
                 # 최초 감지 이벤트는 바로 알림 시그널 발생
                 self.first_object_detected.emit(obj)
-                logger.info(f"최초 객체 감지 알림: ID {obj.object_id} ({obj.object_type.value})")
+                logger.info(f"NetworkManager: 최초 객체 감지 알림 시그널 발생 완료 - ID {obj.object_id} ({obj.object_type.value})")
                 
         except Exception as e:
             logger.error(f"최초 객체 감지 처리 실패: {e}")

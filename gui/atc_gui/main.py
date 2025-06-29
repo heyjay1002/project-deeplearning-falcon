@@ -47,12 +47,30 @@ class WindowClass(QMainWindow):
 
     def _connect_network_signals(self):
         nm = self.network_manager
-        # 최초 감지 알림은 MainPage에서 처리 (중복 연결 제거)
+        # 최초 감지 알림은 MainPage에서 처리하지만, 백업으로 메인 윈도우에서도 처리
+        nm.first_object_detected.connect(self._handle_first_object_detected)
         nm.bird_risk_changed.connect(lambda risk: self.show_notification_dialog('bird', risk) if risk == BirdRiskLevel.HIGH else None)  # 조류 위험도 "경고"일 때만
         nm.runway_a_risk_changed.connect(lambda risk: self.show_notification_dialog('runway_a_risk', risk) if risk == RunwayRiskLevel.HIGH else None)  # 활주로 A 위험도 "경고"일 때만
         nm.runway_b_risk_changed.connect(lambda risk: self.show_notification_dialog('runway_b_risk', risk) if risk == RunwayRiskLevel.HIGH else None)  # 활주로 B 위험도 "경고"일 때만
         nm.tcp_connection_status_changed.connect(lambda connected, msg: self.update_connection_status(connected, msg, "TCP"))
         nm.udp_connection_status_changed.connect(lambda connected, msg: self.update_connection_status(connected, msg, "UDP"))
+
+    def _handle_first_object_detected(self, obj):
+        """최초 감지 이벤트 백업 처리 - MainPage에서 처리되지 않는 경우를 대비"""
+        try:
+            # MainPage가 이미 처리했는지 확인
+            if hasattr(self, 'main_page') and self.main_page:
+                # MainPage에서 이미 처리된 경우 중복 방지
+                if obj.object_id in self.main_page.first_detected_object_ids:
+                    logger.debug(f"MainPage에서 이미 처리된 객체: ID {obj.object_id}")
+                    return
+            
+            # MainPage에서 처리되지 않은 경우 백업으로 처리
+            self.show_notification_dialog('object', obj)
+            logger.info(f"메인 윈도우에서 최초 감지 백업 처리: ID {obj.object_id} ({obj.object_type.value})")
+            
+        except Exception as e:
+            logger.error(f"최초 감지 백업 처리 실패: {e}")
 
     def setup_status_bar(self):
         """상태바 설정"""

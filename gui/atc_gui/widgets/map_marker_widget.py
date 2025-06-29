@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout
+from PyQt6.QtWidgets import QWidget, QLabel, QVBoxLayout, QHBoxLayout, QProgressBar
 from PyQt6.QtCore import Qt, QTimer, QPropertyAnimation, QRect, pyqtSignal, QEasingCurve, QPoint
 from PyQt6.QtGui import QPixmap, QPainter, QPen, QBrush, QColor, QFont
 import os
@@ -26,6 +26,7 @@ class MarkerData:
     size: int = 50
     icon_path: Optional[str] = None
     state: str = 'NORMAL'  # NORMAL, WARNING, SELECTED
+    rescue_level: int = 0  # 구조 레벨 (위험도)
     
     @property
     def is_selected(self) -> bool:
@@ -140,7 +141,6 @@ class DynamicMarker(QLabel):
         if icon_path and os.path.exists(icon_path):
             icon_pixmap = QPixmap(icon_path)
             if not icon_pixmap.isNull():
-                # logger.debug(f"아이콘 로드 성공: {icon_path}")
                 # 흰색 배경 그리기
                 painter.setBrush(QBrush(QColor("white")))
                 painter.setPen(Qt.PenStyle.NoPen)
@@ -157,10 +157,8 @@ class DynamicMarker(QLabel):
                 y = (size - scaled_icon.height()) // 2
                 painter.drawPixmap(x, y, scaled_icon)
                 
-                # 상태에 따른 테두리 추가
-                if self.data.state == 'WARNING':
-                    painter.setPen(QPen(QColor("#FFA500"), 2))  # 주황색
-                elif self.data.state == 'SELECTED':
+                # 상태에 따른 테두리 추가 (SELECTED만 유지)
+                if self.data.state == 'SELECTED':
                     painter.setPen(QPen(QColor("#FFD700"), 2))  # 금색
                 else:
                     painter.setPen(QPen(QColor("#FFFFFF"), 2))  # 흰색
@@ -210,28 +208,6 @@ class DynamicMarker(QLabel):
             painter.end()
             return enhanced
             
-        elif self.data.state == 'WARNING':
-            # 경고/위험 상태는 깜빡임 효과
-            enhanced = QPixmap(pixmap.size())
-            enhanced.fill(Qt.GlobalColor.transparent)
-            
-            painter = QPainter(enhanced)
-            painter.setRenderHint(QPainter.RenderHint.Antialiasing)
-            
-            # 원본 마커 그리기
-            painter.drawPixmap(0, 0, pixmap)
-            
-            # 깜빡임 효과를 위한 반투명 오버레이
-            if self.blink_visible:
-                overlay_color = QColor("#FFA500")
-                overlay_color.setAlpha(128)  # 50% 투명도
-                painter.setBrush(QBrush(overlay_color))
-                painter.setPen(Qt.PenStyle.NoPen)
-                painter.drawRoundedRect(0, 0, pixmap.width(), pixmap.height(), 8, 8)
-            
-            painter.end()
-            return enhanced
-            
         return pixmap
     
     def animate_to_position(self, x: int, y: int):
@@ -264,24 +240,10 @@ class DynamicMarker(QLabel):
     
     def mousePressEvent(self, event):
         """마우스 클릭 이벤트"""
-        logger.info(f"=== 마커 마우스 이벤트 발생 ===")
-        logger.info(f"마커 ID: {self.data.object_id}")
-        logger.info(f"마우스 버튼: {event.button()}")
-        logger.info(f"마커 위치: {self.pos()}")
-        logger.info(f"마커 크기: {self.size()}")
-        logger.info(f"클릭 위치: {event.pos()}")
-        logger.info(f"마커 활성화 상태: {self.isEnabled()}")
-        logger.info(f"마커 가시성: {self.isVisible()}")
-        
         if event.button() == Qt.MouseButton.LeftButton:
-            logger.info(f"좌클릭 감지, 시그널 발생 준비: ID {self.data.object_id}")
             self.clicked.emit(self.data.object_id)
-            logger.info(f"클릭 시그널 발생 완료: ID {self.data.object_id}")
-        else:
-            logger.info(f"좌클릭이 아님: {event.button()}")
         
         super().mousePressEvent(event)
-        logger.info(f"=== 마커 마우스 이벤트 처리 완료 ===")
 
 class MapMarkerWidget(QWidget):
     """지도 마커 위젯"""
@@ -290,7 +252,8 @@ class MapMarkerWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.markers: Dict[int, DynamicMarker] = {}
-        self.marker_labels: Dict[int, QLabel] = {}  # 추가
+        self.marker_labels: Dict[int, QLabel] = {}  # ID 라벨
+        self.risk_labels: Dict[int, QWidget] = {}   # 위험도 라벨 (게이지바 포함)
         self.selected_marker_id: Optional[int] = None
 
         self.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, False)
@@ -300,7 +263,7 @@ class MapMarkerWidget(QWidget):
         self.map_height = 720
         self.set_map_size(self.map_width, self.map_height)
         
-        # 지도 이미지를 표시할 레이블 생성
+        # 지도 이미지를 표시할 라벨 생성
         self.label_map = QLabel(self)
         self.label_map.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_map.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
@@ -348,13 +311,6 @@ class MapMarkerWidget(QWidget):
         painter.drawText(self.map_pixmap.rect(), Qt.AlignmentFlag.AlignCenter, 
                         "지도 이미지를 로드할 수 없습니다\n경로를 확인하세요")
         painter.end()
-        
-        # 임시 이미지 저장
-        try:
-            self.map_pixmap.save(self.map_path)
-            logger.info(f"임시 지도 이미지가 생성되었습니다: {self.map_path}")
-        except Exception as e:
-            logger.error(f"임시 지도 이미지 저장 실패: {str(e)}")
 
     def update_map_image(self):
         """지도 이미지 업데이트"""
@@ -374,12 +330,13 @@ class MapMarkerWidget(QWidget):
         """DetectedObject로부터 MarkerData 생성"""
         return {
             'object_id': obj.object_id,
-            'object_type': obj.object_type,
+            'object_type': obj.object_type.value if hasattr(obj.object_type, 'value') else str(obj.object_type),
             'x_coord': obj.x_coord,
             'y_coord': obj.y_coord,
-            'area': obj.area,
+            'area': obj.area.value if hasattr(obj.area, 'value') else str(obj.area),
             'timestamp': obj.timestamp,
-            'image_data': obj.image_data
+            'image_data': obj.image_data,
+            'rescue_level': obj.state_info if obj.state_info else 0
         }
         
     def calculate_marker_position(self, map_x: float, map_y: float, marker_size: int = 50) -> Tuple[int, int]:
@@ -406,27 +363,64 @@ class MapMarkerWidget(QWidget):
     def _constrain_position(self, position: int, margin: int, max_size: int) -> int:
         """위치를 경계 내로 제한"""
         constrained_position = max(margin, min(position, max_size - margin))
-        
-        # 경계 제약이 적용되었는지 확인하고 로깅
-        if constrained_position != position:
-            logger.debug(f"위치 제약 적용: {position} -> {constrained_position} (margin: {margin}, max_size: {max_size})")
-            
         return constrained_position
     
     def _on_marker_clicked(self, object_id: int):
         """마커 클릭 시 호출되는 메서드"""
-        logger.info(f"=== MapMarkerWidget 마커 클릭 처리 시작 ===")
-        logger.info(f"클릭된 마커 ID: {object_id}")
-        logger.info(f"현재 선택된 마커 ID: {self.selected_marker_id}")
-        
         # 마커 선택
         self.select_marker(object_id)
         
         # 외부로 시그널 전달
-        logger.info(f"MainPage로 마커 클릭 시그널 전달 시작: ID {object_id}")
         self.marker_clicked.emit(object_id)
-        logger.info(f"MainPage로 마커 클릭 시그널 전달 완료: ID {object_id}")
-        logger.info(f"=== MapMarkerWidget 마커 클릭 처리 완료 ===")
+    
+    def create_risk_gauge_widget(self, rescue_level: int, parent=None) -> QWidget:
+        """위험도 게이지바 위젯 생성 (세로 배치, 텍스트 라벨 가로 길이 짧게)"""
+        risk_widget = QWidget(parent)
+        risk_layout = QVBoxLayout(risk_widget)
+        risk_layout.setContentsMargins(2, 2, 2, 2)
+        risk_layout.setSpacing(2)
+        
+        # "위험도" 텍스트 라벨
+        risk_text_label = QLabel("위험도")
+        risk_text_label.setStyleSheet("""
+            QLabel {
+                background: rgba(0,0,0,0.8);
+                color: white;
+                border-radius: 4px;
+                padding: 1px 4px;
+                font-weight: bold;
+                font-size: 10px;
+                min-width: 24px;
+                max-width: 40px;
+            }
+        """)
+        risk_text_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        risk_text_label.adjustSize()
+        
+        # 게이지바
+        gauge = QProgressBar()
+        gauge.setRange(0, 10)  # 0-10 범위
+        gauge.setValue(rescue_level)
+        gauge.setFixedSize(40, 8)
+        gauge.setTextVisible(False)  # 텍스트 숨김
+        
+        # 게이지바 색상: 항상 빨간색
+        gauge.setStyleSheet("""
+            QProgressBar {
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                background-color: #f0f0f0;
+            }
+            QProgressBar::chunk {
+                background-color: #FF0000;
+                border-radius: 3px;
+            }
+        """)
+        
+        risk_layout.addWidget(risk_text_label)
+        risk_layout.addWidget(gauge)
+        
+        return risk_widget
     
     def add_dynamic_marker(self, marker_data: dict):
         """동적 마커 추가"""
@@ -444,7 +438,8 @@ class MapMarkerWidget(QWidget):
                 y=marker_data['y_coord'],
                 object_type=marker_data['object_type'],
                 zone=marker_data['area'],
-                state=existing_state  # 기존 상태 정보 유지
+                state=existing_state,  # 기존 상태 정보 유지
+                rescue_level=marker_data.get('rescue_level', 0)  # 구조 레벨 추가
             ), self)
             marker.clicked.connect(lambda object_id: self._on_marker_clicked(object_id))
             
@@ -458,7 +453,7 @@ class MapMarkerWidget(QWidget):
             self.markers[marker_data['object_id']] = marker
             logger.debug(f"마커 추가 성공: ID {marker_data['object_id']}, 위치: ({x}, {y}), 상태: {existing_state}")
             
-            # ID 라벨 추가 (경계 제약 고려)
+            # ID 라벨 추가
             id_label = QLabel(f"ID:{marker_data['object_id']}", self)
             id_label.setStyleSheet("""
                 background: rgba(0,0,0,0.7);
@@ -487,6 +482,35 @@ class MapMarkerWidget(QWidget):
             
             self.marker_labels[marker_data['object_id']] = id_label
             
+            # 위험도 게이지바 추가 (PERSON, WORK_PERSON 객체만)
+            logger.debug(f"위험도 게이지바 체크: object_type={marker_data['object_type']}, rescue_level={marker_data.get('rescue_level', 0)}")
+            if marker_data['object_type'] in ['일반인', '작업자']:
+                rescue_level = marker_data.get('rescue_level', 0)
+                logger.debug(f"PERSON/WORK_PERSON 객체 발견: ID={marker_data['object_id']}, rescue_level={rescue_level}")
+                if rescue_level > 0:  # 위험도가 0보다 클 때만 표시
+                    logger.debug(f"위험도 게이지바 생성 시작: ID={marker_data['object_id']}, rescue_level={rescue_level}")
+                    risk_widget = self.create_risk_gauge_widget(rescue_level, parent=self)
+                    risk_widget.adjustSize()  # 크기 계산
+                    
+                    # 위험도 라벨 위치 계산 (ID 라벨 위에 배치, 마커 기준 가운데 정렬)
+                    risk_x = x + marker_half_size - risk_widget.width()//2
+                    risk_y = label_y - risk_widget.height() - 2
+                    
+                    # 경계 제약 적용
+                    risk_x = self._constrain_position(risk_x, 0, self.width() - risk_widget.width())
+                    risk_y = self._constrain_position(risk_y, 0, self.height() - risk_widget.height())
+                    
+                    risk_widget.move(risk_x, risk_y)
+                    risk_widget.show()
+                    risk_widget.raise_()
+                    risk_widget.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
+                    
+                    self.risk_labels[marker_data['object_id']] = risk_widget
+                    logger.debug(f"위험도 게이지바 생성 완료: ID={marker_data['object_id']}, 위치=({risk_x}, {risk_y})")
+                else:
+                    logger.debug(f"위험도가 0이므로 게이지바 미생성: ID={marker_data['object_id']}")
+            else:
+                logger.debug(f"PERSON/WORK_PERSON이 아닌 객체: {marker_data['object_type']}")
         except Exception as e:
             logger.error(f"마커 추가 실패: {str(e)}")
             
@@ -505,7 +529,8 @@ class MapMarkerWidget(QWidget):
                     y=marker_data['y_coord'],
                     object_type=marker_data['object_type'],
                     zone=marker_data['area'],
-                    state=current_state  # 기존 상태 정보 유지
+                    state=current_state,  # 기존 상태 정보 유지
+                    rescue_level=marker_data.get('rescue_level', 0)  # 구조 레벨 추가
                 )
                 
                 # 위치가 변경되었으면 이동 (경계 제약 적용됨)
@@ -525,6 +550,40 @@ class MapMarkerWidget(QWidget):
                     
                     label.move(label_x, label_y)
 
+                # 위험도 게이지바 업데이트 (PERSON, WORK_PERSON 객체만)
+                if marker_data['object_type'] in ['일반인', '작업자']:
+                    rescue_level = marker_data.get('rescue_level', 0)
+                    risk_widget = self.risk_labels.get(marker_data['object_id'])
+                    
+                    if rescue_level > 0:
+                        if risk_widget is None:
+                            # 위험도 게이지바가 없으면 새로 생성
+                            risk_widget = self.create_risk_gauge_widget(rescue_level, parent=self)
+                            self.risk_labels[marker_data['object_id']] = risk_widget
+                            risk_widget.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
+                        
+                        # 위험도 게이지바 위치 업데이트
+                        marker_half_size = 50 // 2
+                        label = self.marker_labels.get(marker_data['object_id'])
+                        if label:
+                            label_y = label.y()
+                            risk_x = x + marker_half_size - risk_widget.width()//2
+                            risk_y = label_y - risk_widget.height() - 2
+                            
+                            # 경계 제약 적용
+                            risk_x = self._constrain_position(risk_x, 0, self.width() - risk_widget.width())
+                            risk_y = self._constrain_position(risk_y, 0, self.height() - risk_widget.height())
+                            
+                            risk_widget.move(risk_x, risk_y)
+                            risk_widget.show()
+                            risk_widget.raise_()
+                    else:
+                        # 위험도가 0이면 게이지바 제거
+                        if risk_widget:
+                            risk_widget.hide()
+                            risk_widget.deleteLater()
+                            del self.risk_labels[marker_data['object_id']]
+
                 marker.raise_()
                 
                 # 외관 업데이트
@@ -540,9 +599,6 @@ class MapMarkerWidget(QWidget):
             if object_id in self.markers:
                 marker = self.markers[object_id]
                 
-                # 선택 상태 정보 보존 (selected_marker_id는 유지)
-                # 마커가 선택된 상태였다면 selected_marker_id는 그대로 유지
-                
                 marker.hide()
                 marker.deleteLater()
                 del self.markers[object_id]
@@ -552,6 +608,12 @@ class MapMarkerWidget(QWidget):
                     self.marker_labels[object_id].hide()
                     self.marker_labels[object_id].deleteLater()
                     del self.marker_labels[object_id]
+                    
+                # 위험도 게이지바 제거
+                if object_id in self.risk_labels:
+                    self.risk_labels[object_id].hide()
+                    self.risk_labels[object_id].deleteLater()
+                    del self.risk_labels[object_id]
                     
                 logger.debug(f"마커 제거 성공: ID {object_id}")
         except Exception as e:
@@ -588,6 +650,12 @@ class MapMarkerWidget(QWidget):
                 label.deleteLater()
             self.marker_labels.clear()
             
+            # 위험도 게이지바도 함께 제거
+            for risk_widget in self.risk_labels.values():
+                risk_widget.hide()
+                risk_widget.deleteLater()
+            self.risk_labels.clear()
+            
             self.selected_marker_id = None
             logger.debug("모든 마커 제거 완료")
         except Exception as e:
@@ -613,7 +681,23 @@ class MapMarkerWidget(QWidget):
                 
                 label.move(label_x, label_y)
                 
+            # 위험도 게이지바도 같이 이동 (경계 제약 적용)
+            risk_widget = self.risk_labels.get(marker.data.object_id)
+            if risk_widget:
+                marker_half_size = marker.data.size // 2
+                label = self.marker_labels.get(marker.data.object_id)
+                if label:
+                    label_y = label.y()
+                    risk_x = x + marker_half_size - risk_widget.width()//2
+                    risk_y = label_y - risk_widget.height() - 2
+                    
+                    # 위험도 게이지바도 경계 제약 적용
+                    risk_x = self._constrain_position(risk_x, 0, self.width() - risk_widget.width())
+                    risk_y = self._constrain_position(risk_y, 0, self.height() - risk_widget.height())
+                    
+                    risk_widget.move(risk_x, risk_y)
+                
     def resizeEvent(self, event):
         """위젯 크기 변경 시 처리"""
         super().resizeEvent(event)
-        self.update_marker_positions()
+        self.update_marker_positions() 

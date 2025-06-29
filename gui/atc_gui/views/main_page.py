@@ -213,15 +213,31 @@ class MainPage(QWidget):
 
     def on_first_object_detected(self, obj: DetectedObject):
         """최초 감지 객체(ME_FD)를 처리하여 알림을 발생시킵니다."""
-        # 이전에 알림이 발생하지 않은 객체인지 확인하여 중복 방지
+        logger.info(f"MainPage: 최초 감지 이벤트 수신 - ID {obj.object_id}, Type {obj.object_type.value}, Area {obj.area.value}")
+        
+        # 출입등급 변경으로 인한 새로운 위험요소 감지인지 확인
+        # 기존에 감지된 객체라도 출입등급 변경으로 위험요소가 된 경우 알림 발생
         if obj.object_id not in self.first_detected_object_ids:
             self.first_detected_object_ids.add(obj.object_id)
+            logger.info(f"MainPage: 새로운 객체 최초 감지 - ID {obj.object_id}를 first_detected_object_ids에 추가")
             
             # 부모 윈도우(메인 윈도우)의 알림 다이얼로그 직접 호출
             main_window = self.window()
             if hasattr(main_window, 'show_notification_dialog'):
                 main_window.show_notification_dialog('object', obj)
-                logger.info(f"최초 감지(ME_FD) 알림 발생: ID {obj.object_id} ({obj.object_type.value})")
+                logger.info(f"MainPage: 최초 감지(ME_FD) 알림 발생: ID {obj.object_id} ({obj.object_type.value})")
+            else:
+                logger.error("MainPage: main_window에 show_notification_dialog 메서드가 없습니다")
+        else:
+            # 기존 객체 ID가 있지만 출입등급 변경으로 인한 새로운 위험요소인 경우
+            # 이 경우에도 알림을 발생시킴 (출입등급 변경 후 위험요소로 인식되는 경우)
+            logger.info(f"MainPage: 기존 객체 ID {obj.object_id}가 출입등급 변경으로 인한 새로운 위험요소로 감지됨")
+            main_window = self.window()
+            if hasattr(main_window, 'show_notification_dialog'):
+                main_window.show_notification_dialog('object', obj)
+                logger.info(f"MainPage: 출입등급 변경 후 위험요소 감지 알림 발생: ID {obj.object_id} ({obj.object_type.value})")
+            else:
+                logger.error("MainPage: main_window에 show_notification_dialog 메서드가 없습니다")
 
     def on_cctv_a_response(self, response: str):
         """CCTV A 응답 처리"""

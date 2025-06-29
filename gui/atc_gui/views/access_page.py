@@ -1,5 +1,7 @@
 import os
-from PyQt6.QtWidgets import QWidget, QMessageBox
+from PyQt6.QtWidgets import QWidget, QMessageBox, QLabel, QGraphicsOpacityEffect
+from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPixmap, QImage
 from PyQt6.uic import loadUi
 from utils.interface import AccessControlSettings
 from utils.logger import logger
@@ -33,6 +35,7 @@ class AccessPage(QWidget):
         }
         
         self.setup_connections()
+        self.setup_background_image()  # 배경 이미지 설정
         self.setup_ui_styles()  # UI 스타일 설정
         self.update_zone_colors()        
         self.update_level_buttons()  # 초기 버튼 스타일 설정
@@ -40,6 +43,55 @@ class AccessPage(QWidget):
         # 네트워크 시그널 연결
         if self.network_manager:
             self._connect_network_signals()            
+        
+    def setup_background_image(self):
+        """배경 이미지 설정"""
+        try:
+            # map.png 파일 경로
+            image_path = os.path.join(os.path.dirname(__file__), '../resources/images/map.png')
+            
+            if os.path.exists(image_path):
+                # 배경 이미지 라벨 생성
+                self.background_label = QLabel(self)
+                
+                # verticalLayoutWidget의 위치와 크기 가져오기
+                layout_geometry = self.verticalLayoutWidget.geometry()
+                self.background_label.setGeometry(layout_geometry)
+                
+                # 이미지 로드 및 스케일링
+                pixmap = QPixmap(image_path)
+                if pixmap.isNull():
+                    logger.error("이미지 로드 실패")
+                    return
+                
+                # 이미지를 그레이스케일로 변환
+                image = pixmap.toImage()
+                grayscale_image = image.convertToFormat(QImage.Format.Format_Grayscale8)
+                grayscale_pixmap = QPixmap.fromImage(grayscale_image)
+                    
+                scaled_pixmap = grayscale_pixmap.scaled(
+                    layout_geometry.width(), 
+                    layout_geometry.height(),
+                    Qt.AspectRatioMode.KeepAspectRatio,
+                    Qt.TransformationMode.SmoothTransformation
+                )
+                
+                self.background_label.setPixmap(scaled_pixmap)
+                self.background_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+                
+                # 배경 라벨을 verticalLayoutWidget 뒤로 보내기
+                self.background_label.lower()
+                self.verticalLayoutWidget.raise_()
+                
+                # 배경 라벨이 보이도록 설정
+                self.background_label.setVisible(True)
+                
+                logger.info("배경 이미지 설정 완료")
+            else:
+                logger.warning(f"배경 이미지 파일을 찾을 수 없습니다: {image_path}")
+                
+        except Exception as e:
+            logger.error(f"배경 이미지 설정 실패: {e}")
         
     def setup_connections(self):
         """UI 이벤트 연결"""
@@ -129,6 +181,32 @@ class AccessPage(QWidget):
         
         self.widget_setting_panel.setStyleSheet(panel_style)
         
+        # verticalLayoutWidget을 투명도 설정
+        self.verticalLayoutWidget.setStyleSheet("background-color: transparent; border: none;")
+        
+        # verticalLayoutWidget에 투명도 효과 적용
+        opacity_effect = QGraphicsOpacityEffect()
+        opacity_effect.setOpacity(0.8)
+        self.verticalLayoutWidget.setGraphicsEffect(opacity_effect)
+        
+        zone_widgets = [
+            self.label_RWY_A, self.label_TWY_A, self.label_GRASS_A, self.label_TWY_B,
+            self.label_RWY_B, self.label_TWY_C, self.label_GRASS_B, self.label_TWY_D
+        ]
+        
+        for widget in zone_widgets:
+            widget.setStyleSheet("""
+                background-color: transparent; 
+                border: none; 
+                font-weight: bold;
+                color: black;
+            """)
+            
+            # 각 라벨에 투명도 효과 적용
+            label_opacity = QGraphicsOpacityEffect()
+            label_opacity.setOpacity(0.7)
+            widget.setGraphicsEffect(label_opacity)
+        
     def _connect_network_signals(self):
         """네트워크 시그널 연결"""
         self.network_manager.access_control_settings_received.connect(self._on_settings_received)
@@ -144,7 +222,7 @@ class AccessPage(QWidget):
         self.stackedWidget_rightPanel.setCurrentIndex(1)
         self.label_setting_title.setText(f"{zone_name} 출입설정")
         
-        # horizontalLayoutWidget 표시 (등급별 색상 안내)
+        # horizontalLayout 표시 (등급별 색상 안내)
         self.horizontalLayoutWidget.setVisible(True)
         
         # 현재 레벨 버튼 선택
@@ -199,6 +277,12 @@ class AccessPage(QWidget):
                 settings = self._create_access_control_settings()
                 self.network_manager.update_access_control_settings(settings)
                 logger.info(f"출입 제어 설정 업데이트 요청: {self.current_zone} = 레벨 {self.selected_level}")
+                
+                # 출입등급 변경으로 인한 새로운 위험요소 감지를 위해 MainPage의 최초 감지 기록 초기화
+                main_window = self.window()
+                if hasattr(main_window, 'main_page') and main_window.main_page:
+                    main_window.main_page.first_detected_object_ids.clear()
+                    logger.info(f"출입등급 변경으로 인한 최초 감지 기록 초기화: {self.current_zone} = 레벨 {self.selected_level}")
             
             # 상태 패널로 돌아가기
             self.cancel_setting()
@@ -230,7 +314,17 @@ class AccessPage(QWidget):
         for zone, widget in zone_widgets.items():
             level = self.zone_levels[zone]
             color = self.level_colors[level]
-            widget.setStyleSheet(f"background-color: {color}; border: 1px solid #555; font-weight: bold;")
+            # 색상 설정
+            widget.setStyleSheet(f"""
+                background-color: {color}; 
+                border: 1px solid #555; 
+                font-weight: bold;
+            """)
+            
+            # 투명도 효과 적용
+            opacity_effect = QGraphicsOpacityEffect()
+            opacity_effect.setOpacity(0.7)
+            widget.setGraphicsEffect(opacity_effect)
 
     def request_current_settings(self):
         """서버에서 현재 출입 제어 설정 요청"""
@@ -298,4 +392,33 @@ class AccessPage(QWidget):
     def _on_error(self, error_message: str):
         """출입 제어 오류 처리"""
         logger.error(f"출입 제어 오류: {error_message}")
+
+    def resizeEvent(self, event):
+        """창 크기 변경 시 배경 이미지 조정"""
+        super().resizeEvent(event)
+        if hasattr(self, 'background_label') and self.background_label:
+            # verticalLayoutWidget의 위치와 크기에 맞춰 배경 이미지 조정
+            layout_geometry = self.verticalLayoutWidget.geometry()
+            self.background_label.setGeometry(layout_geometry)
+            
+            # 이미지 다시 스케일링
+            try:
+                image_path = os.path.join(os.path.dirname(__file__), '../resources/images/map.png')
+                if os.path.exists(image_path):
+                    pixmap = QPixmap(image_path)
+                    
+                    # 이미지를 그레이스케일로 변환
+                    image = pixmap.toImage()
+                    grayscale_image = image.convertToFormat(QImage.Format.Format_Grayscale8)
+                    grayscale_pixmap = QPixmap.fromImage(grayscale_image)
+                    
+                    scaled_pixmap = grayscale_pixmap.scaled(
+                        layout_geometry.width(), 
+                        layout_geometry.height(),
+                        Qt.AspectRatioMode.KeepAspectRatio,
+                        Qt.TransformationMode.SmoothTransformation
+                    )
+                    self.background_label.setPixmap(scaled_pixmap)
+            except Exception as e:
+                logger.error(f"배경 이미지 리사이즈 실패: {e}")
 
