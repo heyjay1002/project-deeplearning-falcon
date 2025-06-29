@@ -179,8 +179,8 @@ def get_port_info():
 # 모델 및 데이터 경로
 PATHS = {
     'model_file': 'models/tcn_gesture_model.pth',
-    'raw_data': '../pose_data_rotated',  # 회전된 데이터 사용
-    'processed_data': '../processed_pose_data_rotated',  # 회전된 데이터용 새 처리 폴더
+    'raw_data': 'pose_data_rotated',  # 현재 디렉토리의 회전된 데이터 사용
+    'processed_data': 'processed_pose_data_rotated',  # 현재 디렉토리의 처리된 데이터
     'logs': 'logs'  # pds 폴더 기준 상대경로 (일관된 로그 위치 보장)
 }
 
