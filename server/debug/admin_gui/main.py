@@ -274,13 +274,13 @@ class MainWindow(QMainWindow):
 
     def handle_me_fd_message(self, data: bytes):
         try:
-            print(f"[DEBUG] ME_FD 원본 데이터 길이: {len(data)}")
-            print(f"[DEBUG] ME_FD 헤더: {data[:100]}")  # 처음 100바이트만 출력
+            # print(f"[DEBUG] ME_FD 원본 데이터 길이: {len(data)}")
+            # print(f"[DEBUG] ME_FD 헤더: {data[:100]}")  # 처음 100바이트만 출력
             
             # 서버에서 쉼표 구분자를 사용하므로 수정
             parts = data[6:].decode().split(',')  # ME_FD: 제거 후 쉼표로 분리
-            print(f"[DEBUG] 파싱된 필드 개수: {len(parts)}")
-            print(f"[DEBUG] 필드들: {parts}")
+            # print(f"[DEBUG] 파싱된 필드 개수: {len(parts)}")
+            # print(f"[DEBUG] 필드들: {parts}")
 
             # ME_FD:{event_type},{object_id},{class},{x},{y},{zone},{timestamp},{rescue_level},{image_size},<img_binary>
             # 또는 ME_FD:{event_type},{object_id},{class},{x},{y},{zone},{timestamp},{image_size},<img_binary>
@@ -322,11 +322,13 @@ class MainWindow(QMainWindow):
             
             # 디버그 로그 - rescue_level은 사람일 때만 출력
             if obj_class == 'PERSON':
-                print(f"[DEBUG] obj_class: {obj_class}, rescue_level: {rescue_level}, image_size: {image_size}")
-                print(f"[DEBUG] ME_FD 수신: event_type={event_type}, object_id={object_id}, class={obj_class}, rescue_level={rescue_level}, image_size={image_size}, len(img_bytes)={len(img_bytes)}")
+                # print(f"[DEBUG] obj_class: {obj_class}, rescue_level: {rescue_level}, image_size: {image_size}")
+                # print(f"[DEBUG] ME_FD 수신: event_type={event_type}, object_id={object_id}, class={obj_class}, rescue_level={rescue_level}, image_size={image_size}, len(img_bytes)={len(img_bytes)}")
+                pass
             else:
-                print(f"[DEBUG] obj_class: {obj_class}, image_size: {image_size}")
-                print(f"[DEBUG] ME_FD 수신: event_type={event_type}, object_id={object_id}, class={obj_class}, image_size={image_size}, len(img_bytes)={len(img_bytes)}")
+                # print(f"[DEBUG] obj_class: {obj_class}, image_size: {image_size}")
+                # print(f"[DEBUG] ME_FD 수신: event_type={event_type}, object_id={object_id}, class={obj_class}, image_size={image_size}, len(img_bytes)={len(img_bytes)}")
+                pass
             
             with open(f"/tmp/client_img_{object_id}.jpg", "wb") as f:
                 f.write(img_bytes)

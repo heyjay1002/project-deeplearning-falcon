@@ -131,7 +131,7 @@ class DetectionRepository:
                 event_time = datetime.now(kst).strftime('%Y-%m-%d %H:%M:%S')
                 
                 cur.execute(
-                    "INSERT INTO DETECTED_OBJECT (object_id, object_type_id) VALUES (%s, %s)",
+                    "INSERT IGNORE INTO DETECTED_OBJECT (object_id, object_type_id) VALUES (%s, %s)",
                     (object_id, object_type_id)
                 )
                 

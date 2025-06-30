@@ -121,7 +121,7 @@ class UDPVideoSender(UDPBase):
             final_data = header + encoded.tobytes()
             print(f"[DEBUG] UDP 전송 시도: 크기={len(final_data)}, 대상={self.host}:{self.port}")
             self.socket.sendto(final_data, (self.host, self.port))
-            print(f"[DEBUG] UDP 전송 성공")
+            # print(f"[DEBUG] UDP 전송 성공")
             return True
         except Exception as e:
             if self.running:

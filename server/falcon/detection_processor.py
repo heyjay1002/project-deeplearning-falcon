@@ -56,6 +56,9 @@ class DetectionProcessor(QThread):
         # 경고 전송된 객체 ID 추적 (메모리 캐시)
         self.alerted_object_ids = set()
         
+        # 구조 상황 경험한 객체 ID와 레벨 추적 (레벨 변화 시 재전송)
+        self.alerted_rescue_levels = {}  # {object_id: rescue_level}
+        
         # 데이터베이스 리포지토리 초기화
         self.repository = DetectionRepository(
             host=DB_HOST,
@@ -109,17 +112,66 @@ class DetectionProcessor(QThread):
         try:
             # 데이터베이스에 저장
             if detections:
-                # 최초 경고된 객체들만 필터링 (alerted_object_ids에 없는 ID만)
+                # print(f"[DEBUG] 현재 추적 중인 일반 객체: {len(self.alerted_object_ids)}개")
+                # print(f"[DEBUG] 현재 추적 중인 구조 객체: {len(self.alerted_rescue_levels)}개")
+                # 최초 경고된 객체들 + 최초 구조 상황 필터링
                 new_detections = []
                 for detection in detections:
                     object_id = detection['object_id']
-                    if object_id not in self.alerted_object_ids:
+                    event_type = detection.get('event_type', 2)  # 기본값: UNAUTH
+                    
+                    # print(f"[DEBUG] 감지 객체 확인: object_id={object_id}, event_type={event_type}")
+                    
+                    if event_type == 3:  # 구조 상황
+                        if object_id not in self.alerted_rescue_levels:  # 최초만
+                            new_detections.append(detection)
+                            rescue_level = detection.get('rescue_level', 0)
+                            print(f"[INFO] ✅ 최초 구조: object_id={object_id}, rescue_level={rescue_level}")
+                        # 이미 처리된 구조 객체는 무시
+                    elif object_id not in self.alerted_object_ids:  # 일반 상황
                         new_detections.append(detection)
-                        self.alerted_object_ids.add(object_id)  # 경고 목록에 추가
+                        # 경고 목록 추가는 실제 처리 성공 후에 함
+                        print(f"[INFO] 최초 일반 위반 감지: object_id={object_id}, event_type={event_type}")
+                    else:
+                        # print(f"[DEBUG] 이미 처리된 객체: object_id={object_id}, event_type={event_type}")
+                        pass
                 
                 # 최초 경고된 객체들에 대해서만 이미지 생성 및 DB 저장
+                # print(f"[DEBUG] 최초 감지 객체 수: {len(new_detections)}")
+                if new_detections:
+                    # 구조 상황 포함 여부 확인
+                    rescue_count = sum(1 for det in new_detections if det.get('event_type') == 3)
+                    if rescue_count > 0:
+                        print(f"[INFO] 🚨 구조 객체 포함: {rescue_count}개")
+                    
+                    if not self.video_processor:
+                        print(f"[ERROR] video_processor가 None입니다!")
+                        return
+                    
                 if new_detections and self.video_processor:
+                    # print(f"[DEBUG] 프레임 요청: img_id={img_id}")
+                    
+                    # # 버퍼 상태 확인 (성능 최적화를 위해 주석 처리)
+                    # buffer_keys = list(self.video_processor.frame_buffer.keys())
+                    # print(f"[DEBUG] 버퍼 상태: {len(buffer_keys)}개 프레임 저장됨")
+                    # if buffer_keys:
+                    #     min_id = min(buffer_keys)
+                    #     max_id = max(buffer_keys)
+                    #     print(f"[DEBUG] 버퍼 범위: {min_id} ~ {max_id}")
+                    #     print(f"[DEBUG] 요청 img_id: {img_id}")
+                    #     if img_id < min_id:
+                    #         print(f"[ERROR] img_id가 너무 오래됨 (최소: {min_id})")
+                    #     elif img_id > max_id:
+                    #         print(f"[ERROR] img_id가 너무 최신임 (최대: {max_id})")
+                    
                     frame = self.video_processor.get_frame(img_id)
+                    if frame is not None:
+                        # print(f"[DEBUG] 프레임 획득 성공: img_id={img_id}")
+                        pass
+                    else:
+                        print(f"[ERROR] 프레임 획득 실패: img_id={img_id}")
+                        return
+                    
                     if frame is not None:
                         saved_detections = []
                         crop_imgs = []
@@ -138,6 +190,7 @@ class DetectionProcessor(QThread):
                                     crop_imgs.append(img_encoded.tobytes())
                                     saved_detections.append(detection)
                         if saved_detections:
+                            # print(f"[DEBUG] DB 저장 시도: {len(saved_detections)}개 객체")
                             success = self.repository.save_detection_event(
                                 camera_id='A',
                                 img_id=img_id,
@@ -146,6 +199,34 @@ class DetectionProcessor(QThread):
                             )
                             if success:
                                 print(f"[INFO] ME_FD 저장 완료: {len(saved_detections)}개 객체")
+                                # ME_FD 처리 성공 시에만 alerted_object_ids에 추가
+                                for detection in saved_detections:
+                                    object_id = detection['object_id']
+                                    event_type = detection.get('event_type', 2)
+                                    if event_type == 3:  # 구조 상황
+                                        rescue_level = detection.get('rescue_level', 0)
+                                        self.alerted_rescue_levels[object_id] = rescue_level
+                                        print(f"[INFO] 🚨 구조 ME_FD 전송 완료: object_id={object_id}, rescue_level={rescue_level}")
+                                    else:  # 일반 상황
+                                        self.alerted_object_ids.add(object_id)
+                                        # print(f"[INFO] 처리 완료 등록: object_id={object_id}")
+                                        pass
+                            else:
+                                print(f"[ERROR] ME_FD 저장 실패: {len(saved_detections)}개 객체")
+                                # DB 저장 실패 시에도 중복 키 오류면 등록 (이미 DB에 존재함을 의미)
+                                for detection in saved_detections:
+                                    object_id = detection['object_id']
+                                    event_type = detection.get('event_type', 2)
+                                    if event_type == 3:  # 구조 상황
+                                        rescue_level = detection.get('rescue_level', 0)
+                                        self.alerted_rescue_levels[object_id] = rescue_level
+                                        print(f"[INFO] 🚨 구조 상황 중복 방지 등록: object_id={object_id}, rescue_level={rescue_level}")
+                                    else:  # 일반 상황
+                                        self.alerted_object_ids.add(object_id)
+                                        print(f"[INFO] 일반 상황 중복 방지 등록: object_id={object_id}")
+                        else:
+                            # print(f"[DEBUG] 저장할 객체 없음: saved_detections 비어있음")
+                            pass
             
         except Exception as e:
             print(f"[ERROR] 감지 결과 처리 중 오류: {e}")

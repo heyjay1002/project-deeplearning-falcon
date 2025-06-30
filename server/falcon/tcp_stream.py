@@ -130,7 +130,7 @@ class CalibrationThread(QThread):
         """보정 작업을 큐에 추가"""
         try:
             self.calibration_queue.put(message, block=False)
-            print(f"[DEBUG] 보정 작업 큐 추가: camera_id={message.get('camera_id')}")
+            # print(f"[DEBUG] 보정 작업 큐 추가: camera_id={message.get('camera_id')}")
         except queue.Full:
             print("[ERROR] 보정 작업 큐가 가득참")
     
@@ -464,7 +464,7 @@ class DetectionCommunicator(QThread):
                         det['area_id'] = None
                     
                     # 사람 객체인 경우에만 rescue_level 추출
-                    if det.get('class', '').upper() == 'PERSON':
+                    if det.get('class', '').upper() in ['PERSON', 'WORK_PERSON']:
                         rescue_level = det.get('rescue_level', 0)  # 기본값 0
                         det['rescue_level'] = rescue_level
                     # 비사람 객체는 rescue_level 필드를 만들지 않음
@@ -518,10 +518,21 @@ class DetectionCommunicator(QThread):
                 det['event_type'] = 1  # HAZARD
                 dangerous_objects.append(det)
             
-            # 출입 대상: 사람, 차, 작업차, 작업자
-            elif obj_class in ['PERSON', 'VEHICLE', 'WORK_PERSON', 'WORK_VEHICLE']:
-                # 일단 기본값 설정 (권한 검증 후 변경될 수 있음)
-                det['event_type'] = 2  # UNAUTH (출입위반)
+            # 사람 객체: 구조 상태 확인
+            elif obj_class in ['PERSON', 'WORK_PERSON']:
+                rescue_level = int(det.get('rescue_level', 0))  # 문자열 -> 정수 변환
+                # print(f"[DEBUG] 사람 객체 rescue_level 확인: {obj_class} ID={det.get('object_id')}, rescue_level={rescue_level}")
+                if rescue_level > 0:  # 구조 상황
+                    det['event_type'] = 3  # RESCUE (구조)
+                    dangerous_objects.append(det)  # 무조건 경고 (권한 무시)
+                    print(f"[INFO] ✅ 구조 상황 감지: {obj_class} ID={det.get('object_id')}, rescue_level={rescue_level}")
+                else:  # 일반 상황
+                    det['event_type'] = 2  # UNAUTH (출입위반 임시)
+                    access_objects.append(det)  # 권한 확인 필요
+            
+            # 차량 객체: 권한 확인 대상
+            elif obj_class in ['VEHICLE', 'WORK_VEHICLE']:
+                det['event_type'] = 2  # UNAUTH (출입위반 임시)
                 access_objects.append(det)
             
             # 항공기는 정상 운영 객체 - 경고하지 않음
@@ -552,7 +563,7 @@ class DetectionCommunicator(QThread):
             
             # 해당 구역의 권한 레벨 확인
             authority_level = self.access_cache.get(area_id, 2)  # 기본값: AUTH_ONLY
-            print(f"[DEBUG] 권한 검증: Area {area_id} -> 레벨 {authority_level}, 객체: {obj_class} ID={det.get('object_id')}")
+            # print(f"[DEBUG] 권한 검증: Area {area_id} -> 레벨 {authority_level}, 객체: {obj_class} ID={det.get('object_id')}")
             
             # 권한 레벨에 따른 판단
             if authority_level == 1:  # OPEN: 모든 접근 허용
@@ -561,7 +572,7 @@ class DetectionCommunicator(QThread):
                 continue
             
             elif authority_level == 2:  # AUTH_ONLY: 작업용만 허가, 일반용은 위반
-                print(f"[DEBUG] AUTH_ONLY 권한 검증: {obj_class} ID={det.get('object_id')} in Area {area_id}")
+                # print(f"[DEBUG] AUTH_ONLY 권한 검증: {obj_class} ID={det.get('object_id')} in Area {area_id}")
                 # 작업용 객체는 허용 (경고 없음)
                 if obj_class in ['WORK_PERSON', 'WORK_VEHICLE']:
                     print(f"[INFO] 작업용 접근 허용 (AUTH_ONLY): {obj_class} ID={det.get('object_id')} in Area {area_id}")
@@ -1539,12 +1550,12 @@ class DetectionCommunicator(QThread):
                         print(f"[INFO] 이미지 압축: object_id={object_id}, old_size={len(img_binary)}, new_size={len(img_binary)}")
 
                 # 객체 타입에 따라 다른 메시지 포맷 사용
-                if object_class == 'PERSON':
+                if object_class in ['PERSON', 'WORK_PERSON']:
                     # 사람: event_type_id,object_id,object_class,map_x,map_y,area_name,timestamp,rescue_level,image_size
                     rescue_level = det.get('rescue_level', 0)  # rescue_level을 숫자로 사용
                     gui_msg_header = f"{event_type_id},{object_id},{object_class},{int(map_x) if map_x is not None else -1},{int(map_y) if map_y is not None else -1},{area_name},{timestamp},{rescue_level},{len(img_binary)}"
                     gui_msg = gui_msg_header.encode() + b"," + img_binary #$$
-                    self.gui_server.send_binary_to_client(b"ME_FD:" + gui_msg)
+                    self.gui_server.send_binary_to_client(b"ME_FD:" + gui_msg + b"\n")
                     # 로그 기록 ('$$' 기준)
                     self._log_gui_communication("SEND", f"ME_FD:{gui_msg_header}")
                     self._log_gui_communication("SEND", f"[Binary Data of size {len(img_binary)}]")
@@ -1552,7 +1563,7 @@ class DetectionCommunicator(QThread):
                     # 비사람: event_type_id,object_id,object_class,map_x,map_y,area_name,timestamp,image_size
                     gui_msg_header = f"{event_type_id},{object_id},{object_class},{int(map_x) if map_x is not None else -1},{int(map_y) if map_y is not None else -1},{area_name},{timestamp},{len(img_binary)}"
                     gui_msg = gui_msg_header.encode() + b"," + img_binary #$$
-                    self.gui_server.send_binary_to_client(b"ME_FD:" + gui_msg)
+                    self.gui_server.send_binary_to_client(b"ME_FD:" + gui_msg + b"\n")
                     # 로그 기록 ('$$' 기준)
                     self._log_gui_communication("SEND", f"ME_FD:{gui_msg_header}")
                     self._log_gui_communication("SEND", f"[Binary Data of size {len(img_binary)}]")

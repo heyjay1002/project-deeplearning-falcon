@@ -37,7 +37,7 @@ DEFAULT_WIDTH = 640
 DEFAULT_HEIGHT = 480
 
 # 버퍼 설정
-VIDEO_FRAME_BUFFER = 10  # 1초 분량 (15fps 기준)
+VIDEO_FRAME_BUFFER = 15  # 0.5초 분량 (30fps 기준)
 
 # 디버그 설정
 AUTO_DELETE_DB_ON_START = False  # 서버 시작 시 DB의 탐지 이벤트 초기화 여부
