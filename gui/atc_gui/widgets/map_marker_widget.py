@@ -422,6 +422,17 @@ class MapMarkerWidget(QWidget):
         
         return risk_widget
     
+    def update_risk_gauge_value(self, risk_widget: QWidget, rescue_level: int):
+        """기존 위험도 게이지바의 값을 업데이트"""
+        try:
+            # 위험도 게이지바 위젯에서 QProgressBar 찾기
+            for child in risk_widget.findChildren(QProgressBar):
+                child.setValue(rescue_level)
+                logger.debug(f"위험도 게이지바 값 업데이트: {rescue_level}")
+                break
+        except Exception as e:
+            logger.error(f"위험도 게이지바 값 업데이트 실패: {str(e)}")
+    
     def add_dynamic_marker(self, marker_data: dict):
         """동적 마커 추가"""
         try:
@@ -441,7 +452,10 @@ class MapMarkerWidget(QWidget):
                 state=existing_state,  # 기존 상태 정보 유지
                 rescue_level=marker_data.get('rescue_level', 0)  # 구조 레벨 추가
             ), self)
-            marker.clicked.connect(lambda object_id: self._on_marker_clicked(object_id))
+            
+            # lambda 함수의 클로저 문제 해결을 위해 object_id를 명시적으로 캡처
+            object_id = marker_data['object_id']
+            marker.clicked.connect(lambda clicked_id, obj_id=object_id: self._on_marker_clicked(obj_id))
             
             # 위치 계산 및 설정 (경계 제약 적용됨)
             x, y = self.calculate_marker_position(marker_data['x_coord'], marker_data['y_coord'], 50)
@@ -561,6 +575,9 @@ class MapMarkerWidget(QWidget):
                             risk_widget = self.create_risk_gauge_widget(rescue_level, parent=self)
                             self.risk_labels[marker_data['object_id']] = risk_widget
                             risk_widget.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents, True)
+                        else:
+                            # 기존 위험도 게이지바가 있으면 값을 업데이트
+                            self.update_risk_gauge_value(risk_widget, rescue_level)
                         
                         # 위험도 게이지바 위치 업데이트
                         marker_half_size = 50 // 2

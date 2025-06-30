@@ -1,5 +1,6 @@
 import sys
 import os
+from datetime import datetime
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import *
@@ -21,7 +22,6 @@ class WindowClass(QMainWindow):
         ui_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ui/main_window.ui")
         uic.loadUi(ui_file_path, self)
         self.setWindowTitle("FALCON")
-
         logger.info("FALCON 시작")
         
         # 창 크기 설정 
@@ -192,6 +192,11 @@ class WindowClass(QMainWindow):
 
     def show_notification_dialog(self, dialog_type, data):
         """알림 다이얼로그 표시 - 중복 방지 로직 추가"""
+        # 위험도 알림의 경우 팝업 없이 로그만 기록
+        if dialog_type in ['bird', 'runway_a_risk', 'runway_b_risk']:
+            self._log_notification_details(dialog_type, data)
+            return
+        
         # 기존에 삭제된 다이얼로그들 먼저 정리
         valid_dialogs = []
         for dialog in self._test_dialogs:
@@ -208,17 +213,11 @@ class WindowClass(QMainWindow):
         for existing_dialog in self._test_dialogs:
             try:
                 if existing_dialog.isVisible() and existing_dialog.notification_type == dialog_type:
-                    # 객체 알림의 경우 ID로 중복 확인
-                    if dialog_type == 'object' and hasattr(data, 'object_id') and hasattr(existing_dialog.data, 'object_id'):
+                    # 객체 알림의 경우 ID로 중복 확인 (object, violation_access, rescue 모두)
+                    if dialog_type in ['object', 'violation_access', 'rescue'] and hasattr(data, 'object_id') and hasattr(existing_dialog.data, 'object_id'):
                         if data.object_id == existing_dialog.data.object_id:
-                            logger.debug(f"중복 객체 알림 방지: ID {data.object_id}")
+                            logger.debug(f"중복 알림 방지: 타입 {dialog_type}, ID {data.object_id}")
                             return
-                    # 위험도 알림의 경우 값으로 중복 확인
-                    elif dialog_type in ['bird', 'runway_a_risk', 'runway_b_risk']:
-                        if hasattr(data, 'value') and hasattr(existing_dialog.data, 'value'):
-                            if data.value == existing_dialog.data.value:
-                                logger.debug(f"중복 위험도 알림 방지: {dialog_type} = {data.value}")
-                                return
             except RuntimeError:
                 # 이미 삭제된 객체는 무시
                 continue
@@ -227,6 +226,9 @@ class WindowClass(QMainWindow):
         dialog = NotificationDialog(dialog_type, data, self)
         self._test_dialogs.append(dialog)
         dialog.show()
+        
+        # 알림 표시 로그 기록
+        self._log_notification_details(dialog_type, data)
 
     def debug_show_notification_dialog(self, dialog_type, data):
         print(f"[DEBUG] 알림 다이얼로그 호출됨: {dialog_type}, {data}")
@@ -235,6 +237,53 @@ class WindowClass(QMainWindow):
         dialog = NotificationDialog(dialog_type, data, self)
         self._test_dialogs.append(dialog)
         dialog.show()
+
+    def _log_notification_details(self, dialog_type, data):
+        """알림 표시 시 상세 정보를 로그로 기록"""
+        try:
+            current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            
+            if dialog_type == 'object' and hasattr(data, 'object_id'):
+                # 객체 감지 알림
+                object_type = data.object_type.value if hasattr(data.object_type, 'value') else str(data.object_type)
+                area = data.area.value if hasattr(data.area, 'value') else str(data.area)
+                risk_level = getattr(data, 'state_info', 0)
+                
+                logger.info(f"[알림 표시] 객체 감지 - ID: {data.object_id}, 타입: {object_type}, 위치: {area}, 위험도: {risk_level}, 좌표: ({data.x_coord}, {data.y_coord}), 시간: {current_time}")
+                
+            elif dialog_type == 'rescue' and hasattr(data, 'object_id'):
+                # 구조 요청 알림
+                object_type = data.object_type.value if hasattr(data.object_type, 'value') else str(data.object_type)
+                area = data.area.value if hasattr(data.area, 'value') else str(data.area)
+                risk_level = getattr(data, 'state_info', 0)
+                
+                logger.warning(f"[알림 표시] 구조 요청 - ID: {data.object_id}, 타입: {object_type}, 위치: {area}, 위험도: {risk_level}, 좌표: ({data.x_coord}, {data.y_coord}), 시간: {current_time}")
+                
+            elif dialog_type == 'violation_access' and hasattr(data, 'object_id'):
+                # 출입 위반 알림
+                object_type = data.object_type.value if hasattr(data.object_type, 'value') else str(data.object_type)
+                area = data.area.value if hasattr(data.area, 'value') else str(data.area)
+                risk_level = getattr(data, 'state_info', 0)
+                
+                logger.info(f"[알림 표시] 출입 위반 - ID: {data.object_id}, 타입: {object_type}, 위치: {area}, 위험도: {risk_level}, 좌표: ({data.x_coord}, {data.y_coord}), 시간: {current_time}")
+                
+            elif dialog_type in ['bird', 'runway_a_risk', 'runway_b_risk']:
+                # 위험도 알림
+                risk_type = {
+                    'bird': '조류 위험도',
+                    'runway_a_risk': '활주로 A 위험도', 
+                    'runway_b_risk': '활주로 B 위험도'
+                }.get(dialog_type, '위험도')
+                
+                risk_value = data.value if hasattr(data, 'value') else str(data)
+                logger.info(f"[알림 표시] {risk_type} - 레벨: {risk_value}, 시간: {current_time}")
+                
+            else:
+                # 기타 알림
+                logger.info(f"[알림 표시] 타입: {dialog_type}, 데이터: {data}, 시간: {current_time}")
+                
+        except Exception as e:
+            logger.error(f"알림 로그 기록 실패: {e}")
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

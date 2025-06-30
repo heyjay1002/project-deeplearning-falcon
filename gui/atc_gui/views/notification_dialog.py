@@ -13,8 +13,11 @@ class NotificationDialog(QDialog):
         # 속성을 가장 먼저 선언 (팝업 제외 조건에서도 속성이 존재하도록)
         self.data = data
         
+        # RESCUE 이벤트 타입(3)인 경우 우선적으로 확인
+        if hasattr(data, 'event_type') and data.event_type and hasattr(data.event_type, 'value') and data.event_type.value == "구조":
+            self.notification_type = 'rescue'
         # 객체 타입에 따라 notification_type 자동 결정
-        if hasattr(data, 'object_type') and data.object_type:
+        elif hasattr(data, 'object_type') and data.object_type:
             obj_type = data.object_type
             
             # HAZARD 타입 객체들 (위험요소)
@@ -54,26 +57,50 @@ class NotificationDialog(QDialog):
             self.adjust_position()
 
     def init_ui(self):
-        self.setStyleSheet("""
-            QDialog {
-                background-color: #FFFFFF;
-                border: 1px solid #AAAAAA;
-            }
-            QDialog QLabel {
-                color: #222222;
-                font-size: 18px;
-            }
-            QPushButton {
-                background-color: #3498DB;
-                color: white;
-                border-radius: 6px;
-                padding: 6px 12px;
-                font-size: 18px;
-            }
-            QPushButton:hover {
-                background-color: #2980B9;
-            }
-        """)
+        # 구조 요청 알림의 경우 특별한 스타일 적용
+        if self.notification_type == 'rescue':
+            self.setStyleSheet("""
+                QDialog {
+                    background-color: #FFEBEE;
+                    border: 2px solid #F44336;
+                }
+                QDialog QLabel {
+                    color: #D32F2F;
+                    font-size: 18px;
+                }
+                QPushButton {
+                    background-color: #F44336;
+                    color: white;
+                    border-radius: 6px;
+                    padding: 6px 12px;
+                    font-size: 18px;
+                    font-weight: bold;
+                }
+                QPushButton:hover {
+                    background-color: #D32F2F;
+                }
+            """)
+        else:
+            self.setStyleSheet("""
+                QDialog {
+                    background-color: #FFFFFF;
+                    border: 1px solid #AAAAAA;
+                }
+                QDialog QLabel {
+                    color: #222222;
+                    font-size: 18px;
+                }
+                QPushButton {
+                    background-color: #3498DB;
+                    color: white;
+                    border-radius: 6px;
+                    padding: 6px 12px;
+                    font-size: 18px;
+                }
+                QPushButton:hover {
+                    background-color: #2980B9;
+                }
+            """)
 
         main_layout = QVBoxLayout(self)
         main_layout.setContentsMargins(20, 20, 20, 20)
@@ -88,6 +115,8 @@ class NotificationDialog(QDialog):
         # notification_type에 따라 아이콘 선택
         if self.notification_type == 'violation_access':
             icon_path = os.path.join(os.path.dirname(__file__), '..', 'resources/images/warning_yellow.png')
+        elif self.notification_type == 'rescue':
+            icon_path = os.path.join(os.path.dirname(__file__), '..', 'resources/images/ambulance.png')
         else:
             icon_path = os.path.join(os.path.dirname(__file__), '..', 'resources/images/warning_red.png')
 
@@ -115,7 +144,7 @@ class NotificationDialog(QDialog):
         main_layout.addLayout(title_layout)
 
         # ID 라벨 (제목과 본문 사이에 배치)
-        if self.notification_type in ['object', 'violation_access']:
+        if self.notification_type in ['object', 'violation_access', 'rescue']:
             id_label = QLabel(f"ID: {self.data.object_id}")
             id_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
             id_label.setStyleSheet("""
@@ -131,7 +160,7 @@ class NotificationDialog(QDialog):
             main_layout.addWidget(id_label)
 
         # 본문 영역
-        if self.notification_type in ['object', 'violation_access']:
+        if self.notification_type in ['object', 'violation_access', 'rescue']:
             # 객체 감지 이벤트: 이미지 + 정보를 좌우로 배치
             content_layout = QHBoxLayout()
             content_layout.setSpacing(15)
@@ -191,11 +220,13 @@ class NotificationDialog(QDialog):
                 timestamp_label.setAlignment(Qt.AlignmentFlag.AlignTop)
                 info_layout.addRow(time_field_label, timestamp_label)
             
-            if hasattr(self.data, 'state_info') and self.data.state_info:
+            if hasattr(self.data, 'state_info') and self.data.state_info and self.data.state_info > 0:
                 value = self.data.state_info
+                # 위험도 1~10을 10%~100%로 매핑
+                percentage = min(max(value * 10, 10), 100)  # 1~10을 10%~100%로 변환
                 state_field_label = QLabel("위험도:")
                 state_field_label.setStyleSheet(field_label_style)
-                state_label = QLabel(str(value))
+                state_label = QLabel(f"{percentage}%")
                 state_label.setStyleSheet("font-size: 14px; color: black;")
                 info_layout.addRow(state_field_label, state_label)
 
@@ -218,6 +249,10 @@ class NotificationDialog(QDialog):
         main_layout.addWidget(button, alignment=Qt.AlignmentFlag.AlignHCenter)
 
     def get_title(self) -> str:
+        # RESCUE 이벤트 타입인 경우 우선적으로 확인
+        if hasattr(self.data, 'event_type') and self.data.event_type and hasattr(self.data.event_type, 'value') and self.data.event_type.value == "구조":
+            return '쓰러진 사람 발견'
+        
         # 객체 데이터가 있는 경우 객체 타입에 따라 이벤트 타입 결정
         if hasattr(self.data, 'object_type') and self.data.object_type:
             obj_type = self.data.object_type
@@ -236,7 +271,8 @@ class NotificationDialog(QDialog):
         # 기존 notification_type 기반 매핑 (fallback)
         return {
             'object': '위험요소 감지 알림',
-            'violation_access': '출입 위반 알림'
+            'violation_access': '출입 위반 알림',
+            'rescue': '🚨 구조 요청 알림'
         }.get(self.notification_type, '알림')
 
     def adjust_position(self):

@@ -720,20 +720,33 @@ class MessageInterface:
                 y_coord = float(parts[4])
                 area = MessageParser._parse_area(parts[5])
                 timestamp = MessageParser._parse_timestamp(parts[6]) if parts[6].strip() else None
-                image_size = int(parts[7])
+                
+                # 8번째와 9번째 필드 처리 (image_size와 state_info 순서 수정)
+                image_size = 0
                 image_data = None
                 state_info = None
                 
-                
-                # 이미지 데이터 처리 (선택적)
-                if len(parts) > 8 and parts[8].strip():
+                if len(parts) == 8:
+                    # 8개 필드: 8번째가 image_size
+                    image_size = int(parts[7])
+                elif len(parts) >= 9:
+                    # 9개 필드: 8번째=state_info, 9번째=image_size
                     try:
-                        if len(parts[8]) == image_size:
+                        state_info = int(parts[7].strip())
+                    except ValueError:
+                        logger.debug(f"state_info 파싱 실패: {parts[7]}")
+                    
+                    image_size = int(parts[8])
+                
+                # 이미지 데이터 처리 (선택적, 10번째 필드)
+                if len(parts) > 9 and parts[9].strip():
+                    try:
+                        if len(parts[9]) == image_size:
                             # 바이너리 데이터인 경우
-                            image_data = parts[8].encode('latin-1')
+                            image_data = parts[9].encode('latin-1')
                         else:
                             # Base64 데이터인 경우
-                            image_b64 = parts[8].strip()
+                            image_b64 = parts[9].strip()
                             missing_padding = len(image_b64) % 4
                             if missing_padding:
                                 image_b64 += '=' * (4 - missing_padding)
@@ -741,12 +754,12 @@ class MessageInterface:
                     except Exception as e:
                         logger.debug(f"이미지 데이터 파싱 실패: {e}")
                 
-                # 상태 정보 처리 (선택적)
-                if len(parts) > 9 and parts[9].strip():
+                # 10번째 필드가 state_info인 경우 (구버전 호환성)
+                if len(parts) > 10 and parts[10].strip() and state_info is None:
                     try:
-                        state_info = int(parts[9].strip())
+                        state_info = int(parts[10].strip())
                     except ValueError:
-                        logger.debug(f"상태 정보 파싱 실패: {parts[9]}")
+                        logger.debug(f"상태 정보 파싱 실패: {parts[10]}")
                 
                 # DetectedObject 생성
                 obj = DetectedObject(

@@ -1,0 +1,1202 @@
+2025-06-30 16:00:42,806 - ATC_GUI - INFO - FALCON 시작
+2025-06-30 16:00:42,858 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-30 16:00:42,872 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-30 16:00:42,887 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-30 16:00:42,888 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-30 16:00:42,896 - ATC_GUI - INFO - TCP 연결 성공 (192.168.0.12:5100)
+2025-06-30 16:01:55,860 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915820206,BIRD,19,292,TWY_A\n'
+2025-06-30 16:01:55,860 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915820206,BIRD,19,292,TWY_A...
+2025-06-30 16:01:55,860 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:55,861 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915820206, Type=조류, Pos=(19.0, 292.0), Area=TWY_A
+2025-06-30 16:01:55,861 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:55,889 - ATC_GUI - DEBUG - raw_data: b'ME_FD:1,1751266915820206,BIRD,19,292,TWY_A,2025-06-30T07:01:55Z,1437,\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x00\x00\x01\x00\x01\x00\x00\xff\xdb\x00C\x00\x02\x01\x01\x01\x01\x01\x02\x01\x01\x01\x02\x02\x02\x02\x02\x04\x03\x02\x02\x02\x02\x05\x04\x04\x03\x04\x06\x05\x06\x06\x06\x05\x06\x06\x06\x07\t\x08\x06\x07\t\x07\x06\x06\x08\x0b\x08\t\n\n\n\n\n\x06\x08\x0b\x0c\x0b\n\x0c\t\n\n\n\xff\xdb\x00C\x01\x02\x02\x02\x02\x02\x02\x05\x03\x03\x05\n\x07\x06\x07\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\xff\xc0\x00\x11\x08\x00<\x00\x1d\x03\x01"\x00\x02\x11\x01\x03\x11\x01\xff\xc4\x00\x1f\x00\x00\x01\x05\x01\x01\x01\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\xff\xc4\x00\xb5\x10\x00\x02\x01\x03\x03\x02\x04\x03\x05\x05\x04\x04\x00\x00\x01}\x01\x02\x03\x00\x04\x11\x05\x12!1A\x06\x13Qa\x07"q\x142\x81\x91\xa1\x08#B\xb1\xc1\x15R\xd1\xf0$3br\x82\t\n\x16\x17\x18\x19\x1a%&\'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz\x83\x84\x85\x86\x87\x88\x89\x8a\x92\x93\x94\x95\x96\x97\x98\x99\x9a\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xff\xc4\x00\x1f\x01\x00\x03\x01\x01\x01\x01\x01\x01\x01\x01\x01\x00\x00\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\xff\xc4\x00\xb5\x11\x00\x02\x01\x02\x04\x04\x03\x04\x07\x05\x04\x04\x00\x01\x02w\x00\x01\x02\x03\x11\x04\x05!1\x06\x12AQ\x07aq\x13"2\x81\x08\x14B\x91\xa1\xb1\xc1\t#3R\xf0\x15br\xd1\n\x16$4\xe1%\xf1\x17\x18\x19\x1a&\'()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x92\x93\x94\x95\x96\x97\x98\x99\x9a\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xff\xda\x00\x0c\x03\x01\x00\x02\x11\x03\x11\x00?\x00\xfd\x05\xf1\xaf\x8d \xf0G\x87f\xd6n\xae\xb6En\x86iG\xb2\x8c\xd7\xe6\xff\x00\xc6\x1f\x15k\x7f\xb5\xbf\xc5\x1b\xff\x00\x14\xdfj\x13\xed\x91\x8c\x1a\x7f\x97\xd3\xc8Vb?\xf1\xe6j\xfaG\xfe\no\xf1E\xbc%\xe0(<\x13\xa4j^]\xf6\xb9\x84\x9a\x1f\xef@\x19\xb0\x7f=\xdf\x95|\xbb\xf0\x1a\xc9l/R\xe9W\x00\x90G\xbfA\xfd+\x0c\xe7\x1d\x0c\x13J\xfa\x95\x90d\xab\x1f\x1ei\xbd\x12\xec`k_\xb2\xaf\xc4\x8f\r\xc6f\xd1<;\xa8\xea0\xb1\xc9\x9e+m\xe1[\xfb\xb9\xfa`\xfe5C\xfe\x14\x7f\xc5k$U\x9f\xe1\xfe\xab\x97\x1b\x87\xfa\x0fj\xfd.\xfd\x9f<A\xf6\xbd2\xd6?E\xc7\xe8+\xd8\xe16\x8a\xa7\xce\xb5\x81\xc99\x06N\xb5\xd9\x96\xd5\xfa\xcc\x13<\xcc\xc2\x8c0\xd8\xb7J1\xf9\x9f\x92\x1f\xb5W\xc7;\x9f\x8f\x1f\x1f\xaf\xee,f\xf3-`\x9f\xec\xf6\x87\xfe\x99\xab6?Rj\xcf\xc2\xb9n\xa3\xd6\x85\x99m\x92,\xd8\x12z\x0c\n\xe1\x7fg\xcb\x9f\x01\xc9\xe2MW\xc4\x1e,\xf1\x17\x97\x15\x95\xb9k(}dn\t\xfc\xc1\xfc\xab\xa2\xf0f\xa5\x0e\x99\xe2w\xbe\xd3\xa4\xdd\xfb\xd2\xc0\xfdN\x7f\xad|\'\x19\xcaq\xac\xa5\xcdet~\x91\xc1\xf1\x83\xcb\xda\xb6\xa7\xd6\xbe\x15\xf0o\xc5}^\xc5.\xbc\x1b\xf1\x0b\xecr\x05\xda\xbf\xefc?\xd4U\xf8\xbc\x01\xfbzBXY|n\xd2\xde2\xdf/\xdb~\xf8\xf6\x1e\xdf\xfdz\xf1\x85\xf8\xe7\xe3\x88`KM3^\x9e\xd7\x1f\xf2\xce>\x84\xfa\xff\x00\x9fJ\xee\xbe\x1f\xfcR\xf8\xcbu\xa7K \xf1\xdd\xb4k\xbc\x00/nv?N\xc3\xd3\xff\x00\xaf_I\xc3\xb8\xeaK\n\xa2\xb5g\xc9\xf1&\x06\xa5\x1cw3Z\x19\x97_\xb37\xc1O\x04\xf8\x06\xc3E\xb6\xf0l\x13j\xd1\xdb/\xdb/$\xeb$\xa7\x92\x7f"+\x9d\x8f\xe0\x85\xbf\x87\xe17Wf;h\xe4\x1b\xa3\x8e>\x98\xe9\x9f\xd3\xf4\xa8n\xbe5k\xd76+m\xa3\xe8\xf7fvL\x99\xbd\xab\x99\xbd\xd55]^\xf3\xed\x9a\xcd\xe4\x8b6\xdc\x15\x97\xae2\x7f\xc4\xd7\x8d\x9c\xd1\x96c\x88\xb4\xe3dwe\xd9\x84\xb2\xdc?\xb9\xa9zo\x85\xde$\x92yd\x86m\xf0\x11\x95>\xde\x95\xe9\xff\x00\x0f>\x05\xd9k\x1a\x1a\xcd\xabE!tUU)s\xb3\x8e{W\x9ai\xbe&\xb5\xd0\xe2\x11\xcf6\xf2_v\xefn\x07\xf4\xae\xcbI\xf8\xa7l\xf6\x81a\x89\x1b\x1dwu\xafC)\xc1G\r$\xd7c\x974\xcc*f.\xf2V=C\xc5\xde\x1f\xd3t\xab6\xb3\x8bI\xb5DU\xf9\x07\xb5xW\xc5?\xb2\xe9\xd6\xaf8\x864\x8c/".\x99\xc9\xaf\x06\xb8\xf8\xbf\xf1A\x91\xa4o\x1c\xea%\x82\xf0L\xd5\xe6\xdf\x11~3|N\x96\'\x82\x7f\x18\xdeH\xa4ty3\xde\xbd\x8a\xca\x95X[\x96\xcc\xf1\xe9W\x95\xb9Y\xeb\x1a\x97\x8b|\'w<\xb1\xb6\x81=\xed\xc0\x8f\x0b\xe5t\xc6O\x15\xdd|0\xd5\x8c:\x01\x1f\xf0\xae\xe4\x84\x17\xc8\x12\xf5#\x1dk\xe2\xed\x17\xe2\xcf\x8f-\xb5\xc8\xed\xe2\xd7d\xda\xc41\x07\xb9\xce?\xa5{\x05\x97\xed\x15\xf1WE\xb3\x8a\xd6\xc7_\xc2\x18\xc3\x1d\xc9\x9ezz\xfbUQ\x8cW\xba\x8b\x9d[F\xf6?\xff\xd9\n'
+2025-06-30 16:01:55,890 - ATC_GUI - DEBUG - 바이너리 데이터 처리 시작: 1507 bytes, 시작: b'ME_FD:1,175126691582'
+2025-06-30 16:01:55,890 - ATC_GUI - INFO - ME_FD 바이너리 수신 시작: 1507 bytes
+2025-06-30 16:01:55,891 - ATC_GUI - DEBUG - ME_FD 초기 텍스트 부분: ME_FD:1,1751266915820206,BIRD,19,292,TWY_A,2025-06-30T07:01:55Z,1437
+2025-06-30 16:01:55,891 - ATC_GUI - DEBUG - ME_FD 텍스트 분석: 'ME_FD:1,1751266915820206,BIRD,19,292,TWY_A,2025-06-30T07:01:55Z,1437', parts: ['ME_FD:1', '1751266915820206', 'BIRD', '19', '292', 'TWY_A', '2025-06-30T07:01:55Z', '1437']
+2025-06-30 16:01:55,891 - ATC_GUI - DEBUG - ME_FD (8개 필드): image_size=1437
+2025-06-30 16:01:55,891 - ATC_GUI - DEBUG - ME_FD 크기 계산: 텍스트=69, 이미지=1437, 총=1506
+2025-06-30 16:01:55,892 - ATC_GUI - INFO - ME_FD 완전한 데이터 수신: 1507 bytes
+2025-06-30 16:01:55,892 - ATC_GUI - INFO - === ME_FD 바이너리 데이터 분석 시작 ===
+2025-06-30 16:01:55,892 - ATC_GUI - INFO - 전체 데이터 크기: 1507 bytes
+2025-06-30 16:01:55,893 - ATC_GUI - INFO - 데이터 시작 부분: b'ME_FD:1,1751266915820206,BIRD,19,292,TWY_A,2025-06-30T07:01:55Z,1437,\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x00\x00\x01\x00\x01\x00\x00\xff\xdb\x00C\x00\x02\x01\x01\x01\x01\x01'
+2025-06-30 16:01:55,893 - ATC_GUI - INFO - 추출된 텍스트 부분: 'ME_FD:1,1751266915820206,BIRD,19,292,TWY_A,2025-06-30T07:01:55Z,1437'
+2025-06-30 16:01:55,893 - ATC_GUI - INFO - 텍스트 부분 길이: 68 문자
+2025-06-30 16:01:55,893 - ATC_GUI - INFO - 텍스트 크기 (UTF-8 + 콤마): 69 bytes
+2025-06-30 16:01:55,893 - ATC_GUI - INFO - 이미지 데이터 크기: 1438 bytes
+2025-06-30 16:01:55,893 - ATC_GUI - INFO - 프리픽스 제거 후 텍스트: '1,1751266915820206,BIRD,19,292,TWY_A,2025-06-30T07:01:55Z,1437'
+2025-06-30 16:01:55,893 - ATC_GUI - INFO - ME_FD 텍스트 데이터: 1,1751266915820206,BIRD,19,292,TWY_A,2025-06-30T07:01:55Z,1437
+2025-06-30 16:01:55,893 - ATC_GUI - INFO - ME_FD 이미지 크기: 1438 bytes
+2025-06-30 16:01:55,893 - ATC_GUI - INFO - === ME_FD 바이너리 데이터 분석 완료 ===
+2025-06-30 16:01:55,893 - ATC_GUI - DEBUG - ME_FD (8개 필드): image_size=1437
+2025-06-30 16:01:55,894 - ATC_GUI - DEBUG - ME_FD 바이너리 파싱 결과: ID=1751266915820206, Type=조류, Pos=(19.0, 292.0), Area=TWY_A, EventType=위험요소 감지, ImageSize=1437, StateInfo=None
+2025-06-30 16:01:55,894 - ATC_GUI - WARNING - ME_FD 이미지 크기 불일치: 1438 != 1437
+2025-06-30 16:01:55,894 - ATC_GUI - INFO - NetworkManager: 최초 객체 감지 이벤트 수신 - 1개 객체
+2025-06-30 16:01:55,894 - ATC_GUI - INFO - NetworkManager: 최초 감지 객체 처리 중 - ID 1751266915820206, Type 조류, Area TWY_A
+2025-06-30 16:01:55,894 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 1751266915820206, Type 조류, Area TWY_A
+2025-06-30 16:01:55,894 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 1751266915820206를 first_detected_object_ids에 추가
+2025-06-30 16:01:55,905 - ATC_GUI - INFO - [알림 표시] 객체 감지 - ID: 1751266915820206, 타입: 조류, 위치: TWY_A, 위험도: None, 좌표: (19.0, 292.0), 시간: 2025-06-30 16:01:55
+2025-06-30 16:01:55,905 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 1751266915820206 (조류)
+2025-06-30 16:01:55,905 - ATC_GUI - DEBUG - MainPage에서 이미 처리된 객체: ID 1751266915820206
+2025-06-30 16:01:55,905 - ATC_GUI - INFO - NetworkManager: 최초 객체 감지 알림 시그널 발생 완료 - ID 1751266915820206 (조류)
+2025-06-30 16:01:55,905 - ATC_GUI - INFO - 이미지 포함 최초 감지 이벤트 처리 완료: ID 1751266915820206, StateInfo=None
+2025-06-30 16:01:55,934 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,48,298,TWY_A\nME_FD:1,1751266915909207,BIRD,48,298,TWY_A,2025-06-30T07:01:55Z,2030,\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x00\x00\x01\x00\x01\x00\x00\xff\xdb\x00C\x00\x02\x01\x01\x01\x01\x01\x02\x01\x01\x01\x02\x02\x02\x02\x02\x04\x03\x02\x02\x02\x02\x05\x04\x04\x03\x04\x06\x05\x06\x06\x06\x05\x06\x06\x06\x07\t\x08\x06\x07\t\x07\x06\x06\x08\x0b\x08\t\n\n\n\n\n\x06\x08\x0b\x0c\x0b\n\x0c\t\n\n\n\xff\xdb\x00C\x01\x02\x02\x02\x02\x02\x02\x05\x03\x03\x05\n\x07\x06\x07\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\xff\xc0\x00\x11\x08\x00E\x001\x03\x01"\x00\x02\x11\x01\x03\x11\x01\xff\xc4\x00\x1f\x00\x00\x01\x05\x01\x01\x01\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\xff\xc4\x00\xb5\x10\x00\x02\x01\x03\x03\x02\x04\x03\x05\x05\x04\x04\x00\x00\x01}\x01\x02\x03\x00\x04\x11\x05\x12!1A\x06\x13Qa\x07"q\x142\x81\x91\xa1\x08#B\xb1\xc1\x15R\xd1\xf0$3br\x82\t\n\x16\x17\x18\x19\x1a%&\'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz\x83\x84\x85\x86\x87\x88\x89\x8a\x92\x93\x94\x95\x96\x97\x98\x99\x9a\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xff\xc4\x00\x1f\x01\x00\x03\x01\x01\x01\x01\x01\x01\x01\x01\x01\x00\x00\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\xff\xc4\x00\xb5\x11\x00\x02\x01\x02\x04\x04\x03\x04\x07\x05\x04\x04\x00\x01\x02w\x00\x01\x02\x03\x11\x04\x05!1\x06\x12AQ\x07aq\x13"2\x81\x08\x14B\x91\xa1\xb1\xc1\t#3R\xf0\x15br\xd1\n\x16$4\xe1%\xf1\x17\x18\x19\x1a&\'()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x92\x93\x94\x95\x96\x97\x98\x99\x9a\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xff\xda\x00\x0c\x03\x01\x00\x02\x11\x03\x11\x00?\x00\xfa^\xf7\xfe\tg\xf0\x8e\xef\xee!O\xfbm\x9a\xe5>$\x7f\xc12\xbe\x19\xf8j\xcf\xedv\xb7l\xbf\xec\xf9\x98\xfe\xb5\xed\xbf\xf0\xd8\xde\x01\x8f\xfe>\xad\'\x8f\xfe\xd9\x13\xfd+\x91\xf8\xcb\xfbT\xf8\x0b\xc4Zo\xd9\xb4\x8b\x962\xff\x00q\xe2"\xbdlM8\xc6\x8b\x97c\xcc\xc2\xa9\xce\xb2\x8cz\x9f,^\xfc\x08\xd0m\xbcI/\x83,\xeeL\xbe\\\xfe_\x07\x19\xf7\xc5z_\x86?\xe0\x99G\xc5\xf6q]\xc3\xaf=\xbf\x99\xfc"M\xf8\xfdEy\xc7\x82\xf5;\xb9>!K\xac\\\xcc\xf2y\x97\xdf\xebK\xf4\xaf\xb3~\x0b\xfc[\xd14\xdd\x1e/\xed[\xc4\x8f\xca\xf5\x19\xcd|\x9e\x0b3u\xf1\xce\x93z#\xea3\x1c\x9at0Q\xaa\x96\xa7\x83\xbf\xfc\x12{^\x85b\xb6]u\xff\x00}\xca\xb2\x9c\xfc\xbe\xbfz\xbeJ\xf8\xad\xf0\xe6\xd7\xc0_\x10o\xbc?\x05\xd7\x9d\x05\x9c\xfeZ\xdc\xc6\xe7\x12{\xed\xc9\xc7\xe6k\xf4\xfb\xf6\x8f\xfd\xaf|\x07\xf0\xc3\xe0N\xb3\xe2O\x0fkHu&\xb1\xfb&\x99\x16\xdc\x94\x9f\xd0\x1e\xff\x00\x95~W\xea:\x9d\xde\xabq-\xe5\xc4\xcf,\xb2\xcf\xe63\xc8\xd9\xfc+\xe9j\xaa\\\xde\xe9\xf3t\x92\x945\xdc\xce\xf2\xac\xbf\xe83\xff\x00\x90\xcf\xff\x00\x15E7\xcd\xd0}\x1b\xf2\xa2\xb3\xe5F\x9e\xce\x07\xecE\xe7\xc3\x1f\x87W\xfc\x9d\x16\xd0\xfd!\x15\xe3?\xb4/\xc2\xdf\x01h\xbal\xb7Qh\xf0$\xb1\xff\x00\x1aq\x9f\xd2\x9de\xf1_\xf6\x94\xb4\xfb\xfe\x10\x0f\xff\x00l\xb1\xfd+\x80\xf8\xd1\xf1\x1f\xe3\x86\xb1\xa6\xcb\x16\xab\xe0\xb7\x8f\xcc\xeeb\'\x1f\xa0\xae\x9c|\x9cp\x92\xb1\xcd\x95\xd4\x97\xd7bx\xa7\x81n!\x97\xc6\x1e^\xf0"\xf3\xfc\xcf/\xfaf\xbe\xb0\xf8W\xe0\xcf\x0e\xeb\x1ao\x93w\x96\xf7\xdb\x8f\xeb_\x16xb\xe7Q\xd0\xbcG-\xdd\xf5\xb3\x06\x8f\xfeY\x96\xeb\xf8\xe2\xbd\x8fK\xfd\xa2\xf5\xdf\x0eC\xe4\xd8\xa8\xfa\x89q\xfd+\xf2\x8c\xbb\x15K\x0f\x9bIO\xab?`\xce\xe8W\xad\x93S\xf6{$\xef\xf8\x1c\xb7\xfc\x14O\xc5>\x16\xd1\xfcs\xa5\xfc5\xf0r\x06]2\x0f?P\x1efC\xcf\xfd\xe21\xc7\xd3\x9a\xf0\xef\x84~\x11\xd5~$\xf8\xefL\xf0&\x8d\x13<\xda\x9c\xfb\x12@\x9b\xb6/\xf7\xb1\xdf\xf3\x15\xb3\xf1Z\xcbP\xf1F\xabu\xe3MF\xe5\xa5\xbd\xbb\x9f|\xae\xc3?/\xf7z\xfe\xb5\xf4\x07\xfc\x12#\xe0\xdd\xcf\x8a~(k?\x12\xaf\xac\x94Z\xe8\x90\xf9v\xce\xc9\xb8#\xfa\x83\xc5~\x95\x85\x9ckM\xfc\x8f\xca\xe5I\xd2\x8f\x99\xef\xff\x00\xf0\xed/\x82\x7f\xf3\xc9\x7f\xf0\x13\xff\x00\xb2\xa2\xbe\x9b\xcc\xbf\xf3\xe2\xdf\xe7\xf0\xa2\xbdOcO\xb1\xcd\xed\'\xdc\xe0\xa7\xf1?\x85\xe0\xfb\xf7\xc9\xff\x00\x7f\x05yo\xc5\xdf\x1b\xe8W\xd0\xf9Q\xeaq\xcb\xee\x84\x1a\xf3\x0f\x88>\x13:$\xdeQ\xd6\xef\xcf\xb8\x9c\x8a\xe0\xa4\xd6 \xb3\xff\x00P\xf2\x9f\xf7\xe4\xdd^>q\x8a\x9d,,\x92W\xb9\xe8\xe4\x99j\xc4\xe2T\xd4\xac\xa3\xbf\x99\x89\xe2\x0f\x02\xc9>\xb5.\xaca\x01d\xff\x00\x96@t\xfc\x7f\xfa\xd5\x8f{\xe0}T\xfd\xcb\\\xfe5\xb1\xe2\x1f\x1c\xcb\x01\xe6a\xf8\x9cW8~4%\x9c\xdeL\xd2\xee\xf7-\x8f\xe9_\x99\xd2\xcakcqQ\xac\x95\x9a?C\xc4\xf1\x05\x1a8g\x87z\xa4g\xeb^\x1a\xb8:W\x93-\xb9.~\xea\xe3\xad}\xf7\xff\x00\x04\xf5\xf8w\xe1\xef\x85\xff\x00\x02mt\xc7\x1b/uY\xfe\xd9|\xbbv\x92?\xe7\x9f\xff\x00_\xf4\xaf\x8e\xbc#\xe3\x7f\x05\xeb\x1a\xb5\xae\xa1|CEo\xf7\xa2?\xc7\xf8\xf6\xaf\xa2\xbc\t\xfbV|7\xf0\xcd\x94KyxcX\xa0\xf2\xd4\xef\xc0\x1e\xfd+\xf4\xdc\xb2\x8f\xd5\xa9\xfe\xf1\xdd\x9f\x9bc1*\xb5G\xca\xac\x8f\xaf?\xb6\xad\xff\x00\xe7\xa2~B\x8a\xf9\x8f\xfe\x1b\x9f\xe1\x17\xfd\x05\x7f\xf2/\xff\x00Z\x8a\xf5\xfd\xbc\x0e\x13\xcc|]\xf1\xff\x00\xe0\xae\xad\xfe\x95u\xab\xa9\xff\x00g\x15\xe6w\x9f\x13\xbe\x14\xbc\xdeT\x17\x11\xbf\xbe\xfcW\x1d\xad~\xcb>5\xf2|\x9d\xf0\xfdw\x7f\xf5\xeb\x95\xd5\xff\x00fO\x1c\xd84\xb7bh\x91c\xfe\xec\x9b\xb3^~*\x97\xb5\x85\x8e\xbc-\x7f`\xdbN\xc5o\x8f\x7f\x17<\x1e\x9a\xa4Z\x7f\x85\xdf\xccY>\xf4\xaa\xf8\xdb\xf8c\x9f\xce\xbcO\xc4\xdf\x14n<\xef:\x0b\x8f\xc0U\xff\x00\x1a\xfc0\xf8\x8a\xd2\xcb6\x9d\xa5\x96i>\xe9$|\xbf\xaf5\xe4\xda\xa7\xc3?\x8d\x10M\xe5]X0\xf7\xc0\xff\x00\x1a\xf0gJ\xa4d\xa2\xb6:Uoi&\xd6\xe7\xb4x\x13\xe2\xcc\xf0Y}\x91\xe4\x1b\xbf\xe7\xa7\x99\xfd1]\x17\x89\xfe\'_\xde\xe8\xbfd\x8e\xe1U\xff\x00\xbc\rx\xaf\x87\xbe\x1c\xf8\xdaN\xed\x1f\xfc\x04\x9a\xd8X\xb5\xa1}\xff\x00\x13\x08\xe5\x86?\xf6\xd2\xbd\x1aq\x9d8\xeaeV1\x95\xaev?\xf0\x9a^\x7f\xcf\xc0\xff\x00\xbe\xa8\xae\x1b\xed\x93\x7f|\xfetV\x9c\xd21\xf6p?]\xaf|)gy\xdd\x17\xfe\xd9g\xfa\xd7\x9a\xfe\xd1\xf2\xd9\xfc5\xf8;\xa9\xf8\xdfJ\xd3\xd2F\xb6\xb1\xfbO\xd9\xd8\xe3w\xfb;\xb9\xc7\xd7\x14Q^\xb4\xd2Q\xd0\xe0rm\xa3\xf3w\xc4\xbf\xb7O\xc4k9\xa5\x86/\x0ci\x1f\xbb\xef\xe5\x1ek\xcfo\x7fn\xff\x00\x89\x17\xf3y\xb7\x1e\x17\xd2\x0f\xb7\x92h\xa2\xbcyk3\xd1\xc3\xa4\x96\x84\x9aG\xed\xa1\xf1"q\x94\xd3\xed\x13\xf0\x07\xfaV\xdd\xc7\xc7\x8f\x11x\xd2\xcf\x1a\x8d\x8ch\xdf\xdeG\xff\x00\xebQE\\\x9bi\\\xd6\xa7CC\xcf\xff\x00c\xf5\xa2\x8a*\x0c\xcf\xff\xd9\n'
+2025-06-30 16:01:55,934 - ATC_GUI - DEBUG - UTF-8 디코딩 실패, 바이너리 데이터로 재처리
+2025-06-30 16:01:55,934 - ATC_GUI - DEBUG - 바이너리 데이터 처리 시작: 2141 bytes, 시작: b'ME_OD:17512669159092'
+2025-06-30 16:01:55,934 - ATC_GUI - INFO - 🔍 ME_OD와 ME_FD 혼재 패킷 감지!
+2025-06-30 16:01:55,935 - ATC_GUI - INFO - === ME_OD와 ME_FD 혼재 패킷 처리 시작 ===
+2025-06-30 16:01:55,935 - ATC_GUI - INFO - 전체 데이터 크기: 1185 문자
+2025-06-30 16:01:55,935 - ATC_GUI - INFO - ME_FD 라인 인덱스: 1
+2025-06-30 16:01:55,935 - ATC_GUI - INFO - ME_OD 부분 추출: 40 문자
+2025-06-30 16:01:55,935 - ATC_GUI - DEBUG - ME_OD 내용: ME_OD:1751266915909207,BIRD,48,298,TWY_A
+2025-06-30 16:01:55,935 - ATC_GUI - DEBUG - ME_OD 라인 처리: ME_OD:1751266915909207,BIRD,48,298,TWY_A
+2025-06-30 16:01:55,935 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,48,298,TWY_A...
+2025-06-30 16:01:55,935 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:55,935 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(48.0, 298.0), Area=TWY_A
+2025-06-30 16:01:55,935 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:55,935 - ATC_GUI - INFO - ME_FD 부분 추출: 1142 문자
+2025-06-30 16:01:55,935 - ATC_GUI - DEBUG - ME_FD 내용 시작: ME_FD:1,1751266915909207,BIRD,48,298,TWY_A,2025-06-30T07:01:55Z,2030, JFIF       C ...
+2025-06-30 16:01:55,935 - ATC_GUI - INFO - === ME_FD 바이너리 데이터 분석 시작 ===
+2025-06-30 16:01:55,935 - ATC_GUI - INFO - 전체 데이터 크기: 1196 bytes
+2025-06-30 16:01:55,935 - ATC_GUI - INFO - 데이터 시작 부분: b'ME_FD:1,1751266915909207,BIRD,48,298,TWY_A,2025-06-30T07:01:55Z,2030,\x00\x10JFIF\x00\x01\x01\x00\x00\x01\x00\x01\x00\x00\x00C\x00\x02\x01\x01\x01\x01\x01\x02\x01\x01\x01\x02\x02'
+2025-06-30 16:01:55,935 - ATC_GUI - INFO - 추출된 텍스트 부분: 'ME_FD:1,1751266915909207,BIRD,48,298,TWY_A,2025-06-30T07:01:55Z,2030'
+2025-06-30 16:01:55,935 - ATC_GUI - INFO - 텍스트 부분 길이: 68 문자
+2025-06-30 16:01:55,935 - ATC_GUI - INFO - 텍스트 크기 (UTF-8 + 콤마): 69 bytes
+2025-06-30 16:01:55,936 - ATC_GUI - INFO - 이미지 데이터 크기: 1127 bytes
+2025-06-30 16:01:55,936 - ATC_GUI - INFO - 프리픽스 제거 후 텍스트: '1,1751266915909207,BIRD,48,298,TWY_A,2025-06-30T07:01:55Z,2030'
+2025-06-30 16:01:55,936 - ATC_GUI - INFO - ME_FD 텍스트 데이터: 1,1751266915909207,BIRD,48,298,TWY_A,2025-06-30T07:01:55Z,2030
+2025-06-30 16:01:55,936 - ATC_GUI - INFO - ME_FD 이미지 크기: 1127 bytes
+2025-06-30 16:01:55,936 - ATC_GUI - INFO - === ME_FD 바이너리 데이터 분석 완료 ===
+2025-06-30 16:01:55,936 - ATC_GUI - DEBUG - ME_FD (8개 필드): image_size=2030
+2025-06-30 16:01:55,936 - ATC_GUI - DEBUG - ME_FD 바이너리 파싱 결과: ID=1751266915909207, Type=조류, Pos=(48.0, 298.0), Area=TWY_A, EventType=위험요소 감지, ImageSize=2030, StateInfo=None
+2025-06-30 16:01:55,936 - ATC_GUI - WARNING - ME_FD 이미지 크기 불일치: 1127 != 2030
+2025-06-30 16:01:55,936 - ATC_GUI - INFO - NetworkManager: 최초 객체 감지 이벤트 수신 - 1개 객체
+2025-06-30 16:01:55,936 - ATC_GUI - INFO - NetworkManager: 최초 감지 객체 처리 중 - ID 1751266915909207, Type 조류, Area TWY_A
+2025-06-30 16:01:55,936 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 1751266915909207, Type 조류, Area TWY_A
+2025-06-30 16:01:55,936 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 1751266915909207를 first_detected_object_ids에 추가
+2025-06-30 16:01:55,943 - ATC_GUI - INFO - [알림 표시] 객체 감지 - ID: 1751266915909207, 타입: 조류, 위치: TWY_A, 위험도: None, 좌표: (48.0, 298.0), 시간: 2025-06-30 16:01:55
+2025-06-30 16:01:55,943 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 1751266915909207 (조류)
+2025-06-30 16:01:55,943 - ATC_GUI - DEBUG - MainPage에서 이미 처리된 객체: ID 1751266915909207
+2025-06-30 16:01:55,944 - ATC_GUI - INFO - NetworkManager: 최초 객체 감지 알림 시그널 발생 완료 - ID 1751266915909207 (조류)
+2025-06-30 16:01:55,944 - ATC_GUI - INFO - 이미지 포함 최초 감지 이벤트 처리 완료: ID 1751266915909207, StateInfo=None
+2025-06-30 16:01:55,944 - ATC_GUI - INFO - === ME_OD와 ME_FD 혼재 패킷 처리 완료 ===
+2025-06-30 16:01:55,948 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 16:01:55,948 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 16:01:55,948 - ATC_GUI - DEBUG - 새로운 객체: 2개 (전체: 2개)
+2025-06-30 16:01:55,954 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1751266915820206, 크기: 50x50
+2025-06-30 16:01:55,955 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1751266915820206, 위치: (0, 264), 상태: NORMAL
+2025-06-30 16:01:55,957 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=조류, rescue_level=0
+2025-06-30 16:01:55,957 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 조류
+2025-06-30 16:01:55,958 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1751266915909207, 크기: 50x50
+2025-06-30 16:01:55,959 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1751266915909207, 위치: (22, 270), 상태: NORMAL
+2025-06-30 16:01:55,959 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=조류, rescue_level=0
+2025-06-30 16:01:55,959 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 조류
+2025-06-30 16:01:55,968 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,56,299,TWY_A\n'
+2025-06-30 16:01:55,968 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,56,299,TWY_A...
+2025-06-30 16:01:55,969 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:55,969 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(56.0, 299.0), Area=TWY_A
+2025-06-30 16:01:55,969 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:55,996 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,64,299,TWY_A\n'
+2025-06-30 16:01:55,996 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,64,299,TWY_A...
+2025-06-30 16:01:55,996 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:55,996 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(64.0, 299.0), Area=TWY_A
+2025-06-30 16:01:55,996 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,027 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,72,300,TWY_A\n'
+2025-06-30 16:01:56,027 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,72,300,TWY_A...
+2025-06-30 16:01:56,027 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,028 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(72.0, 300.0), Area=TWY_A
+2025-06-30 16:01:56,028 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,068 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,81,300,TWY_A\n'
+2025-06-30 16:01:56,068 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,81,300,TWY_A...
+2025-06-30 16:01:56,069 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,069 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(81.0, 300.0), Area=TWY_A
+2025-06-30 16:01:56,069 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,102 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,88,300,TWY_A\n'
+2025-06-30 16:01:56,103 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,88,300,TWY_A...
+2025-06-30 16:01:56,103 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,104 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(88.0, 300.0), Area=TWY_A
+2025-06-30 16:01:56,104 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,134 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,100,301,TWY_A\n'
+2025-06-30 16:01:56,135 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,100,301,TWY_A...
+2025-06-30 16:01:56,135 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,135 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(100.0, 301.0), Area=TWY_A
+2025-06-30 16:01:56,135 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,148 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:01:56,148 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:01:56,148 - ATC_GUI - DEBUG - 사라진 객체 ID 제거: 1751266915820206
+2025-06-30 16:01:56,148 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:01:56,149 - ATC_GUI - DEBUG - 마커 제거 성공: ID 1751266915820206
+2025-06-30 16:01:56,151 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (30, 271), 상태: NORMAL
+2025-06-30 16:01:56,151 - ATC_GUI - DEBUG - 사라진 객체들의 최초 감지 기록 정리: {1751266915820206}
+2025-06-30 16:01:56,176 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,111,301,TWY_A\n'
+2025-06-30 16:01:56,176 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,111,301,TWY_A...
+2025-06-30 16:01:56,177 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,177 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(111.0, 301.0), Area=TWY_A
+2025-06-30 16:01:56,178 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,196 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,118,303,TWY_A\n'
+2025-06-30 16:01:56,197 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,118,303,TWY_A...
+2025-06-30 16:01:56,197 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,197 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(118.0, 303.0), Area=TWY_A
+2025-06-30 16:01:56,198 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,228 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,125,303,TWY_A\n'
+2025-06-30 16:01:56,229 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,125,303,TWY_A...
+2025-06-30 16:01:56,229 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,230 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(125.0, 303.0), Area=TWY_A
+2025-06-30 16:01:56,230 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,348 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:01:56,349 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:01:56,349 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:01:56,352 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (85, 273), 상태: NORMAL
+2025-06-30 16:01:56,574 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,135,304,TWY_A\n'
+2025-06-30 16:01:56,574 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,135,304,TWY_A...
+2025-06-30 16:01:56,575 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,575 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(135.0, 304.0), Area=TWY_A
+2025-06-30 16:01:56,576 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,578 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,145,304,TWY_A\nME_OD:1751266915909207,BIRD,152,304,TWY_A\nME_OD:1751266915909207,BIRD,161,303,TWY_A\nME_OD:1751266915909207,BIRD,171,302,TWY_A\nME_OD:1751266915909207,BIRD,180,301,TWY_A\nME_OD:1751266915909207,BIRD,191,301,GRASS_A\nME_OD:1751266915909207,BIRD,200,301,GRASS_A\nME_OD:1751266915909207,BIRD,209,301,GRASS_A\nME_OD:1751266915909207,BIRD,215,301,GRASS_A\n'
+2025-06-30 16:01:56,578 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,145,304,TWY_A...
+2025-06-30 16:01:56,579 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,579 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(145.0, 304.0), Area=TWY_A
+2025-06-30 16:01:56,580 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,580 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,152,304,TWY_A...
+2025-06-30 16:01:56,581 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,581 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(152.0, 304.0), Area=TWY_A
+2025-06-30 16:01:56,581 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,582 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,161,303,TWY_A...
+2025-06-30 16:01:56,582 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,582 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(161.0, 303.0), Area=TWY_A
+2025-06-30 16:01:56,583 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,583 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,171,302,TWY_A...
+2025-06-30 16:01:56,583 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,583 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(171.0, 302.0), Area=TWY_A
+2025-06-30 16:01:56,583 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,583 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,180,301,TWY_A...
+2025-06-30 16:01:56,583 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,583 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(180.0, 301.0), Area=TWY_A
+2025-06-30 16:01:56,583 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,583 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,191,301,GRASS_A...
+2025-06-30 16:01:56,583 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,583 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(191.0, 301.0), Area=GRASS_A
+2025-06-30 16:01:56,584 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,584 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,200,301,GRASS_A...
+2025-06-30 16:01:56,584 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,584 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(200.0, 301.0), Area=GRASS_A
+2025-06-30 16:01:56,584 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,584 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,209,301,GRASS_A...
+2025-06-30 16:01:56,584 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,584 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(209.0, 301.0), Area=GRASS_A
+2025-06-30 16:01:56,584 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,584 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,215,301,GRASS_A...
+2025-06-30 16:01:56,584 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,584 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(215.0, 301.0), Area=GRASS_A
+2025-06-30 16:01:56,584 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,648 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,222,300,GRASS_A\n'
+2025-06-30 16:01:56,648 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,222,300,GRASS_A...
+2025-06-30 16:01:56,649 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,649 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(222.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:56,650 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,650 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:01:56,651 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:01:56,651 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:01:56,653 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (109, 276), 상태: NORMAL
+2025-06-30 16:01:56,656 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,229,300,GRASS_A\n'
+2025-06-30 16:01:56,657 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,229,300,GRASS_A...
+2025-06-30 16:01:56,657 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,657 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(229.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:56,658 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,670 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,235,300,GRASS_A\n'
+2025-06-30 16:01:56,671 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,235,300,GRASS_A...
+2025-06-30 16:01:56,671 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,672 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(235.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:56,672 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,703 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,240,300,GRASS_A\n'
+2025-06-30 16:01:56,704 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,240,300,GRASS_A...
+2025-06-30 16:01:56,704 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,705 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(240.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:56,705 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,731 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,244,300,GRASS_A\n'
+2025-06-30 16:01:56,732 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,244,300,GRASS_A...
+2025-06-30 16:01:56,732 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,733 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(244.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:56,733 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,764 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,245,300,GRASS_A\n'
+2025-06-30 16:01:56,765 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,245,300,GRASS_A...
+2025-06-30 16:01:56,765 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,766 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(245.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:56,766 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,796 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,245,300,GRASS_A\n'
+2025-06-30 16:01:56,797 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,245,300,GRASS_A...
+2025-06-30 16:01:56,798 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,798 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(245.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:56,798 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,827 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,245,300,GRASS_A\n'
+2025-06-30 16:01:56,828 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,245,300,GRASS_A...
+2025-06-30 16:01:56,828 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,829 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(245.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:56,829 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,858 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,245,300,GRASS_A\n'
+2025-06-30 16:01:56,859 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,245,300,GRASS_A...
+2025-06-30 16:01:56,859 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,859 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(245.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:56,859 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,889 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,245,299,GRASS_A\n'
+2025-06-30 16:01:56,890 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,245,299,GRASS_A...
+2025-06-30 16:01:56,890 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,890 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(245.0, 299.0), Area=GRASS_A
+2025-06-30 16:01:56,891 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,929 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,245,300,GRASS_A\n'
+2025-06-30 16:01:56,930 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,245,300,GRASS_A...
+2025-06-30 16:01:56,930 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,930 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(245.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:56,930 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,948 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:01:56,948 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:01:56,948 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:01:56,949 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (202, 272), 상태: NORMAL
+2025-06-30 16:01:56,961 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,244,300,GRASS_A\n'
+2025-06-30 16:01:56,961 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,244,300,GRASS_A...
+2025-06-30 16:01:56,961 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,961 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(244.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:56,961 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:56,981 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,244,300,GRASS_A\n'
+2025-06-30 16:01:56,981 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,244,300,GRASS_A...
+2025-06-30 16:01:56,981 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:56,981 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(244.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:56,981 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,034 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,244,300,GRASS_A\n'
+2025-06-30 16:01:57,035 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,244,300,GRASS_A...
+2025-06-30 16:01:57,035 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,035 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(244.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,035 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,054 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,244,300,GRASS_A\n'
+2025-06-30 16:01:57,054 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,244,300,GRASS_A...
+2025-06-30 16:01:57,054 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,054 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(244.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,054 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,092 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,244,300,GRASS_A\n'
+2025-06-30 16:01:57,092 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,244,300,GRASS_A...
+2025-06-30 16:01:57,092 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,092 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(244.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,093 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,145 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,244,300,GRASS_A\n'
+2025-06-30 16:01:57,146 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,244,300,GRASS_A...
+2025-06-30 16:01:57,146 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,146 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(244.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,147 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,149 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:01:57,149 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:01:57,150 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:01:57,152 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (217, 272), 상태: NORMAL
+2025-06-30 16:01:57,155 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,244,300,GRASS_A\n'
+2025-06-30 16:01:57,155 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,244,300,GRASS_A...
+2025-06-30 16:01:57,156 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,156 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(244.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,157 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,186 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,186 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,187 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,187 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,188 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,237 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,244,300,GRASS_A\n'
+2025-06-30 16:01:57,237 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,244,300,GRASS_A...
+2025-06-30 16:01:57,238 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,238 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(244.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,239 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,258 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,244,300,GRASS_A\n'
+2025-06-30 16:01:57,259 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,244,300,GRASS_A...
+2025-06-30 16:01:57,259 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,260 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(244.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,260 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,305 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,306 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,306 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,307 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,307 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,335 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,335 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,336 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,336 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,337 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,366 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,367 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,367 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,368 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,368 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,392 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,392 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,393 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,393 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,394 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,426 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,427 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,427 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,428 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,428 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,448 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:01:57,449 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:01:57,449 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:01:57,451 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (217, 272), 상태: NORMAL
+2025-06-30 16:01:57,468 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,469 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,469 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,470 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,470 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,502 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,502 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,502 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,503 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,503 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,530 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,299,GRASS_A\n'
+2025-06-30 16:01:57,531 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,299,GRASS_A...
+2025-06-30 16:01:57,531 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,531 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 299.0), Area=GRASS_A
+2025-06-30 16:01:57,531 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,564 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,564 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,565 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,565 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,565 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,585 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,586 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,586 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,586 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,587 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,627 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,627 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,628 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,628 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,628 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,669 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,670 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,670 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,670 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,671 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,702 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,703 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,703 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,704 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,704 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,733 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,733 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,734 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,734 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,735 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,748 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:01:57,749 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:01:57,749 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:01:57,751 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (216, 272), 상태: NORMAL
+2025-06-30 16:01:57,759 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,760 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,761 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,761 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,761 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,790 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,242,300,GRASS_A\n'
+2025-06-30 16:01:57,791 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,242,300,GRASS_A...
+2025-06-30 16:01:57,792 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,792 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(242.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,792 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,835 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,242,299,GRASS_A\n'
+2025-06-30 16:01:57,835 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,242,299,GRASS_A...
+2025-06-30 16:01:57,836 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,836 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(242.0, 299.0), Area=GRASS_A
+2025-06-30 16:01:57,837 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,867 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,868 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,868 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,868 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,869 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,898 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,898 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,899 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,899 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,900 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,939 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,939 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,939 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,939 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,939 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,948 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:01:57,948 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:01:57,948 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:01:57,949 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (216, 272), 상태: NORMAL
+2025-06-30 16:01:57,960 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,961 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,961 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,961 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,961 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:57,992 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:57,993 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:57,993 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:57,993 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:57,994 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,028 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,029 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,030 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,030 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,030 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,070 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,299,GRASS_A\n'
+2025-06-30 16:01:58,070 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,299,GRASS_A...
+2025-06-30 16:01:58,071 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,071 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 299.0), Area=GRASS_A
+2025-06-30 16:01:58,072 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,103 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,103 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,104 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,104 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,104 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,142 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,143 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,143 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,144 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,144 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,176 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,176 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,177 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,177 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,178 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,190 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,242,300,GRASS_A\n'
+2025-06-30 16:01:58,191 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,242,300,GRASS_A...
+2025-06-30 16:01:58,191 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,192 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(242.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,192 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,234 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,234 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,235 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,235 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,236 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,248 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:01:58,249 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:01:58,249 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:01:58,251 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (216, 272), 상태: NORMAL
+2025-06-30 16:01:58,259 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,260 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,260 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,260 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,261 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,301 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,242,300,GRASS_A\n'
+2025-06-30 16:01:58,302 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,242,300,GRASS_A...
+2025-06-30 16:01:58,302 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,303 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(242.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,303 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,343 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,299,GRASS_A\n'
+2025-06-30 16:01:58,343 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,299,GRASS_A...
+2025-06-30 16:01:58,344 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,344 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 299.0), Area=GRASS_A
+2025-06-30 16:01:58,345 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,366 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,366 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,367 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,367 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,368 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,393 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,393 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,394 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,394 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,395 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,423 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,424 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,424 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,425 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,425 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,448 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:01:58,449 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:01:58,449 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:01:58,451 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (216, 272), 상태: NORMAL
+2025-06-30 16:01:58,467 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,468 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,469 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,469 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,469 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,499 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,500 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,500 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,501 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,501 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,532 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,533 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,533 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,534 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,534 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,567 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,567 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,568 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,568 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,569 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,595 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,595 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,596 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,596 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,597 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,629 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,630 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,630 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,630 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,631 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,649 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:01:58,649 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:01:58,649 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:01:58,652 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (216, 272), 상태: NORMAL
+2025-06-30 16:01:58,671 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,671 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,672 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,672 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,673 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,691 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,692 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,692 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,693 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,693 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,734 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,734 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,735 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,735 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,736 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,758 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,758 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,759 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,759 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,760 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,791 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,792 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,792 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,792 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,793 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,827 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,299,GRASS_A\n'
+2025-06-30 16:01:58,827 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,299,GRASS_A...
+2025-06-30 16:01:58,828 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,828 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 299.0), Area=GRASS_A
+2025-06-30 16:01:58,829 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,859 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,859 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,860 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,860 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,861 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,890 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,890 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,891 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,891 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,892 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,933 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,933 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,934 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,934 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,935 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:58,948 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:01:58,948 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:01:58,949 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:01:58,951 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (216, 272), 상태: NORMAL
+2025-06-30 16:01:58,963 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:58,964 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:58,964 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:58,964 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:58,965 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,148 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:01:59,149 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:01:59,149 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:01:59,151 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (216, 272), 상태: NORMAL
+2025-06-30 16:01:59,236 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\nME_OD:1751266915909207,BIRD,243,300,GRASS_A\nME_OD:1751266915909207,BIRD,243,300,GRASS_A\nME_OD:1751266915909207,BIRD,243,300,GRASS_A\nME_OD:1751266915909207,BIRD,243,300,GRASS_A\nME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,237 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,238 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,238 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,238 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,239 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,239 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,240 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,240 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,240 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,241 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,241 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,241 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,242 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,242 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,242 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,242 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,242 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,242 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,242 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,242 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,242 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,242 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,242 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,242 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,242 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,299,GRASS_A\nME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,243 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,299,GRASS_A...
+2025-06-30 16:01:59,243 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,243 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 299.0), Area=GRASS_A
+2025-06-30 16:01:59,243 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,243 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,243 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,243 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,243 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,255 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,256 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,256 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,256 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,256 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,301 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,301 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,301 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,301 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,301 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,336 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,337 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,337 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,337 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,338 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,349 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:01:59,349 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:01:59,349 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:01:59,351 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (216, 272), 상태: NORMAL
+2025-06-30 16:01:59,367 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,367 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,368 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,368 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,368 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,389 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,389 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,390 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,390 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,390 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,430 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,431 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,431 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,431 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,432 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,461 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,461 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,462 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,462 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,462 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,491 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,492 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,492 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,492 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,492 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,533 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,533 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,534 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,534 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,534 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,565 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,242,299,GRASS_A\n'
+2025-06-30 16:01:59,566 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,242,299,GRASS_A...
+2025-06-30 16:01:59,566 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,566 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(242.0, 299.0), Area=GRASS_A
+2025-06-30 16:01:59,566 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,589 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,589 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,589 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,590 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,590 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,643 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,644 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,644 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,644 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,644 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,648 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:01:59,648 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:01:59,648 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:01:59,650 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (216, 272), 상태: NORMAL
+2025-06-30 16:01:59,654 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,655 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,655 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,655 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,655 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,685 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,685 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,686 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,686 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,686 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,735 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,736 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,736 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,736 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,736 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,758 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,758 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,758 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,759 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,759 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,798 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,242,300,GRASS_A\n'
+2025-06-30 16:01:59,799 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,242,300,GRASS_A...
+2025-06-30 16:01:59,799 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,800 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(242.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,800 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,829 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,830 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,830 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,831 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,831 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,871 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,871 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,872 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,872 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,872 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,891 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,892 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,892 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,893 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,893 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,934 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:01:59,935 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:01:59,935 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,935 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,936 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,949 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:01:59,949 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:01:59,949 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:01:59,952 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (216, 272), 상태: NORMAL
+2025-06-30 16:01:59,974 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,242,300,GRASS_A\n'
+2025-06-30 16:01:59,975 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,242,300,GRASS_A...
+2025-06-30 16:01:59,975 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:01:59,976 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(242.0, 300.0), Area=GRASS_A
+2025-06-30 16:01:59,976 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:01:59,998 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,242,300,GRASS_A\n'
+2025-06-30 16:01:59,999 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,242,300,GRASS_A...
+2025-06-30 16:01:59,999 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,000 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(242.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,000 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,036 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,242,300,GRASS_A\n'
+2025-06-30 16:02:00,037 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,242,300,GRASS_A...
+2025-06-30 16:02:00,037 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,037 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(242.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,038 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,070 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,070 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,071 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,071 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,071 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,098 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,099 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,099 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,100 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,100 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,129 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,129 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,130 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,130 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,131 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,171 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,171 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,172 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,172 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,172 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,201 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,201 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,202 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,202 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,202 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,232 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,233 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,233 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,233 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,234 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,248 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:02:00,249 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:02:00,249 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:02:00,251 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (215, 272), 상태: NORMAL
+2025-06-30 16:02:00,264 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,264 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,265 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,265 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,265 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,299 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,242,300,GRASS_A\n'
+2025-06-30 16:02:00,299 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,242,300,GRASS_A...
+2025-06-30 16:02:00,300 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,300 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(242.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,300 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,325 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,326 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,326 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,326 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,327 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,368 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,242,300,GRASS_A\n'
+2025-06-30 16:02:00,368 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,242,300,GRASS_A...
+2025-06-30 16:02:00,368 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,369 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(242.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,369 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,390 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,242,300,GRASS_A\n'
+2025-06-30 16:02:00,391 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,242,300,GRASS_A...
+2025-06-30 16:02:00,391 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,391 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(242.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,391 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,423 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,424 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,424 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,425 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,425 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,467 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,467 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,467 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,468 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,468 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,497 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,497 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,498 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,498 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,498 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,528 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,529 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,529 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,529 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,530 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,548 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:02:00,549 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:02:00,549 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:02:00,551 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (216, 272), 상태: NORMAL
+2025-06-30 16:02:00,560 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,560 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,561 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,561 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,561 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,593 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,593 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,594 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,594 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,594 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,624 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,625 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,625 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,625 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,625 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,665 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,242,300,GRASS_A\n'
+2025-06-30 16:02:00,666 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,242,300,GRASS_A...
+2025-06-30 16:02:00,666 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,666 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(242.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,666 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,699 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,699 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,699 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,700 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,700 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,735 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,299,GRASS_A\n'
+2025-06-30 16:02:00,735 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,299,GRASS_A...
+2025-06-30 16:02:00,735 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,746 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 299.0), Area=GRASS_A
+2025-06-30 16:02:00,746 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,754 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,242,300,GRASS_A\n'
+2025-06-30 16:02:00,755 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,242,300,GRASS_A...
+2025-06-30 16:02:00,755 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,755 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(242.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,756 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,799 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,799 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,800 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,800 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,800 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,826 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,827 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,827 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,827 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,827 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,848 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:02:00,848 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:02:00,849 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:02:00,851 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (216, 272), 상태: NORMAL
+2025-06-30 16:02:00,857 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,857 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,858 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,858 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,858 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,900 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,900 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,901 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,901 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,901 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,931 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,932 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,932 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,932 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,933 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:00,969 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:00,969 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:00,970 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:00,970 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:00,970 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,000 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:01,000 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:01,001 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,001 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,001 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,022 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:01,023 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:01,023 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,023 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,024 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,069 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,242,300,GRASS_A\n'
+2025-06-30 16:02:01,069 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,242,300,GRASS_A...
+2025-06-30 16:02:01,069 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,070 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(242.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,070 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,121 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:01,121 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:01,122 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,122 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,122 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,128 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,242,300,GRASS_A\n'
+2025-06-30 16:02:01,128 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,242,300,GRASS_A...
+2025-06-30 16:02:01,129 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,129 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(242.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,129 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,148 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:02:01,149 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:02:01,149 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:02:01,151 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (216, 272), 상태: NORMAL
+2025-06-30 16:02:01,171 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:01,171 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:01,172 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,172 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,172 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,193 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:01,193 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:01,194 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,194 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,194 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,225 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:01,226 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:01,226 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,227 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,227 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,259 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:01,259 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:01,260 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,260 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,260 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,291 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:01,292 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:01,292 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,292 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,293 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,336 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:01,336 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:01,337 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,337 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,337 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,365 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:01,366 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:01,366 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,366 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,366 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,388 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:01,388 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:01,389 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,389 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,389 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,417 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:01,417 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:01,418 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,418 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,418 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,448 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:02:01,448 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:02:01,448 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:02:01,450 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (216, 272), 상태: NORMAL
+2025-06-30 16:02:01,468 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:01,468 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:01,469 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,469 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,469 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,490 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:01,491 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:01,491 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,491 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,492 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,520 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:01,521 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:01,521 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,522 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,522 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,561 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:01,562 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:01,562 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,562 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,562 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,593 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,243,300,GRASS_A\n'
+2025-06-30 16:02:01,593 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,243,300,GRASS_A...
+2025-06-30 16:02:01,594 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,594 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(243.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,594 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,624 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,242,300,GRASS_A\n'
+2025-06-30 16:02:01,624 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,242,300,GRASS_A...
+2025-06-30 16:02:01,625 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,625 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(242.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,626 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,648 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:02:01,648 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:02:01,648 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:02:01,651 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (216, 272), 상태: NORMAL
+2025-06-30 16:02:01,667 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,241,300,GRASS_A\n'
+2025-06-30 16:02:01,667 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,241,300,GRASS_A...
+2025-06-30 16:02:01,668 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,668 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(241.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,668 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,696 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,241,300,GRASS_A\n'
+2025-06-30 16:02:01,697 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,241,300,GRASS_A...
+2025-06-30 16:02:01,697 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,698 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(241.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,698 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,726 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,240,300,GRASS_A\n'
+2025-06-30 16:02:01,726 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,240,300,GRASS_A...
+2025-06-30 16:02:01,727 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,727 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(240.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,728 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,767 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,237,300,GRASS_A\n'
+2025-06-30 16:02:01,767 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,237,300,GRASS_A...
+2025-06-30 16:02:01,768 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,768 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(237.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,768 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,798 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,234,300,GRASS_A\n'
+2025-06-30 16:02:01,799 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,234,300,GRASS_A...
+2025-06-30 16:02:01,799 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,799 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(234.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,800 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,819 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,229,299,GRASS_A\n'
+2025-06-30 16:02:01,819 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,229,299,GRASS_A...
+2025-06-30 16:02:01,820 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,820 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(229.0, 299.0), Area=GRASS_A
+2025-06-30 16:02:01,820 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,848 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:02:01,848 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:02:01,849 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:02:01,851 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (214, 272), 상태: NORMAL
+2025-06-30 16:02:01,871 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,223,299,GRASS_A\n'
+2025-06-30 16:02:01,871 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,223,299,GRASS_A...
+2025-06-30 16:02:01,872 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,872 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(223.0, 299.0), Area=GRASS_A
+2025-06-30 16:02:01,872 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,902 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,215,300,GRASS_A\n'
+2025-06-30 16:02:01,902 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,215,300,GRASS_A...
+2025-06-30 16:02:01,902 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,902 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(215.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,902 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,923 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,206,300,GRASS_A\n'
+2025-06-30 16:02:01,923 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,206,300,GRASS_A...
+2025-06-30 16:02:01,923 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,923 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(206.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,924 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,965 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,193,300,GRASS_A\n'
+2025-06-30 16:02:01,965 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,193,300,GRASS_A...
+2025-06-30 16:02:01,965 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,965 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(193.0, 300.0), Area=GRASS_A
+2025-06-30 16:02:01,965 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:01,990 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,180,300,TWY_A\n'
+2025-06-30 16:02:01,990 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,180,300,TWY_A...
+2025-06-30 16:02:01,990 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:01,990 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(180.0, 300.0), Area=TWY_A
+2025-06-30 16:02:01,990 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:02,021 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,164,299,TWY_A\n'
+2025-06-30 16:02:02,022 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,164,299,TWY_A...
+2025-06-30 16:02:02,022 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:02,022 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(164.0, 299.0), Area=TWY_A
+2025-06-30 16:02:02,022 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:02,049 - ATC_GUI - DEBUG - 객체 업데이트 처리: 1개 객체
+2025-06-30 16:02:02,049 - ATC_GUI - DEBUG - 객체 목록 업데이트: 1개 객체
+2025-06-30 16:02:02,049 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 1개)
+2025-06-30 16:02:02,051 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (196, 271), 상태: NORMAL
+2025-06-30 16:02:02,054 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266915909207,BIRD,150,298,TWY_A\n'
+2025-06-30 16:02:02,054 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266915909207,BIRD,150,298,TWY_A...
+2025-06-30 16:02:02,054 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:02,055 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266915909207, Type=조류, Pos=(150.0, 298.0), Area=TWY_A
+2025-06-30 16:02:02,055 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:02,100 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266922074207,ANIMAL,131,298,TWY_A\n'
+2025-06-30 16:02:02,100 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266922074207,ANIMAL,131,298,TWY_A...
+2025-06-30 16:02:02,100 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:02,101 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266922074207, Type=동물, Pos=(131.0, 298.0), Area=TWY_A
+2025-06-30 16:02:02,101 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:02,101 - ATC_GUI - DEBUG - raw_data: b'ME_FD:1,1751266922074207,ANIMAL,131,298,TWY_A,2025-06-30T07:02:02Z,1783,\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x00\x00\x01\x00\x01\x00\x00\xff\xdb\x00C\x00\x02\x01\x01\x01\x01\x01\x02\x01\x01\x01\x02\x02\x02\x02\x02\x04\x03\x02\x02\x02\x02\x05\x04\x04\x03\x04\x06\x05\x06\x06\x06\x05\x06\x06\x06\x07\t\x08\x06\x07\t\x07\x06\x06\x08\x0b\x08\t\n\n\n\n\n\x06\x08\x0b\x0c\x0b\n\x0c\t\n\n\n\xff\xdb\x00C\x01\x02\x02\x02\x02\x02\x02\x05\x03\x03\x05\n\x07\x06\x07\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\xff\xc0\x00\x11\x08\x00>\x00/\x03\x01"\x00\x02\x11\x01\x03\x11\x01\xff\xc4\x00\x1f\x00\x00\x01\x05\x01\x01\x01\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\xff\xc4\x00\xb5\x10\x00\x02\x01\x03\x03\x02\x04\x03\x05\x05\x04\x04\x00\x00\x01}\x01\x02\x03\x00\x04\x11\x05\x12!1A\x06\x13Qa\x07"q\x142\x81\x91\xa1\x08#B\xb1\xc1\x15R\xd1\xf0$3br\x82\t\n\x16\x17\x18\x19\x1a%&\'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz\x83\x84\x85\x86\x87\x88\x89\x8a\x92\x93\x94\x95\x96\x97\x98\x99\x9a\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xff\xc4\x00\x1f\x01\x00\x03\x01\x01\x01\x01\x01\x01\x01\x01\x01\x00\x00\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\xff\xc4\x00\xb5\x11\x00\x02\x01\x02\x04\x04\x03\x04\x07\x05\x04\x04\x00\x01\x02w\x00\x01\x02\x03\x11\x04\x05!1\x06\x12AQ\x07aq\x13"2\x81\x08\x14B\x91\xa1\xb1\xc1\t#3R\xf0\x15br\xd1\n\x16$4\xe1%\xf1\x17\x18\x19\x1a&\'()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x92\x93\x94\x95\x96\x97\x98\x99\x9a\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xff\xda\x00\x0c\x03\x01\x00\x02\x11\x03\x11\x00?\x00\xfb\xa7\xc5?\xf0D\xbf\x84\xfan\x90\xf7\xb6_\x13\xb5Pc#\x00\xb4M\xff\x00\xa0\x01\xfa\xd7\x96\xf8\xc3\xfe\t\xc9\xe0\xaf\x06\xc8L~5\xb9(\x8b\xcf\x9f\x10\x1b\xb1\xf4\xeb_P\xf8\xcf\xfe\n\xb5\xfb\x1ck:*\xd9\x9f\x15N\xd3g\x80\xd6\xd9\xe4\xfa\xd7\x8b|B\xfd\xb1>\nx\xdeYm\xfc;\xac\xf9\xe1\x97\x80#\t\xb7=>\xbd?J\xaceOcG\x9d\x9b`i\xfbz\x9c\x87\x94i\x7f\xb1>\x83\xafNmt\xcf\x17\xc3\x0f \x12\xd6\xc0\xee\xf4\xed\xfes]L\x7f\xf0H-\x7f\xc66\xca\xda7\xc4\x8bh\xe4#\x82\xd6\xa3\xbf\xff\x00\xaa\xb5~\x1e\xfca\xf0\xae\x99\xac\xa4\x97Z\x81\x8a&pAq\xbb?\xe1_P|3\xfd\xa9\xfe\x0eYI\x0f\x9d\xe3\xd8#e\n\x86\x19@\xf9\x89\xf4\x1f\xe7\xadpe\xf9\x92\xc4O\x94\xf61\xb8\x0feG\x94\xf9\x16\x7f\xf8!\xe7\xed\x02\x89\xb3K\xf8\x83\xa3\xdd/\xf1y\xcb\xb0\xaf\xa7N\xbd\xff\x00*\xc6\xd5\xbf\xe0\x8a\x1f\xb4n\x8bk%\xfd\xe7\x89\xb4\x86\x85\x00/\xe4>y\xdc\x00\xeb\xf5\xaf\xd5\xcf\x0ck\xbaF\xbd\xa6E\xa8i\xba\x97\x9c\x97+\xb9d\x1cdW\x88\xff\x00\xc1G\xbfhV\xfd\x9e\xff\x00g\xd9u}\x1a\xe4\x1dJ\xf7R\xb7\x86\x04\r\x86(\x1c3\x91\xf4\xf9\x7f:\xf6e))X\xf9\xaeW\x07c\xf0\xde\xce\xf6_\xb4\x0f:Vm\xc4}\xe6&\xbb\xef\x07]Dn\xa3r\xa0\x9e9\xc75\xc0[\xd8\xcafS\xf6Yx5\xd7\xf8R\xce\xff\x00\xed)\xe5E \xc6>\xf15\xf2\x99\xfc\xa4\xa3%s\xee8R\x10\x93\xbbG\xac.\xafq\x1c\x0b\xe5\x16<q\xc9\xe2\xb4\xbe\x17\xf8sY\xf8\x93\xf1GB\xf0\xe5\xa8q\xbfR\x8d\xa4`y\xda\x0f#\xe8k\x96\xd2\xce\xa5o0\x13+2\x94\xe8\xc7"\xbdo\xf6s\xf0\xff\x00\x8al|A\x17\x8a\xf4K\xc8\xed\xae!`c.\x99$\xf3\xd0\xf6\xc7\xf5\xaf\x9d\xc81.\x18\xbb6{Y\xf6\x1b\x9b\n\xe4\x8f\xd4?\x02\x19\xb4="-&+x\xa3\x8a\xc2\xd4\x08\x86\xd0\x01p\x07\xca>\xb5\xf9\xcb\xff\x00\x05\x8c\xf8\xf4|a\xf1F\xcf\xe1\x8e\x93zd\xb5\xd2\xed\xfc\xf7\t!\xda%\x93f\xe5\xc7\xb7\x96?:\xfagF\xf8\xc3\xf1GB\xf0E\xe7\x8a\xfcQ\xadB\xd6\xf66\xed4\x86C\x8e@>\xbe\xb5\xf9Y\xf1\xc7\xe2>\xb1\xf1;\xe2n\xaf\xe3mJv\xdfyz\xec\x98s\xf7s\xc6+\xf4\xdee?x\xfc\xb6Qp\x93L\xfd;\xf8\x8b\xfb\x1d|\n\xf0\xb5\x8c\xaf\xff\x00\x0c\xe9a\x03)\xe5\xd2\xd2\x1f\xd3\x0b\xc5|\xef\xf1#\xc0\xdf\x08\xf4\x9b\xd9l\xf4\x1f\x87)i(\x1c\x00\x8a0}\xb08\xafQ\xf8\x89\xfb{\xf8\xe7\xc4\x9a[\xae\xb3oi\x10*p\x10\x01\xbb>\xbe\xb5\xe0\x1a\xaf\xc4\x9b\xaf\x11\xea\x92\xea7\xf7\xb1\x031\xf90\x7f?\xe9_/\x9dMM\xbag\xd9e\x15>\xae\xd4\x8a\x10\xfc3\xd5\xef\xe6i!\xb7\x10\xa6\xef\x93-\x9c\x8a\xf5'
+2025-06-30 16:02:02,102 - ATC_GUI - DEBUG - 바이너리 데이터 처리 시작: 1448 bytes, 시작: b'ME_FD:1,175126692207'
+2025-06-30 16:02:02,102 - ATC_GUI - INFO - ME_FD 바이너리 수신 시작: 1448 bytes
+2025-06-30 16:02:02,102 - ATC_GUI - DEBUG - ME_FD 초기 텍스트 부분: ME_FD:1,1751266922074207,ANIMAL,131,298,TWY_A,2025-06-30T07:02:02Z,1783
+2025-06-30 16:02:02,103 - ATC_GUI - DEBUG - ME_FD 텍스트 분석: 'ME_FD:1,1751266922074207,ANIMAL,131,298,TWY_A,2025-06-30T07:02:02Z,1783', parts: ['ME_FD:1', '1751266922074207', 'ANIMAL', '131', '298', 'TWY_A', '2025-06-30T07:02:02Z', '1783']
+2025-06-30 16:02:02,103 - ATC_GUI - DEBUG - ME_FD (8개 필드): image_size=1783
+2025-06-30 16:02:02,103 - ATC_GUI - DEBUG - ME_FD 크기 계산: 텍스트=72, 이미지=1783, 총=1855
+2025-06-30 16:02:02,103 - ATC_GUI - DEBUG - raw_data: b"o\x84\xb0E\xe1\x19a\x1a\xacj\xeb\x1e\x00\xda:f\xbc\x92\xef\xe2\x8b\xdaK\xf6\x0b+\xad\xce?\xe7\x9b\xf4\xab\x9aW\xc7M_I\x94\tt\xb5\x95@\xf9\xcb\xaes\xe9\x9c\xd7\x89\x93`\x1d,G;=\x0c\xef9\x85J.\x9a=S\xf6\xc5\xf8\xf7g'\xc2\x13\xf0\xf3\xc2%\xc5\xcd\xcc\xd8\xbadl6\xde0\xa4\x8e\xc7\x9e=\xab\xe0\x9dr\xc3R[\xc7Q\x166\xbb.\xd1\xd0c\x15\xee~?\xf1\xe6\xa3\xe2\x19\xee\xb5k\xbd5c\x0f\x83\x11\t\x8e\x99\xaf\x1d\xd7\xf5\xef2\xe0\xb4\x91\x85%\x89$w<W\xe8I\xdd\x1f\x9ess\xbb\x9d\xff\x00\x89\xbe!K\xae\xd9\x9b3w\xe5\xb2\xe7\x04\xb1\xc9\xcdrm\xaf\xdf\xd9\xa0\x8du\xb0\n\xe7\x05\xe5<}+oS\xf8\x1d\xe3\x02\xe4\xc9\xe2K\x17\xc6v\x9f$\x8c\x7f\xe3\xb5\xcf\xeb?\x02<Sq\x19W\xd7lI\xc1\xc3ma\x8f\xc9k\x9f\x11\x85\x8dH\xf34z\x141.\x14\xd29m_\xe2>\xb1\xa2jM<:\xf2\xees\xcb\tNx\xfc}\xe9\xb1~\xd0z\xfcr\x08\xcf\x88\x97\x9f\xbd\xbd\xcbf\xb2|S\xfb/x\xc6\xe4\x99\xa0\xf1E\x88<\xe7{9\xff\x00\xd9k\x8f\xb5\xfd\x9b\xfcua~\xd2\xdc\xf8\xb2\xc4\xaa\x9f\xbb\x19~~\xbf-y\x94`\xa1V\xc6u*:\x92\xbb=^\xf7\xe3N\xab\xadY\xa42\xeb*\xe1A\xc0S\xb4s\xff\x00\xea\xac\x1b\x8du\xf5\x06&YU\xb0x\xc7j\xe4$\xf0~\xb1c/\xd9\xcd\xd4\r\xb3\xab\t\x18\x7f!Vmc\xb8\xd3r\xb2M\xb8\xb0\xfe\x1fo\xff\x00]zM\xbb\x99Y\x1f\xff\xd9\n"
+2025-06-30 16:02:02,104 - ATC_GUI - DEBUG - ME_FD 텍스트 분석: 'ME_FD:1,1751266922074207,ANIMAL,131,298,TWY_A,2025-06-30T07:02:02Z,1783', parts: ['ME_FD:1', '1751266922074207', 'ANIMAL', '131', '298', 'TWY_A', '2025-06-30T07:02:02Z', '1783']
+2025-06-30 16:02:02,104 - ATC_GUI - DEBUG - ME_FD (8개 필드): image_size=1783
+2025-06-30 16:02:02,104 - ATC_GUI - DEBUG - ME_FD 크기 계산: 텍스트=72, 이미지=1783, 총=1855
+2025-06-30 16:02:02,104 - ATC_GUI - INFO - ME_FD 완전한 데이터 수신: 1856 bytes
+2025-06-30 16:02:02,104 - ATC_GUI - INFO - === ME_FD 바이너리 데이터 분석 시작 ===
+2025-06-30 16:02:02,105 - ATC_GUI - INFO - 전체 데이터 크기: 1856 bytes
+2025-06-30 16:02:02,105 - ATC_GUI - INFO - 데이터 시작 부분: b'ME_FD:1,1751266922074207,ANIMAL,131,298,TWY_A,2025-06-30T07:02:02Z,1783,\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x00\x00\x01\x00\x01\x00\x00\xff\xdb\x00C\x00\x02\x01\x01'
+2025-06-30 16:02:02,105 - ATC_GUI - INFO - 추출된 텍스트 부분: 'ME_FD:1,1751266922074207,ANIMAL,131,298,TWY_A,2025-06-30T07:02:02Z,1783'
+2025-06-30 16:02:02,105 - ATC_GUI - INFO - 텍스트 부분 길이: 71 문자
+2025-06-30 16:02:02,105 - ATC_GUI - INFO - 텍스트 크기 (UTF-8 + 콤마): 72 bytes
+2025-06-30 16:02:02,106 - ATC_GUI - INFO - 이미지 데이터 크기: 1784 bytes
+2025-06-30 16:02:02,106 - ATC_GUI - INFO - 프리픽스 제거 후 텍스트: '1,1751266922074207,ANIMAL,131,298,TWY_A,2025-06-30T07:02:02Z,1783'
+2025-06-30 16:02:02,106 - ATC_GUI - INFO - ME_FD 텍스트 데이터: 1,1751266922074207,ANIMAL,131,298,TWY_A,2025-06-30T07:02:02Z,1783
+2025-06-30 16:02:02,106 - ATC_GUI - INFO - ME_FD 이미지 크기: 1784 bytes
+2025-06-30 16:02:02,106 - ATC_GUI - INFO - === ME_FD 바이너리 데이터 분석 완료 ===
+2025-06-30 16:02:02,107 - ATC_GUI - DEBUG - ME_FD (8개 필드): image_size=1783
+2025-06-30 16:02:02,107 - ATC_GUI - DEBUG - ME_FD 바이너리 파싱 결과: ID=1751266922074207, Type=동물, Pos=(131.0, 298.0), Area=TWY_A, EventType=위험요소 감지, ImageSize=1783, StateInfo=None
+2025-06-30 16:02:02,107 - ATC_GUI - WARNING - ME_FD 이미지 크기 불일치: 1784 != 1783
+2025-06-30 16:02:02,107 - ATC_GUI - INFO - NetworkManager: 최초 객체 감지 이벤트 수신 - 1개 객체
+2025-06-30 16:02:02,108 - ATC_GUI - INFO - NetworkManager: 최초 감지 객체 처리 중 - ID 1751266922074207, Type 동물, Area TWY_A
+2025-06-30 16:02:02,108 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 1751266922074207, Type 동물, Area TWY_A
+2025-06-30 16:02:02,108 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 1751266922074207를 first_detected_object_ids에 추가
+2025-06-30 16:02:02,114 - ATC_GUI - INFO - [알림 표시] 객체 감지 - ID: 1751266922074207, 타입: 동물, 위치: TWY_A, 위험도: None, 좌표: (131.0, 298.0), 시간: 2025-06-30 16:02:02
+2025-06-30 16:02:02,114 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 1751266922074207 (동물)
+2025-06-30 16:02:02,114 - ATC_GUI - DEBUG - MainPage에서 이미 처리된 객체: ID 1751266922074207
+2025-06-30 16:02:02,114 - ATC_GUI - INFO - NetworkManager: 최초 객체 감지 알림 시그널 발생 완료 - ID 1751266922074207 (동물)
+2025-06-30 16:02:02,114 - ATC_GUI - INFO - 이미지 포함 최초 감지 이벤트 처리 완료: ID 1751266922074207, StateInfo=None
+2025-06-30 16:02:02,309 - ATC_GUI - DEBUG - raw_data: b'ME_OD:1751266922284210,BIRD,20,292,TWY_A\nME_FD:1,1751266922284210,BIRD,20,292,TWY_A,2025-06-30T07:02:02Z,1659,\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x00\x00\x01\x00\x01\x00\x00\xff\xdb\x00C\x00\x02\x01\x01\x01\x01\x01\x02\x01\x01\x01\x02\x02\x02\x02\x02\x04\x03\x02\x02\x02\x02\x05\x04\x04\x03\x04\x06\x05\x06\x06\x06\x05\x06\x06\x06\x07\t\x08\x06\x07\t\x07\x06\x06\x08\x0b\x08\t\n\n\n\n\n\x06\x08\x0b\x0c\x0b\n\x0c\t\n\n\n\xff\xdb\x00C\x01\x02\x02\x02\x02\x02\x02\x05\x03\x03\x05\n\x07\x06\x07\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\xff\xc0\x00\x11\x08\x00?\x00)\x03\x01"\x00\x02\x11\x01\x03\x11\x01\xff\xc4\x00\x1f\x00\x00\x01\x05\x01\x01\x01\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\xff\xc4\x00\xb5\x10\x00\x02\x01\x03\x03\x02\x04\x03\x05\x05\x04\x04\x00\x00\x01}\x01\x02\x03\x00\x04\x11\x05\x12!1A\x06\x13Qa\x07"q\x142\x81\x91\xa1\x08#B\xb1\xc1\x15R\xd1\xf0$3br\x82\t\n\x16\x17\x18\x19\x1a%&\'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz\x83\x84\x85\x86\x87\x88\x89\x8a\x92\x93\x94\x95\x96\x97\x98\x99\x9a\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xff\xc4\x00\x1f\x01\x00\x03\x01\x01\x01\x01\x01\x01\x01\x01\x01\x00\x00\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\xff\xc4\x00\xb5\x11\x00\x02\x01\x02\x04\x04\x03\x04\x07\x05\x04\x04\x00\x01\x02w\x00\x01\x02\x03\x11\x04\x05!1\x06\x12AQ\x07aq\x13"2\x81\x08\x14B\x91\xa1\xb1\xc1\t#3R\xf0\x15br\xd1\n\x16$4\xe1%\xf1\x17\x18\x19\x1a&\'()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x92\x93\x94\x95\x96\x97\x98\x99\x9a\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xff\xda\x00\x0c\x03\x01\x00\x02\x11\x03\x11\x00?\x00\xfa\xdf\xc6^6\xd1\xf4\xddC\xceO\r\xd8#\x7f\xb3i\x18\xfd1Tu/\x8f\xd6ZW\x85n\xb5\x89tKG{O\xe1\xfb4y\x93\xf4\xae3\xe2\xccs\xa3\xcf"\xde\x90\xc9\xf7H=+\xcd\xef5I/\xad\xc5\xa8\x94\x98\xc7\xf0\xfa\xfd}k\x1cvmV\x9d_f\xf73\xc0\xe54\xaaR\xf6\x8bc\xe7?\x8c~#\xf8\x87q\xaf\rV?\x11_f\xf2\xf7\xedW\'\xed\x0f\x18Q\xeb\x84 \n\xcc\xb2\xf8\x87\xe3\xdb\x14\xf2\xcf\x8c5`?\xec*\xff\x00\xe3_\xa1\x9f\xb2\xc7\xec\xfb\xf0\xfa\xf3\xc2\xbf\xdb\x1f\x11|5o\xa8>\xaf\xc0K\x94?\xbb\x83\xfb\xbc\x1e>\xbd}\xeb\xd4.\x7fc\xef\xd9\xf2\xe8\xfe\xef\xe1n\x93\xff\x00~\xdb\xfck\xae\x97\xb5\xab\xb38\xf1\x1e\xc7\rW\xd9\xc9j~]\xd9\xfck\xf8\x9fc\xd7\xc7z\xb0\xfa\xea\xef\xfe5\xa9\xff\x00\x0b\xfb\xe3\xa7\xfd\x15?\x11\x7f\xe0\xe5\xbf\xc6\xbfMd\xfd\x83?fY\xbf\xd6|/\x84\xff\x00\xdbA\xfe5[\xfe\x18\x07\xf6Q\xff\x00\xa1\x02\xef\xfe\xfe\x7f\xf6U\xe9\xfb)\x1cg\xcc\x9f\x1d<Z4\xebi\xa4\x13\xe0\xcd\xfe\xac\xf1\\\x0f\x84\xcf\x88\xf5\xedB;\r\x12\xd7\xedW)\xfe\xbe\xd8\x8c\x03\xf8\x8e\x95\x99\xfbS\xf8\xde\x14\xf1\xdc~\x10\xd3\xe7\xdd\x15\x8f\xfa\xf20\x7fZ\xa3\xf0\xb3\xe3M\xe7\x83u)\'\x8bK\xf9\xe4\xfb\xee9\'\xf1\xaf\xcd\xf3Z\xd6\xc7|H\xfd//\xc0\xce\x9e\x07T}1i\xf1\xab\xf6\xa2\xf0\xd6\x9c\x90\xf8\x7f\xe0u\xad\xc2\xc7\x17\x96\x8a.\xd7\x01}*\xf5\xaf\xed\x8d\xfbM\xe8\xdf\xf2\x19\xfd\x97\xee\xa5\xff\x00\xaf\'v\xfe\xb5\xcd|5\xfd\xa8u\x9df\xea\r0x\x0c\xce\x1f\xefIo\x8ek\xe8\x9f\x03\xf8\xf7S\xd5\xf9M\x1ed\xfa\xc6\xdf\xe3_m\x97\xd4\x8dE\xa1\xf0\x99\xae\x1e\x7fY\xf6\x9d\x0f.\xb3\xfd\xbe\xbe&\'\xfc\x85\xbfe\xdd~/\xf7`5\xa3\xff\x00\x0f\x10\xd6?\xe8\xd9\xbcc\xff\x00\x80\x03\xfc+\xdf!\x12Om\xe6Cm!>\xa6\x02\x7f\x9dG\xf66\xf4o\xfb\xe2O\xf1\xafh\xf2\xfd\xacO\xc9mkL\xd4<Q\xe2\x8b\xdf\x12x\x86\xced7\xff\x00yv\x9c\xb7\xf8~\x15\xa3\xa5\xf8^\xe5\x1f\xcc\xb0\xb6\x92S\xea\xcaEzV\xa3\xe2\xff\x00\x0f\xdaM\x1c\xf2B\x85\xa2\xfb\x84\xc4\x0e?\x0cU)>(iv\xb7>[\xc5f\x07\xa2\x80?\x95~;O-\xa9\x88\xc4\xfbI=\x0f\xd4\xa8\xe7\xd0\xa7\x86\xf6mjZ\xf0w\xc2\xff\x00\x10\xeb\x01F\x8f\xe2K\x8d4\'\xdd1\xb6\xd2+\xd4\xbc;\xf0o\xe3\xe4\xdf\xf2+\xfe\xd2P\xaf\xfb\xd9?\xccW\x11\xa7\xfcf\xf0\xed\xbd\xb7\x99\xa8\xdd[\xc0}c5\xd0\xf8\x7f\xf6\x83\xf8qh\x7f\xd3\xb5\xa3o\xff\x00\\\xcbW\xe8Yr\xf6{\x9f\x15\x98\xd4\x8dG\xa1\xdc\xe9?\x0b\xff\x00m\x88\xd3\xcb\xd3\xbe>\xe8\x97#\xd0\xcc\xc2\xae\xff\x00\xc2\x1d\xfbx\x7f\xd1a\xf0\xdf\xfd\xf9\x92\xad|>\xf8\xa5\xf0\xfbQ\xff\x00\x8f'
+2025-06-30 16:02:02,309 - ATC_GUI - DEBUG - UTF-8 디코딩 실패, 바이너리 데이터로 재처리
+2025-06-30 16:02:02,309 - ATC_GUI - DEBUG - 바이너리 데이터 처리 시작: 1489 bytes, 시작: b'ME_OD:17512669222842'
+2025-06-30 16:02:02,309 - ATC_GUI - INFO - 🔍 ME_OD와 ME_FD 혼재 패킷 감지!
+2025-06-30 16:02:02,310 - ATC_GUI - INFO - === ME_OD와 ME_FD 혼재 패킷 처리 시작 ===
+2025-06-30 16:02:02,310 - ATC_GUI - INFO - 전체 데이터 크기: 901 문자
+2025-06-30 16:02:02,310 - ATC_GUI - INFO - ME_FD 라인 인덱스: 1
+2025-06-30 16:02:02,310 - ATC_GUI - INFO - ME_OD 부분 추출: 40 문자
+2025-06-30 16:02:02,311 - ATC_GUI - DEBUG - ME_OD 내용: ME_OD:1751266922284210,BIRD,20,292,TWY_A
+2025-06-30 16:02:02,311 - ATC_GUI - DEBUG - ME_OD 라인 처리: ME_OD:1751266922284210,BIRD,20,292,TWY_A
+2025-06-30 16:02:02,311 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 1751266922284210,BIRD,20,292,TWY_A...
+2025-06-30 16:02:02,311 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 1개 객체
+2025-06-30 16:02:02,311 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=1751266922284210, Type=조류, Pos=(20.0, 292.0), Area=TWY_A
+2025-06-30 16:02:02,312 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 1개 객체
+2025-06-30 16:02:02,312 - ATC_GUI - INFO - ME_FD 부분 추출: 860 문자
+2025-06-30 16:02:02,312 - ATC_GUI - DEBUG - ME_FD 내용 시작: ME_FD:1,1751266922284210,BIRD,20,292,TWY_A,2025-06-30T07:02:02Z,1659, JFIF       C ...
+2025-06-30 16:02:02,312 - ATC_GUI - INFO - === ME_FD 바이너리 데이터 분석 시작 ===
+2025-06-30 16:02:02,312 - ATC_GUI - INFO - 전체 데이터 크기: 881 bytes
+2025-06-30 16:02:02,312 - ATC_GUI - INFO - 데이터 시작 부분: b'ME_FD:1,1751266922284210,BIRD,20,292,TWY_A,2025-06-30T07:02:02Z,1659,\x00\x10JFIF\x00\x01\x01\x00\x00\x01\x00\x01\x00\x00\x00C\x00\x02\x01\x01\x01\x01\x01\x02\x01\x01\x01\x02\x02'
+2025-06-30 16:02:02,313 - ATC_GUI - INFO - 추출된 텍스트 부분: 'ME_FD:1,1751266922284210,BIRD,20,292,TWY_A,2025-06-30T07:02:02Z,1659'
+2025-06-30 16:02:02,313 - ATC_GUI - INFO - 텍스트 부분 길이: 68 문자
+2025-06-30 16:02:02,313 - ATC_GUI - INFO - 텍스트 크기 (UTF-8 + 콤마): 69 bytes
+2025-06-30 16:02:02,313 - ATC_GUI - INFO - 이미지 데이터 크기: 812 bytes
+2025-06-30 16:02:02,313 - ATC_GUI - INFO - 프리픽스 제거 후 텍스트: '1,1751266922284210,BIRD,20,292,TWY_A,2025-06-30T07:02:02Z,1659'
+2025-06-30 16:02:02,314 - ATC_GUI - INFO - ME_FD 텍스트 데이터: 1,1751266922284210,BIRD,20,292,TWY_A,2025-06-30T07:02:02Z,1659
+2025-06-30 16:02:02,314 - ATC_GUI - INFO - ME_FD 이미지 크기: 812 bytes
+2025-06-30 16:02:02,314 - ATC_GUI - INFO - === ME_FD 바이너리 데이터 분석 완료 ===
+2025-06-30 16:02:02,314 - ATC_GUI - DEBUG - ME_FD (8개 필드): image_size=1659
+2025-06-30 16:02:02,314 - ATC_GUI - DEBUG - ME_FD 바이너리 파싱 결과: ID=1751266922284210, Type=조류, Pos=(20.0, 292.0), Area=TWY_A, EventType=위험요소 감지, ImageSize=1659, StateInfo=None
+2025-06-30 16:02:02,314 - ATC_GUI - WARNING - ME_FD 이미지 크기 불일치: 812 != 1659
+2025-06-30 16:02:02,314 - ATC_GUI - INFO - NetworkManager: 최초 객체 감지 이벤트 수신 - 1개 객체
+2025-06-30 16:02:02,314 - ATC_GUI - INFO - NetworkManager: 최초 감지 객체 처리 중 - ID 1751266922284210, Type 조류, Area TWY_A
+2025-06-30 16:02:02,314 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 1751266922284210, Type 조류, Area TWY_A
+2025-06-30 16:02:02,314 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 1751266922284210를 first_detected_object_ids에 추가
+2025-06-30 16:02:02,317 - ATC_GUI - INFO - [알림 표시] 객체 감지 - ID: 1751266922284210, 타입: 조류, 위치: TWY_A, 위험도: None, 좌표: (20.0, 292.0), 시간: 2025-06-30 16:02:02
+2025-06-30 16:02:02,317 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 1751266922284210 (조류)
+2025-06-30 16:02:02,317 - ATC_GUI - DEBUG - MainPage에서 이미 처리된 객체: ID 1751266922284210
+2025-06-30 16:02:02,317 - ATC_GUI - INFO - NetworkManager: 최초 객체 감지 알림 시그널 발생 완료 - ID 1751266922284210 (조류)
+2025-06-30 16:02:02,318 - ATC_GUI - INFO - 이미지 포함 최초 감지 이벤트 처리 완료: ID 1751266922284210, StateInfo=None
+2025-06-30 16:02:02,318 - ATC_GUI - INFO - === ME_OD와 ME_FD 혼재 패킷 처리 완료 ===
+2025-06-30 16:02:02,318 - ATC_GUI - DEBUG - raw_data: b"\x7f\x18Z\x8f\xf7\xee\x95k\xbe\xff\x00\x84\xf7\xc3\xff\x00\xf4<\xdb\xff\x00\xe0lu\xf4\x07\xcf\xfb)\x1f!|E\xf0V\x89i\xff\x00\x1e\xf1m\xfcI\xaf%\xf1t\xfe\x18\xd2\xef?}y\xe6}#\x15\x83\xe3\x7f\xdb\x8b\xc7\xf7\x9f\x7f\xc2\xb6/\xf8\x01\xfdk\xc8<O\xfbWk\xb7\x8f\xbc\xf8>\xd8\xb7\xb9\x1f\xe3_5V\x8d\x07\xfc5c\xd7\xfa\xc4\x8f\xa7\xfc\x07\xe2?\x86z\xc4pi\x9a\x97\x83$\x9aW\xfb\xd2\xb5\xd1\xe7\xf28\xaff\xf0\x87\x86>\x14\xf8\x86/*\x0f\x06\x95\x97\xd5\xa3'\xf9\x9a\xf8[\xc1\xbf\xb6\\\xdaE\xca\xa3|<\xb2\xc2}\xdc 8\xfdk\xdf~\x1b\xff\x00\xc1@\xbc\x1f\xa3\xcb\xe7k>\x15\xba\x89\xbdc;\xabL;\xf6[\x93Z\xa2\xa9\xb1\xf5\xb6\x87\xfb2|-\xd6m\xbc\xc8\xfc \xf17\xaa:\xaf\xf2\xab\xbf\xf0\xc7\xff\x00\x03?\xe8V\xd6\xff\x00\xf05\xff\x00\xf8\xaa\xf3\xaf\x06\x7f\xc1M?f\xb8\xcf\xd9/ \xd4\xb3\xed\xa7\xbf\xf4\xae\xe7\xfe\x1e\x9b\xfb6\xff\x00\xd0'Y\xff\x00\xc0\x15\xff\x00\xe2k\xdcUbp\x9f\xff\xd9\n"
+2025-06-30 16:02:02,318 - ATC_GUI - DEBUG - 바이너리 데이터 처리 시작: 281 bytes, 시작: b'\x7f\x18Z\x8f\xf7\xee\x95k\xbe\xff\x00\x84\xf7\xc3\xff\x00\xf4<\xdb\xff'
+2025-06-30 16:02:02,318 - ATC_GUI - DEBUG - 기타 바이너리 데이터: 281 bytes, 내용: Zk  < lu)!|EVi mI%t?}y}#ۋ¶/k<OWk>ط_5V5...
+2025-06-30 16:02:02,348 - ATC_GUI - DEBUG - 객체 업데이트 처리: 3개 객체
+2025-06-30 16:02:02,348 - ATC_GUI - DEBUG - 객체 목록 업데이트: 3개 객체
+2025-06-30 16:02:02,349 - ATC_GUI - DEBUG - 새로운 객체: 2개 (전체: 3개)
+2025-06-30 16:02:02,349 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 1751266915909207, 위치: (123, 270), 상태: NORMAL
+2025-06-30 16:02:02,352 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1751266922074207, 크기: 50x50
+2025-06-30 16:02:02,352 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1751266922074207, 위치: (105, 270), 상태: NORMAL
+2025-06-30 16:02:02,353 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=동물, rescue_level=0
+2025-06-30 16:02:02,353 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 동물
+2025-06-30 16:02:02,353 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1751266922284210, 크기: 50x50
+2025-06-30 16:02:02,353 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1751266922284210, 위치: (0, 264), 상태: NORMAL
+2025-06-30 16:02:02,354 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=조류, rescue_level=0
+2025-06-30 16:02:02,354 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 조류
+2025-06-30 16:02:04,948 - ATC_GUI - DEBUG - 마커 제거 성공: ID 1751266915909207
+2025-06-30 16:02:04,949 - ATC_GUI - DEBUG - 테이블에서 객체 ID 1751266915909207 제거
+2025-06-30 16:02:04,949 - ATC_GUI - DEBUG - 마커 제거 성공: ID 1751266922074207
+2025-06-30 16:02:04,949 - ATC_GUI - DEBUG - 테이블에서 객체 ID 1751266922074207 제거
+2025-06-30 16:02:04,950 - ATC_GUI - DEBUG - 마커 제거 성공: ID 1751266922284210
+2025-06-30 16:02:04,950 - ATC_GUI - DEBUG - 테이블에서 객체 ID 1751266922284210 제거
+2025-06-30 16:02:04,950 - ATC_GUI - DEBUG - 타임아웃된 객체 제거: [1751266915909207, 1751266922074207, 1751266922284210]
+2025-06-30 16:02:16,639 - ATC_GUI - INFO - TCP 연결 해제
+2025-06-30 16:02:21,448 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)

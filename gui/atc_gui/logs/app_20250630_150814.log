@@ -1,0 +1,30 @@
+2025-06-30 15:08:14,407 - ATC_GUI - INFO - FALCON 시작
+2025-06-30 15:08:14,472 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-30 15:08:14,485 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-30 15:08:14,509 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-30 15:08:14,511 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-30 15:08:14,549 - ATC_GUI - INFO - TCP 연결 성공 (192.168.0.12:5100)
+2025-06-30 15:08:16,534 - ATC_GUI - INFO - Access 탭 전환
+2025-06-30 15:08:16,535 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-30 15:08:16,599 - ATC_GUI - DEBUG - raw_data: b'AR_AC:OK,1,2,2,2,3,1,1,1\n'
+2025-06-30 15:08:16,600 - ATC_GUI - DEBUG - AR_AC 응답 수신: OK,1,2,2,2,3,1,1,1
+2025-06-30 15:08:16,600 - ATC_GUI - INFO - 출입 제어 설정 수신: {'TWY_A_level': 1, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 1, 'GRASS_A_level': 1, 'GRASS_B_level': 1}
+2025-06-30 15:08:16,601 - ATC_GUI - INFO - 출입 제어 설정 응답 처리 완료: {'TWY_A_level': 1, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 1, 'GRASS_A_level': 1, 'GRASS_B_level': 1}
+2025-06-30 15:08:24,025 - ATC_GUI - INFO - Access 탭 전환
+2025-06-30 15:08:24,025 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-30 15:08:24,073 - ATC_GUI - DEBUG - raw_data: b'AR_AC:OK,1,2,2,2,3,1,1,1\n'
+2025-06-30 15:08:24,073 - ATC_GUI - DEBUG - AR_AC 응답 수신: OK,1,2,2,2,3,1,1,1
+2025-06-30 15:08:24,073 - ATC_GUI - INFO - 출입 제어 설정 수신: {'TWY_A_level': 1, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 1, 'GRASS_A_level': 1, 'GRASS_B_level': 1}
+2025-06-30 15:08:24,074 - ATC_GUI - INFO - 출입 제어 설정 응답 처리 완료: {'TWY_A_level': 1, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 1, 'GRASS_A_level': 1, 'GRASS_B_level': 1}
+2025-06-30 15:08:27,119 - ATC_GUI - INFO - Access 탭 전환
+2025-06-30 15:08:27,119 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-30 15:08:27,336 - ATC_GUI - DEBUG - raw_data: b'AR_AC:OK,1,2,2,2,3,1,1,1\n'
+2025-06-30 15:08:27,337 - ATC_GUI - DEBUG - AR_AC 응답 수신: OK,1,2,2,2,3,1,1,1
+2025-06-30 15:08:27,337 - ATC_GUI - INFO - 출입 제어 설정 수신: {'TWY_A_level': 1, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 1, 'GRASS_A_level': 1, 'GRASS_B_level': 1}
+2025-06-30 15:08:27,340 - ATC_GUI - INFO - 출입 제어 설정 응답 처리 완료: {'TWY_A_level': 1, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 1, 'GRASS_A_level': 1, 'GRASS_B_level': 1}
+2025-06-30 15:08:31,932 - ATC_GUI - INFO - Access 탭 전환
+2025-06-30 15:08:31,933 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-30 15:08:32,145 - ATC_GUI - DEBUG - raw_data: b'AR_AC:OK,1,2,2,2,3,1,1,1\n'
+2025-06-30 15:08:32,145 - ATC_GUI - DEBUG - AR_AC 응답 수신: OK,1,2,2,2,3,1,1,1
+2025-06-30 15:08:32,146 - ATC_GUI - INFO - 출입 제어 설정 수신: {'TWY_A_level': 1, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 1, 'GRASS_A_level': 1, 'GRASS_B_level': 1}
+2025-06-30 15:08:32,149 - ATC_GUI - INFO - 출입 제어 설정 응답 처리 완료: {'TWY_A_level': 1, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 1, 'GRASS_A_level': 1, 'GRASS_B_level': 1}

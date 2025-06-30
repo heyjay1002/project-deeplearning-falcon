@@ -181,11 +181,15 @@ class MainPage(QWidget):
             logger.error(f"테이블 스타일 적용 오류: {e}")
 
     def on_table_object_clicked(self, row, column):
-        """테이블에서 객체 클릭 시 마커 선택 효과 적용"""
+        """테이블에서 객체 클릭 시 마커 선택 효과만 적용"""
         item = self.table_object_list.item(row, 0)
         if item is not None:
             object_id = int(item.text())
+            logger.info(f"테이블 행 클릭: ID {object_id}")
+            
+            # 마커 선택만 수행
             self.map_marker.select_marker(object_id)
+            logger.info(f"마커 선택 완료: ID {object_id}")
 
     def setup_network_manager(self):
         """네트워크 관리자 시그널만 연결"""
@@ -214,6 +218,23 @@ class MainPage(QWidget):
     def on_first_object_detected(self, obj: DetectedObject):
         """최초 감지 객체(ME_FD)를 처리하여 알림을 발생시킵니다."""
         logger.info(f"MainPage: 최초 감지 이벤트 수신 - ID {obj.object_id}, Type {obj.object_type.value}, Area {obj.area.value}")
+        
+        # RESCUE 이벤트에서 PERSON/WORK_PERSON 객체의 위험도 1인 경우 특별 알림
+        if (obj.event_type and obj.event_type.value == "구조" and 
+            obj.object_type in [ObjectType.PERSON, ObjectType.WORK_PERSON] and 
+            obj.state_info == 1):
+            
+            logger.warning(f"🚨 구조 요청 알림: ID {obj.object_id}, Type {obj.object_type.value}, 위험도 {obj.state_info}")
+            
+            # 부모 윈도우(메인 윈도우)의 알림 다이얼로그 직접 호출
+            main_window = self.window()
+            if hasattr(main_window, 'show_notification_dialog'):
+                main_window.show_notification_dialog('rescue', obj)
+                logger.info(f"MainPage: 구조 요청 알림 발생: ID {obj.object_id} ({obj.object_type.value}) - 위험도 {obj.state_info}")
+            else:
+                logger.error("MainPage: main_window에 show_notification_dialog 메서드가 없습니다")
+            
+            return  # 구조 요청 알림이 발생했으므로 일반 알림은 발생시키지 않음
         
         # 출입등급 변경으로 인한 새로운 위험요소 감지인지 확인
         # 기존에 감지된 객체라도 출입등급 변경으로 위험요소가 된 경우 알림 발생

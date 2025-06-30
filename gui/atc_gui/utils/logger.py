@@ -30,8 +30,8 @@ class Logger:
         log_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'logs')
         os.makedirs(log_dir, exist_ok=True)
 
-        # 로그 파일 경로
-        log_file = os.path.join(log_dir, f'app_{datetime.now().strftime("%Y%m%d")}.log')
+        # 로그 파일 경로 - 실행 시간까지 포함하여 매번 새 파일 생성
+        log_file = os.path.join(log_dir, f'app_{datetime.now().strftime("%Y%m%d_%H%M%S")}.log')
 
         # 로거 설정
         self.logger = logging.getLogger('ATC_GUI')

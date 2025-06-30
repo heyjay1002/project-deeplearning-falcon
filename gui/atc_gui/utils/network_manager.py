@@ -23,8 +23,8 @@ class NetworkManager(QObject):
     """
 
     # UI가 연결할 시그널들
-    object_detected = pyqtSignal(DetectedObject)
-    first_object_detected = pyqtSignal(DetectedObject)  # 최초 감지 이벤트용
+    object_detected = pyqtSignal(list)
+    first_object_detected = pyqtSignal(DetectedObject)  # 최초 감지 이벤트
     bird_risk_changed = pyqtSignal(BirdRiskLevel)
     runway_a_risk_changed = pyqtSignal(RunwayRiskLevel)
     runway_b_risk_changed = pyqtSignal(RunwayRiskLevel)
@@ -181,14 +181,14 @@ class NetworkManager(QObject):
         try:
             # 이미 DetectedObject 인스턴스인 경우
             if isinstance(obj_data, DetectedObject):
-                self.object_detected.emit(obj_data)
+                self.object_detected.emit([obj_data])
                 return
             
             # 문자열 데이터인 경우 파싱
             if isinstance(obj_data, str):
                 obj = self._parse_object_string(obj_data)
                 if obj:
-                    self.object_detected.emit(obj)
+                    self.object_detected.emit([obj])
                     
         except Exception as e:
             logger.error(f"객체 데이터 처리 실패: {e}")

@@ -180,8 +180,23 @@ class BinaryDataProcessor:
                 logger.debug(f"MR_OD 크기 계산: 텍스트={text_size}, 이미지={image_size}, 총={expected_size}")
                 return expected_size
             elif message_type == 'ME_FD' and len(parts) >= 8:
-                # ME_FD:event_type,object_id,object_type,x_coord,y_coord,area,timestamp,image_size
-                image_size = int(parts[7])
+                # ME_FD 메시지 구조 분석
+                # 8개 필드: ME_FD:event_type,object_id,object_type,x_coord,y_coord,area,timestamp,image_size
+                # 9개 필드: ME_FD:event_type,object_id,object_type,x_coord,y_coord,area,timestamp,state_info,image_size
+                
+                if len(parts) == 8:
+                    # 8개 필드: 마지막이 image_size
+                    image_size = int(parts[7])
+                    logger.debug(f"ME_FD (8개 필드): image_size={image_size}")
+                elif len(parts) >= 9:
+                    # 9개 필드: 8번째=state_info, 9번째=image_size
+                    state_info = parts[7]
+                    image_size = int(parts[8])
+                    logger.debug(f"ME_FD (9개 필드): state_info={state_info}, image_size={image_size}")
+                else:
+                    logger.warning(f"ME_FD: 예상치 못한 필드 수 {len(parts)}")
+                    return 0
+                
                 text_size = len(text_part.encode('utf-8')) + 1  # 콤마 포함
                 expected_size = text_size + image_size
                 logger.debug(f"ME_FD 크기 계산: 텍스트={text_size}, 이미지={image_size}, 총={expected_size}")
@@ -499,7 +514,7 @@ class TcpClient(QObject):
         try:
             while self.socket.bytesAvailable():
                 raw_data = self.socket.readAll().data()
-                logger.info(f"raw_data: {raw_data}")
+                logger.debug(f"raw_data: {raw_data}")
                 
                 # 통계 업데이트
                 self.stats['bytes_received'] += len(raw_data)
@@ -578,19 +593,28 @@ class TcpClient(QObject):
                 logger.info(f"MR_OD 바이너리 수신 시작: {len(data)} bytes")
                 
             elif data.startswith(b'ME_FD:'):
-                self.current_binary_type = 'ME_FD'
-                self.is_receiving_binary = True
-                self.binary_start_time = time.time()
-                self.binary_buffer = data
-                logger.info(f"ME_FD 바이너리 수신 시작: {len(data)} bytes")
+                # ME_FD 데이터에 여러 ME_FD가 포함되어 있는지 확인
+                data_str = data.decode('utf-8', errors='ignore')
+                me_fd_count = data_str.count('ME_FD:')
                 
-                # ME_FD 텍스트 부분 미리 추출해서 출력
-                try:
-                    text_part = self.binary_processor.extract_text_part_from_binary(data, 'ME_FD')
-                    if text_part:
-                        logger.debug(f"ME_FD 초기 텍스트 부분: {text_part}")
-                except Exception as e:
-                    logger.debug(f"ME_FD 초기 텍스트 추출 실패: {e}")
+                if me_fd_count > 1:
+                    logger.info(f"🔍 여러 ME_FD 감지: {me_fd_count}개")
+                    self._process_multiple_me_fd_binary(data_str)
+                else:
+                    # 단일 ME_FD 처리
+                    self.current_binary_type = 'ME_FD'
+                    self.is_receiving_binary = True
+                    self.binary_start_time = time.time()
+                    self.binary_buffer = data
+                    logger.info(f"ME_FD 바이너리 수신 시작: {len(data)} bytes")
+                    
+                    # ME_FD 텍스트 부분 미리 추출해서 출력
+                    try:
+                        text_part = self.binary_processor.extract_text_part_from_binary(data, 'ME_FD')
+                        if text_part:
+                            logger.debug(f"ME_FD 초기 텍스트 부분: {text_part}")
+                    except Exception as e:
+                        logger.debug(f"ME_FD 초기 텍스트 추출 실패: {e}")
                     
             elif data.startswith(b'LR_OI:'):
                 self.current_binary_type = 'LR_OI'
@@ -618,6 +642,13 @@ class TcpClient(QObject):
                 # 텍스트로 변환 시도해서 텍스트 응답인지 확인
                 try:
                     text_data = data.decode('utf-8', errors='ignore')
+                    
+                    # ME_OD와 ME_FD가 혼재된 패킷인지 확인
+                    if 'ME_OD:' in text_data and 'ME_FD:' in text_data:
+                        logger.info(f"🔍 ME_OD와 ME_FD 혼재 패킷 감지!")
+                        self._process_mixed_me_od_me_fd_packet(text_data)
+                        return
+                    
                     # 출입제어 응답 또는 로그 응답인지 확인
                     if ('AR_AC' in text_data or 'AR_UA' in text_data or 
                         'LR_BL' in text_data or 'LR_OL' in text_data or 'LR_RL' in text_data):
@@ -636,6 +667,101 @@ class TcpClient(QObject):
         except Exception as e:
             logger.error(f"바이너리 데이터 처리 오류: {e}")
             self._reset_binary_buffer()
+
+    def _process_mixed_me_od_me_fd_packet(self, data_str: str):
+        """ME_OD와 ME_FD가 혼재된 패킷 처리"""
+        try:
+            logger.info(f"=== ME_OD와 ME_FD 혼재 패킷 처리 시작 ===")
+            logger.info(f"전체 데이터 크기: {len(data_str)} 문자")
+            
+            # ME_FD 위치 찾기 (줄바꿈 기준으로 찾기)
+            lines = data_str.split('\n')
+            me_fd_line_index = -1
+            
+            for i, line in enumerate(lines):
+                if line.startswith('ME_FD:'):
+                    me_fd_line_index = i
+                    break
+            
+            if me_fd_line_index == -1:
+                logger.error("ME_FD 라인을 찾을 수 없습니다")
+                return
+            
+            logger.info(f"ME_FD 라인 인덱스: {me_fd_line_index}")
+            
+            # ME_OD 부분 추출 (ME_FD 라인 전까지의 모든 라인)
+            me_od_lines = lines[:me_fd_line_index]
+            me_od_part = '\n'.join(me_od_lines).strip()
+            
+            if me_od_part:
+                logger.info(f"ME_OD 부분 추출: {len(me_od_part)} 문자")
+                logger.debug(f"ME_OD 내용: {me_od_part}")
+                
+                # 각 ME_OD 라인을 개별적으로 처리
+                for line in me_od_lines:
+                    if line.strip() and line.startswith('ME_OD:'):
+                        logger.debug(f"ME_OD 라인 처리: {line}")
+                        self._process_single_message(line)
+            
+            # ME_FD 부분 추출 (ME_FD 라인부터 끝까지)
+            me_fd_lines = lines[me_fd_line_index:]
+            me_fd_part = '\n'.join(me_fd_lines).strip()
+            
+            if me_fd_part:
+                logger.info(f"ME_FD 부분 추출: {len(me_fd_part)} 문자")
+                logger.debug(f"ME_FD 내용 시작: {me_fd_part[:100]}...")
+                
+                # ME_FD 부분을 바이너리 데이터로 변환하여 처리
+                me_fd_binary_data = me_fd_part.encode('utf-8', errors='ignore')
+                self._handle_first_detection_binary_response(me_fd_binary_data)
+            
+            logger.info(f"=== ME_OD와 ME_FD 혼재 패킷 처리 완료 ===")
+            
+        except Exception as e:
+            logger.error(f"ME_OD와 ME_FD 혼재 패킷 처리 오류: {e}")
+
+    def _process_multiple_me_fd_binary(self, data_str: str):
+        """여러 ME_FD가 포함된 바이너리 데이터 처리"""
+        try:
+            logger.info(f"여러 ME_FD 바이너리 데이터 처리 시작")
+            
+            # ME_FD 위치들을 모두 찾기
+            me_fd_positions = []
+            start_pos = 0
+            while True:
+                pos = data_str.find('ME_FD:', start_pos)
+                if pos == -1:
+                    break
+                me_fd_positions.append(pos)
+                start_pos = pos + 1
+            
+            logger.info(f"발견된 ME_FD 개수: {len(me_fd_positions)}")
+            
+            # 각 ME_FD를 개별적으로 처리
+            for i, me_fd_start in enumerate(me_fd_positions):
+                logger.info(f"ME_FD {i+1} 처리 시작 (위치: {me_fd_start})")
+                
+                # 다음 ME_FD 위치 찾기
+                next_me_fd_start = -1
+                if i + 1 < len(me_fd_positions):
+                    next_me_fd_start = me_fd_positions[i + 1]
+                
+                # 현재 ME_FD 데이터 추출
+                if next_me_fd_start != -1:
+                    # 다음 ME_FD가 있는 경우: 현재 ME_FD부터 다음 ME_FD 직전까지
+                    me_fd_data = data_str[me_fd_start:next_me_fd_start]
+                    logger.info(f"ME_FD {i+1} 데이터 크기: {len(me_fd_data)} bytes")
+                else:
+                    # 마지막 ME_FD인 경우: 현재 ME_FD부터 끝까지
+                    me_fd_data = data_str[me_fd_start:]
+                    logger.info(f"마지막 ME_FD 데이터 크기: {len(me_fd_data)} bytes")
+                
+                # 바이너리 처리
+                binary_data = me_fd_data.encode('utf-8', errors='ignore')
+                self._handle_first_detection_binary_response(binary_data)
+            
+        except Exception as e:
+            logger.error(f"여러 ME_FD 바이너리 처리 오류: {e}")
 
     def _process_binary_message(self, message_type: str, data: bytes):
         """바이너리 메시지 처리"""
@@ -676,23 +802,52 @@ class TcpClient(QObject):
     def _handle_first_detection_binary_response(self, data: bytes):
         """ME_FD 바이너리 응답 처리"""
         try:
+            logger.info(f"=== ME_FD 바이너리 데이터 분석 시작 ===")
+            logger.info(f"전체 데이터 크기: {len(data)} bytes")
+            logger.info(f"데이터 시작 부분: {data[:100]}")
+            
             # 텍스트 부분과 이미지 부분 분리  
             text_part = self.binary_processor.extract_text_part_from_binary(data, 'ME_FD')
             if not text_part:
                 logger.error("ME_FD: 텍스트 부분 추출 실패")
                 return
             
+            logger.info(f"추출된 텍스트 부분: '{text_part}'")
+            logger.info(f"텍스트 부분 길이: {len(text_part)} 문자")
+            
             # 이미지 데이터 추출
             text_size = len(text_part.encode('utf-8')) + 1  # 콤마 포함
             image_data = data[text_size:]
+            logger.info(f"텍스트 크기 (UTF-8 + 콤마): {text_size} bytes")
+            logger.info(f"이미지 데이터 크기: {len(image_data)} bytes")
             
             # ME_FD: 프리픽스 제거
             if text_part.startswith('ME_FD:'):
                 text_part = text_part[6:]  # 'ME_FD:' 제거
+                logger.info(f"프리픽스 제거 후 텍스트: '{text_part}'")
+            
+            # 여러 객체가 포함되었는지 확인
+            if ';' in text_part:
+                logger.warning(f"⚠️  ME_FD에서 세미콜론 감지! 여러 객체 가능성: '{text_part}'")
+                # 세미콜론으로 분리해서 각 부분 분석
+                parts = text_part.split(';')
+                logger.info(f"세미콜론으로 분리된 부분들: {len(parts)}개")
+                for i, part in enumerate(parts):
+                    logger.info(f"  부분 {i+1}: '{part}'")
+                    if ',' in part:
+                        fields = part.split(',')
+                        logger.info(f"    필드 수: {len(fields)}")
+                        if len(fields) >= 8:
+                            try:
+                                image_size = int(fields[7])
+                                logger.info(f"    이미지 크기 필드: {image_size}")
+                            except:
+                                logger.error(f"    이미지 크기 파싱 실패: {fields[7] if len(fields) > 7 else 'N/A'}")
             
             # 터미널에 텍스트 부분 출력 (이미지 제외)
             logger.info(f"ME_FD 텍스트 데이터: {text_part}")
             logger.info(f"ME_FD 이미지 크기: {len(image_data)} bytes")
+            logger.info(f"=== ME_FD 바이너리 데이터 분석 완료 ===")
             
             # 텍스트 부분 처리
             self._process_first_detection_with_image(text_part, image_data)
@@ -700,130 +855,20 @@ class TcpClient(QObject):
         except Exception as e:
             logger.error(f"ME_FD 바이너리 응답 처리 오류: {e}")
 
-    def _handle_object_image_binary_response(self, data: bytes):
-        """LR_OI 바이너리 응답 처리 (객체 이미지 조회 응답)"""
-        try:
-            # 텍스트 부분과 이미지 부분 분리
-            text_part = self.binary_processor.extract_text_part_from_binary(data, 'LR_OI')
-            if not text_part:
-                logger.error("LR_OI: 텍스트 부분 추출 실패")
-                return
-            
-            # 이미지 데이터 추출
-            text_size = len(text_part.encode('utf-8')) + 1  # 콤마 포함
-            image_data = data[text_size:]
-            
-            logger.info(f"LR_OI 텍스트 데이터: {text_part}")
-            logger.info(f"LR_OI 이미지 크기: {len(image_data)} bytes")
-            
-            # LR_OI: 프리픽스 제거하고 응답 처리
-            if text_part.startswith('LR_OI:'):
-                text_part = text_part[6:]  # 'LR_OI:' 제거
-            
-            # 응답 성공/실패 여부 확인
-            if text_part.startswith("OK"):
-                self._process_object_image_with_data(text_part, image_data)
-            elif text_part.startswith("ERR"):
-                error_msg = text_part[4:] if len(text_part) > 4 else "알 수 없는 오류"
-                logger.warning(f"객체 이미지 조회 오류: {error_msg}")
-                # 요청 소스에 따라 다른 에러 시그널 발생
-                if self.is_log_page_request:
-                    self.log_object_image_error.emit(error_msg)
-                else:
-                    self.object_detail_error.emit(error_msg)
-                # 에러 처리 후 초기화
-                self.requested_object_id = None
-                self.is_log_page_request = False
-            else:
-                logger.error(f"LR_OI 알 수 없는 응답 형식: {text_part}")
-                # 요청 소스에 따라 다른 에러 시그널 발생
-                if self.is_log_page_request:
-                    self.log_object_image_error.emit("알 수 없는 응답 형식")
-                else:
-                    self.object_detail_error.emit("알 수 없는 응답 형식")
-                # 에러 처리 후 초기화
-                self.requested_object_id = None
-                self.is_log_page_request = False
-
-        except Exception as e:
-            logger.error(f"LR_OI 바이너리 응답 처리 오류: {e}")
-            # 요청 소스에 따라 다른 에러 시그널 발생
-            if self.is_log_page_request:
-                self.log_object_image_error.emit(str(e))
-            else:
-                self.object_detail_error.emit(str(e))
-            # 에러 처리 후 초기화
-            self.requested_object_id = None
-            self.is_log_page_request = False
-
-    def _process_object_image_with_data(self, text_part: str, image_data: bytes):
-        """LR_OI 객체 이미지 데이터 처리"""
-        try:
-            # text_part: "OK,image_size"에서 정보 추출
-            parts = text_part.split(',')
-            if len(parts) < 2:
-                logger.error(f"LR_OI 응답 형식 오류: {text_part}")
-                return
-            
-            # OK 확인
-            if parts[0] != "OK":
-                logger.error(f"LR_OI 응답 실패: {text_part}")
-                return
-            
-            try:
-                expected_image_size = int(parts[1])
-                actual_image_size = len(image_data)
-                
-                if expected_image_size != actual_image_size:
-                    logger.warning(f"LR_OI 이미지 크기 불일치: 예상={expected_image_size}, 실제={actual_image_size}")
-                
-                # 요청된 객체 ID 사용 (없으면 0)
-                object_id = self.requested_object_id if self.requested_object_id is not None else 0
-                
-                # DetectedObject 생성 (이미지만 포함)
-                # LR_OI는 이미지만 반환하므로 기본값으로 객체 생성
-                detected_object = DetectedObject(
-                    object_id=object_id,
-                    object_type=ObjectType.UNKNOWN,
-                    x_coord=0.0,
-                    y_coord=0.0,
-                    area=AirportArea.TWY_A,
-                    event_type=None,
-                    timestamp=None,
-                    state_info=None,
-                    image_data=image_data
-                )
-                
-                # 요청 소스에 따라 다른 시그널 발생
-                if self.is_log_page_request:
-                    logger.info(f"로그 페이지 객체 이미지 응답: ID={object_id}")
-                    self.log_object_image_response.emit(detected_object)
-                else:
-                    logger.info(f"메인 페이지 객체 상세보기 응답: ID={object_id}")
-                    self.object_detail_response.emit(detected_object)
-                
-                # 요청 완료 후 초기화
-                self.requested_object_id = None
-                self.is_log_page_request = False
-                
-            except ValueError as e:
-                logger.error(f"LR_OI 이미지 크기 파싱 오류: {e}")
-                
-        except Exception as e:
-            logger.error(f"LR_OI 객체 이미지 데이터 처리 오류: {e}")
-
     def _process_first_detection_with_image(self, text_part: str, image_data: bytes):
         """이미지가 포함된 최초 감지 이벤트 처리"""
+        
         try:
             # 텍스트 부분에서 객체 정보 파싱
-            # 형식: event_type,object_id,object_type,x_coord,y_coord,area,timestamp,image_size
+            # 8개 필드: event_type,object_id,object_type,x_coord,y_coord,area,timestamp,image_size
+            # 9개 필드: event_type,object_id,object_type,x_coord,y_coord,area,timestamp,state_info,image_size
             parts = text_part.split(',')
             
             if len(parts) < 8:
                 logger.error(f"ME_FD: 필드 수 부족: {len(parts)}")
                 return
 
-            # 객체 정보 생성
+            # 공통 필드들 (1-7번째)
             event_type = MessageParser._parse_event_type(parts[0])
             object_id = int(parts[1])
             object_type = MessageParser._parse_object_type(parts[2])
@@ -831,9 +876,28 @@ class TcpClient(QObject):
             y_coord = float(parts[4])
             area = MessageParser._parse_area(parts[5])
             timestamp = MessageParser._parse_timestamp(parts[6])
-            image_size = int(parts[7])
+            
+            # 8번째와 9번째 필드 처리
+            state_info = None
+            if len(parts) == 8:
+                # 8개 필드: 8번째가 image_size
+                image_size = int(parts[7])
+                logger.debug(f"ME_FD (8개 필드): image_size={image_size}")
+            elif len(parts) >= 9:
+                # 9개 필드: 8번째=state_info, 9번째=image_size
+                try:
+                    state_info = int(parts[7].strip())
+                    logger.debug(f"ME_FD state_info 파싱: {state_info}")
+                except ValueError:
+                    logger.warning(f"ME_FD state_info 파싱 실패: {parts[7]}")
+                
+                image_size = int(parts[8])
+                logger.debug(f"ME_FD (9개 필드): state_info={state_info}, image_size={image_size}")
+            else:
+                logger.error(f"ME_FD: 예상치 못한 필드 수: {len(parts)}")
+                return
 
-            logger.debug(f"ME_FD 바이너리 파싱 결과: ID={object_id}, Type={object_type.value}, Pos=({x_coord}, {y_coord}), Area={area.value}, EventType={event_type.value if event_type else 'None'}, ImageSize={image_size}")
+            logger.debug(f"ME_FD 바이너리 파싱 결과: ID={object_id}, Type={object_type.value}, Pos=({x_coord}, {y_coord}), Area={area.value}, EventType={event_type.value if event_type else 'None'}, ImageSize={image_size}, StateInfo={state_info}")
 
             # 이미지 크기 검증
             if len(image_data) != image_size:
@@ -848,13 +912,13 @@ class TcpClient(QObject):
                 area=area,
                 event_type=event_type,
                 timestamp=timestamp,
-                state_info=None,
+                state_info=state_info,
                 image_data=image_data
             )
 
             # 최초 감지 이벤트 시그널 발생
             self.first_object_detected.emit([obj])
-            logger.info(f"이미지 포함 최초 감지 이벤트 처리 완료: ID {object_id}")
+            logger.info(f"이미지 포함 최초 감지 이벤트 처리 완료: ID {object_id}, StateInfo={state_info}")
 
         except Exception as e:
             logger.error(f"이미지 포함 최초 감지 이벤트 처리 오류: {e}")
@@ -1003,61 +1067,71 @@ class TcpClient(QObject):
     def _process_buffered_messages(self):
         """버퍼된 메시지들을 처리"""
         try:
-            # 줄바꿈으로 분리
+            # 1. 먼저 버퍼 전체에서 ME_FD 존재 여부 확인 (우선 처리)
+            if 'ME_FD:' in self.message_buffer:
+                logger.info(f"🔍 버퍼에서 ME_FD 감지, 바이너리 처리 시작")
+                logger.debug(f"버퍼 내용 (처음 200자): {self.message_buffer[:200]}")
+                
+                # ME_FD 위치들을 모두 찾기
+                me_fd_positions = []
+                start_pos = 0
+                while True:
+                    pos = self.message_buffer.find('ME_FD:', start_pos)
+                    if pos == -1:
+                        break
+                    me_fd_positions.append(pos)
+                    start_pos = pos + 1
+                
+                logger.info(f"발견된 ME_FD 개수: {len(me_fd_positions)}")
+                
+                # 첫 번째 ME_FD 이전 부분이 있다면 먼저 텍스트로 처리
+                if me_fd_positions and me_fd_positions[0] > 0:
+                    before_first_me_fd = self.message_buffer[:me_fd_positions[0]].strip()
+                    logger.info(f"첫 번째 ME_FD 이전 텍스트 처리: {before_first_me_fd[:100]}...")
+                    
+                    # 이전 부분을 줄바꿈으로 분리하여 처리
+                    for line in before_first_me_fd.split('\n'):
+                        line = line.strip()
+                        if line:
+                            self._process_single_message(line)
+                
+                # 각 ME_FD를 개별적으로 처리
+                for i, me_fd_start in enumerate(me_fd_positions):
+                    logger.info(f"ME_FD {i+1} 처리 시작 (위치: {me_fd_start})")
+                    
+                    # 다음 ME_FD 위치 찾기
+                    next_me_fd_start = -1
+                    if i + 1 < len(me_fd_positions):
+                        next_me_fd_start = me_fd_positions[i + 1]
+                    
+                    # 현재 ME_FD 데이터 추출
+                    if next_me_fd_start != -1:
+                        # 다음 ME_FD가 있는 경우: 현재 ME_FD부터 다음 ME_FD 직전까지
+                        me_fd_data = self.message_buffer[me_fd_start:next_me_fd_start]
+                        logger.info(f"ME_FD {i+1} 데이터 크기: {len(me_fd_data)} bytes")
+                    else:
+                        # 마지막 ME_FD인 경우: 현재 ME_FD부터 끝까지
+                        me_fd_data = self.message_buffer[me_fd_start:]
+                        logger.info(f"마지막 ME_FD 데이터 크기: {len(me_fd_data)} bytes")
+                    
+                    # 바이너리 처리
+                    binary_data = me_fd_data.encode('utf-8', errors='ignore')
+                    self._handle_binary_data(binary_data)
+                
+                # 버퍼 초기화
+                self.message_buffer = ""
+                return
+            
+            # 2. ME_FD가 없는 경우 기존 텍스트 처리 로직
             while '\n' in self.message_buffer:
                 line, self.message_buffer = self.message_buffer.split('\n', 1)
                 message = line.strip()
                 if message:
                     self._process_single_message(message)
-                    self.stats['messages_received'] += 1
-            
-            # 줄바꿈이 없는 경우에도 메시지 프리픽스로 분리 시도
-            if self.message_buffer and not '\n' in self.message_buffer:
-                # 메시지 프리픽스들 확인
-                prefixes = ['ME_OD:', 'ME_FD:', 'ME_BR:', 'ME_RA:', 'ME_RB:', 
-                           'MR_CA:', 'MR_CB:', 'MR_MP:', 'MR_OD:']
-                
-                for prefix in prefixes:
-                    if prefix in self.message_buffer:
-                        # 프리픽스 이전의 잘못된 데이터 제거
-                        prefix_pos = self.message_buffer.find(prefix)
-                        if prefix_pos > 0:
-                            invalid_part = self.message_buffer[:prefix_pos]
-                            logger.warning(f"잘못된 메시지 데이터 제거: '{invalid_part}'")
-                            self.message_buffer = self.message_buffer[prefix_pos:]
-                        
-                        # 완전한 메시지인지 확인 (세미콜론이나 다른 구분자로 끝나는지)
-                        if ';' in self.message_buffer:
-                            # 세미콜론으로 구분된 메시지들 처리
-                            parts = self.message_buffer.split(';')
-                            for i, part in enumerate(parts[:-1]):  # 마지막 부분은 버퍼에 남김
-                                if part.strip():
-                                    self._process_single_message(part.strip())
-                                    self.stats['messages_received'] += 1
-                            
-                            # 마지막 부분을 버퍼에 남김
-                            self.message_buffer = parts[-1]
-                            break
-                        else:
-                            # 단일 메시지인 경우 처리
-                            message = self.message_buffer.strip()
-                            if message:
-                                self._process_single_message(message)
-                                self.stats['messages_received'] += 1
-                                self.message_buffer = ""
-                            break
-                
-                # 프리픽스가 없는 경우, 숫자로 시작하는 잘못된 데이터 제거
-                if self.message_buffer and not any(prefix in self.message_buffer for prefix in prefixes):
-                    # 숫자로 시작하는 데이터 제거
-                    if re.match(r'^\d+', self.message_buffer):
-                        logger.warning(f"숫자로 시작하는 잘못된 데이터 제거: '{self.message_buffer}'")
-                        self.message_buffer = ""
-                            
+                    
         except Exception as e:
-            logger.error(f"버퍼된 메시지 처리 오류: {e}")
-            # 오류 발생 시 버퍼 초기화
-            self.message_buffer = ""
+            logger.error(f"메시지 버퍼 처리 오류: {e}")
+            self.message_buffer = ""  # 오류 시 버퍼 초기화
 
     def _process_single_message(self, message: str):
         """단일 메시지 처리"""
@@ -1331,6 +1405,118 @@ class TcpClient(QObject):
         except Exception as e:
             logger.error(f"조류 위험도 로그 응답 처리 실패: {e}, 데이터: {data[:200]}...")
             self.bird_risk_log_error.emit(str(e))
+
+    def _handle_object_image_binary_response(self, data: bytes):
+        """LR_OI 바이너리 응답 처리 (객체 이미지 조회 응답)"""
+        try:
+            # 텍스트 부분과 이미지 부분 분리
+            text_part = self.binary_processor.extract_text_part_from_binary(data, 'LR_OI')
+            if not text_part:
+                logger.error("LR_OI: 텍스트 부분 추출 실패")
+                return
+            
+            # 이미지 데이터 추출
+            text_size = len(text_part.encode('utf-8')) + 1  # 콤마 포함
+            image_data = data[text_size:]
+            
+            logger.info(f"LR_OI 텍스트 데이터: {text_part}")
+            logger.info(f"LR_OI 이미지 크기: {len(image_data)} bytes")
+            
+            # LR_OI: 프리픽스 제거하고 응답 처리
+            if text_part.startswith('LR_OI:'):
+                text_part = text_part[6:]  # 'LR_OI:' 제거
+            
+            # 응답 성공/실패 여부 확인
+            if text_part.startswith("OK"):
+                self._process_object_image_with_data(text_part, image_data)
+            elif text_part.startswith("ERR"):
+                error_msg = text_part[4:] if len(text_part) > 4 else "알 수 없는 오류"
+                logger.warning(f"객체 이미지 조회 오류: {error_msg}")
+                # 요청 소스에 따라 다른 에러 시그널 발생
+                if self.is_log_page_request:
+                    self.log_object_image_error.emit(error_msg)
+                else:
+                    self.object_detail_error.emit(error_msg)
+                # 에러 처리 후 초기화
+                self.requested_object_id = None
+                self.is_log_page_request = False
+            else:
+                logger.error(f"LR_OI 알 수 없는 응답 형식: {text_part}")
+                # 요청 소스에 따라 다른 에러 시그널 발생
+                if self.is_log_page_request:
+                    self.log_object_image_error.emit("알 수 없는 응답 형식")
+                else:
+                    self.object_detail_error.emit("알 수 없는 응답 형식")
+                # 에러 처리 후 초기화
+                self.requested_object_id = None
+                self.is_log_page_request = False
+
+        except Exception as e:
+            logger.error(f"LR_OI 바이너리 응답 처리 오류: {e}")
+            # 요청 소스에 따라 다른 에러 시그널 발생
+            if self.is_log_page_request:
+                self.log_object_image_error.emit(str(e))
+            else:
+                self.object_detail_error.emit(str(e))
+            # 에러 처리 후 초기화
+            self.requested_object_id = None
+            self.is_log_page_request = False
+
+    def _process_object_image_with_data(self, text_part: str, image_data: bytes):
+        """LR_OI 객체 이미지 데이터 처리"""
+        try:
+            # text_part: "OK,image_size"에서 정보 추출
+            parts = text_part.split(',')
+            if len(parts) < 2:
+                logger.error(f"LR_OI 응답 형식 오류: {text_part}")
+                return
+            
+            # OK 확인
+            if parts[0] != "OK":
+                logger.error(f"LR_OI 응답 실패: {text_part}")
+                return
+            
+            try:
+                expected_image_size = int(parts[1])
+                actual_image_size = len(image_data)
+                
+                if expected_image_size != actual_image_size:
+                    logger.warning(f"LR_OI 이미지 크기 불일치: 예상={expected_image_size}, 실제={actual_image_size}")
+                
+                # 요청된 객체 ID 사용 (없으면 0)
+                object_id = self.requested_object_id if self.requested_object_id is not None else 0
+                
+                # DetectedObject 생성 (이미지만 포함)
+                # LR_OI는 이미지만 반환하므로 기본값으로 객체 생성
+                detected_object = DetectedObject(
+                    object_id=object_id,
+                    object_type=ObjectType.UNKNOWN,
+                    x_coord=0.0,
+                    y_coord=0.0,
+                    area=AirportArea.TWY_A,
+                    event_type=None,
+                    timestamp=None,
+                    state_info=None,
+                    image_data=image_data
+                )
+                
+                # 요청 소스에 따라 다른 시그널 발생
+                if self.is_log_page_request:
+                    logger.info(f"로그 페이지 객체 이미지 응답: ID={object_id}")
+                    self.log_object_image_response.emit(detected_object)
+                else:
+                    logger.info(f"메인 페이지 객체 상세보기 응답: ID={object_id}")
+                    self.object_detail_response.emit(detected_object)
+                
+                # 요청 완료 후 초기화
+                self.requested_object_id = None
+                self.is_log_page_request = False
+                
+            except ValueError as e:
+                logger.error(f"LR_OI 이미지 크기 파싱 오류: {e}")
+                
+        except Exception as e:
+            logger.error(f"LR_OI 객체 이미지 데이터 처리 오류: {e}")
 
     # === 내부 유틸리티 메서드 ===
     def _cleanup_previous_connection(self):
