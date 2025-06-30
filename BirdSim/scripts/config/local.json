@@ -1,0 +1,18 @@
+{
+    "description": "로컬 테스트 환경 설정",
+    "tcp_host": "localhost",
+    "tcp_port": 5200,
+    "enable_tcp": true,
+    "confidence_threshold": 0.3,
+    "frame_skip": 1,
+    "enable_visualization": true,
+    "fps_target": 30,
+    "distance_threshold": 100,
+    "tracking_config": {
+        "position_jump_threshold": 30.0,
+        "jump_duration_threshold": 2,
+        "min_episode_length": 5,
+        "enable_data_cleaning": true,
+        "realtime_mode": true
+    }
+} 
