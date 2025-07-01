@@ -122,10 +122,19 @@ class YOLOResultVisualizer:
         ax5.legend()
         ax5.grid(True, alpha=0.3)
         
-        # 6. 전체 손실
+        # 6. 전체 손실 (개별 loss들의 합으로 계산)
         ax6 = axes[1, 2]
-        if 'train/loss' in df.columns:
-            ax6.plot(df['epoch'], df['train/loss'], label='Total Loss', color='#17becf', linewidth=2)
+        
+        # Total training loss 계산
+        if all(col in df.columns for col in ['train/box_loss', 'train/cls_loss', 'train/dfl_loss']):
+            total_train_loss = df['train/box_loss'] + df['train/cls_loss'] + df['train/dfl_loss']
+            ax6.plot(df['epoch'], total_train_loss, label='Total Training Loss', color='#17becf', linewidth=2)
+            
+        # Validation loss도 추가
+        if all(col in df.columns for col in ['val/box_loss', 'val/cls_loss', 'val/dfl_loss']):
+            total_val_loss = df['val/box_loss'] + df['val/cls_loss'] + df['val/dfl_loss']
+            ax6.plot(df['epoch'], total_val_loss, label='Total Validation Loss', color='#ff7f0e', linewidth=2, linestyle='--')
+            
         ax6.set_title('Total Loss', fontweight='bold')
         ax6.set_xlabel('Epoch')
         ax6.set_ylabel('Loss')
@@ -168,9 +177,9 @@ class YOLOResultVisualizer:
 - Recall: {final_epoch.get('metrics/recall(B)', 0):.4f}
 
 📉 최종 손실
-- Box Loss: {final_epoch.get('val/box_loss', 0):.4f}
-- Class Loss: {final_epoch.get('val/cls_loss', 0):.4f}
-- Total Loss: {final_epoch.get('train/loss', 0):.4f}
+- Validation Box Loss: {final_epoch.get('val/box_loss', 0):.4f}
+- Validation Class Loss: {final_epoch.get('val/cls_loss', 0):.4f}
+- Training Total Loss: {(final_epoch.get('train/box_loss', 0) + final_epoch.get('train/cls_loss', 0) + final_epoch.get('train/dfl_loss', 0)):.4f}
 
 🎮 모델 파일
 - 최적 모델: weights/best.pt

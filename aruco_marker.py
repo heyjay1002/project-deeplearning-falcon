@@ -12,7 +12,6 @@ if not cap.isOpened():
     exit()
 
 print("✅ ArUco 마커 인식 시작 (ID 0~3 예상)")
-q
 while True:
     ret, frame = cap.read()
     if not ret:
