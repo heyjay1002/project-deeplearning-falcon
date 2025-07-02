@@ -1,0 +1,26 @@
+=== MISCLASSIFICATION ANALYSIS ===
+
+Total Misclassifications: 8/797
+Error Rate: 1.0%
+
+Class-wise Error Matrix:
+
+stop misclassified as:
+  - left: 1 times
+
+forward misclassified as:
+  - stop: 3 times
+  - right: 1 times
+
+left misclassified as:
+  - forward: 1 times
+
+right misclassified as:
+  - left: 2 times
+
+Confidence Analysis:
+Average confidence (correct): 0.989
+Average confidence (incorrect): 0.674
+
+High-confidence errors (>0.9): 2
+This suggests potential systematic issues in the model.

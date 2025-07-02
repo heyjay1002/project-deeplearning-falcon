@@ -1,0 +1,50 @@
+2025-06-30 14:37:33,006 - ATC_GUI - INFO - FALCON 시작
+2025-06-30 14:37:33,091 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-30 14:37:33,107 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-30 14:37:33,129 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-30 14:37:33,130 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-30 14:37:33,171 - ATC_GUI - INFO - TCP 연결 성공 (192.168.0.23:5100)
+2025-06-30 14:37:44,897 - ATC_GUI - INFO - Access 탭 전환
+2025-06-30 14:37:44,898 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-30 14:37:44,965 - ATC_GUI - DEBUG - raw_data: b'AR_AC:OK,2,2,2,2,2,2,2,2\n'
+2025-06-30 14:37:44,966 - ATC_GUI - DEBUG - AR_AC 응답 수신: OK,2,2,2,2,2,2,2,2
+2025-06-30 14:37:44,966 - ATC_GUI - INFO - 출입 제어 설정 수신: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 2, 'RWY_B_level': 2, 'GRASS_A_level': 2, 'GRASS_B_level': 2}
+2025-06-30 14:37:44,970 - ATC_GUI - INFO - 출입 제어 설정 응답 처리 완료: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 2, 'RWY_B_level': 2, 'GRASS_A_level': 2, 'GRASS_B_level': 2}
+2025-06-30 14:40:14,351 - ATC_GUI - DEBUG - raw_data: b'ME_RB:1\n'
+2025-06-30 14:40:14,353 - ATC_GUI - INFO - [알림 표시] 활주로 B 위험도 - 레벨: WARNING, 시간: 2025-06-30 14:40:14
+2025-06-30 14:40:14,353 - ATC_GUI - INFO - 활주로 B 위험도 변경: WARNING
+2025-06-30 14:40:37,084 - ATC_GUI - INFO - Access 탭 전환
+2025-06-30 14:40:37,085 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-30 14:40:37,189 - ATC_GUI - DEBUG - raw_data: b'AR_AC:OK,2,2,2,2,2,2,2,2\n'
+2025-06-30 14:40:37,189 - ATC_GUI - DEBUG - AR_AC 응답 수신: OK,2,2,2,2,2,2,2,2
+2025-06-30 14:40:37,190 - ATC_GUI - INFO - 출입 제어 설정 수신: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 2, 'RWY_B_level': 2, 'GRASS_A_level': 2, 'GRASS_B_level': 2}
+2025-06-30 14:40:37,194 - ATC_GUI - INFO - 출입 제어 설정 응답 처리 완료: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 2, 'RWY_B_level': 2, 'GRASS_A_level': 2, 'GRASS_B_level': 2}
+2025-06-30 14:40:42,844 - ATC_GUI - INFO - Access 탭 전환
+2025-06-30 14:40:42,845 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-30 14:40:42,876 - ATC_GUI - DEBUG - raw_data: b'AR_AC:OK,2,2,2,2,2,2,2,2\n'
+2025-06-30 14:40:42,876 - ATC_GUI - DEBUG - AR_AC 응답 수신: OK,2,2,2,2,2,2,2,2
+2025-06-30 14:40:42,877 - ATC_GUI - INFO - 출입 제어 설정 수신: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 2, 'RWY_B_level': 2, 'GRASS_A_level': 2, 'GRASS_B_level': 2}
+2025-06-30 14:40:42,880 - ATC_GUI - INFO - 출입 제어 설정 응답 처리 완료: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 2, 'RWY_B_level': 2, 'GRASS_A_level': 2, 'GRASS_B_level': 2}
+2025-06-30 14:40:57,586 - ATC_GUI - INFO - Access 탭 전환
+2025-06-30 14:40:57,586 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-30 14:40:57,669 - ATC_GUI - DEBUG - raw_data: b'AR_AC:OK,2,2,2,2,2,2,2,2\n'
+2025-06-30 14:40:57,669 - ATC_GUI - DEBUG - AR_AC 응답 수신: OK,2,2,2,2,2,2,2,2
+2025-06-30 14:40:57,670 - ATC_GUI - INFO - 출입 제어 설정 수신: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 2, 'RWY_B_level': 2, 'GRASS_A_level': 2, 'GRASS_B_level': 2}
+2025-06-30 14:40:57,674 - ATC_GUI - INFO - 출입 제어 설정 응답 처리 완료: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 2, 'RWY_B_level': 2, 'GRASS_A_level': 2, 'GRASS_B_level': 2}
+2025-06-30 14:41:04,398 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 2, 'RWY_B_level': 3, 'GRASS_A_level': 2, 'GRASS_B_level': 2}
+2025-06-30 14:41:04,399 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: RWY B = 레벨 3
+2025-06-30 14:41:04,399 - ATC_GUI - INFO - 출입등급 변경으로 인한 최초 감지 기록 초기화: RWY B = 레벨 3
+2025-06-30 14:41:04,531 - ATC_GUI - DEBUG - raw_data: b'AR_UA:ERR,4\n'
+2025-06-30 14:41:04,531 - ATC_GUI - DEBUG - AR_UA 응답 수신: ERR,4
+2025-06-30 14:41:04,531 - ATC_GUI - ERROR - 출입 제어 설정 업데이트 실패: 4
+2025-06-30 14:41:08,775 - ATC_GUI - WARNING - 출입 제어 설정 업데이트 실패: 4
+2025-06-30 14:41:16,659 - ATC_GUI - INFO - TCP 연결 해제
+2025-06-30 14:41:19,924 - ATC_GUI - INFO - Access 탭 전환
+2025-06-30 14:41:19,925 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-30 14:41:21,484 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-30 14:41:21,535 - ATC_GUI - INFO - Access 탭 전환
+2025-06-30 14:41:21,536 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-30 14:41:27,172 - ATC_GUI - INFO - Access 탭 전환
+2025-06-30 14:41:27,173 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-30 14:41:41,484 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 5회)
+2025-06-30 14:42:06,484 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 10회)

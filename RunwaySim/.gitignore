@@ -1,0 +1,73 @@
+# ============================================
+# Unity 프로젝트 + AI 학습 용 .gitignore
+# 총 절약 용량: ~4.5GB
+# ============================================
+
+# Unity 자동 생성 파일들 (3.8GB - 가장 큰 용량)
+Library/
+Temp/
+Logs/
+UserSettings/
+
+# 중복 git 저장소
+Github/
+
+# AI 학습 관련 큰 파일들
+# YOLO 학습 체크포인트들 (각 65MB, 총 ~500MB)
+training/yolo/runs/
+# 기본 모델과 최고 성능 모델만 유지
+training/yolo/yolov8*.pt
+!training/yolo/best.pt
+
+# 캡처/시각화 데이터 (929MB)
+data/yolo_capture/
+data/yolo_visualization/
+
+# 매우 큰 3D 모델 파일들 (100MB 이상)
+Assets/falcon_3*.glb
+
+# Python 관련
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.env
+
+# 빌드 결과물
+Builds/
+*.app
+*.exe
+*.apk
+*.ipa
+
+# IDE 관련
+.vscode/
+.idea/
+*.sln.iml
+
+# OS 관련
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# 로그 및 임시파일
+*.log
+*.tmp
+*.temp
+sysinfo.txt
+crashlytics-build.properties
+
+# 주의: 아래 파일들은 프로젝트 실행에 필요하므로 포함
+# - Assets/의 대부분 파일들 (텍스처, 스크립트, 씬 등)
+# - 작은 크기의 .pt 모델 파일들
+# - ProjectSettings/
+# - Packages/

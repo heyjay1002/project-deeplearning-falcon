@@ -1,0 +1,23 @@
+2025-06-30 13:36:17,953 - ATC_GUI - INFO - FALCON 시작
+2025-06-30 13:36:18,087 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-30 13:36:18,130 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-30 13:36:18,176 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-30 13:36:18,178 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-30 13:36:18,201 - ATC_GUI - INFO - TCP 연결 성공 (192.168.0.12:5100)
+2025-06-30 13:36:19,025 - ATC_GUI - INFO - Access 탭 전환
+2025-06-30 13:36:19,026 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-30 13:36:19,107 - ATC_GUI - DEBUG - raw_data: b'AR_AC:OK,1,2,2,2,3,1,1,1\n'
+2025-06-30 13:36:19,108 - ATC_GUI - DEBUG - AR_AC 응답 수신: OK,1,2,2,2,3,1,1,1
+2025-06-30 13:36:19,108 - ATC_GUI - INFO - 출입 제어 설정 수신: {'TWY_A_level': 1, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 1, 'GRASS_A_level': 1, 'GRASS_B_level': 1}
+2025-06-30 13:36:19,112 - ATC_GUI - INFO - 출입 제어 설정 응답 처리 완료: {'TWY_A_level': 1, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 1, 'GRASS_A_level': 1, 'GRASS_B_level': 1}
+2025-06-30 13:36:23,058 - ATC_GUI - INFO - Access 탭 전환
+2025-06-30 13:36:23,059 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-30 13:36:23,092 - ATC_GUI - DEBUG - raw_data: b'AR_AC:OK,1,2,2,2,3,1,1,1\n'
+2025-06-30 13:36:23,093 - ATC_GUI - DEBUG - AR_AC 응답 수신: OK,1,2,2,2,3,1,1,1
+2025-06-30 13:36:23,093 - ATC_GUI - INFO - 출입 제어 설정 수신: {'TWY_A_level': 1, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 1, 'GRASS_A_level': 1, 'GRASS_B_level': 1}
+2025-06-30 13:36:23,099 - ATC_GUI - INFO - 출입 제어 설정 응답 처리 완료: {'TWY_A_level': 1, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 1, 'GRASS_A_level': 1, 'GRASS_B_level': 1}
+2025-06-30 13:36:31,060 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: {'TWY_A_level': 1, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 2, 'GRASS_A_level': 1, 'GRASS_B_level': 1}
+2025-06-30 13:36:31,061 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: RWY B = 레벨 2
+2025-06-30 13:36:31,061 - ATC_GUI - INFO - 출입등급 변경으로 인한 최초 감지 기록 초기화: RWY B = 레벨 2
+2025-06-30 13:36:36,979 - ATC_GUI - INFO - Access 탭 전환
+2025-06-30 13:36:36,980 - ATC_GUI - INFO - 출입 제어 설정 요청

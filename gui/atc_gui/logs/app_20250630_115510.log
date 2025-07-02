@@ -1,0 +1,1490 @@
+2025-06-30 11:55:10,723 - ATC_GUI - INFO - FALCON 시작
+2025-06-30 11:55:10,783 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-30 11:55:10,796 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-30 11:55:10,811 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-30 11:55:10,812 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-30 11:55:10,882 - ATC_GUI - INFO - TCP 연결 성공 (192.168.0.12:5100)
+2025-06-30 11:55:17,611 - ATC_GUI - DEBUG - raw_data: b'ME_RB:1\n'
+2025-06-30 11:55:17,612 - ATC_GUI - INFO - [알림 표시] 활주로 B 위험도 - 레벨: WARNING, 시간: 2025-06-30 11:55:17
+2025-06-30 11:55:17,612 - ATC_GUI - INFO - 활주로 B 위험도 변경: WARNING
+2025-06-30 11:55:17,614 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,402,RWY_B,0;17512521175752,PERSON,383,415,RWY_B,0\nME_OD:17512521175751,PERSON,217,402,RWY_B,0;17512521175752,PERSON,383,416,RWY_B,0\nME_OD:17512521175751,PERSON,218,403,RWY_B,0;17512521175752,PERSON,383,411,RWY_B,0\n'
+2025-06-30 11:55:17,614 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,402,RWY_B,0;17512521175752,PERSON,383,415,RWY_B,0...
+2025-06-30 11:55:17,615 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:17,615 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 402.0), Area=RWY_B
+2025-06-30 11:55:17,615 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521175752, Type=일반인, Pos=(383.0, 415.0), Area=RWY_B
+2025-06-30 11:55:17,615 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:17,615 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,402,RWY_B,0;17512521175752,PERSON,383,416,RWY_B,0...
+2025-06-30 11:55:17,615 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:17,615 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 402.0), Area=RWY_B
+2025-06-30 11:55:17,615 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521175752, Type=일반인, Pos=(383.0, 416.0), Area=RWY_B
+2025-06-30 11:55:17,615 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:17,615 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,403,RWY_B,0;17512521175752,PERSON,383,411,RWY_B,0...
+2025-06-30 11:55:17,615 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:17,615 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 403.0), Area=RWY_B
+2025-06-30 11:55:17,616 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521175752, Type=일반인, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:17,616 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:17,633 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,403,RWY_B,0;17512521175752,PERSON,383,409,RWY_B,0\n'
+2025-06-30 11:55:17,634 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,403,RWY_B,0;17512521175752,PERSON,383,409,RWY_B,0...
+2025-06-30 11:55:17,634 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:17,634 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 403.0), Area=RWY_B
+2025-06-30 11:55:17,634 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521175752, Type=일반인, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:17,634 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:17,658 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,403,RWY_B,0;17512521175752,PERSON,382,408,RWY_B,0\n'
+2025-06-30 11:55:17,658 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,403,RWY_B,0;17512521175752,PERSON,382,408,RWY_B,0...
+2025-06-30 11:55:17,659 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:17,659 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 403.0), Area=RWY_B
+2025-06-30 11:55:17,659 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521175752, Type=일반인, Pos=(382.0, 408.0), Area=RWY_B
+2025-06-30 11:55:17,659 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:17,690 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:17,690 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:17,690 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:17,690 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 402.0), Area=RWY_B
+2025-06-30 11:55:17,690 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:17,691 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:17,695 - ATC_GUI - DEBUG - 객체 업데이트 처리: 3개 객체
+2025-06-30 11:55:17,695 - ATC_GUI - DEBUG - 객체 목록 업데이트: 3개 객체
+2025-06-30 11:55:17,695 - ATC_GUI - DEBUG - 새로운 객체: 3개 (전체: 3개)
+2025-06-30 11:55:17,702 - ATC_GUI - DEBUG - 마커 설정 완료: ID 17512521175751, 크기: 50x50
+2025-06-30 11:55:17,702 - ATC_GUI - DEBUG - 마커 추가 성공: ID 17512521175751, 위치: (190, 373), 상태: NORMAL
+2025-06-30 11:55:17,704 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=0
+2025-06-30 11:55:17,704 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=17512521175751, rescue_level=0
+2025-06-30 11:55:17,704 - ATC_GUI - DEBUG - 위험도가 0이므로 게이지바 미생성: ID=17512521175751
+2025-06-30 11:55:17,704 - ATC_GUI - DEBUG - 마커 설정 완료: ID 17512521175752, 크기: 50x50
+2025-06-30 11:55:17,705 - ATC_GUI - DEBUG - 마커 추가 성공: ID 17512521175752, 위치: (355, 385), 상태: NORMAL
+2025-06-30 11:55:17,705 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=0
+2025-06-30 11:55:17,706 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=17512521175752, rescue_level=0
+2025-06-30 11:55:17,706 - ATC_GUI - DEBUG - 위험도가 0이므로 게이지바 미생성: ID=17512521175752
+2025-06-30 11:55:17,709 - ATC_GUI - DEBUG - 마커 설정 완료: ID 17512521177092, 크기: 50x50
+2025-06-30 11:55:17,710 - ATC_GUI - DEBUG - 마커 추가 성공: ID 17512521177092, 위치: (355, 380), 상태: NORMAL
+2025-06-30 11:55:17,710 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=0
+2025-06-30 11:55:17,710 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=17512521177092, rescue_level=0
+2025-06-30 11:55:17,710 - ATC_GUI - DEBUG - 위험도가 0이므로 게이지바 미생성: ID=17512521177092
+2025-06-30 11:55:17,720 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:17,721 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:17,721 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:17,721 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 402.0), Area=RWY_B
+2025-06-30 11:55:17,721 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:17,721 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:17,741 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:17,741 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:17,741 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:17,741 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 402.0), Area=RWY_B
+2025-06-30 11:55:17,741 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:17,741 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:17,761 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,216,401,RWY_B,0;17512521177092,WORK_PERSON,382,408,RWY_B\n'
+2025-06-30 11:55:17,762 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,216,401,RWY_B,0;17512521177092,WORK_PERSON,382,408,RWY_B...
+2025-06-30 11:55:17,762 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:17,762 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(216.0, 401.0), Area=RWY_B
+2025-06-30 11:55:17,762 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 408.0), Area=RWY_B
+2025-06-30 11:55:17,762 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:17,783 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,216,400,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:17,783 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,216,400,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:17,784 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:17,784 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(216.0, 400.0), Area=RWY_B
+2025-06-30 11:55:17,784 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:17,785 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:17,809 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,216,400,RWY_B,0;17512521177092,WORK_PERSON,382,408,RWY_B\n'
+2025-06-30 11:55:17,809 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,216,400,RWY_B,0;17512521177092,WORK_PERSON,382,408,RWY_B...
+2025-06-30 11:55:17,810 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:17,810 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(216.0, 400.0), Area=RWY_B
+2025-06-30 11:55:17,811 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 408.0), Area=RWY_B
+2025-06-30 11:55:17,811 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:17,855 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:17,856 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:17,857 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:17,857 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 400.0), Area=RWY_B
+2025-06-30 11:55:17,857 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:17,858 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:17,888 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:17,888 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:17,889 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:17,889 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 400.0), Area=RWY_B
+2025-06-30 11:55:17,889 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:17,890 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:17,917 - ATC_GUI - DEBUG - raw_data: b'ME_FD:2,17512521175751,PERSON,217,400,RWY_B,2025-06-30T02:55:17Z,0,3461,\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x00\x00\x01\x00\x01\x00\x00\xff\xdb\x00C\x00\x02\x01\x01\x01\x01\x01\x02\x01\x01\x01\x02\x02\x02\x02\x02\x04\x03\x02\x02\x02\x02\x05\x04\x04\x03\x04\x06\x05\x06\x06\x06\x05\x06\x06\x06\x07\t\x08\x06\x07\t\x07\x06\x06\x08\x0b\x08\t\n\n\n\n\n\x06\x08\x0b\x0c\x0b\n\x0c\t\n\n\n\xff\xdb\x00C\x01\x02\x02\x02\x02\x02\x02\x05\x03\x03\x05\n\x07\x06\x07\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\xff\xc0\x00\x11\x08\x00|\x002\x03\x01"\x00\x02\x11\x01\x03\x11\x01\xff\xc4\x00\x1f\x00\x00\x01\x05\x01\x01\x01\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\xff\xc4\x00\xb5\x10\x00\x02\x01\x03\x03\x02\x04\x03\x05\x05\x04\x04\x00\x00\x01}\x01\x02\x03\x00\x04\x11\x05\x12!1A\x06\x13Qa\x07"q\x142\x81\x91\xa1\x08#B\xb1\xc1\x15R\xd1\xf0$3br\x82\t\n\x16\x17\x18\x19\x1a%&\'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz\x83\x84\x85\x86\x87\x88\x89\x8a\x92\x93\x94\x95\x96\x97\x98\x99\x9a\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xff\xc4\x00\x1f\x01\x00\x03\x01\x01\x01\x01\x01\x01\x01\x01\x01\x00\x00\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\xff\xc4\x00\xb5\x11\x00\x02\x01\x02\x04\x04\x03\x04\x07\x05\x04\x04\x00\x01\x02w\x00\x01\x02\x03\x11\x04\x05!1\x06\x12AQ\x07aq\x13"2\x81\x08\x14B\x91\xa1\xb1\xc1\t#3R\xf0\x15br\xd1\n\x16$4\xe1%\xf1\x17\x18\x19\x1a&\'()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x92\x93\x94\x95\x96\x97\x98\x99\x9a\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xff\xda\x00\x0c\x03\x01\x00\x02\x11\x03\x11\x00?\x00\xfdH\xfd\xa2<@\xdf\x0b|\x17\xa8x\xc3\xc4*#\x84oX\xa4o\x97q\xe7\xe5\xc9\xef\xed_\x0f|-\xf8q\xf1;\xe3\xb7\xc4\xdb\xdf\x8a>\x11\xd5E\x92\x8d@\xcf\x0c\xb3G\xb8:\x17-\xb3\xea\x01\xc1\x1d\xab\xde\xff\x00\xe0\xae?\x17$\x9fS\xd3~\x10h\xd7*\xb6\xea\x89-\xe9V\xe1]\xba\x06\xf4\'\xde\xa7\xfd\x96>\x19\xb7\x84\xbe\x14i\x93]4\xb1<\xe8%\x91\x15He\xdc\xa0\xe4\x8e\xddk\xf2\x8e\x15\xc8\xe8`\xe8V\xc4b>)\x9e\xa5J\xeej\xd66\xb5\xcdFO\x0c\xf8Z\xfb_\xf1\xc4\xf1n\xb0\x8eY&\x98a\x06\xe3\x9e}\xb2zW\xe7\xe7\xc4\x7f\x1fI\xe2\xdf\x1a\\\xf8\x94\x06x\xae\'\x90\xc6\xbdHB\xc4\x8c\xfe\x15\xf5\xbf\xed\xc9\xac\xde\xf8_\xe1\x84:n\x8d|\xc1\xf5\x1b\x967Bs\x8d\xc8\x0f\x00\xe7\xd4W\xc4\xd3\xcc&\x9d\xe5(\x10\xbb\x16\xd9\xd3\x19=+\xd8\xe1\xbe\x1a\x86Y\x8bu\xe0\xdd\xdb\xbe\xc76a\x8b_W\xf6q-\xdb\\[\x89\t\xf3UA?(,\x07\xe1^\x91\xf0\xfa\xc0\xa6\x86\xdej\x15/&\xe5\x0c1\x90y\xc8\xaf5\xf0\xf6\x94\xda\xa6\xb9mc\xe5\xb1\r.[\x038\x1e\xb5\xed\xf0h\xc9\xa7\xdaG\x1d\xb8\xdc\xa8\x81AQ\x9e\x83\x15\xe8q\x9e`\xe8\xe5r\xa6\xb7g\xcd\xe2j\xbeU\xa1\x11\xb3\xb3\xcf\xcd\x01\'\xb9\xc5\x15&\xe9?\xb8\xdf\xf7\xcd\x15\xf8\xaa\x9c\xecp\x1d\x0f\xed\x03\xe2\x11\xf1\xd3\xf6\xc1\xbd\xb6\xd2\x1d\xee,\xcd\xff\x00\x96\x84\xfc\xca\xe9\x14\x84\x02\x0fq\x81_Qh:\xd6\x8f\n\xa7\x84\xed/\x14\xca\xea\x10yN\x08\\q\x8e+\xe4\xbf\xd9{\xc3\x1a\x8e\xa7\xe3\rW\xe2\x05\xf3\xb3\xff\x00g\x82\xc8\xe4\x1e\xaery\xfck\xda4\xef\x12\x98|E\x1d\xdd\xb3\x05\x95NH\xcf5\xfd\x11\x95e\x11\xab\x08\xa9\xb7k#\xe8\xeb\xe3\xfd\x93\xd1\x18\xff\x00\xb6?\xc2\xbd[\xc6\xfe\x12\x97@\xd153-\xfe\x95?\x9d:\x16\xcb*g\xe5\xc8\xea\x01\xed_\x17\xeb\xdaN\xa9\xa3k\x12i\xda\xbd\x94\xb0\\#\x9d\xf1\xcb\x19S\xc1\xeb\x83\xda\xbe\xff\x00\xd6\xbcGg\x17\xc4];T\xd5\n\xbd\xaf\x8a-~\xc71\'\xe5\x12\xc61\xc9\xe9\x9c\x8a\xf0\x1f\xdb\x1b\xe1]\xd5\x96\xac\xbe+\xd2t\xfd\xb1\xc4\xbe\\\xce#8\xfa\x93_EW\n\xa8\xc6\xd1G\x93O\x10\xaa\xcb\xdeg\x92\xfc(\xd2f\xbe\xd7\xda\xea(\x1d\xcaB\x08\xda\xa4\xf1\x8e\xbfJ\xf5\x1d2\xe2x"f\x99Y\x97<\x0cW\x92h\xdf\x10m|+\xa0\x8b\x0b-\x18\xb5\xf3\xcd\x89\'I?\x83\xd2\xba{/\x8c6\x89f"6\x98`\xa0m\xeb\x8a\xfc\x9b\x8cp\x19\x9e;\x1d\x18F>\xe9ui\xaa\xa7~\x97v\x8c\x81\x8d\xb9\xe4zQ\\\n\xfcg\xd0\xd5B\xc9g.\xe00\xd8S\xd6\x8a\xf8\xc7\xc3\xd9\x8av\xe58\xbd\x9bG\xd1_\x04\xbc&\xbe\x15\xfd\x9eE\xe4\xd1\x18\xae\xf5\x8b\xa34\x8f"\xed+\x19\xf9\x94\x1c\xfb\x1a\xe5u/\x12Ca\xe2\xc7F\x99\xd5\xf6\x13\xb0\xf0q\xf4\xafv\xf8\x91\xe1\x1f\xf8A\xfe\x1e\x9f\x0c\xddA\xe4Ig\n\x9f%\x86\xd2\x00\x18\x18\xcfoC_&\xf8\x97QD\xf1\xaa\xeaW\x12\xc8\xc6f(Qy\xc7=+\xfa\'\x86kO\x15\x06\xeaF\xd67\xcc\xa9\xbaz\xdc\xf4}g_\xb8\xf1\'\x85\xa4\xb4\xb1\x9b\xfd\'L\x96+\xed5\xc1\xe7\x03\r \x1f\xaek\xd4d\xbf\xf0\x8f\xc6\x8f\x0c\xda\x1b\xfbd\x10kz\x1f\x9a\x8c\xc4ae1\x86\x1c\xfa\xe4\xd7\x97|\x18\xd1\xd3\xc4~7M\x05\x10\xb4gN\x98H\x00\xce\xcc\x83\x80\xde\x95K\xc3Z\xe6\xb7\xe0\xbf\t\xdf\xf8V\xc5&\xfbn\x85\xaa\xba\xa0\x91\x08\xd9\x16\xf2\x00\xc7a\x8a\xfa*\xb4\xa3Q\xeayt\x93\x86\xb7>m\xf1\xd7\x85\xe4\xf0\x9f\x88\xee\xf4[\x84e\x92\xce\xe1\xe3p\xc3\x07\n\xc4g\xe8qY\x96\xff\x00\xeb7\x1e\x84\xf5\xae\xeb\xe3\xa2K}\xf1\x0fT\xbb\xbaM\xb3\\F\xb2\xb2w\xcb\x1c\xe7\x1e\x9c\xd7#\r\x94n\x04I\xcb/\x0c\xa3\xa85\xf3\x15\xa8\xc6rjG\xb9A\xfbT\xaeQ\x96)\x0c\x8cDlAc\x82\x05\x15y\xa2tb\x85\x08\xc1\xc61Ep}V\x07O\xb2\x89\xfbc\xf1/\xe1\x86\x8d\xf1\x85|Ios`\x82\x18\xed\x0c6\xb7{pZ\xe5r\x08\xcf|\x1e\r~s|r\xf8Qs\xe0-Y\xe3\xf1\x10A5\x95\xe3\xc71\x8b\xd5X\x82~\x99\x15\x17\x83\x7f\xe0\xa7\x9f\xb5\'\x86 \xfe\xce\x8b\xc5\xb6\xf3\xe1\xcc\x93\xfd\xa6\x11\xb8\xb9\xe5\x89\xf7\'\xadX\x87\xf6\x85\xd7\xbfh\x9f\x10\\x\xb7\xc6\xd6V\x7fj%\x96e\x8f\x02\'\\\xf2\xde\x81\x8f\\W\xbf\x92\xca\x14b\xe0\xba\x9c\xf8\xf8*\xabS\xa3\xfd\x97|{\xf0\xebL\xd6\xaf\xf5}K\xc56\xd6\xd3\xac%V9\xe5Ub\x9d\x8e\t\xe4c\xbd[\xf8\x93\xf1G\xe0$z\xad\xee\xb5a\xe28./5\x1bd\x89\xa1\xb3\x91$\xcc\x8a>\xf1\nOS\xcdy$\x1f\x05\xfe\x11I\xe2]K]K\x7f\x9a\xe5\xa4\x0c\x16f\xe3$\xfa\x1cS\xbc\x1b\xe0\x8f\x85\x9e\x10\xd5Dqh\xa4\xc8[\xf7r<\xfb\xff\x00C\xd2\xbd\xfeD|\xf3\xa8\xe2\xec}\x95\xfb$\xfe\xcb?\xb3o\xed\x17\xf0\x92?\x19\xf8\xcb\xc0-6\xab%\xc9\x8e\xea\xe9\xe4*\\/B=\x01\xe7\x8a\xf5+\x9f\xf8&\x9f\xec\x97vK7\xc3\xbf+q\xceRlW\x80| \xfd\xae\x1f\xf6b\xf8q6\xa2<85\x1d2[\x92Z\xdbv\xc7S\x9e\xa0zV\xa3\x7f\xc1gt\x17\xff\x00S\xf0\x92R\x9f\xc2|\xe2r;W\xccb\xe9\xca\x96!\xc5u>\x83\x03gC\x9c\xf5\xf6\xff\x00\x82]~\xc7\xa5\x89o\x03NI<\x9f\xb4\x9e\x7fJ+\xcac\xff\x00\x82\xc9\xe8f5?\xf0\xa9.yQ\xd2\xe9E\x15\xc9\xca\xce\xcec\xf3\xf7\xe3\x07\x83,~\x1c\xfcG\xd6<+\xa4\xde\xb5\xd5\xbd\x85\xfd\xc5\xacw,\xd92\xacr2\x07$w \x03\xf8\xd3\xfe\x1b\xfcN\xb6\xf0\xe5\x83\xe8\x97vD\xf9\xc3\xe5\x96!\x9c\x0f|VG\x8du\xeb\xad{\\\xb8\xd4/\x1c\xb4\x93\x96y]\xbb\xb1$\x9c\xfb\xe4\xd79\x14\xedi:2\x02p\x06qW\x86\x8b\xa0\xee\x9d\xc9\xabIT\xd0\xfa\x1b\xc2\xda\x1c?\xd9\x7f\xda\xcf|\xec\xb7c\xcc\x8c\x13\xd7<\xe2\xb2.|M\xa2\xe9\x9e+\x87E\xb8\xb6\x99\xa6\x94\x93\x19\xdas\x8f_\xa5n|0\xbd\xd2\xf5?\x87\xdat\xd7\x05\xf7E\x16\x1f\xd8\xed\xad\xbf\x89_\rt\x8f\xf8T\x1a\'\xc4\xdb8<\xbb\xa8\xaf\x19$\x9d\x86>N\xcaM}l*7\x04|\xbe"\x92\xa5\'c\xe8\x9f\xd8o\xc3\xfe\x03\xf8\x8f,\xde\x15\xf1\x86\x8d\x16\xa3\x00]\xeb\x1c\xab\xbb\x8a\xfa{\xfe\x19\x03\xf6kd\x12/\xc1\xed\x1c\xee\x19\xc9\x84\xe7\xf1\xaf\x85\x7fd/\x89\xda\x9f\x83\xef/\xb5=\x19A\xbf\xb4\xb5\xf3\xa0\x8ctu\xc6B\x9f|v\xae\xae\xff\x00\xfe\n\xe9\xf1\x9bN\xbc\x96\xce_\x84V\xc4\xc3+!f\xb6\x97\x9c\x1cg\xa5|\xfeh\xb91J\xc7\xbb\x81v\xa3\xc9\xdc\xfa\xec\xfe\xc6?\xb2\xf3\x92\xef\xf0kG\xdcNO\xee\x8f_\xce\x8a\xf9&/\xf8,\x87\x8d\xd65[\x8f\x81\xae\xd2\x05\x01\xd9\x15\xc0\'\xb9\x1ct\xa2\xbc\xeb\xb3\xba\xc8\xfc\xfd\xd4&\x8eFfV\xe4\xb18=G\xd6\xb3\x1f\xef\x9f\xadXa\xb5\x8a\xef\xdd\x83\xf7\xbd}\xea\t\x15\x95\x89e#\'\x8c\x8f^\x94*\xadt\x1b\xdc\xf7o\x80bF\xf0#\xcdu\xcc!\xf6\x86=\x07\xb6k\xe8\xff\x00\r\xe8:o\xc4O\xd9KX\xd0M\x99ccq$\xb1H\xab\x900M|\xbf\xfb7C\xad\xdd\xf8v\xf3G\xbf\x82hm\x96\xe5\xca\xc9,eW9<d\xd7\xd8\x1f\xb2e\x84\x1a\x97\xc3\xef\x11\xf8M\xe5VCg;p\xddI\xcd}6\x16\xab\xab\x87\xe6kc\xe7q\xd4\xd2\xaf\xc8y\'\xec^4\xd8<\x7fo\xa6\x96\x13\xc9$\xa0N\x18\x82\x1d3\xd0z\x8a\xfd\x1d\xd3\xbe\x11\xfc$\xd4,a\x9aO\x87\x9aV\xd7\x89Hi-W<\x8e\xe7\x1dk\xf3s\xf6yH\xfc-\xf1\x89\xf4\x95M\x93\xc7+F\xbb\xb8*U\x88\xc7\xe9^\xa7\xf1\xaf\xfe\n\'\xf1\xd3\xe0\'\x8b\x07\x83\xb4\xbd>\xc2\xe2\xd9c\xc43Od\xe4\x05\x1c\x0c\xb60N+\x835\xa6\xa5%P\xf4\xf2\xe5\xcd\xa1\xf6\xb1\xf8-\xf0uN\xdf\xf8V\xfaI\xc7\x7f\xb0\xad\x15\xf9\xfd\x17\xfc\x16#\xf6\x82\xf2\x97w\x84\xb4W;F]v\x80\xde\xf8\xedEx\xbc\xcc\xf5}\x91\xf0\xc8 \x8c\xa9\x04v"\xbb/\x81>\x0c\xb9\xf1\xf7\xc4\x8d\'\xc2\xb6\xb6~s\xdej\x11)\x8d\x90\x9f\x97#\'\x1e\x9e\xf5\xc6\x05\x11\xaa\xa1\xe3\x8c\x0c\xd7w\xf0\x1b\xe3\'\x88>\x02|L\xd2|s\xa4hq]MlK\x84\xb8N\x80\xf2\x0f\xd0\xd4\x98\x9f\xaa\xdf\x1b~\x03x3\xc3\x9f\xb3\x1c\xba\x07\x87\xb4\x1d>\xd6\xfbK\xb2\x81\xbe\xd5kn\xa5\xe6`\xaa\x1c\x829bz\xfe\x15\xe0\x7f\xb1\x8d\xfcV\x9f\x125O\x0b\xcdr\xac\x97\x91?\x96\x84\x80Xs\xd0V\xbf\xc3\x8f\xda\xcb\xf6\x88\xfd\xb1<\x15\xaa\xe8\xde\x1c\xf0\x15\x9c:t6\xe6MV\xebq\xdc\xb9\x19d\x1e\x9d\xeb\x90\xfd\x93\x05\xbd\x97\xed\x1d\x15\xb1\x95TB\x92Fw8\xf9H$`\xfb\xd7\xd1`f\xa3E\xc1\xb3\xc3\xc6\xc2N\xaf=\x8e\x0b\xe2V\xafc\xf0\xcf\xf6\xb2\xd4\xb4\xdbT\n\xe9~Yc\xcf\xccC\xc8{~5\xf77\xc3\xcf\x80\x9f\x04\xfe&xj/\x14\xf8\xc7\xe1\xde\x9d\x7fu$a|\xcb\x88\x89\xdcq\xc9\xfa\xe6\xbeE\xff\x00\x82\x88\xd8\xf8c\xc0_\x184\xef\x1c\xeavi\x0c\x97\xa9\x18i8\x05\xb6w\xfa\xd7\xd4\xff\x00\xb0\x97\xed)\xf0\xb3\xe3\'\xc3\x1b}7\xc3\x9e%\x87\xed\xf6\x0eb\xb9\xb4i\x97v\xe5\xe0\x9cu\xeb\x9a\x9c\xcaP\x9e\x1b\x9a/c\xbb\x01\xee;\x9dr\xfe\xc5\xdf\xb3\x0b\xa8s\xf0\x7fJ\xe4g\xe5\x84\xe3\xf0\xa2\xbd(J\xc4\x02\xb6\xd1\xb0\xc7\x0ce\x00\x9f|v\xa2\xbeqH\xf5\xf9\x99\xfc\xfeY[\xad\xf5\xc2\xa8!\x80;N\x0fC\xe9_\xa5\xbf\xf0N\xaf\xd8\x9f\xe0w\x8b\xfe\x06Y|A\xf8\x87\xe0\x8bmB\xff\x00P\x95\xd5M\xccM\x90\xa3\xa1\xe7\xda\xbf6\xb4\\A\xadZ\x88\xc0\xc3\xcc\x0b\x03\xd0\xf3_\xb3\xff\x00\xb1B\xc1\x1f\xec\xdf\xe1KH\xadcD{(Y\x82\x822\xc6%$\xf5\xab9\x8e\xdf\xe1\xbf\xc1\xaf\x86\xff\x00\nt\x89\xfc=\xe0M\x02\xda\xc5.\x86nR5\xc6\xe0GO\xa5|\x7f\xf1OM_\xd9\xe3\xf6\xea\xd3\xef\xe5\xf0~4\x1dl\x92\x93\xa0"5gbyn\x80\xf3_u\xaeU\x02\xee\',G=\x86k/\xc4\x1e\x15\xf0\xd6\xbe`\x9f\\\xd0\xado$\xb7\x9b0=\xc4!\x8as\xd8\x9a\xde\x95y\xd2\xd5\x19\xd4\xa5\x1a\x8bS\xcd>/~\xcb\xff\x00\x04\xff\x00im?O\x9b\xe2\x0e\x8d\xf6\xa4\x84\x16\xb7)&0\xa4q\xcf\xe5\xcfz\xe2~\x1a\x7f\xc10\xbff\xff\x00\x86\xbe<\xb6\xf1\xe7\x86t\xcb\xa8.m\xd82$\x17\xce\xaa1\xfd\xe5\x07\x0c}\xeb\xe98\xac\xad"\x03\xca\x81Tc\x80\xa3\x00P\xc1\xa3\'c\x91\xcfN*}\xb4\xf9\x1c^\xcc\x9atU=\x88\x16\x08aQ\x14xUQ\x85\x19\xe8\x05\x15iU\x88\x07\xcdnG\xa0\xff\x00\n+>Tt\xf3\xb3\xff\xd9\nME_FD:2,17512521177092,WORK_PERSON,383,410,RWY_B,2025-06-30T02:55:17Z,0,2092,\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x00\x00\x01\x00\x01\x00\x00\xff\xdb\x00C\x00\x02\x01\x01\x01\x01\x01\x02\x01\x01\x01\x02\x02\x02\x02\x02\x04\x03\x02\x02\x02\x02\x05\x04\x04\x03\x04\x06\x05\x06\x06\x06\x05\x06\x06\x06\x07\t\x08\x06\x07\t\x07\x06\x06\x08\x0b\x08\t\n\n\n\n\n\x06\x08\x0b\x0c\x0b\n\x0c\t\n\n\n\xff\xdb\x00C\x01\x02\x02\x02\x02\x02\x02\x05\x03\x03\x05\n\x07\x06\x07\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\xff\xc0\x00\x11\x08\x00Q\x00#\x03\x01"\x00\x02\x11\x01\x03\x11\x01\xff\xc4\x00\x1f\x00\x00\x01\x05\x01\x01\x01\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\xff\xc4\x00\xb5\x10\x00\x02\x01\x03\x03\x02\x04\x03\x05\x05\x04\x04\x00\x00\x01}\x01\x02\x03\x00\x04\x11\x05\x12!1A\x06\x13Qa\x07"q\x142\x81\x91\xa1\x08#B\xb1\xc1\x15R\xd1\xf0$3br\x82\t\n\x16\x17\x18\x19\x1a%&\'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz\x83\x84\x85\x86\x87\x88\x89\x8a\x92\x93\x94\x95\x96\x97\x98\x99\x9a\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xff\xc4\x00\x1f\x01\x00\x03\x01\x01\x01\x01\x01\x01\x01\x01\x01\x00\x00\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\xff\xc4\x00\xb5\x11\x00\x02\x01\x02\x04\x04\x03\x04\x07\x05\x04\x04\x00\x01\x02w\x00\x01\x02\x03\x11\x04\x05!1\x06\x12AQ\x07aq\x13"2\x81\x08\x14B\x91\xa1\xb1\xc1\t#3R\xf0\x15br\xd1\n\x16$4\xe1%\xf1\x17\x18\x19\x1a&\'()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x92\x93\x94\x95\x96\x97\x98\x99\x9a\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xff\xda\x00\x0c\x03\x01\x00\x02\x11\x03\x11\x00?\x00\xeb]Dg\x11\xc8\xe2#\xf7\xc0n\xab\xdf\xf4\xafB\xf8\x0bcg}\xe3@\xb7V\xc9\xbe;\'y\x0bg\n\x00\xc8\xc7\xbdp\xf6\xf6\xcc-\xd9\xe1\xb5\x91\x88RB\xb1\x1c\xfbW\xa6\xc7\xe0\x8b\x8f\t\xf8\x01\xb5+=[n\xb5\xa8X\xbc\xcc\x90\x90\x0c\x04)(\x07\x19\x038\xcek\xe7s\xcc\xd3/\xc9)B\xa5{$\xe4\x91\xae\x1e\x84\xea\xd6J1\xba=S\xc4\xde!\x07\xe1\xfd\xdf\x855\x99\xda\xea\xd5\xe0\x93\xec\xc1\xf7\x12\x8cT\xe3\xbe1\x9fj\xf9\xd6UH\xeeg\x11\xc6\xab\x86\xda0;U\x7f\x82\x1f\x16\xbc_\xf1\x07\xc6S\xf8SQ\xd6.\x1e\x0bex\xef|\xd1\xc8~\x80\x0fj\xd3\xd7\xf4\x8b\xcd\'U\x96\xd9\xed\xdc\x87\x98mb1\x91\x9e\xc3\xbdwS\xfe\xc7\xcc1\x11tj&\xa4\x93H\x8a\x94\xa7N\xabRV(y\x7f\xed\xb7\xe7EY\xfb\x0c\xbf\xf3\xcao\xfb\xf5\xff\x00\xd7\xa2\xbdO\xec\xcc"\xd3\x91\x11d}\xf9\xf1\xd7\xf6\x1f\xfd\x97~\x18x\x02\xff\x00\xc6:/\x82\xcc7\xd6\xcc\xa2\xc4\xb5\xc9 ?P\xd8\xeeA\xfeB\xbeF\xd6\xaf4\x895\x1b\x97\x96W\x89\xa4uB\xc0\xf0\xaa;c\xd3\xd6\xbe\x9d\xfd\xa7\xbfi\xfd;\xe2\x0f\xc2\x1f\x0c\xdcXY\x0bs\xaa\xbc\xb3][\xb3nh\xd9~\xe08=3\xd7=\xab\xe5}_H:\xa4\x92\\\xc2\xdc\xb3n\xf9}k\xf2\x1f\x19\xb0\xea|.\xaa[i#\xe9\xf8])c\xb9^\xc71\xa5xk\xc3~\x15\xf1-\xf6\xbf\xe1\xbb\xdd\x97\x17\x8c\x1aE\x8d0w\x0e\x9bx\xe0\xe7\xd75\xf5G\xec\xe9\xfb;|9\xfd\xac<!t|g\xaaOi\xaa\xe8\x93$7"\xd9W\'p\xf9[\x91\xfeM|\xd3\xa3i\x0c\xfa\x99K\x99\x19p\xc3\x93\x8e?J\xf6\xdf\xd9K\xe2\xa6\xad\xf0W\xe2\x1c\x1a\xcc\xd7\x8f-\x9e\xa2\xbb/\xa1E\xca\xc8\xa0\xfd\xecu\xdc\x07Nk\xf3\xcf\t\xb3LF\'\x8aaBsm(h\xaez\x9cC\x85\xc3\xa8NJ*\xe8\xf6\x83\xff\x00\x04\xac\xf8>?\xe6s\xd6?!\xfe\x14W}7\xed\xdd\xf0\x86\xdeS\x0c\xda~\xa7\xb9~\xf6-\xe8\xaf\xea&\xab\xdf\xe2?=\xe7}\xcf\xcf\x9f\x14\xeb\x93\xe9\xde\x0b\xd3,\xed\xa7 \xac;p\xc4\x9e\x08\xe6\xa0\xf0>\xafys`g\x94\xa9e|\x01\x83\x83\xfa\xd7/\xe3/\x19iw\xba\xff\x00\xfc#\x96qL"\xb2\x93\xcbgs\xc8\xc2n\xe7\x8fZ\xf5\x99\xbe\rM\xf0\xe7\xe0\xef\x83\xbe j\x17l_\xc4\xf6\xbfix\x99\x86\xd5\xf9\xf06\x8cd\x0cz\x93_#\xc6\xfc=\x8e\xe2l\x82x,,S\x93wW\xef\xe4{\xf9&68\x1c|jKc\x1fO\x87\xcf\xbe3K\x12\xe0\x9f\x98\x01\xc6*\xcd\xd5\xcc\xde\x17\x16\x17\xfa\x8b\x98\xed\xee\x03\xc6\xbe_`x\xcf\xd6\xa0\x87W\xb4\xb7i\x0cxb\x14\x903\xd7\x8a\xf7\xcf\x81\x7f\xb2V\x8d\xfbM|,\x8fZ\xd6\xbcWq\xa7Ke1H\x05\xb8\\\x0c\xf7;\x94\xd7'
+2025-06-30 11:55:17,918 - ATC_GUI - DEBUG - 바이너리 데이터 처리 시작: 4982 bytes, 시작: b'ME_FD:2,175125211757'
+2025-06-30 11:55:17,918 - ATC_GUI - INFO - ME_FD 바이너리 수신 시작: 4982 bytes
+2025-06-30 11:55:17,918 - ATC_GUI - DEBUG - ME_FD 초기 텍스트 부분: ME_FD:2,17512521175751,PERSON,217,400,RWY_B,2025-06-30T02:55:17Z,0
+2025-06-30 11:55:17,919 - ATC_GUI - DEBUG - ME_FD 텍스트 분석: 'ME_FD:2,17512521175751,PERSON,217,400,RWY_B,2025-06-30T02:55:17Z,0', parts: ['ME_FD:2', '17512521175751', 'PERSON', '217', '400', 'RWY_B', '2025-06-30T02:55:17Z', '0']
+2025-06-30 11:55:17,919 - ATC_GUI - DEBUG - ME_FD (8개 필드): image_size=0
+2025-06-30 11:55:17,919 - ATC_GUI - DEBUG - ME_FD 크기 계산: 텍스트=67, 이미지=0, 총=67
+2025-06-30 11:55:17,919 - ATC_GUI - INFO - ME_FD 완전한 데이터 수신: 4982 bytes
+2025-06-30 11:55:17,919 - ATC_GUI - INFO - === ME_FD 바이너리 데이터 분석 시작 ===
+2025-06-30 11:55:17,920 - ATC_GUI - INFO - 전체 데이터 크기: 4982 bytes
+2025-06-30 11:55:17,920 - ATC_GUI - INFO - 데이터 시작 부분: b'ME_FD:2,17512521175751,PERSON,217,400,RWY_B,2025-06-30T02:55:17Z,0,3461,\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x00\x00\x01\x00\x01\x00\x00\xff\xdb\x00C\x00\x02\x01\x01'
+2025-06-30 11:55:17,920 - ATC_GUI - INFO - 추출된 텍스트 부분: 'ME_FD:2,17512521175751,PERSON,217,400,RWY_B,2025-06-30T02:55:17Z,0'
+2025-06-30 11:55:17,920 - ATC_GUI - INFO - 텍스트 부분 길이: 66 문자
+2025-06-30 11:55:17,920 - ATC_GUI - INFO - 텍스트 크기 (UTF-8 + 콤마): 67 bytes
+2025-06-30 11:55:17,921 - ATC_GUI - INFO - 이미지 데이터 크기: 4915 bytes
+2025-06-30 11:55:17,921 - ATC_GUI - INFO - 프리픽스 제거 후 텍스트: '2,17512521175751,PERSON,217,400,RWY_B,2025-06-30T02:55:17Z,0'
+2025-06-30 11:55:17,921 - ATC_GUI - INFO - ME_FD 텍스트 데이터: 2,17512521175751,PERSON,217,400,RWY_B,2025-06-30T02:55:17Z,0
+2025-06-30 11:55:17,921 - ATC_GUI - INFO - ME_FD 이미지 크기: 4915 bytes
+2025-06-30 11:55:17,922 - ATC_GUI - INFO - === ME_FD 바이너리 데이터 분석 완료 ===
+2025-06-30 11:55:17,922 - ATC_GUI - DEBUG - ME_FD (8개 필드): image_size=0
+2025-06-30 11:55:17,922 - ATC_GUI - DEBUG - ME_FD 바이너리 파싱 결과: ID=17512521175751, Type=일반인, Pos=(217.0, 400.0), Area=RWY_B, EventType=출입 위반, ImageSize=0, StateInfo=None
+2025-06-30 11:55:17,922 - ATC_GUI - WARNING - ME_FD 이미지 크기 불일치: 4915 != 0
+2025-06-30 11:55:17,923 - ATC_GUI - INFO - NetworkManager: 최초 객체 감지 이벤트 수신 - 1개 객체
+2025-06-30 11:55:17,923 - ATC_GUI - INFO - NetworkManager: 최초 감지 객체 처리 중 - ID 17512521175751, Type 일반인, Area RWY_B
+2025-06-30 11:55:17,923 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 17512521175751, Type 일반인, Area RWY_B
+2025-06-30 11:55:17,923 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 17512521175751를 first_detected_object_ids에 추가
+2025-06-30 11:55:17,972 - ATC_GUI - INFO - [알림 표시] 객체 감지 - ID: 17512521175751, 타입: 일반인, 위치: RWY_B, 위험도: None, 좌표: (217.0, 400.0), 시간: 2025-06-30 11:55:17
+2025-06-30 11:55:17,973 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 17512521175751 (일반인)
+2025-06-30 11:55:17,973 - ATC_GUI - DEBUG - MainPage에서 이미 처리된 객체: ID 17512521175751
+2025-06-30 11:55:17,973 - ATC_GUI - INFO - NetworkManager: 최초 객체 감지 알림 시그널 발생 완료 - ID 17512521175751 (일반인)
+2025-06-30 11:55:17,973 - ATC_GUI - INFO - 이미지 포함 최초 감지 이벤트 처리 완료: ID 17512521175751, StateInfo=None
+2025-06-30 11:55:17,973 - ATC_GUI - DEBUG - raw_data: b'\xe4\xfe\x1dxs\xc4\x1c1\xc41\xc5c\xbai\xf2=\xcc\xf74\xc3\xe2\xf0\xb3T\xf7g\x92\xdb\xea\xb1^@\xb71Z\x96V\x1f+2\xbeH\xfc\xe8\xaf\xa1\xae\xff\x00c\x7f\x13\xf8Ns\xe1\xdd3^\x17\x10Z\xa8X\xa7\x96 Y\xc1\x00\xe4\xe0\x01\xdf\xd2\x8a\xfe\x96u)\xb7\xa2?>Q\x99\xf0\x04\xb6\xe9-\xf4\xfa\x89\x03\xcd\xb8\x98\xca\xf9\\\x8c\x95\xc61\xd7\x1e\xd9\xcf\xbd}\x1d\xf1\xc7\xe3_\x83<u\xf0\x9f\xc1\xbe\x12\xf0\x85\x9d\xd0\x1e\x1c\xd0\xcd\xb3\xb5\xcc\x07i}\xbdx#\xb8\xaf\x9e-\xecn\xf5;\x84\xd3l-\xcc\xd3\xdc8\x8a\x08\x94\xf2\xee\xc7\x01\x7f\x12@\xae\xef\xc4?\x0c\xbc[\xf0\xdd?\xb0\xbc_\xa5Mmx\x91$\xdeC\xcev\x08\xc8\xceq\xd78\xf7\xa3,\x84%\x8aM\xa3\xa2\xb3j:\x11\xdexr\xfa\xc3E\xb7\xd7egT\xbc\xff\x00V\xcd\xd3\xde\xbe\xca\xfd\x8b\xfe0\xf8\x07\xe1/\xc0\x8bI\xbco\xe21\x14:\x8d\xc3yX\x8f\xae8"\xbc\x07\xe2\x96\x9be\xa3\xfc"\xf0D\xb6\x91\x16\x84\xdbK+\xb3\xe0\xb30\x19\xc7\x1d\xaa\xd5\xd7\x84\xbcg\xe3_\xd9\xcf\xc2\xff\x00\xf0\x85\xf8v\xebT6w\x13\tR\xc6<\xb4e\x8f\x04\x8cv\xae\xfc}*j\x9c\x9aG\x15\x1a\xd5e;6}\xa2?k\x0f\x80\x17\x03\xce\x1f\x11\xe2\x1b\xbb4|\x8f\xd2\x8a\xfc\xfd_\x83\xdf\x1eTc\xfe\x15\x8e\xba}\xcd\x95\x15\xe2\xa8\xab\x1e\x8d\x91\xcb\xfe\xcd>\x1a\x97\xc5\x9f\x1e\xfc\x1f\xa1\x89T\x99<E\x1bH\x17\xd2\'W\x1f\x9e9\xf6\xf4\xaf\xa5\xff\x00\xe0\xa3\xfe\t{_\x88?\xf0\x90J\xa8\xb1\xdfi\xd1\xaa\xc8A\x01|\xb1\x8c/=x\xf7\xaf3\xff\x00\x82qx\x0b\xfe\x12/\xda\x82\xcf\\\x96\x0cA\xa2\xda\xcbxJv\x93o\x00\xe7\xb7\x1f\xfdz\xfa\xcb\xfe\n\x0f\xf0\x03\xc5\x1f\x1b>\x075\x87\x81\xe1iu\x9d2\xf9.-\x02\x90\x1aH\xc1\xcb\xa1\xe3\x9e\x9ct\xae\x8c\x05UJ\xba\xb9\x95hN{\x1f=\xfca\xf8w\xe2+/\xd9C\xc0\xde*\x92\xd1\x8cqY\x87\xb8\xf9~\xeb;a\x7f\xe08\xafa\xff\x00\x82\\5\xfb|*\xd7]\xd9~\xc9\x1e\xb8\xd1[\xb0\xeaB\xaeO\xf3\xaf\\\xb8\xf8Ee\xe3\x7f\xd9\xe2\xd3\xe1O\x8b`k\x19%\xd0!\xb4\x94E\x82\xd0J\xa8\x00e$\x10\x0e\xefcX?\xb1/\xc0\x9d{\xe0\x17\xc2i\xfc\x15\xe2K\xaf6\xe1\xf5\xbb\x9b\x95q\xfcH\xc4\x05\xcf\xe0+j\xd8\xafk\t\xc5\xf79U\'J\xa2\xb9\xec\xe3\x0c\x01\x0b\x9e:\xe6\x8aj\xc8H\x1bq\x8e\xdcQ^C\x8c\xaf\xb9\xe8-\x8f\x80\xff\x00\xe0\x95\xbf\xf2X\xfcA\xff\x00`\xaf\xe9_|\xde\x7f\xaa\x93\xfd\xca(\xad!\xfcD\\GI\xfe\xa5\xfe\x94\xd8z~\x14QN?\x139\xab\x7f\x15\x0b\x07\xfa\x95\xff\x00v\x8a(\xa4\xf76[\x1f\xff\xd9\nME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\nME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:17,974 - ATC_GUI - DEBUG - 바이너리 데이터 처리 시작: 892 bytes, 시작: b'\xe4\xfe\x1dxs\xc4\x1c1\xc41\xc5c\xbai\xf2=\xcc\xf74\xc3'
+2025-06-30 11:55:17,974 - ATC_GUI - DEBUG - 기타 바이너리 데이터: 892 bytes, 내용: xs11ci=4Tg^@1ZV+2H诡 cNs3^ZX Y Ҋu)?>Q-͸\1...
+2025-06-30 11:55:17,982 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:17,983 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:17,983 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:17,983 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:17,983 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:17,983 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:17,996 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:17,997 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:17,997 - ATC_GUI - DEBUG - 사라진 객체 ID 제거: 17512521175752
+2025-06-30 11:55:17,997 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:17,997 - ATC_GUI - DEBUG - 마커 제거 성공: ID 17512521175752
+2025-06-30 11:55:17,999 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (191, 373), 상태: NORMAL
+2025-06-30 11:55:18,000 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (355, 380), 상태: NORMAL
+2025-06-30 11:55:18,023 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:18,023 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:18,023 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,023 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,023 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,023 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,044 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B\n'
+2025-06-30 11:55:18,044 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B...
+2025-06-30 11:55:18,044 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,044 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,044 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 411.0), Area=RWY_B
+2025-06-30 11:55:18,044 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,076 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:18,076 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:18,077 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,077 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 402.0), Area=RWY_B
+2025-06-30 11:55:18,077 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,077 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,092 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:18,092 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:18,092 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,092 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,092 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,092 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,124 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:18,124 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:18,124 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,124 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,124 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,124 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,157 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:18,157 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:18,157 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,157 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,157 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,157 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,181 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:18,182 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:18,182 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,182 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,182 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,182 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,194 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,400,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:18,194 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,400,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:18,194 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,194 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 400.0), Area=RWY_B
+2025-06-30 11:55:18,194 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,194 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,213 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:18,213 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:18,213 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,213 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,213 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,213 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,233 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:18,234 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:18,234 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,234 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,234 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:18,234 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,255 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:18,255 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:18,256 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,256 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,256 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:18,257 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,276 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,400,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:18,277 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,400,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:18,277 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,277 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 400.0), Area=RWY_B
+2025-06-30 11:55:18,277 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,278 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,294 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:18,295 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:18,295 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:18,297 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (191, 372), 상태: NORMAL
+2025-06-30 11:55:18,299 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (355, 381), 상태: NORMAL
+2025-06-30 11:55:18,302 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:18,303 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:18,303 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,303 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,303 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:18,304 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,317 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:18,318 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:18,318 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,319 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,319 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,319 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,350 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B\n'
+2025-06-30 11:55:18,351 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B...
+2025-06-30 11:55:18,351 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,351 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,352 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 411.0), Area=RWY_B
+2025-06-30 11:55:18,352 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,392 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:18,392 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:18,393 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,393 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,393 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,394 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,414 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:18,414 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:18,415 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,415 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 400.0), Area=RWY_B
+2025-06-30 11:55:18,415 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,415 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,429 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:18,430 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:18,430 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,430 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,430 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:18,431 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,458 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:18,458 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:18,459 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,459 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,459 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,460 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,489 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:18,489 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:18,489 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,490 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,490 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:18,490 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,495 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:18,495 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:18,495 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:18,497 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (190, 372), 상태: NORMAL
+2025-06-30 11:55:18,499 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (355, 380), 상태: NORMAL
+2025-06-30 11:55:18,510 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B\n'
+2025-06-30 11:55:18,510 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B...
+2025-06-30 11:55:18,510 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,510 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 400.0), Area=RWY_B
+2025-06-30 11:55:18,510 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 411.0), Area=RWY_B
+2025-06-30 11:55:18,511 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,535 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:18,535 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:18,535 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,535 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,535 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:18,535 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,563 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:18,564 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:18,564 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,564 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,564 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:18,564 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,585 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:18,585 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:18,586 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,586 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,586 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,587 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,616 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:18,617 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:18,617 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,617 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,617 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,618 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,638 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:18,638 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:18,639 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,639 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,639 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,640 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,659 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,382,412,RWY_B\n'
+2025-06-30 11:55:18,660 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,382,412,RWY_B...
+2025-06-30 11:55:18,660 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,660 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 400.0), Area=RWY_B
+2025-06-30 11:55:18,660 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 412.0), Area=RWY_B
+2025-06-30 11:55:18,661 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,690 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:18,690 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:18,691 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,691 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 400.0), Area=RWY_B
+2025-06-30 11:55:18,691 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:18,692 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,734 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:18,735 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:18,735 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,735 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,736 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,736 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,756 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:18,756 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:18,757 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,757 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 402.0), Area=RWY_B
+2025-06-30 11:55:18,757 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,757 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,777 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,412,RWY_B\n'
+2025-06-30 11:55:18,777 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,412,RWY_B...
+2025-06-30 11:55:18,777 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,778 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 402.0), Area=RWY_B
+2025-06-30 11:55:18,778 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 412.0), Area=RWY_B
+2025-06-30 11:55:18,778 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,795 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:18,796 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:18,796 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:18,798 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (190, 371), 상태: NORMAL
+2025-06-30 11:55:18,800 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (354, 382), 상태: NORMAL
+2025-06-30 11:55:18,820 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:18,821 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:18,821 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,821 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,822 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,822 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,850 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:18,850 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:18,851 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,851 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,851 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:18,851 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,897 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:18,898 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:18,898 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,899 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,899 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:18,899 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,931 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:18,931 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:18,931 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,932 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:18,932 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:18,932 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:18,979 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:18,980 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:18,980 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:18,981 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 402.0), Area=RWY_B
+2025-06-30 11:55:18,981 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:18,981 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,004 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:19,004 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:19,005 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,005 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,005 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:19,006 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,038 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:19,038 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:19,039 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,039 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,039 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,039 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,059 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:19,060 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:19,060 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,060 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,060 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,061 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,094 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:19,095 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:19,095 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:19,097 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (191, 372), 상태: NORMAL
+2025-06-30 11:55:19,099 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (354, 381), 상태: NORMAL
+2025-06-30 11:55:19,103 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:19,104 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:19,104 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,105 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,105 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,105 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,121 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:19,121 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:19,122 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,122 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,122 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,123 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,162 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:19,163 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:19,174 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,174 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,174 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,175 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,175 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:19,176 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:19,176 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,176 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,177 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:19,177 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,225 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:19,226 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:19,226 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,226 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,227 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:19,227 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,259 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:19,259 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:19,259 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,259 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,259 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,259 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,280 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:19,280 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:19,280 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,280 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,280 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,280 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,295 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:19,295 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:19,295 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:19,296 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (190, 372), 상태: NORMAL
+2025-06-30 11:55:19,296 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (354, 381), 상태: NORMAL
+2025-06-30 11:55:19,311 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:19,311 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:19,311 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,311 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,311 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:19,311 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,353 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,400,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:19,353 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,400,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:19,353 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,353 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 400.0), Area=RWY_B
+2025-06-30 11:55:19,353 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,353 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,394 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,412,RWY_B\n'
+2025-06-30 11:55:19,395 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,412,RWY_B...
+2025-06-30 11:55:19,395 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,396 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,396 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 412.0), Area=RWY_B
+2025-06-30 11:55:19,397 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,427 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:19,427 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:19,428 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,428 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 400.0), Area=RWY_B
+2025-06-30 11:55:19,429 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:19,429 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,458 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:19,458 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:19,458 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,458 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,458 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,459 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,479 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B\n'
+2025-06-30 11:55:19,479 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B...
+2025-06-30 11:55:19,479 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,479 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,479 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 411.0), Area=RWY_B
+2025-06-30 11:55:19,479 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,510 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:19,510 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:19,511 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,511 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,512 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,512 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,576 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,400,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B\n'
+2025-06-30 11:55:19,576 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,400,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B...
+2025-06-30 11:55:19,577 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,577 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 400.0), Area=RWY_B
+2025-06-30 11:55:19,578 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 411.0), Area=RWY_B
+2025-06-30 11:55:19,578 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,595 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:19,595 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:19,596 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:19,598 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (191, 372), 상태: NORMAL
+2025-06-30 11:55:19,600 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (355, 382), 상태: NORMAL
+2025-06-30 11:55:19,604 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:19,604 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:19,605 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,605 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,606 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,606 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,649 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:19,649 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:19,650 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,650 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,651 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,651 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,670 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:19,670 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:19,671 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,671 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,672 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,672 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,701 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:19,701 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:19,702 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,702 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,702 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,703 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,722 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:19,723 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:19,723 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,724 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,724 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:19,724 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,754 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:19,755 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:19,755 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,756 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,756 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,756 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,796 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:19,796 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:19,796 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,796 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,796 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,796 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,805 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:19,805 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:19,805 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,805 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,805 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,805 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,849 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:19,849 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:19,849 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:19,849 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:19,849 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:19,849 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:19,894 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:19,895 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:19,895 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:19,897 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (191, 372), 상태: NORMAL
+2025-06-30 11:55:19,899 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (355, 381), 상태: NORMAL
+2025-06-30 11:55:20,095 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\nME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\nME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\nME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\nME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\nME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:20,095 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:20,095 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,095 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 402.0), Area=RWY_B
+2025-06-30 11:55:20,095 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:20,095 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,095 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:20,095 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,095 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,095 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:20,096 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,096 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:20,096 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,096 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,096 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:20,096 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,096 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:20,096 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,096 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,096 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:20,096 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,096 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:20,096 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,096 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,097 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:20,097 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,097 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:20,097 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,097 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,097 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:20,097 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,098 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:20,098 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:20,098 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,098 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,098 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:20,098 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,114 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:20,114 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:20,114 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,114 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,114 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:20,114 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,156 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:20,156 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:20,156 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,156 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,156 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:20,156 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,195 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:20,195 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:20,195 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:20,195 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (191, 373), 상태: NORMAL
+2025-06-30 11:55:20,196 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (354, 381), 상태: NORMAL
+2025-06-30 11:55:20,207 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:20,208 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:20,208 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,208 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,208 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:20,208 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,229 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:20,230 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:20,230 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,230 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,230 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:20,230 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,262 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:20,263 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:20,263 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,263 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,263 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:20,264 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,295 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:20,295 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:20,295 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,295 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,296 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:20,296 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,326 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:20,326 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:20,326 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,327 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,327 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:20,327 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,357 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:20,358 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:20,358 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,359 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,359 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:20,359 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,378 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:20,378 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:20,379 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,379 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,379 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:20,380 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,395 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:20,395 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:20,396 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:20,398 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (191, 372), 상태: NORMAL
+2025-06-30 11:55:20,400 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (355, 381), 상태: NORMAL
+2025-06-30 11:55:20,419 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:20,419 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:20,420 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,420 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,420 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:20,421 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,462 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:20,463 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:20,463 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,464 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,464 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:20,464 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,515 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:20,516 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:20,516 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,516 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,517 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:20,517 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,526 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:20,527 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:20,527 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,527 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,527 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:20,528 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,557 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:20,557 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:20,558 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,558 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,558 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:20,559 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,599 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:20,600 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:20,600 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,600 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,600 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:20,601 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,630 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:20,630 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:20,631 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,631 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,631 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:20,632 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,661 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:20,662 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:20,662 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,662 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,663 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:20,663 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,682 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:20,683 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:20,683 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,683 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 402.0), Area=RWY_B
+2025-06-30 11:55:20,683 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:20,684 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,694 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:20,695 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:20,695 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:20,697 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (190, 372), 상태: NORMAL
+2025-06-30 11:55:20,699 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (355, 381), 상태: NORMAL
+2025-06-30 11:55:20,723 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:20,724 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:20,724 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,725 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,725 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:20,725 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,755 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:20,755 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:20,756 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,756 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,756 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:20,757 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,797 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,219,402,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:20,797 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,219,402,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:20,798 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,798 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(219.0, 402.0), Area=RWY_B
+2025-06-30 11:55:20,798 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:20,798 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,830 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:20,831 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:20,831 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,831 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 402.0), Area=RWY_B
+2025-06-30 11:55:20,831 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:20,832 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,860 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B\n'
+2025-06-30 11:55:20,860 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B...
+2025-06-30 11:55:20,861 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,861 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,861 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 411.0), Area=RWY_B
+2025-06-30 11:55:20,861 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,892 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B\n'
+2025-06-30 11:55:20,893 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B...
+2025-06-30 11:55:20,893 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,893 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,893 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 411.0), Area=RWY_B
+2025-06-30 11:55:20,894 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,895 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:20,895 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:20,896 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:20,898 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (190, 372), 상태: NORMAL
+2025-06-30 11:55:20,900 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (355, 380), 상태: NORMAL
+2025-06-30 11:55:20,923 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:20,923 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:20,924 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,924 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 400.0), Area=RWY_B
+2025-06-30 11:55:20,924 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:20,924 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,953 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:20,953 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:20,953 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,954 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,954 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:20,954 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:20,985 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:20,985 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:20,985 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:20,985 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:20,985 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:20,985 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,026 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:21,026 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:21,026 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,026 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,026 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:21,026 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,057 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:21,057 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:21,057 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,058 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,058 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:21,058 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,089 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:21,089 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:21,089 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,089 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,089 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:21,089 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,121 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:21,121 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:21,122 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,122 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,122 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:21,123 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,162 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:21,163 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:21,163 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,163 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,163 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:21,164 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,193 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:21,194 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:21,194 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,194 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,194 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:21,195 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,195 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:21,195 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:21,196 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:21,198 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (190, 371), 상태: NORMAL
+2025-06-30 11:55:21,200 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (355, 381), 상태: NORMAL
+2025-06-30 11:55:21,215 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:21,216 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:21,216 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,216 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,217 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:21,217 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,244 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,219,402,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:21,245 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,219,402,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:21,245 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,245 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(219.0, 402.0), Area=RWY_B
+2025-06-30 11:55:21,245 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:21,246 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,313 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:21,313 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:21,314 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,314 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,314 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:21,314 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,353 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:21,354 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:21,354 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,355 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,355 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:21,355 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,387 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:21,387 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:21,388 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,388 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,388 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:21,388 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,419 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B\n'
+2025-06-30 11:55:21,420 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B...
+2025-06-30 11:55:21,420 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,420 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,421 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 411.0), Area=RWY_B
+2025-06-30 11:55:21,421 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,451 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:21,451 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:21,452 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,452 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,452 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:21,453 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,472 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:21,472 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:21,472 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,473 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,473 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:21,473 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,495 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:21,495 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:21,496 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:21,498 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (190, 372), 상태: NORMAL
+2025-06-30 11:55:21,500 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (355, 381), 상태: NORMAL
+2025-06-30 11:55:21,722 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,219,402,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\nME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\nME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\nME_OD:17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,384,411,RWY_B\nME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\nME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\nME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:21,722 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,219,402,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:21,723 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,723 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(219.0, 402.0), Area=RWY_B
+2025-06-30 11:55:21,723 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:21,724 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,724 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:21,724 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,725 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,725 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:21,725 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,725 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:21,726 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,726 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,726 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:21,726 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,727 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,384,411,RWY_B...
+2025-06-30 11:55:21,727 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,727 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 400.0), Area=RWY_B
+2025-06-30 11:55:21,727 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(384.0, 411.0), Area=RWY_B
+2025-06-30 11:55:21,728 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,728 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:21,728 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,728 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,729 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:21,729 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,729 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:21,729 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,730 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,730 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:21,730 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,730 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:21,731 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,731 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,731 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:21,731 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,732 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:21,732 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:21,732 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,732 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,733 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:21,733 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,766 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:21,767 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:21,767 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,767 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,768 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:21,768 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,787 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:21,788 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:21,788 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,788 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,788 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:21,789 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,795 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:21,795 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:21,795 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:21,797 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (192, 373), 상태: NORMAL
+2025-06-30 11:55:21,799 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (355, 381), 상태: NORMAL
+2025-06-30 11:55:21,825 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:21,826 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:21,826 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,826 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,827 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:21,827 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,846 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:21,846 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:21,847 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,847 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,847 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:21,848 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,877 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:21,877 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:21,877 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,877 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,878 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:21,878 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,919 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B\n'
+2025-06-30 11:55:21,919 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B...
+2025-06-30 11:55:21,919 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,919 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,919 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 411.0), Area=RWY_B
+2025-06-30 11:55:21,919 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,959 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:21,959 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:21,959 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,959 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,960 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:21,960 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,985 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:21,985 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:21,985 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:21,985 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:21,985 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:21,985 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:21,995 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:21,995 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:21,995 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:21,996 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (190, 372), 상태: NORMAL
+2025-06-30 11:55:21,996 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (355, 381), 상태: NORMAL
+2025-06-30 11:55:22,022 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,219,402,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:22,023 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,219,402,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:22,023 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,023 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(219.0, 402.0), Area=RWY_B
+2025-06-30 11:55:22,023 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:22,024 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,054 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:22,054 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:22,055 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,055 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,055 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:22,055 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,088 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:22,088 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:22,088 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,088 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,088 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:22,088 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,116 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:22,116 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:22,116 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,116 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,116 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:22,116 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,151 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B\n'
+2025-06-30 11:55:22,151 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B...
+2025-06-30 11:55:22,152 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,152 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,152 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 411.0), Area=RWY_B
+2025-06-30 11:55:22,152 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,188 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,412,RWY_B\n'
+2025-06-30 11:55:22,189 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,412,RWY_B...
+2025-06-30 11:55:22,189 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,189 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,190 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 412.0), Area=RWY_B
+2025-06-30 11:55:22,190 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,195 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:22,195 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:22,195 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:22,198 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (192, 373), 상태: NORMAL
+2025-06-30 11:55:22,200 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (355, 381), 상태: NORMAL
+2025-06-30 11:55:22,220 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:22,220 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:22,221 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,221 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,221 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:22,221 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,251 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:22,251 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:22,252 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,252 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,252 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:22,253 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,293 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:22,293 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:22,294 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,294 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,294 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:22,295 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,313 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:22,314 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:22,314 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,315 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,315 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:22,316 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,356 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:22,356 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:22,356 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,357 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,357 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:22,357 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,388 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B\n'
+2025-06-30 11:55:22,389 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B...
+2025-06-30 11:55:22,389 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,390 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,390 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 411.0), Area=RWY_B
+2025-06-30 11:55:22,390 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,495 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:22,495 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:22,495 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:22,498 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (191, 372), 상태: NORMAL
+2025-06-30 11:55:22,500 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (355, 382), 상태: NORMAL
+2025-06-30 11:55:22,656 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\nME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\nME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\nME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\nME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\nME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:22,657 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:22,657 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,657 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,657 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:22,658 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,658 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:22,658 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,659 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,659 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:22,659 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,659 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:22,660 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,660 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,660 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:22,660 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,660 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:22,661 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,661 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,661 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:22,661 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,662 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:22,662 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,662 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,662 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:22,663 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,663 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:22,663 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,663 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,663 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:22,664 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,664 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\nME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:22,664 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:22,665 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,665 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,665 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:22,665 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,666 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:22,666 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,666 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,666 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:22,667 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,689 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:22,689 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:22,689 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,689 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,689 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:22,689 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,695 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:22,695 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:22,695 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:22,696 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (190, 372), 상태: NORMAL
+2025-06-30 11:55:22,698 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (354, 381), 상태: NORMAL
+2025-06-30 11:55:22,720 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:22,720 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:22,721 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,721 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,721 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:22,721 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,771 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:22,771 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:22,771 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,771 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,771 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:22,771 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,802 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:22,802 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:22,802 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,802 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,802 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:22,802 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,823 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:22,823 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:22,823 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,823 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,823 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:22,823 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,853 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:22,854 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:22,854 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,854 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,854 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:22,854 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,895 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:22,895 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:22,895 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:22,896 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (191, 372), 상태: NORMAL
+2025-06-30 11:55:22,896 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (354, 380), 상태: NORMAL
+2025-06-30 11:55:22,898 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:22,898 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:22,898 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,898 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,898 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:22,898 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,916 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:22,917 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:22,917 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,917 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,918 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:22,918 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:22,961 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:22,961 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:22,961 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:22,962 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:22,962 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:22,962 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,002 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:23,002 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:23,003 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,003 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,003 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,004 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,022 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:23,023 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:23,023 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,024 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,024 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,024 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,054 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:23,054 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:23,055 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,055 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,055 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,055 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,095 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:23,095 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:23,096 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:23,098 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (190, 372), 상태: NORMAL
+2025-06-30 11:55:23,100 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (355, 381), 상태: NORMAL
+2025-06-30 11:55:23,103 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:23,104 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:23,104 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,105 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,105 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,105 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,128 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:23,129 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:23,129 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,129 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 400.0), Area=RWY_B
+2025-06-30 11:55:23,130 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,130 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,345 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\nME_OD:17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\nME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\nME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\nME_OD:17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\nME_OD:17512521175751,PERSON,219,402,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:23,345 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:23,346 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,346 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,346 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,347 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,347 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:23,348 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,348 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 400.0), Area=RWY_B
+2025-06-30 11:55:23,348 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,348 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,348 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:23,349 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,349 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,349 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:23,350 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,350 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:23,350 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,351 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,351 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:23,351 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,351 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:23,352 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,352 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 402.0), Area=RWY_B
+2025-06-30 11:55:23,352 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:23,352 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,352 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,219,402,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:23,353 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,353 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(219.0, 402.0), Area=RWY_B
+2025-06-30 11:55:23,353 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,353 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,358 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:23,358 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:23,359 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,359 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,359 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,360 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,389 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,219,402,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:23,390 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,219,402,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:23,390 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,391 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(219.0, 402.0), Area=RWY_B
+2025-06-30 11:55:23,391 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,391 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,394 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:23,395 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:23,395 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:23,398 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (190, 372), 상태: NORMAL
+2025-06-30 11:55:23,400 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (354, 381), 상태: NORMAL
+2025-06-30 11:55:23,431 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,219,402,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:23,431 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,219,402,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:23,432 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,432 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(219.0, 402.0), Area=RWY_B
+2025-06-30 11:55:23,432 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:23,433 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,451 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:23,451 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:23,452 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,452 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,452 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:23,453 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,493 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:23,494 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:23,494 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,494 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,494 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,495 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,524 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:23,525 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:23,525 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,526 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,526 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:23,526 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,567 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B\n'
+2025-06-30 11:55:23,567 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,411,RWY_B...
+2025-06-30 11:55:23,568 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,568 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,568 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 411.0), Area=RWY_B
+2025-06-30 11:55:23,569 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,595 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:23,595 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:23,596 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:23,598 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (192, 373), 상태: NORMAL
+2025-06-30 11:55:23,600 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (355, 380), 상태: NORMAL
+2025-06-30 11:55:23,608 - ATC_GUI - DEBUG - raw_data: b'ME_RA:1\n'
+2025-06-30 11:55:23,610 - ATC_GUI - INFO - [알림 표시] 활주로 A 위험도 - 레벨: WARNING, 시간: 2025-06-30 11:55:23
+2025-06-30 11:55:23,610 - ATC_GUI - INFO - 활주로 A 위험도 변경: WARNING
+2025-06-30 11:55:23,616 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521236197,FOD,464,116,RWY_A;17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\nME_FD:1,17512521236197,FOD,464,116,RWY_A,2025-06-30T02:55:23Z,1243,\xff\xd8\xff\xe0\x00\x10JFIF\x00\x01\x01\x00\x00\x01\x00\x01\x00\x00\xff\xdb\x00C\x00\x02\x01\x01\x01\x01\x01\x02\x01\x01\x01\x02\x02\x02\x02\x02\x04\x03\x02\x02\x02\x02\x05\x04\x04\x03\x04\x06\x05\x06\x06\x06\x05\x06\x06\x06\x07\t\x08\x06\x07\t\x07\x06\x06\x08\x0b\x08\t\n\n\n\n\n\x06\x08\x0b\x0c\x0b\n\x0c\t\n\n\n\xff\xdb\x00C\x01\x02\x02\x02\x02\x02\x02\x05\x03\x03\x05\n\x07\x06\x07\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\xff\xc0\x00\x11\x08\x00\x12\x00G\x03\x01"\x00\x02\x11\x01\x03\x11\x01\xff\xc4\x00\x1f\x00\x00\x01\x05\x01\x01\x01\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\xff\xc4\x00\xb5\x10\x00\x02\x01\x03\x03\x02\x04\x03\x05\x05\x04\x04\x00\x00\x01}\x01\x02\x03\x00\x04\x11\x05\x12!1A\x06\x13Qa\x07"q\x142\x81\x91\xa1\x08#B\xb1\xc1\x15R\xd1\xf0$3br\x82\t\n\x16\x17\x18\x19\x1a%&\'()*456789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz\x83\x84\x85\x86\x87\x88\x89\x8a\x92\x93\x94\x95\x96\x97\x98\x99\x9a\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xe1\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xf1\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xff\xc4\x00\x1f\x01\x00\x03\x01\x01\x01\x01\x01\x01\x01\x01\x01\x00\x00\x00\x00\x00\x00\x01\x02\x03\x04\x05\x06\x07\x08\t\n\x0b\xff\xc4\x00\xb5\x11\x00\x02\x01\x02\x04\x04\x03\x04\x07\x05\x04\x04\x00\x01\x02w\x00\x01\x02\x03\x11\x04\x05!1\x06\x12AQ\x07aq\x13"2\x81\x08\x14B\x91\xa1\xb1\xc1\t#3R\xf0\x15br\xd1\n\x16$4\xe1%\xf1\x17\x18\x19\x1a&\'()*56789:CDEFGHIJSTUVWXYZcdefghijstuvwxyz\x82\x83\x84\x85\x86\x87\x88\x89\x8a\x92\x93\x94\x95\x96\x97\x98\x99\x9a\xa2\xa3\xa4\xa5\xa6\xa7\xa8\xa9\xaa\xb2\xb3\xb4\xb5\xb6\xb7\xb8\xb9\xba\xc2\xc3\xc4\xc5\xc6\xc7\xc8\xc9\xca\xd2\xd3\xd4\xd5\xd6\xd7\xd8\xd9\xda\xe2\xe3\xe4\xe5\xe6\xe7\xe8\xe9\xea\xf2\xf3\xf4\xf5\xf6\xf7\xf8\xf9\xfa\xff\xda\x00\x0c\x03\x01\x00\x02\x11\x03\x11\x00?\x00\xdc\xf8I\xe0\xcf\x10|U\xf8\x93\xa4\xfc?\xd2\xf6\x0b\x9dR\xe0\xc5\x1bN\xc7h\xf9Y\x8e\x7f\x00k\xeb\xdb\xaf\xf8$\x7f\xc4\x08\xa0\x11\xc7\xa8\xe9\xd3\x1d\xdb|\xa1)8ld\x91\x9e+\xe5\x7f\x82\xde7\xd4\xfe\x06\xfcU\xd1\xbe&[\xe9\x7fi\xb9\xd2\xee\xcc\xb1\xdb\\\xb9T`U\x94\xe4\xf6\xc0b\x7f\n\xfbB\x0f\xf8,\x91_\xf8\xfe\xf8_m\x96\x94\x92`\xbb\'\xe5\xdb\x8e\xf5\xd8x\xfe\xcc\xe0\xae\xbf\xe0\x94\x7f\x18m\t\x16\xd6\x16L\xa0\x1er\xb5\xe2\x9f\xb4\xb7\xec\x9d\xf1\x03\xf6|\xb9\xd3"\xf1\x16\x9e\xaa5\x02\xd8d~\x06\x14\x9e\x9f\x85}s\x07\xfc\x163C\x95@\xb9\xf8V\xec\xa4\xf2\x16\xe3\x93_=\xfe\xdb\x1f\xb6=\x9f\xed/\xae\xe9sX\xe8\xef\xa6\xc7\xa5\x83\x8br\xd9\xea\x08\xfe\xb4\xb5\x0ff|\xc7\xa9Y\xdd\xdb\xcc#0\x00\xc5\x82\x86+\xd3\'\x15\xe9?\x04?g\x0f\x88\x1f\x1ct;\x8d[\xc1^\x1a\x9a\xe1mg0I2G\x95\x0c9\xaeK[\xdd{"4\x10\xab\xb1 \xedc\x8c\xe0\xe7\xad}\x8b\xff\x00\x04\xdb\xfd\xb2\xbe\x08\xfe\xcd\x9f\n/\xfc\r\xf1\x16\xea\xe6\xd6\xea\xebSk\x96\x99"\xdf\xc1\x07\x19=\xff\x00\xfa\xf4\xc3\xd9\x9e\x05\xae\xfe\xc4\xff\x00\x1c4\xd0\xf0\xddx\x13P*\x17\x99#\x84\x90+\x1a/\xd8\xef\xe2\xea[\xc1\x9f\x07j\xaa\xbef[\x16\xcd\xcd~\x9f\xe8\xdf\xf0Q?\xd97[U\xc7\xc4\x95\x89[\xa8\xb9\xb6*?\x13Z\xc7\xf6\xd6\xfd\x94&\xb3yc\xf8\xa1\xa6\x11\x1cl\xe1H p\t\xf4\xa5v\x1e\xcf\xcc\xfc\x8b\xf8\x81\xf0C\xc6\x9e\x08\xd1\x0e\xad\xe2/\r\xdfZ#]\x15W\x96\x02\xab\x8e\x9c\xd1_z\x7f\xc1I?h/\x80\xfe>\xf8\x05\xff\x00\x08\xaf\xc3\xef\x14iz\x96\xa1w\xaaA$\x91\xc2\xbb\x9e4\x18r\x06G\x03\x8c\x91\xedEe=\xca\x8a\xe5G\xc9?\x1bt\xdd:\xdf\xc2\xd6\xd76\xf6\x10\xa4\x8d\xad\x18\xdaD\x88\x06)\xe49\xdb\x90:g\x9cW\x94]\x12\x0f\x92\x0e\x13\xfb\xa3\xa7\xe5E\x15\xb1DJJ\xfd\xd3\x8ct\xc5H\xb2\xc9,\xbb\xa4\x91\x98\xb7\xde,s\x9a(\xa0\x07\\\x01$E\\n\x1e\x87\x9au\x8d\xcd\xca\xcc\xb1\xad\xc3\x85#\x05C\x9cc\x14Q@\x17\xd6Y[\xe5i\x18\x8c\x1e\t\xf6\xa9n\'\x9b\xfb\x08/\x9c\xd8n\x18n<\x8c\xf44Q@\x19\x93\\NU\x98\xce\xf98\xc9\xdcy\xc7\x03\xf4\xa2\x8a+)\xfc@\x7f\xff\xd9\n'
+2025-06-30 11:55:23,616 - ATC_GUI - DEBUG - UTF-8 디코딩 실패, 바이너리 데이터로 재처리
+2025-06-30 11:55:23,616 - ATC_GUI - DEBUG - 바이너리 데이터 처리 시작: 1429 bytes, 시작: b'ME_OD:17512521236197'
+2025-06-30 11:55:23,617 - ATC_GUI - DEBUG - 기타 바이너리 데이터: 1429 bytes, 내용: ME_OD:17512521236197,FOD,464,116,RWY_A;17512521175...
+2025-06-30 11:55:23,622 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:23,623 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:23,623 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,623 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,623 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,623 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,653 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:23,654 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,400,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:23,654 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,654 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 400.0), Area=RWY_B
+2025-06-30 11:55:23,654 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,654 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,687 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:23,687 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:23,688 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,688 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,688 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:23,688 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,725 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:23,726 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:23,726 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,726 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,726 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,726 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,747 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:23,747 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:23,747 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,747 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,747 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,747 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,798 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:23,799 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:23,799 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,799 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 402.0), Area=RWY_B
+2025-06-30 11:55:23,800 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:23,800 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,821 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:23,822 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:23,822 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,822 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,822 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,823 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,852 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:23,853 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:23,853 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,853 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,853 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,854 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,894 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:23,895 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:23,895 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,895 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,896 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,896 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,897 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:23,897 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:23,897 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:23,899 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (191, 372), 상태: NORMAL
+2025-06-30 11:55:23,900 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (354, 381), 상태: NORMAL
+2025-06-30 11:55:23,935 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:23,936 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:23,936 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,936 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,937 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:23,937 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,961 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:23,962 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:23,962 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,962 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:23,962 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:23,963 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:23,991 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,400,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:23,992 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,400,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:23,992 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:23,993 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 400.0), Area=RWY_B
+2025-06-30 11:55:23,993 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:23,993 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,021 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:24,022 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:24,022 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,023 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:24,023 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:24,023 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,064 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B\n'
+2025-06-30 11:55:24,065 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,411,RWY_B...
+2025-06-30 11:55:24,065 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,066 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:24,066 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 411.0), Area=RWY_B
+2025-06-30 11:55:24,066 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,095 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:24,096 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:24,096 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,096 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:24,097 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:24,097 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,126 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:24,127 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:24,127 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,127 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:24,127 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:24,128 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,158 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:24,158 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:24,158 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,158 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:24,159 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:24,159 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,188 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,384,412,RWY_B\n'
+2025-06-30 11:55:24,189 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,384,412,RWY_B...
+2025-06-30 11:55:24,189 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,189 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:24,189 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(384.0, 412.0), Area=RWY_B
+2025-06-30 11:55:24,189 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,195 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:24,195 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:24,196 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:24,198 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (190, 372), 상태: NORMAL
+2025-06-30 11:55:24,199 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (354, 380), 상태: NORMAL
+2025-06-30 11:55:24,230 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:24,230 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:24,231 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,231 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:24,231 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:24,231 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,261 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:24,261 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:24,262 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,262 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 402.0), Area=RWY_B
+2025-06-30 11:55:24,262 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:24,263 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,296 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:24,296 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:24,297 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,297 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:24,297 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:24,297 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,323 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B\n'
+2025-06-30 11:55:24,323 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,409,RWY_B...
+2025-06-30 11:55:24,323 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,324 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:24,324 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 409.0), Area=RWY_B
+2025-06-30 11:55:24,324 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,354 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:24,354 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:24,355 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,355 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:24,355 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:24,356 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,385 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:24,385 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:24,386 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,386 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:24,386 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:24,386 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,395 - ATC_GUI - DEBUG - 객체 업데이트 처리: 2개 객체
+2025-06-30 11:55:24,395 - ATC_GUI - DEBUG - 객체 목록 업데이트: 2개 객체
+2025-06-30 11:55:24,396 - ATC_GUI - DEBUG - 새로운 객체: 0개 (전체: 2개)
+2025-06-30 11:55:24,398 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521175751, 위치: (190, 372), 상태: NORMAL
+2025-06-30 11:55:24,400 - ATC_GUI - DEBUG - 마커 업데이트 성공: ID 17512521177092, 위치: (354, 381), 상태: NORMAL
+2025-06-30 11:55:24,416 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B\n'
+2025-06-30 11:55:24,416 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,382,410,RWY_B...
+2025-06-30 11:55:24,417 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,417 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:24,417 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(382.0, 410.0), Area=RWY_B
+2025-06-30 11:55:24,418 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,447 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:24,447 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:24,448 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,448 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:24,448 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:24,449 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,490 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B\n'
+2025-06-30 11:55:24,490 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,410,RWY_B...
+2025-06-30 11:55:24,490 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,491 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:24,491 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 410.0), Area=RWY_B
+2025-06-30 11:55:24,491 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,522 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:24,523 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:24,523 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,523 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:24,523 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:24,524 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,553 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:24,554 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,402,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:24,554 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,554 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 402.0), Area=RWY_B
+2025-06-30 11:55:24,554 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:24,555 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,585 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:24,586 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,217,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:24,586 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,586 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(217.0, 401.0), Area=RWY_B
+2025-06-30 11:55:24,587 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:24,587 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체
+2025-06-30 11:55:24,631 - ATC_GUI - DEBUG - raw_data: b'ME_OD:17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B\n'
+2025-06-30 11:55:24,631 - ATC_GUI - DEBUG - ME_OD 이벤트 수신: 17512521175751,PERSON,218,401,RWY_B,0;17512521177092,WORK_PERSON,383,409,RWY_B...
+2025-06-30 11:55:24,632 - ATC_GUI - DEBUG - ME_OD 파싱 결과: 2개 객체
+2025-06-30 11:55:24,632 - ATC_GUI - DEBUG - ME_OD 객체 1: ID=17512521175751, Type=일반인, Pos=(218.0, 401.0), Area=RWY_B
+2025-06-30 11:55:24,632 - ATC_GUI - DEBUG - ME_OD 객체 2: ID=17512521177092, Type=작업자, Pos=(383.0, 409.0), Area=RWY_B
+2025-06-30 11:55:24,633 - ATC_GUI - DEBUG - 일반 객체 감지 이벤트 처리: 2개 객체

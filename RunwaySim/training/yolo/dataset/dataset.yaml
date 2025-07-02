@@ -1,0 +1,8 @@
+names:
+  0: Flock
+  1: Airplane
+nc: 2
+path: /home/jinhyuk2me/BirdRiskSim/training/yolo/dataset
+test: null
+train: images/train
+val: images/val

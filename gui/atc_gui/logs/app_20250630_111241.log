@@ -1,0 +1,13 @@
+2025-06-30 11:12:41,838 - ATC_GUI - INFO - ====================================================================================================
+2025-06-30 11:12:41,838 - ATC_GUI - INFO - FALCON 시작
+2025-06-30 11:12:41,905 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-30 11:12:41,921 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-30 11:12:41,940 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-30 11:12:41,942 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-30 11:12:41,957 - ATC_GUI - INFO - TCP 연결 성공 (192.168.0.12:5100)
+2025-06-30 11:12:49,100 - ATC_GUI - INFO - Access 탭 전환
+2025-06-30 11:12:49,102 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-30 11:12:49,225 - ATC_GUI - DEBUG - raw_data: b'AR_AC:OK,2,2,3,3,2,3,2,1\n'...
+2025-06-30 11:12:49,226 - ATC_GUI - DEBUG - AR_AC 응답 수신: OK,2,2,3,3,2,3,2,1
+2025-06-30 11:12:49,226 - ATC_GUI - INFO - 출입 제어 설정 수신: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 3, 'TWY_D_level': 3, 'RWY_A_level': 2, 'RWY_B_level': 3, 'GRASS_A_level': 2, 'GRASS_B_level': 1}
+2025-06-30 11:12:49,230 - ATC_GUI - INFO - 출입 제어 설정 응답 처리 완료: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 3, 'TWY_D_level': 3, 'RWY_A_level': 2, 'RWY_B_level': 3, 'GRASS_A_level': 2, 'GRASS_B_level': 1}

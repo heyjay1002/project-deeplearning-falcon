@@ -1,0 +1,811 @@
+2025-06-29 15:50:56,807 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 15:50:56,931 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 15:50:57,014 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 15:50:57,018 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 15:51:00,440 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 1001, Type 일반인, Area RWY_A
+2025-06-29 15:51:00,441 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 1001를 first_detected_object_ids에 추가
+2025-06-29 15:51:00,464 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 1001 (일반인)
+2025-06-29 15:51:01,468 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 1001, Type 일반인, Area RWY_A
+2025-06-29 15:51:01,468 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 1001를 first_detected_object_ids에 추가
+2025-06-29 15:51:01,476 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 1001 (일반인)
+2025-06-29 15:51:04,921 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 15:51:06,792 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 1002, Type 일반차량, Area TWY_A
+2025-06-29 15:51:06,792 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 1002를 first_detected_object_ids에 추가
+2025-06-29 15:51:06,798 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 1002 (일반차량)
+2025-06-29 15:51:07,800 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 1002, Type 일반차량, Area TWY_A
+2025-06-29 15:51:07,801 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 1002를 first_detected_object_ids에 추가
+2025-06-29 15:51:07,807 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 1002 (일반차량)
+2025-06-29 15:51:11,778 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 1003, Type 일반인, Area RWY_B
+2025-06-29 15:51:11,778 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 1003를 first_detected_object_ids에 추가
+2025-06-29 15:51:11,782 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 1003 (일반인)
+2025-06-29 15:51:11,783 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 1004, Type 일반차량, Area GRASS_A
+2025-06-29 15:51:11,783 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 1004를 first_detected_object_ids에 추가
+2025-06-29 15:51:11,792 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 1004 (일반차량)
+2025-06-29 15:51:11,793 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 1005, Type 조류, Area RWY_A
+2025-06-29 15:51:11,793 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 1005를 first_detected_object_ids에 추가
+2025-06-29 15:51:11,807 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 1005 (조류)
+2025-06-29 15:51:12,815 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 1003, Type 일반인, Area RWY_B
+2025-06-29 15:51:12,816 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 1003를 first_detected_object_ids에 추가
+2025-06-29 15:51:12,820 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 1003 (일반인)
+2025-06-29 15:51:12,821 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 1004, Type 일반차량, Area GRASS_A
+2025-06-29 15:51:12,822 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 1004를 first_detected_object_ids에 추가
+2025-06-29 15:51:12,832 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 1004 (일반차량)
+2025-06-29 15:51:12,832 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 1005, Type 조류, Area RWY_A
+2025-06-29 15:51:12,832 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 1005를 first_detected_object_ids에 추가
+2025-06-29 15:51:12,832 - ATC_GUI - DEBUG - 중복 객체 알림 방지: ID 1005
+2025-06-29 15:51:12,833 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 1005 (조류)
+2025-06-29 15:51:21,979 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 1006, Type 일반인, Area RWY_A
+2025-06-29 15:51:21,979 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 1006를 first_detected_object_ids에 추가
+2025-06-29 15:51:21,984 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 1006 (일반인)
+2025-06-29 15:51:36,734 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 5회)
+2025-06-29 15:51:42,020 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 15:51:42,020 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 15:52:05,403 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 1007, Type 일반차량, Area TWY_A
+2025-06-29 15:52:05,403 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 1007를 first_detected_object_ids에 추가
+2025-06-29 15:52:05,413 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 1007 (일반차량)
+2025-06-29 15:52:06,418 - ATC_GUI - INFO - MainPage: 최초 감지 이벤트 수신 - ID 1007, Type 일반차량, Area TWY_A
+2025-06-29 15:52:06,418 - ATC_GUI - INFO - MainPage: 새로운 객체 최초 감지 - ID 1007를 first_detected_object_ids에 추가
+2025-06-29 15:52:06,423 - ATC_GUI - INFO - MainPage: 최초 감지(ME_FD) 알림 발생: ID 1007 (일반차량)
+2025-06-29 15:52:16,733 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 10회)
+2025-06-29 15:52:35,377 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 15:52:35,378 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 15:52:36,712 - ATC_GUI - INFO - Log 탭 전환
+2025-06-29 15:52:41,527 - ATC_GUI - INFO - 로그 타입 변경: 조류 위험도 등급 변화 이력, 페이지 인덱스: 1
+2025-06-29 15:52:42,748 - ATC_GUI - INFO - 로그 타입 변경: 조종사 요청 응답 이력, 페이지 인덱스: 2
+2025-06-29 15:52:43,620 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 15:52:43,620 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 15:52:44,237 - ATC_GUI - INFO - Log 탭 전환
+2025-06-29 15:52:45,315 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 15:52:45,316 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 15:52:49,212 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 15:52:49,212 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 15:58:36,055 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 15:58:36,145 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 15:58:36,172 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 15:58:36,204 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 15:58:36,206 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 15:58:37,515 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 15:58:37,516 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 15:58:38,954 - ATC_GUI - INFO - Log 탭 전환
+2025-06-29 15:58:39,607 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 15:58:39,607 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 15:58:44,484 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 15:59:58,707 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 15:59:58,799 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 15:59:58,817 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 15:59:58,849 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 15:59:58,852 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 15:59:59,648 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 15:59:59,649 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:00:06,733 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 16:02:20,161 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:02:20,240 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:02:20,251 - ATC_GUI - ERROR - 배경 이미지 설정 실패: 'QVBoxLayout' object has no attribute 'width'
+2025-06-29 16:04:24,808 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:04:24,897 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:04:24,915 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:04:24,941 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:04:24,942 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:04:26,515 - ATC_GUI - ERROR - 배경 이미지 리사이즈 실패: 'QVBoxLayout' object has no attribute 'width'
+2025-06-29 16:04:26,522 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:04:26,523 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:04:32,734 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 16:05:04,733 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 5회)
+2025-06-29 16:05:05,013 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:05:05,013 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:06:36,627 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:06:36,739 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:06:36,762 - ATC_GUI - INFO - 배경 이미지 경로: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map.png
+2025-06-29 16:06:36,763 - ATC_GUI - INFO - verticalLayoutWidget geometry: PyQt6.QtCore.QRect(60, 140, 651, 551)
+2025-06-29 16:06:36,763 - ATC_GUI - INFO - 원본 이미지 크기: 873 x 679
+2025-06-29 16:06:36,765 - ATC_GUI - INFO - 스케일된 이미지 크기: 651 x 506
+2025-06-29 16:06:36,765 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:06:36,805 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:06:36,807 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:06:37,533 - ATC_GUI - ERROR - 배경 이미지 리사이즈 실패: 'QVBoxLayout' object has no attribute 'width'
+2025-06-29 16:06:37,538 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:06:37,538 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:07:11,156 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:07:11,276 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:07:11,306 - ATC_GUI - INFO - 배경 이미지 경로: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map.png
+2025-06-29 16:07:11,306 - ATC_GUI - INFO - verticalLayoutWidget geometry: PyQt6.QtCore.QRect(60, 140, 651, 551)
+2025-06-29 16:07:11,307 - ATC_GUI - INFO - 원본 이미지 크기: 873 x 679
+2025-06-29 16:07:11,309 - ATC_GUI - INFO - 스케일된 이미지 크기: 651 x 506
+2025-06-29 16:07:11,309 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:07:11,353 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:07:11,355 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:07:11,995 - ATC_GUI - ERROR - 배경 이미지 리사이즈 실패: 'QVBoxLayout' object has no attribute 'width'
+2025-06-29 16:07:11,999 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:07:12,001 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:07:44,992 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:07:45,166 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:07:45,190 - ATC_GUI - INFO - 배경 이미지 경로: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map.png
+2025-06-29 16:07:45,190 - ATC_GUI - INFO - verticalLayoutWidget geometry: PyQt6.QtCore.QRect(60, 140, 651, 551)
+2025-06-29 16:07:45,190 - ATC_GUI - INFO - 원본 이미지 크기: 873 x 679
+2025-06-29 16:07:45,192 - ATC_GUI - INFO - 스케일된 이미지 크기: 651 x 506
+2025-06-29 16:07:45,193 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:07:45,245 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:07:45,249 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:07:46,176 - ATC_GUI - ERROR - 배경 이미지 리사이즈 실패: 'QVBoxLayout' object has no attribute 'width'
+2025-06-29 16:07:46,181 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:07:46,182 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:09:08,412 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:09:08,581 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:09:08,616 - ATC_GUI - INFO - 배경 이미지 경로: /home/jay/dev_ws_home/deeplearning-repo-2/gui/atc_gui/views/../resources/images/map.png
+2025-06-29 16:09:08,616 - ATC_GUI - INFO - verticalLayoutWidget geometry: PyQt6.QtCore.QRect(60, 140, 651, 551)
+2025-06-29 16:09:08,616 - ATC_GUI - INFO - 원본 이미지 크기: 873 x 679
+2025-06-29 16:09:08,619 - ATC_GUI - INFO - 스케일된 이미지 크기: 651 x 506
+2025-06-29 16:09:08,619 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:09:08,658 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:09:08,661 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:09:09,381 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:09:09,382 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:09:16,733 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 16:09:16,847 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:09:16,847 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:12:05,935 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:12:06,024 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:12:06,042 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:12:06,075 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:12:06,076 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:12:06,931 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:12:06,932 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:12:19,067 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:12:19,157 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:12:19,181 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:12:19,225 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:12:19,226 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:12:20,124 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:12:20,125 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:12:34,586 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:12:34,701 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:12:34,721 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:12:34,751 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:12:34,753 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:12:35,773 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:12:35,774 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:13:56,768 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:13:56,876 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:13:56,894 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:13:56,935 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:13:56,936 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:13:58,516 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:13:58,517 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:14:03,405 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:14:03,405 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:14:04,733 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 16:14:36,733 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 5회)
+2025-06-29 16:15:17,456 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:15:17,544 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:15:17,557 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:15:17,583 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:15:17,585 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:15:18,732 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:15:18,732 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:15:29,636 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:15:29,755 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:15:29,774 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:15:29,798 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:15:29,799 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:15:30,919 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:15:30,920 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:15:39,400 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:15:39,561 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:15:39,595 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:15:39,634 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:15:39,636 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:15:40,484 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:15:40,485 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:15:50,390 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:15:50,512 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:15:50,537 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:15:50,576 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:15:50,579 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:15:51,170 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:15:51,170 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:16:00,902 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:16:01,067 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:16:01,118 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:16:01,169 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:16:01,171 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:16:01,708 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:16:01,709 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:16:09,485 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 16:16:19,050 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:16:19,140 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:16:19,153 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:16:19,188 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:16:19,189 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:16:20,339 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:16:20,339 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:16:34,975 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:16:35,077 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:16:35,106 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:16:35,135 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:16:35,137 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:16:35,751 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:16:35,752 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:16:43,484 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 16:17:15,733 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 5회)
+2025-06-29 16:17:20,128 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:17:20,216 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:17:20,236 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:17:20,272 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:17:20,273 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:17:21,334 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:17:21,335 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:17:33,052 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:17:33,177 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:17:33,209 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:17:33,240 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:17:33,242 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:17:33,925 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:17:33,926 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:17:43,671 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:17:43,775 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:17:43,789 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:17:43,814 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:17:43,816 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:17:45,147 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:17:45,148 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:17:51,589 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:17:51,729 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:17:51,749 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:17:51,778 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:17:51,779 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:17:53,180 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:17:53,181 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:17:59,734 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 16:18:17,571 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:18:17,659 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:18:17,673 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:18:17,699 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:18:17,700 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:18:19,135 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:18:19,135 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:18:32,951 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:18:33,079 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:18:33,103 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:18:33,137 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:18:33,139 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:18:33,642 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:18:33,643 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:18:41,484 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 16:19:13,733 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 5회)
+2025-06-29 16:19:15,426 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:19:15,527 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:19:15,562 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:19:15,602 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:19:15,603 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:19:16,360 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:19:16,361 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:19:28,522 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:19:28,637 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:19:28,665 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:19:28,701 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:19:28,704 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:19:29,536 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:19:29,537 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:19:36,734 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 16:19:57,919 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:19:58,026 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:19:58,050 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:19:58,092 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:19:58,096 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:19:58,634 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:19:58,634 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:20:06,484 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 16:20:20,607 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:20:20,713 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:20:20,742 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:20:20,792 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:20:20,796 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:20:21,353 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:20:21,353 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:20:28,734 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 16:20:51,200 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:20:51,292 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:20:51,308 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:20:51,337 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:20:51,338 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:20:52,573 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:20:52,574 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:20:59,771 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:20:59,886 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:20:59,910 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:20:59,946 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:20:59,948 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:21:00,639 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:21:00,639 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:21:07,733 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 16:21:29,410 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:21:29,411 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:21:39,733 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 5회)
+2025-06-29 16:21:59,930 - ATC_GUI - INFO - Log 탭 전환
+2025-06-29 16:22:01,743 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:22:01,744 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:22:08,256 - ATC_GUI - INFO - Log 탭 전환
+2025-06-29 16:22:12,161 - ATC_GUI - INFO - 원본 데이터가 없어 테이블만 초기화
+2025-06-29 16:22:12,162 - ATC_GUI - INFO - 로그 페이지 리셋 완료
+2025-06-29 16:49:27,621 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 16:49:27,744 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 16:49:27,763 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 16:49:27,796 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 16:49:27,797 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 16:49:34,626 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 16:49:34,627 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 16:49:35,480 - ATC_GUI - INFO - Log 탭 전환
+2025-06-29 16:49:35,733 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 17:43:02,103 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 17:43:02,105 - ATC_GUI - DEBUG - 모든 마커 제거 완료
+2025-06-29 17:43:02,117 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1001, 크기: 50x50
+2025-06-29 17:43:02,117 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1001, 위치: (41, 108), 상태: NORMAL
+2025-06-29 17:43:02,120 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1002, 크기: 50x50
+2025-06-29 17:43:02,121 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1002, 위치: (141, 108), 상태: NORMAL
+2025-06-29 17:43:02,127 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2001, 크기: 50x50
+2025-06-29 17:43:02,127 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2001, 위치: (241, 108), 상태: NORMAL
+2025-06-29 17:43:02,129 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2002, 크기: 50x50
+2025-06-29 17:43:02,129 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2002, 위치: (341, 108), 상태: NORMAL
+2025-06-29 17:43:02,134 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3001, 크기: 50x50
+2025-06-29 17:43:02,134 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3001, 위치: (41, 241), 상태: NORMAL
+2025-06-29 17:43:02,141 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3002, 크기: 50x50
+2025-06-29 17:43:02,141 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3002, 위치: (141, 241), 상태: NORMAL
+2025-06-29 17:43:02,146 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3003, 크기: 50x50
+2025-06-29 17:43:02,146 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3003, 위치: (241, 241), 상태: NORMAL
+2025-06-29 17:43:04,691 - ATC_GUI - DEBUG - 마커 선택 성공: ID 1001
+2025-06-29 17:43:06,297 - ATC_GUI - DEBUG - 마커 선택 성공: ID 1002
+2025-06-29 17:43:07,089 - ATC_GUI - DEBUG - 마커 선택 성공: ID 2001
+2025-06-29 17:43:07,579 - ATC_GUI - DEBUG - 마커 선택 성공: ID 2002
+2025-06-29 17:43:08,147 - ATC_GUI - DEBUG - 마커 선택 성공: ID 3003
+2025-06-29 17:43:08,623 - ATC_GUI - DEBUG - 마커 선택 성공: ID 3002
+2025-06-29 17:43:09,258 - ATC_GUI - DEBUG - 마커 선택 성공: ID 3001
+2025-06-29 17:43:13,773 - ATC_GUI - DEBUG - 마커 선택 성공: ID 1001
+2025-06-29 17:48:39,767 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 17:48:39,767 - ATC_GUI - DEBUG - 모든 마커 제거 완료
+2025-06-29 17:48:39,774 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1001, 크기: 50x50
+2025-06-29 17:48:39,774 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1001, 위치: (41, 108), 상태: NORMAL
+2025-06-29 17:48:39,778 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1002, 크기: 50x50
+2025-06-29 17:48:39,779 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1002, 위치: (141, 108), 상태: NORMAL
+2025-06-29 17:48:39,784 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2001, 크기: 50x50
+2025-06-29 17:48:39,784 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2001, 위치: (241, 108), 상태: NORMAL
+2025-06-29 17:48:39,785 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2002, 크기: 50x50
+2025-06-29 17:48:39,785 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2002, 위치: (341, 108), 상태: NORMAL
+2025-06-29 17:48:39,790 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3001, 크기: 50x50
+2025-06-29 17:48:39,790 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3001, 위치: (41, 241), 상태: NORMAL
+2025-06-29 17:48:39,796 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3002, 크기: 50x50
+2025-06-29 17:48:39,796 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3002, 위치: (141, 241), 상태: NORMAL
+2025-06-29 17:48:39,802 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3003, 크기: 50x50
+2025-06-29 17:48:39,802 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3003, 위치: (241, 241), 상태: NORMAL
+2025-06-29 17:52:19,706 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 17:52:19,706 - ATC_GUI - DEBUG - 모든 마커 제거 완료
+2025-06-29 17:52:19,713 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1001, 크기: 50x50
+2025-06-29 17:52:19,713 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1001, 위치: (41, 108), 상태: NORMAL
+2025-06-29 17:52:19,715 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=0
+2025-06-29 17:52:19,715 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 일반인
+2025-06-29 17:52:19,717 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1002, 크기: 50x50
+2025-06-29 17:52:19,717 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1002, 위치: (141, 108), 상태: NORMAL
+2025-06-29 17:52:19,718 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=3
+2025-06-29 17:52:19,718 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 일반인
+2025-06-29 17:52:19,722 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2001, 크기: 50x50
+2025-06-29 17:52:19,722 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2001, 위치: (241, 108), 상태: NORMAL
+2025-06-29 17:52:19,723 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=7
+2025-06-29 17:52:19,723 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 작업자
+2025-06-29 17:52:19,723 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2002, 크기: 50x50
+2025-06-29 17:52:19,724 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2002, 위치: (341, 108), 상태: NORMAL
+2025-06-29 17:52:19,724 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=10
+2025-06-29 17:52:19,724 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 작업자
+2025-06-29 17:52:19,729 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3001, 크기: 50x50
+2025-06-29 17:52:19,729 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3001, 위치: (41, 241), 상태: NORMAL
+2025-06-29 17:52:19,729 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=조류, rescue_level=0
+2025-06-29 17:52:19,730 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 조류
+2025-06-29 17:52:19,736 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3002, 크기: 50x50
+2025-06-29 17:52:19,736 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3002, 위치: (141, 241), 상태: NORMAL
+2025-06-29 17:52:19,737 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반차량, rescue_level=0
+2025-06-29 17:52:19,737 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 일반차량
+2025-06-29 17:52:19,742 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3003, 크기: 50x50
+2025-06-29 17:52:19,742 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3003, 위치: (241, 241), 상태: NORMAL
+2025-06-29 17:52:19,743 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=FOD, rescue_level=0
+2025-06-29 17:52:19,743 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: FOD
+2025-06-29 17:56:27,762 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 17:56:27,763 - ATC_GUI - DEBUG - 모든 마커 제거 완료
+2025-06-29 17:56:27,770 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1001, 크기: 50x50
+2025-06-29 17:56:27,771 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1001, 위치: (41, 108), 상태: NORMAL
+2025-06-29 17:56:27,774 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=0
+2025-06-29 17:56:27,774 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1001, rescue_level=0
+2025-06-29 17:56:27,774 - ATC_GUI - DEBUG - 위험도가 0이므로 게이지바 미생성: ID=1001
+2025-06-29 17:56:27,777 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1002, 크기: 50x50
+2025-06-29 17:56:27,778 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1002, 위치: (141, 108), 상태: NORMAL
+2025-06-29 17:56:27,779 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=3
+2025-06-29 17:56:27,779 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1002, rescue_level=3
+2025-06-29 17:56:27,780 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=1002, rescue_level=3
+2025-06-29 17:56:27,788 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=1002, 위치=(0, 0)
+2025-06-29 17:56:27,796 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2001, 크기: 50x50
+2025-06-29 17:56:27,796 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2001, 위치: (241, 108), 상태: NORMAL
+2025-06-29 17:56:27,797 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=7
+2025-06-29 17:56:27,797 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2001, rescue_level=7
+2025-06-29 17:56:27,797 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2001, rescue_level=7
+2025-06-29 17:56:27,798 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2001, 위치=(0, 0)
+2025-06-29 17:56:27,799 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2002, 크기: 50x50
+2025-06-29 17:56:27,799 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2002, 위치: (341, 108), 상태: NORMAL
+2025-06-29 17:56:27,799 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=10
+2025-06-29 17:56:27,799 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2002, rescue_level=10
+2025-06-29 17:56:27,799 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2002, rescue_level=10
+2025-06-29 17:56:27,800 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2002, 위치=(0, 0)
+2025-06-29 17:56:27,805 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3001, 크기: 50x50
+2025-06-29 17:56:27,805 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3001, 위치: (41, 241), 상태: NORMAL
+2025-06-29 17:56:27,805 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=조류, rescue_level=0
+2025-06-29 17:56:27,805 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 조류
+2025-06-29 17:56:27,812 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3002, 크기: 50x50
+2025-06-29 17:56:27,813 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3002, 위치: (141, 241), 상태: NORMAL
+2025-06-29 17:56:27,813 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반차량, rescue_level=0
+2025-06-29 17:56:27,813 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 일반차량
+2025-06-29 17:56:27,817 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3003, 크기: 50x50
+2025-06-29 17:56:27,818 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3003, 위치: (241, 241), 상태: NORMAL
+2025-06-29 17:56:27,818 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=FOD, rescue_level=0
+2025-06-29 17:56:27,818 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: FOD
+2025-06-29 17:56:35,454 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 17:56:35,456 - ATC_GUI - DEBUG - 모든 마커 제거 완료
+2025-06-29 17:56:35,466 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1001, 크기: 50x50
+2025-06-29 17:56:35,466 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1001, 위치: (41, 108), 상태: NORMAL
+2025-06-29 17:56:35,467 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=0
+2025-06-29 17:56:35,467 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1001, rescue_level=0
+2025-06-29 17:56:35,468 - ATC_GUI - DEBUG - 위험도가 0이므로 게이지바 미생성: ID=1001
+2025-06-29 17:56:35,469 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1002, 크기: 50x50
+2025-06-29 17:56:35,469 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1002, 위치: (141, 108), 상태: NORMAL
+2025-06-29 17:56:35,470 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=3
+2025-06-29 17:56:35,470 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1002, rescue_level=3
+2025-06-29 17:56:35,470 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=1002, rescue_level=3
+2025-06-29 17:56:35,483 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=1002, 위치=(0, 0)
+2025-06-29 17:56:35,489 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2001, 크기: 50x50
+2025-06-29 17:56:35,490 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2001, 위치: (241, 108), 상태: NORMAL
+2025-06-29 17:56:35,491 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=7
+2025-06-29 17:56:35,492 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2001, rescue_level=7
+2025-06-29 17:56:35,492 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2001, rescue_level=7
+2025-06-29 17:56:35,494 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2001, 위치=(0, 0)
+2025-06-29 17:56:35,495 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2002, 크기: 50x50
+2025-06-29 17:56:35,495 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2002, 위치: (341, 108), 상태: NORMAL
+2025-06-29 17:56:35,495 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=10
+2025-06-29 17:56:35,495 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2002, rescue_level=10
+2025-06-29 17:56:35,495 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2002, rescue_level=10
+2025-06-29 17:56:35,496 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2002, 위치=(0, 0)
+2025-06-29 17:56:35,501 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3001, 크기: 50x50
+2025-06-29 17:56:35,501 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3001, 위치: (41, 241), 상태: NORMAL
+2025-06-29 17:56:35,501 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=조류, rescue_level=0
+2025-06-29 17:56:35,501 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 조류
+2025-06-29 17:56:35,508 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3002, 크기: 50x50
+2025-06-29 17:56:35,509 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3002, 위치: (141, 241), 상태: NORMAL
+2025-06-29 17:56:35,510 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반차량, rescue_level=0
+2025-06-29 17:56:35,510 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 일반차량
+2025-06-29 17:56:35,514 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3003, 크기: 50x50
+2025-06-29 17:56:35,515 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3003, 위치: (241, 241), 상태: NORMAL
+2025-06-29 17:56:35,515 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=FOD, rescue_level=0
+2025-06-29 17:56:35,515 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: FOD
+2025-06-29 17:58:01,169 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 17:58:01,170 - ATC_GUI - DEBUG - 모든 마커 제거 완료
+2025-06-29 17:58:01,177 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1001, 크기: 50x50
+2025-06-29 17:58:01,177 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1001, 위치: (41, 108), 상태: NORMAL
+2025-06-29 17:58:01,178 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=0
+2025-06-29 17:58:01,178 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1001, rescue_level=0
+2025-06-29 17:58:01,178 - ATC_GUI - DEBUG - 위험도가 0이므로 게이지바 미생성: ID=1001
+2025-06-29 17:58:01,179 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1002, 크기: 50x50
+2025-06-29 17:58:01,180 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1002, 위치: (141, 108), 상태: NORMAL
+2025-06-29 17:58:01,180 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=3
+2025-06-29 17:58:01,180 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1002, rescue_level=3
+2025-06-29 17:58:01,180 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=1002, rescue_level=3
+2025-06-29 17:58:01,193 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=1002, 위치=(0, 0)
+2025-06-29 17:58:01,197 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2001, 크기: 50x50
+2025-06-29 17:58:01,197 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2001, 위치: (241, 108), 상태: NORMAL
+2025-06-29 17:58:01,198 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=7
+2025-06-29 17:58:01,198 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2001, rescue_level=7
+2025-06-29 17:58:01,198 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2001, rescue_level=7
+2025-06-29 17:58:01,199 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2001, 위치=(0, 0)
+2025-06-29 17:58:01,199 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2002, 크기: 50x50
+2025-06-29 17:58:01,200 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2002, 위치: (341, 108), 상태: NORMAL
+2025-06-29 17:58:01,200 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=10
+2025-06-29 17:58:01,200 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2002, rescue_level=10
+2025-06-29 17:58:01,200 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2002, rescue_level=10
+2025-06-29 17:58:01,201 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2002, 위치=(0, 0)
+2025-06-29 17:58:01,207 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3001, 크기: 50x50
+2025-06-29 17:58:01,207 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3001, 위치: (41, 241), 상태: NORMAL
+2025-06-29 17:58:01,207 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=조류, rescue_level=0
+2025-06-29 17:58:01,208 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 조류
+2025-06-29 17:58:01,211 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3002, 크기: 50x50
+2025-06-29 17:58:01,211 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3002, 위치: (141, 241), 상태: NORMAL
+2025-06-29 17:58:01,212 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반차량, rescue_level=0
+2025-06-29 17:58:01,212 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 일반차량
+2025-06-29 17:58:01,216 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3003, 크기: 50x50
+2025-06-29 17:58:01,216 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3003, 위치: (241, 241), 상태: NORMAL
+2025-06-29 17:58:01,216 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=FOD, rescue_level=0
+2025-06-29 17:58:01,216 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: FOD
+2025-06-29 17:59:17,001 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 17:59:17,002 - ATC_GUI - DEBUG - 모든 마커 제거 완료
+2025-06-29 17:59:17,008 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1001, 크기: 50x50
+2025-06-29 17:59:17,008 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1001, 위치: (41, 108), 상태: NORMAL
+2025-06-29 17:59:17,010 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=0
+2025-06-29 17:59:17,010 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1001, rescue_level=0
+2025-06-29 17:59:17,010 - ATC_GUI - DEBUG - 위험도가 0이므로 게이지바 미생성: ID=1001
+2025-06-29 17:59:17,011 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1002, 크기: 50x50
+2025-06-29 17:59:17,011 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1002, 위치: (141, 108), 상태: NORMAL
+2025-06-29 17:59:17,012 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=3
+2025-06-29 17:59:17,012 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1002, rescue_level=3
+2025-06-29 17:59:17,012 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=1002, rescue_level=3
+2025-06-29 17:59:17,019 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=1002, 위치=(116, 56)
+2025-06-29 17:59:17,025 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2001, 크기: 50x50
+2025-06-29 17:59:17,025 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2001, 위치: (241, 108), 상태: NORMAL
+2025-06-29 17:59:17,026 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=7
+2025-06-29 17:59:17,026 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2001, rescue_level=7
+2025-06-29 17:59:17,026 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2001, rescue_level=7
+2025-06-29 17:59:17,028 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2001, 위치=(216, 56)
+2025-06-29 17:59:17,029 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2002, 크기: 50x50
+2025-06-29 17:59:17,029 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2002, 위치: (341, 108), 상태: NORMAL
+2025-06-29 17:59:17,030 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=10
+2025-06-29 17:59:17,030 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2002, rescue_level=10
+2025-06-29 17:59:17,030 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2002, rescue_level=10
+2025-06-29 17:59:17,031 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2002, 위치=(316, 56)
+2025-06-29 17:59:17,036 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3001, 크기: 50x50
+2025-06-29 17:59:17,037 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3001, 위치: (41, 241), 상태: NORMAL
+2025-06-29 17:59:17,037 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=조류, rescue_level=0
+2025-06-29 17:59:17,037 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 조류
+2025-06-29 17:59:17,042 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3002, 크기: 50x50
+2025-06-29 17:59:17,042 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3002, 위치: (141, 241), 상태: NORMAL
+2025-06-29 17:59:17,042 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반차량, rescue_level=0
+2025-06-29 17:59:17,042 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 일반차량
+2025-06-29 17:59:17,046 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3003, 크기: 50x50
+2025-06-29 17:59:17,047 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3003, 위치: (241, 241), 상태: NORMAL
+2025-06-29 17:59:17,047 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=FOD, rescue_level=0
+2025-06-29 17:59:17,047 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: FOD
+2025-06-29 18:03:24,349 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 18:03:24,349 - ATC_GUI - DEBUG - 모든 마커 제거 완료
+2025-06-29 18:03:24,355 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1001, 크기: 50x50
+2025-06-29 18:03:24,355 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1001, 위치: (41, 108), 상태: NORMAL
+2025-06-29 18:03:24,357 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=0
+2025-06-29 18:03:24,357 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1001, rescue_level=0
+2025-06-29 18:03:24,357 - ATC_GUI - DEBUG - 위험도가 0이므로 게이지바 미생성: ID=1001
+2025-06-29 18:03:24,358 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1002, 크기: 50x50
+2025-06-29 18:03:24,358 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1002, 위치: (141, 108), 상태: NORMAL
+2025-06-29 18:03:24,359 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=3
+2025-06-29 18:03:24,359 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1002, rescue_level=3
+2025-06-29 18:03:24,359 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=1002, rescue_level=3
+2025-06-29 18:03:24,365 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=1002, 위치=(116, 56)
+2025-06-29 18:03:24,371 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2001, 크기: 50x50
+2025-06-29 18:03:24,372 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2001, 위치: (241, 108), 상태: NORMAL
+2025-06-29 18:03:24,373 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=7
+2025-06-29 18:03:24,373 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2001, rescue_level=7
+2025-06-29 18:03:24,373 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2001, rescue_level=7
+2025-06-29 18:03:24,374 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2001, 위치=(216, 56)
+2025-06-29 18:03:24,376 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2002, 크기: 50x50
+2025-06-29 18:03:24,376 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2002, 위치: (341, 108), 상태: NORMAL
+2025-06-29 18:03:24,377 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=10
+2025-06-29 18:03:24,377 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2002, rescue_level=10
+2025-06-29 18:03:24,377 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2002, rescue_level=10
+2025-06-29 18:03:24,378 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2002, 위치=(316, 56)
+2025-06-29 18:03:24,384 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3001, 크기: 50x50
+2025-06-29 18:03:24,385 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3001, 위치: (41, 241), 상태: NORMAL
+2025-06-29 18:03:24,386 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=조류, rescue_level=0
+2025-06-29 18:03:24,386 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 조류
+2025-06-29 18:03:24,391 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3002, 크기: 50x50
+2025-06-29 18:03:24,391 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3002, 위치: (141, 241), 상태: NORMAL
+2025-06-29 18:03:24,392 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반차량, rescue_level=0
+2025-06-29 18:03:24,392 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 일반차량
+2025-06-29 18:03:24,395 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3003, 크기: 50x50
+2025-06-29 18:03:24,395 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3003, 위치: (241, 241), 상태: NORMAL
+2025-06-29 18:03:24,396 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=FOD, rescue_level=0
+2025-06-29 18:03:24,396 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: FOD
+2025-06-29 18:04:55,206 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 18:04:55,206 - ATC_GUI - DEBUG - 모든 마커 제거 완료
+2025-06-29 18:04:55,214 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1001, 크기: 50x50
+2025-06-29 18:04:55,214 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1001, 위치: (41, 108), 상태: NORMAL
+2025-06-29 18:04:55,216 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=0
+2025-06-29 18:04:55,216 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1001, rescue_level=0
+2025-06-29 18:04:55,216 - ATC_GUI - DEBUG - 위험도가 0이므로 게이지바 미생성: ID=1001
+2025-06-29 18:04:55,217 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1002, 크기: 50x50
+2025-06-29 18:04:55,217 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1002, 위치: (141, 108), 상태: NORMAL
+2025-06-29 18:04:55,218 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=3
+2025-06-29 18:04:55,218 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1002, rescue_level=3
+2025-06-29 18:04:55,218 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=1002, rescue_level=3
+2025-06-29 18:04:55,224 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=1002, 위치=(116, 56)
+2025-06-29 18:04:55,228 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2001, 크기: 50x50
+2025-06-29 18:04:55,229 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2001, 위치: (241, 108), 상태: NORMAL
+2025-06-29 18:04:55,229 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=7
+2025-06-29 18:04:55,229 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2001, rescue_level=7
+2025-06-29 18:04:55,229 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2001, rescue_level=7
+2025-06-29 18:04:55,230 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2001, 위치=(216, 56)
+2025-06-29 18:04:55,231 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2002, 크기: 50x50
+2025-06-29 18:04:55,231 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2002, 위치: (341, 108), 상태: NORMAL
+2025-06-29 18:04:55,232 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=10
+2025-06-29 18:04:55,232 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2002, rescue_level=10
+2025-06-29 18:04:55,232 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2002, rescue_level=10
+2025-06-29 18:04:55,233 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2002, 위치=(316, 56)
+2025-06-29 18:04:55,237 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3001, 크기: 50x50
+2025-06-29 18:04:55,237 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3001, 위치: (41, 241), 상태: NORMAL
+2025-06-29 18:04:55,238 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=조류, rescue_level=0
+2025-06-29 18:04:55,238 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 조류
+2025-06-29 18:04:55,244 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3002, 크기: 50x50
+2025-06-29 18:04:55,244 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3002, 위치: (141, 241), 상태: NORMAL
+2025-06-29 18:04:55,245 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반차량, rescue_level=0
+2025-06-29 18:04:55,245 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 일반차량
+2025-06-29 18:04:55,249 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3003, 크기: 50x50
+2025-06-29 18:04:55,249 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3003, 위치: (241, 241), 상태: NORMAL
+2025-06-29 18:04:55,250 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=FOD, rescue_level=0
+2025-06-29 18:04:55,250 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: FOD
+2025-06-29 18:06:18,406 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 18:06:18,406 - ATC_GUI - DEBUG - 모든 마커 제거 완료
+2025-06-29 18:06:18,414 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1001, 크기: 50x50
+2025-06-29 18:06:18,414 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1001, 위치: (41, 108), 상태: NORMAL
+2025-06-29 18:06:18,415 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=0
+2025-06-29 18:06:18,415 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1001, rescue_level=0
+2025-06-29 18:06:18,415 - ATC_GUI - DEBUG - 위험도가 0이므로 게이지바 미생성: ID=1001
+2025-06-29 18:06:18,416 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1002, 크기: 50x50
+2025-06-29 18:06:18,416 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1002, 위치: (141, 108), 상태: NORMAL
+2025-06-29 18:06:18,417 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=3
+2025-06-29 18:06:18,417 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1002, rescue_level=3
+2025-06-29 18:06:18,417 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=1002, rescue_level=3
+2025-06-29 18:06:18,425 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=1002, 위치=(116, 160)
+2025-06-29 18:06:18,431 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2001, 크기: 50x50
+2025-06-29 18:06:18,431 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2001, 위치: (241, 108), 상태: NORMAL
+2025-06-29 18:06:18,432 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=7
+2025-06-29 18:06:18,432 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2001, rescue_level=7
+2025-06-29 18:06:18,432 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2001, rescue_level=7
+2025-06-29 18:06:18,433 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2001, 위치=(216, 160)
+2025-06-29 18:06:18,433 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2002, 크기: 50x50
+2025-06-29 18:06:18,434 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2002, 위치: (341, 108), 상태: NORMAL
+2025-06-29 18:06:18,434 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=10
+2025-06-29 18:06:18,434 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2002, rescue_level=10
+2025-06-29 18:06:18,434 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2002, rescue_level=10
+2025-06-29 18:06:18,435 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2002, 위치=(316, 160)
+2025-06-29 18:06:18,438 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3001, 크기: 50x50
+2025-06-29 18:06:18,439 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3001, 위치: (41, 241), 상태: NORMAL
+2025-06-29 18:06:18,439 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=조류, rescue_level=0
+2025-06-29 18:06:18,440 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 조류
+2025-06-29 18:06:18,445 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3002, 크기: 50x50
+2025-06-29 18:06:18,446 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3002, 위치: (141, 241), 상태: NORMAL
+2025-06-29 18:06:18,447 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반차량, rescue_level=0
+2025-06-29 18:06:18,447 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 일반차량
+2025-06-29 18:06:18,451 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3003, 크기: 50x50
+2025-06-29 18:06:18,452 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3003, 위치: (241, 241), 상태: NORMAL
+2025-06-29 18:06:18,452 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=FOD, rescue_level=0
+2025-06-29 18:06:18,452 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: FOD
+2025-06-29 18:06:21,904 - ATC_GUI - DEBUG - 마커 선택 성공: ID 3002
+2025-06-29 18:09:19,063 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 18:09:19,063 - ATC_GUI - DEBUG - 모든 마커 제거 완료
+2025-06-29 18:09:19,069 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1001, 크기: 50x50
+2025-06-29 18:09:19,070 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1001, 위치: (41, 108), 상태: NORMAL
+2025-06-29 18:09:19,071 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=0
+2025-06-29 18:09:19,071 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1001, rescue_level=0
+2025-06-29 18:09:19,071 - ATC_GUI - DEBUG - 위험도가 0이므로 게이지바 미생성: ID=1001
+2025-06-29 18:09:19,072 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1002, 크기: 50x50
+2025-06-29 18:09:19,072 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1002, 위치: (141, 108), 상태: NORMAL
+2025-06-29 18:09:19,073 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=3
+2025-06-29 18:09:19,073 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1002, rescue_level=3
+2025-06-29 18:09:19,073 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=1002, rescue_level=3
+2025-06-29 18:09:19,080 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=1002, 위치=(144, 55)
+2025-06-29 18:09:19,086 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2001, 크기: 50x50
+2025-06-29 18:09:19,087 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2001, 위치: (241, 108), 상태: NORMAL
+2025-06-29 18:09:19,087 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=7
+2025-06-29 18:09:19,087 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2001, rescue_level=7
+2025-06-29 18:09:19,087 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2001, rescue_level=7
+2025-06-29 18:09:19,088 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2001, 위치=(244, 55)
+2025-06-29 18:09:19,090 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2002, 크기: 50x50
+2025-06-29 18:09:19,091 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2002, 위치: (341, 108), 상태: NORMAL
+2025-06-29 18:09:19,091 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=10
+2025-06-29 18:09:19,091 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2002, rescue_level=10
+2025-06-29 18:09:19,091 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2002, rescue_level=10
+2025-06-29 18:09:19,092 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2002, 위치=(344, 55)
+2025-06-29 18:09:19,096 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3001, 크기: 50x50
+2025-06-29 18:09:19,097 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3001, 위치: (41, 241), 상태: NORMAL
+2025-06-29 18:09:19,097 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=조류, rescue_level=0
+2025-06-29 18:09:19,097 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 조류
+2025-06-29 18:09:19,101 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3002, 크기: 50x50
+2025-06-29 18:09:19,101 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3002, 위치: (141, 241), 상태: NORMAL
+2025-06-29 18:09:19,101 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반차량, rescue_level=0
+2025-06-29 18:09:19,101 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 일반차량
+2025-06-29 18:09:19,105 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3003, 크기: 50x50
+2025-06-29 18:09:19,105 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3003, 위치: (241, 241), 상태: NORMAL
+2025-06-29 18:09:19,106 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=FOD, rescue_level=0
+2025-06-29 18:09:19,106 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: FOD
+2025-06-29 18:11:19,141 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 18:11:19,141 - ATC_GUI - DEBUG - 모든 마커 제거 완료
+2025-06-29 18:11:19,147 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1001, 크기: 50x50
+2025-06-29 18:11:19,147 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1001, 위치: (41, 108), 상태: NORMAL
+2025-06-29 18:11:19,149 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=0
+2025-06-29 18:11:19,149 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1001, rescue_level=0
+2025-06-29 18:11:19,149 - ATC_GUI - DEBUG - 위험도가 0이므로 게이지바 미생성: ID=1001
+2025-06-29 18:11:19,150 - ATC_GUI - DEBUG - 마커 설정 완료: ID 1002, 크기: 50x50
+2025-06-29 18:11:19,150 - ATC_GUI - DEBUG - 마커 추가 성공: ID 1002, 위치: (141, 108), 상태: NORMAL
+2025-06-29 18:11:19,151 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반인, rescue_level=3
+2025-06-29 18:11:19,151 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=1002, rescue_level=3
+2025-06-29 18:11:19,151 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=1002, rescue_level=3
+2025-06-29 18:11:19,157 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=1002, 위치=(144, 55)
+2025-06-29 18:11:19,164 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2001, 크기: 50x50
+2025-06-29 18:11:19,165 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2001, 위치: (241, 108), 상태: NORMAL
+2025-06-29 18:11:19,165 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=7
+2025-06-29 18:11:19,166 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2001, rescue_level=7
+2025-06-29 18:11:19,166 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2001, rescue_level=7
+2025-06-29 18:11:19,166 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2001, 위치=(244, 55)
+2025-06-29 18:11:19,167 - ATC_GUI - DEBUG - 마커 설정 완료: ID 2002, 크기: 50x50
+2025-06-29 18:11:19,168 - ATC_GUI - DEBUG - 마커 추가 성공: ID 2002, 위치: (341, 108), 상태: NORMAL
+2025-06-29 18:11:19,168 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=작업자, rescue_level=10
+2025-06-29 18:11:19,168 - ATC_GUI - DEBUG - PERSON/WORK_PERSON 객체 발견: ID=2002, rescue_level=10
+2025-06-29 18:11:19,168 - ATC_GUI - DEBUG - 위험도 게이지바 생성 시작: ID=2002, rescue_level=10
+2025-06-29 18:11:19,169 - ATC_GUI - DEBUG - 위험도 게이지바 생성 완료: ID=2002, 위치=(344, 55)
+2025-06-29 18:11:19,174 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3001, 크기: 50x50
+2025-06-29 18:11:19,175 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3001, 위치: (41, 241), 상태: NORMAL
+2025-06-29 18:11:19,176 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=조류, rescue_level=0
+2025-06-29 18:11:19,176 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 조류
+2025-06-29 18:11:19,180 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3002, 크기: 50x50
+2025-06-29 18:11:19,181 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3002, 위치: (141, 241), 상태: NORMAL
+2025-06-29 18:11:19,181 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=일반차량, rescue_level=0
+2025-06-29 18:11:19,181 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: 일반차량
+2025-06-29 18:11:19,185 - ATC_GUI - DEBUG - 마커 설정 완료: ID 3003, 크기: 50x50
+2025-06-29 18:11:19,185 - ATC_GUI - DEBUG - 마커 추가 성공: ID 3003, 위치: (241, 241), 상태: NORMAL
+2025-06-29 18:11:19,185 - ATC_GUI - DEBUG - 위험도 게이지바 체크: object_type=FOD, rescue_level=0
+2025-06-29 18:11:19,185 - ATC_GUI - DEBUG - PERSON/WORK_PERSON이 아닌 객체: FOD
+2025-06-29 18:17:11,491 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 18:17:11,561 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 18:17:11,573 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 18:17:11,601 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 18:17:11,602 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 18:17:13,615 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 18:17:13,616 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 18:17:19,733 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 18:17:26,545 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 3, 'GRASS_A_level': 1, 'GRASS_B_level': 3}
+2025-06-29 18:17:26,545 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: GRASS B = 레벨 3
+2025-06-29 18:17:26,546 - ATC_GUI - INFO - 출입등급 변경으로 인한 최초 감지 기록 초기화: GRASS B = 레벨 3
+2025-06-29 18:17:58,903 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 18:17:58,974 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 18:17:58,986 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 18:17:59,011 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 18:17:59,013 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 18:18:00,215 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 18:18:00,216 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 18:18:03,412 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 3, 'GRASS_A_level': 2, 'GRASS_B_level': 1}
+2025-06-29 18:18:03,413 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: GRASS A = 레벨 2
+2025-06-29 18:18:03,413 - ATC_GUI - INFO - 출입등급 변경으로 인한 최초 감지 기록 초기화: GRASS A = 레벨 2
+2025-06-29 18:18:06,420 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 3, 'GRASS_A_level': 3, 'GRASS_B_level': 1}
+2025-06-29 18:18:06,420 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: GRASS A = 레벨 3
+2025-06-29 18:18:06,420 - ATC_GUI - INFO - 출입등급 변경으로 인한 최초 감지 기록 초기화: GRASS A = 레벨 3
+2025-06-29 18:18:06,913 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 18:18:23,990 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 18:18:24,066 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 18:18:24,078 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 18:18:24,106 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 18:18:24,108 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 18:18:25,143 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 18:18:25,144 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 18:18:35,578 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 18:18:35,647 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 18:18:35,659 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 18:18:35,681 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 18:18:35,682 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 18:18:37,082 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 18:18:37,083 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 18:18:42,884 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 3, 'GRASS_A_level': 2, 'GRASS_B_level': 1}
+2025-06-29 18:18:42,885 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: GRASS A = 레벨 2
+2025-06-29 18:18:42,885 - ATC_GUI - INFO - 출입등급 변경으로 인한 최초 감지 기록 초기화: GRASS A = 레벨 2
+2025-06-29 18:18:43,733 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 18:21:13,540 - ATC_GUI - INFO - FALCON 시작
+2025-06-29 18:21:13,613 - ATC_GUI - DEBUG - 지도 이미지 업데이트 완료: 925x720
+2025-06-29 18:21:13,632 - ATC_GUI - INFO - 배경 이미지 설정 완료
+2025-06-29 18:21:13,657 - ATC_GUI - INFO - 모든 로그 시그널 연결 완료
+2025-06-29 18:21:13,659 - ATC_GUI - INFO - TCP 연결 시도 중...
+2025-06-29 18:21:16,324 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 18:21:16,325 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 18:21:21,733 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 1회)
+2025-06-29 18:21:28,370 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 3, 'GRASS_A_level': 2, 'GRASS_B_level': 1}
+2025-06-29 18:21:28,370 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: GRASS A = 레벨 2
+2025-06-29 18:21:28,371 - ATC_GUI - INFO - 출입등급 변경으로 인한 최초 감지 기록 초기화: GRASS A = 레벨 2
+2025-06-29 18:21:32,288 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 3, 'GRASS_A_level': 3, 'GRASS_B_level': 1}
+2025-06-29 18:21:32,288 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: GRASS A = 레벨 3
+2025-06-29 18:21:32,288 - ATC_GUI - INFO - 출입등급 변경으로 인한 최초 감지 기록 초기화: GRASS A = 레벨 3
+2025-06-29 18:21:52,978 - ATC_GUI - INFO - Log 탭 전환
+2025-06-29 18:21:53,733 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 5회)
+2025-06-29 18:22:08,018 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 18:22:08,018 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 18:22:32,314 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: {'TWY_A_level': 2, 'TWY_B_level': 2, 'TWY_C_level': 2, 'TWY_D_level': 2, 'RWY_A_level': 3, 'RWY_B_level': 3, 'GRASS_A_level': 3, 'GRASS_B_level': 1}
+2025-06-29 18:22:32,314 - ATC_GUI - INFO - 출입 제어 설정 업데이트 요청: RWY A = 레벨 3
+2025-06-29 18:22:32,315 - ATC_GUI - INFO - 출입등급 변경으로 인한 최초 감지 기록 초기화: RWY A = 레벨 3
+2025-06-29 18:22:33,733 - ATC_GUI - INFO - TCP 재연결 시도 중... (시도 10회)
+2025-06-29 18:22:34,654 - ATC_GUI - INFO - Log 탭 전환
+2025-06-29 18:22:37,221 - ATC_GUI - INFO - Access 탭 전환
+2025-06-29 18:22:37,222 - ATC_GUI - INFO - 출입 제어 설정 요청
+2025-06-29 18:22:38,026 - ATC_GUI - INFO - Log 탭 전환
