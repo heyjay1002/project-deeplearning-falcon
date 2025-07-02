@@ -58,7 +58,7 @@
 ### 🧑‍💼 김종명 [`@jongbob1918`](https://github.com/jongbob1918)
 - 프로젝트 총괄  
 - 프로젝트 문서 관리  
-- IDS 서버 구축  
+- 지상 감지 AI 서버 구축  
 - 지상 객체 탐지를 위한 딥러닝 모델 기술조사 및 제작
 
 ### 🧑‍💼 김지연 [`@heyjay1002`](https://github.com/heyjay1002)
