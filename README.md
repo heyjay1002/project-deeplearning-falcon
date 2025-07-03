@@ -77,41 +77,18 @@ FALCON 프로젝트는 공항 내에서 발생 가능한 다양한 **지상·공
 
 ---
 
-## 🧩 FALCON의 핵심 기능
-
-![core_features](link)
-
-### 👩‍✈️ 관제사 기능
-- **지상 위험 탐지**: 조류, FOD, 일반인 등 위험요소 실시간 감지 및 알림  
-- **지상 쓰러짐 감지**: 작업자/일반인의 쓰러짐 판단 및 위험도 시각화  
-- **지상 출입 통제**: 구역별 출입 등급 설정 및 출입 위반 자동 감지
-
-### 👨‍✈️ 조종사 기능
-- **운항 위험 경보**: 영상 분석 기반 위험요소 탐지 및 TTS 음성 경고  
-- **위험도 질의 자동응답**: 음성 질의에 대한 실시간 LLM 응답  
-- **지상 유도 보조**: 유도사 수신호 인식 → 방향 지시 음성 보조 제공
-
----
-
-# 시스템 설계
-
-## 시스템 아키텍처
-![system_architecture](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/software_architecture.png?raw=true)
-
-## ER 다이어그램
-![er_diagram](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/er_diagram.png?raw=true)
-
----
-
 # 🔧 주요 기능
 
 FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다양한 위험요소에 능동적으로 대응하는 기능을 제공한다.
+
+![core_features](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/core_features.png?raw=true)
 
 ---
 
 ### 🛫 관제사 AI 서비스: **Hawkeye**
 > 지상에서 발생하는 다양한 위험요소를 실시간으로 감지하고, GUI를 통해 시각적 피드백 및 출입 통제를 자동화함으로써 관제 업무를 보조한다.
-![hawkeye_features](link)
+
+![hawkeye_features](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/hawkeye_features.png?raw=true)
 
 - **지상 위험요소 탐지**
   - CCTV 기반 영상 분석
@@ -132,7 +109,8 @@ FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다
 
 ### ✈️ 조종사 AI 서비스: **RedWing**
 > 조종사의 인지 부담을 줄이고, 지상 유도 및 위험 판단을 자동화하여 더 안전한 운항 결정을 돕는 인터페이스를 제공한다.
-![redwing_features](link)
+
+![redwing_features](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/redwing_features.png?raw=true)
 
 - **운항 위험 경보**
   - 조류 충돌, 활주로 위험요소 등을 실시간 TTS로 경고
@@ -141,10 +119,15 @@ FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다
 - **위험도 질의 자동응답**
   - 음성 질의(STT) → LLM 분류 → 음성 응답(TTS)
   - 예: “Runway Alpha status?” → “Runway Alpha is CLEAR.”
+ 
+[▶️ request_demo.mp4 재생](https://raw.githubusercontent.com/addinedu-ros-9th/deeplearning-repo-2/main/assets/videos/request_demo.mp4)
 
 - **지상 유도 보조**
   - CCTV 영상 내 유도사 수신호(정지, 전진, 좌우회전 등) 인식
   - 수신호 분석 결과를 조종사에게 음성 안내로 전달
+
+[▶️ marshal_demo.mp4 재생](https://raw.githubusercontent.com/addinedu-ros-9th/deeplearning-repo-2/main/assets/videos/marshal_demo.mp4)
+
 
 ---
 
@@ -179,6 +162,16 @@ FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다
   - Blender로 포즈 합성 이미지 683장 생성
   - YOLOv8n-pose 모델 학습
   - 쓰러짐 감지 성능 향상 확인
+
+---
+
+# 시스템 설계
+
+## 시스템 아키텍처
+![system_architecture](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/software_architecture.png?raw=true)
+
+## ER 다이어그램
+![er_diagram](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/er_diagram.png?raw=true)
 
 ---
 
