@@ -90,7 +90,7 @@
   - [영상 보기](https://youtu.be/sB_zEFfP7kI)
  
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/dynamic_pose.gif?raw=true" width="90%">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/dynamic_pose.gif?raw=true" width="60%">
 </p>
 
 ---
@@ -104,7 +104,7 @@
   - 조류 이동 경로, 항공기 이륙/착륙 경로 시나리오 생성
 
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/runwaysim.gif?raw=true" width="90%">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/runwaysim.gif?raw=true" width="60%">
 </p>
 
 - **실시간 위험도 시뮬레이션**:
@@ -112,7 +112,7 @@
   - 항공기와의 상대 거리, 속도를 분석하여 **충돌 확률 수치화**
 
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bird_sim.gif?raw=true" width="90%">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bird_sim.gif?raw=true" width="60%">
 </p>
 
 ## 2) 객체 탐지 (Object Detection)
@@ -150,7 +150,7 @@
 </table>
 
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/blender.gif?raw=true" width="90%">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/blender.gif?raw=true" width="60%">
 </p>
 
 - **모델 아키텍처 및 학습 설정**:
@@ -217,7 +217,7 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
   - 이를 활용해 삼각측량 및 트래킹 기술을 활용한 조류 충돌 실시간 위험도 산출 기능 구현이 실제로 가능할 것으로 판단하였음.
 
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bds_muan.png?raw=true" width="90%">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bds_muan.png?raw=true" width="60%">
 </p>
 
 - **🌐 시뮬레이션 환경 구성**
@@ -226,7 +226,7 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
   - 항공기는 베지어 곡선 기반 경로로 이동하며 다중 비행 지원
 
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bird_sim.gif?raw=true" width="90%">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bird_sim.gif?raw=true" width="60%">
 </p>
 
 - **🛰️ CCTV 기반 위치 추정 (Triangulation)**
@@ -246,7 +246,7 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
   - GUI 및 음성 인터페이스를 통해 조종사/관제사에게 실시간 경고 전달
 
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bds_result.gif?raw=true" width="90%">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bds_result.gif?raw=true" width="60%">
 </p>
 
 
