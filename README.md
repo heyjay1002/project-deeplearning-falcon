@@ -3,10 +3,9 @@
 # FALCON: 딥러닝 기반 항공 운항 안전 서비스
 > Foreign object Auto-detection & Localization Camera Observation Network
 
-[발표자료 보기](https://docs.google.com/presentation/d/1z73na_gwi2OX0oAGJ8FHGI7qYufhDPk5QCgtm7bIQoM/edit?usp=sharing)
+[발표자료 보기](https://docs.google.com/presentation/d/1z73na_gwi2OX0oAGJ8FHGI7qYufhDPk5QCgtm7bIQoM/edit?usp=sharing)<br>
+[감시 기능 테스트](https://youtu.be/IStV5IDaaLw)
 
-
-[시현영상](https://youtu.be/IStV5IDaaLw)
 ---
 
 # 📚 목차
