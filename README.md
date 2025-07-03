@@ -10,8 +10,8 @@
 # 📚 목차
 
 - [프로젝트 개요](#🚀-프로젝트-개요)
-- [주요기능](#🔧-주요-기능)
-- [핵십기술](#🧠-핵심-기술)
+- [주요 기능](#🔧-주요-기능)
+- [핵심 기술](#🧠-핵심-기술)
 1. A
 2. B
 3. C
@@ -21,17 +21,16 @@
 
 ---
 
-## 🚀 프로젝트 개요
+# 🚀 1. 프로젝트 개요
 
 국내외 공항에서는 **조류 충돌**, **FOD 사고**, **활주로 오진입** 등 중대 사고가 **반복적으로 발생**하고 있습니다.  
 이는 관제사·조종사의 **인지 부담**, 감지 장비의 **한계**, 정보 전달 지연 등 복합적인 요인에 기인합니다.
 
-> 대표 사례:
-> - 무안공항 조류충돌 (2024) – *감지 시스템 부재*
-> - 콩코드 FOD 사고 (2000) – *이물질 미제거*
-> - 오스틴 활주로 오진입 (2023) – *관제 실수 + 인지 오류*
-
-이러한 문제를 해결하기 위해 개발된 **FALCON 시스템**은 다음과 같은 핵심 가치를 제공합니다:
+| 사례 | 발생 연도 | 원인 요약 |
+|------|------------|----------------|
+| 무안공항 조류충돌 | 2024 | 감지 시스템 부재 |
+| 콩코드 FOD 사고 | 2000 | 이물질 미제거 |
+| 오스틴 활주로 오진입 | 2023 | 관제 실수 + 인지 오류 |
 
 ---
 
@@ -47,9 +46,9 @@
   위험 정보를 **GUI/TTS**로 자동 제공해 **반응 속도 향상**
 ---
 
-# 🔧 주요 기능
+# 🔧 2. 주요 기능
 
-### 🛫 관제사 AI 서비스: `Hawkeye`
+## 🛫 관제사 AI 서비스: `Hawkeye`
 
 - **지상 위험요소 탐지**
   - CCTV 기반 영상 분석
@@ -71,7 +70,7 @@
 
 ---
 
-### ✈️ 조종사 AI 서비스: `RedWing`
+## ✈️ 조종사 AI 서비스: `RedWing`
 
 - **운항 위험 경보**
   - 조류 충돌, 활주로 위험요소 등을 실시간 TTS로 경고
@@ -94,9 +93,9 @@
 
 ---
 
-## 🧠 핵심 기술
+# 🧠 3. 핵심 기술
 
-### 1) 시뮬레이션 기반 위험 예측
+## 1) 시뮬레이션 기반 위험 예측
 
 - **Unity 기반 공항 환경 시뮬레이터 구성**:
   - 실제 활주로 및 주변 환경 모델링
@@ -114,10 +113,10 @@
   <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bird_sim.gif?raw=true" width="90%">
 </p>
 
-### 2) 객체 탐지 (Object Detection)
+## 2) 객체 탐지 (Object Detection)
 공항 환경에서 발생할 수 있는 다양한 위험요소를 **지상(Ground)** 과 **상공(Aerial)** 영역으로 구분하여 탐지하는 이중 구조로 설계되었습니다.
 
-#### 🧱 지상 객체 감지 (Ground Object Detection)
+### 🧱 지상 객체 감지 (Ground Object Detection)
 
 - **탐지 클래스**: 조류, FOD, 사람, 야생동물, 항공기, 차량 (총 6종)
 
@@ -176,7 +175,7 @@
   - YOLOv11-seg 기반 초기 모델 대비 약 50% 경량화 및 속도 개선
   - Negative Sample 학습을 통해 ArUco 마커 오인식 문제 해결
 
-#### 🛩️ 상공 객체 감지 (Aerial Object Detection)
+### 🛩️ 상공 객체 감지 (Aerial Object Detection)
 
 조류 등 **공중 위험요소**를 실시간으로 탐지하기 위해 YOLOv8 기반으로 개발된 특화 모델.  
 FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경보** 기능을 수행한다.
@@ -196,9 +195,9 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
 
 ---
 
-### 3) 객체 추적 (Object Tracking)
+## 3) 객체 추적 (Object Tracking)
 
-#### (1) 지상 객체 추적:
+### (1) 지상 객체 추적:
   - `ByteTrack` 알고리즘 사용 (Ultralytics 내장)
   - `Low Score Detection` + `Kalman Filter` 기반 예측
   - 실시간성과 정확성 우수
@@ -207,7 +206,7 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
   <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/byte_track.gif?raw=true" width="50%">
 </p>
 
-#### (2) 공중 객체 추적 (Aerial Object Tracking)
+### (2) 공중 객체 추적 (Aerial Object Tracking)
 
 조류 충돌과 같은 공중 위험을 예측하고 대응하기 위해, FALCON은 **삼각측량 기반 위치 추정**, **ByteTrack 기반 객체 추적**, 그리고 **Unity 시뮬레이터 기반 위험도 계산** 기술을 통합하여 다음과 같은 시스템을 구현하였다.
 
@@ -256,16 +255,16 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
 
 ---
 
-### 4) 자세 감지 (Pose Estimation)
+## 4) 자세 감지 (Pose Estimation)
 
 지상 유도사의 제스처를 정확하게 인식하기 위해 정적 및 동적 자세 감지 기술을 결합하여 적용하였다.
 
-#### (1) 정적 자세 감지
+### (1) 정적 자세 감지
 - `YOLOv8n-pose` 기반으로 17개 Keypoint 추출
 - Blender 기반 합성 데이터(683장) + 실제 촬영 데이터로 학습
 - Keypoint 기울기 분석을 통해 쓰러짐 판단 가능
 
-#### (2) 동적 자세 감지
+### (2) 동적 자세 감지
 
 - **모델 구조**:
   - Temporal Convolutional Network (TCN)
@@ -292,7 +291,7 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
 
 ---
 
-### 5) 좌표계 변환 (Coordinate Mapping)
+## 5) 좌표계 변환 (Coordinate Mapping)
 
 <p align="center">
   <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
@@ -309,7 +308,7 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
 
 ---
 
-## 🧪 기술적 문제 및 해결
+# 🧪 4. 기술적 문제 및 해결
 
 ### 📉 YOLO 정확도 저하
 
@@ -338,7 +337,7 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
 
 ---
 
-# 시스템 설계
+# 5. 시스템 설계
 
 ## 시스템 아키텍처
 ![system_architecture](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/software_architecture.png?raw=true)
@@ -348,7 +347,7 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
 
 ---
 
-## 폴더 구조 요약
+# 6. 프로젝트 구조
 
 ```
 FALCON/
@@ -382,7 +381,7 @@ FALCON/
 
 ---
 
-## 🛠️ 기술 스택
+# 🛠️ 7. 기술 스택
 
 | 분류 | 사용 기술 |
 |------|-----------|
@@ -397,7 +396,7 @@ FALCON/
 
 ---
 
-## 👥 팀 구성
+## 👥 8. 팀 구성
 
 ### 🧑‍💼 김종명 [`@jongbob1918`](https://github.com/jongbob1918)
 - 프로젝트 총괄  
@@ -424,9 +423,5 @@ FALCON/
 - 지상 객체 및 조류 탐지를 위한 딥러닝 모델 제작  
 - 조종사 음성 인터페이스 및 LLM 연동 기능 구현  
 - 파일럿 AI 서비스 전체 기능 설계 및 구현
-
----
-
-## 📋 일정 관리
 
 
