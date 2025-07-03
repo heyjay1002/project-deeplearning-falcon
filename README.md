@@ -258,12 +258,6 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
   <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bds_result.gif?raw=true" width="60%">
 </p>
 
-
-
-
-
-> 관제사와 조종사가 실시간으로 변하는 공중 위험에 대응할 수 있도록 선제적 경고 체계를 제공하는 것이 본 기술의 핵심 가치이다.
-
 ---
 
 ## 4) 자세 감지 (Pose Estimation)
@@ -411,6 +405,10 @@ FALCON/
 ---
 
 # 8. 프로젝트 일정 관리
+
+Confluence와 Jira를 이용해 전체 일정을 관리하였습니다.
+세부 업무 분배, 기능 개발 진척도, 이슈 트래킹 등을 시각적으로 체계화하여 효율적인 협업 환경을 조성하였습니다.
+
 <p align="center">
   <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/Jjra_manage.gif?raw=true" width="100%">
 </p>
