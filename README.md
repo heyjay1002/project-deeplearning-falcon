@@ -336,18 +336,18 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
 </p>
 
 ### 🧍‍♂️ Pose Keypoint 인식 오류
-
-<p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/old_poseㅐ.png?raw=true" width="40%">,
-    <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pose.png?raw=true" width="40%">,
-</p>
-
-
 - 문제: 사람 모형이 눕거나 뒤집힌 상태에서 keypoint 인식률 저하
 - 해결:
   - Blender로 포즈 합성 이미지 683장 생성
   - YOLOv8n-pose 모델 학습
   - 쓰러짐 감지 성능 향상 확인
+ 
+  
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/old_poseㅐ.png?raw=true" width="40%">,
+    <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pose.png?raw=true" width="40%">,
+</p>
+
 
 ---
 
