@@ -1,11 +1,16 @@
 ![Banner](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/banner.png?raw=true)
 
-# FALCON: 딥러닝 기반 항공 운항 안전 서비스
-> Foreign object Auto-detection & Localization Camera Observation Network
-
-[발표자료](https://docs.google.com/presentation/d/1z73na_gwi2OX0oAGJ8FHGI7qYufhDPk5QCgtm7bIQoM/edit?usp=sharing)
-
----
+<p align="center">
+  <a href="https://www.apache.org/licenses/LICENSE-2.0">
+    <img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=for-the-badge" alt="License">
+  </a>
+  <a href="https://docs.google.com/presentation/d/1z73na_gwi2OX0oAGJ8FHGI7qYufhDPk5QCgtm7bIQoM/edit?usp=sharing">
+    <img src="https://img.shields.io/badge/PRESENTATION-GoogleSlides-yellow?style=for-the-badge&logo=google-slides&logoColor=white" alt="발표자료">
+  </a>
+  <a href="https://youtu.be/-si0u8I1h2A">
+    <img src="https://img.shields.io/badge/DEMO-YouTube-red?style=for-the-badge&logo=youtube&logoColor=white" alt="RedWing 영상">
+  </a>
+</p>
 
 # 📚 목차
 
