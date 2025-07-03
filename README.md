@@ -3,22 +3,27 @@
 # FALCON: 딥러닝 기반 항공 운항 안전 서비스
 > Foreign object Auto-detection & Localization Camera Observation Network
 
-[발표자료 보기](https://docs.google.com/presentation/d/1z73na_gwi2OX0oAGJ8FHGI7qYufhDPk5QCgtm7bIQoM/edit?usp=sharing)<br>
-[감시 기능 테스트](https://youtu.be/IStV5IDaaLw)
+[발표자료](https://docs.google.com/presentation/d/1z73na_gwi2OX0oAGJ8FHGI7qYufhDPk5QCgtm7bIQoM/edit?usp=sharing)
 
 ---
 
 # 📚 목차
 
-- [프로젝트 개요](#🚀-프로젝트-개요)
-- [주요 기능](#🔧-주요-기능)
-- [핵심 기술](#🧠-핵심-기술)
-1. A
-2. B
-3. C
-4. D
-5. E
-6. F
+1. [🚀 프로젝트 개요](#🚀-1-프로젝트-개요)
+2. [🔧 주요 기능](#🔧-2-주요-기능)
+3. [🧠 핵심 기술](#🧠-3-핵심-기술)  
+   3.1 [시뮬레이션 기반 위험 예측](#1-시뮬레이션-기반-위험-예측)  
+   3.2 [객체 탐지 (Object Detection)](#2-객체-탐지-object-detection)  
+   3.3 [객체 추적 (Object Tracking)](#3-객체-추적-object-tracking)  
+   3.4 [자세 감지 (Pose Estimation)](#4-자세-감지-pose-estimation)  
+   3.5 [좌표계 변환 (Coordinate Mapping)](#5-좌표계-변환-coordinate-mapping)
+4. [🧪 기술적 문제 및 해결](#🧪-4-기술적-문제-및-해결)
+5. [🧩 시스템 설계](#5-시스템-설계)
+6. [📁 프로젝트 구조](#6-프로젝트-구조)
+7. [🛠️ 기술 스택](#🛠️-7-기술-스택)
+8. [📅 프로젝트 일정 관리](#📅-8-프로젝트-일정-관리)
+9. [👥 팀 구성](#👥-8-팀-구성)
+
 
 ---
 
@@ -33,7 +38,7 @@
 | 콩코드 FOD 사고 | 2000 | 이물질 미제거 |
 | 오스틴 활주로 오진입 | 2023 | 관제 실수 + 인지 오류 |
 
----
+FALCON은 이러한 문제의식을 바탕으로, 항공 운항의 **안전성과 효율성**을 높이기 위한 **세 가지 핵심 가치를 제안합니다.**
 
 ## 💡 FALCON의 핵심 가치
 
@@ -77,6 +82,11 @@
 
 ## ✈️ 조종사 AI 서비스: `RedWing`
 
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/dynamic_pose.gif?raw=true" width="60%">
+</p>
+
+
 - **운항 위험 경보**
   - 조류 충돌, 활주로 위험요소 등을 실시간 TTS로 경고
   - 영상 분석 + 위험 판단 모델 연동
@@ -92,10 +102,6 @@
   - 수신호 분석 결과를 조종사에게 음성 안내로 전달
   - [영상 보기](https://youtu.be/sB_zEFfP7kI)
  
-<p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/dynamic_pose.gif?raw=true" width="60%">
-</p>
-
 ---
 
 # 🧠 3. 핵심 기술
@@ -318,10 +324,10 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
 ### 📉 YOLO 정확도 저하
 
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pr_curve_Image_seg_model.png?raw=true" width="40%">,
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/old_real_test.gif?raw=true" width="40%">,
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pr_curve_Real_box_model.png?raw=true" width="40%">,
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/real_test.gif?raw=true" width="40%">,
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pr_curve_Image_seg_model.png?raw=true" width="400" height="300">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/old_real_test.gif?raw=true" width="400" height="300"><br>
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pr_curve_Real_box_model.png?raw=true" width="400" height="300">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/real_test.gif?raw=true" width="400" height="300">
 </p>
 
 - 문제: 실사 기반 테스트 시 객체 탐지 정확도 낮음
@@ -404,7 +410,12 @@ FALCON/
 
 ---
 
-## 👥 8. 팀 구성
+# 📅 8. 프로젝트 일정 관리
+
+
+---
+
+# 👥 8. 팀 구성
 
 ### 🧑‍💼 김종명 [`@jongbob1918`](https://github.com/jongbob1918)
 - 프로젝트 총괄  
