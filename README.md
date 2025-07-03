@@ -412,7 +412,7 @@ FALCON/
 
 # 8. 프로젝트 일정 관리
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/Jjra_manage.gif?raw=true" width="40%">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/Jjra_manage.gif?raw=true" width="100%">
 </p>
 
 ---
