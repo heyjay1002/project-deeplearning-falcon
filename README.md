@@ -315,7 +315,10 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
 ### 📉 YOLO 정확도 저하
 
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pr_curve_Image_seg_model.png?raw=true" width="40%">,
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/old_real_test.gif?raw=true" width="40%">,
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pr_curve_Real_box_model.png?raw=true" width="40%">,
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/real_test.gif?raw=true" width="40%">,
 </p>
 
 - 문제: 실사 기반 테스트 시 객체 탐지 정확도 낮음
