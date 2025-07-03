@@ -119,16 +119,12 @@ FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다
 - **위험도 질의 자동응답**
   - 음성 질의(STT) → LLM 분류 → 음성 응답(TTS)
   - 예: “Runway Alpha status?” → “Runway Alpha is CLEAR.”
- 
-[▶️ request_demo.mp4 재생](https://raw.githubusercontent.com/addinedu-ros-9th/deeplearning-repo-2/main/assets/videos/request_demo.mp4)
+  - [영상 보기](https://youtu.be/VvQjRLMTrvU)
 
 - **지상 유도 보조**
   - CCTV 영상 내 유도사 수신호(정지, 전진, 좌우회전 등) 인식
   - 수신호 분석 결과를 조종사에게 음성 안내로 전달
-
-[▶️ marshal_demo.mp4 재생](https://raw.githubusercontent.com/addinedu-ros-9th/deeplearning-repo-2/main/assets/videos/marshal_demo.mp4)
-
-
+  - [영상 보기](https://youtu.be/sB_zEFfP7kI)
 ---
 
 # 🔧 핵심 기술
