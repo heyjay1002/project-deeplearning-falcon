@@ -366,14 +366,10 @@ FALCON/
 │   │   └── redwing/         # 조종사용 GUI
 │   │
 │   ├── infrastructure/      # 시스템 인프라
-│   │   ├── server/          # 서버 코드
-│   │   ├── network/         # 네트워크 통신
-│   │   └── database/        # 데이터베이스
+│   │   └── server/          # 서버 코드
 │   │
 │   ├── shared/              # 공통 모듈
-│   │   ├── utils/           # 유틸리티
-│   │   ├── models/          # AI 모델
-│   │   └── protocols/       # 통신 프로토콜
+│   │   └── utils/           # 유틸리티
 │   │
 │   └── tests/               # 테스트 코드
 │       └── technical_test/  # 기술 검증
