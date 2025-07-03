@@ -1,29 +1,33 @@
 ![Banner](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/banner.png?raw=true)
 
-# FALCON: 딥러닝 기반 항공 운항 안전 서비스
-> Foreign object Auto-detection & Localization Camera Observation Network
-
-[발표자료 보기](https://docs.google.com/presentation/d/1z73na_gwi2OX0oAGJ8FHGI7qYufhDPk5QCgtm7bIQoM/edit?usp=sharing)
-
-
-[시현영상](https://youtu.be/IStV5IDaaLw)
----
+<p align="center">
+  <a href="https://www.apache.org/licenses/LICENSE-2.0">
+    <img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg?style=for-the-badge" alt="License">
+  </a>
+  <a href="https://docs.google.com/presentation/d/1z73na_gwi2OX0oAGJ8FHGI7qYufhDPk5QCgtm7bIQoM/edit?usp=sharing">
+    <img src="https://img.shields.io/badge/PRESENTATION-GoogleSlides-yellow?style=for-the-badge&logo=google-slides&logoColor=white" alt="발표자료">
+  </a>
+  <a href="https://youtu.be/-si0u8I1h2A">
+    <img src="https://img.shields.io/badge/DEMO-YouTube-red?style=for-the-badge&logo=youtube&logoColor=white" alt="RedWing 영상">
+  </a>
+</p>
 
 # 📚 목차
 
-- [프로젝트 개요](#🚀-프로젝트-개요)
-- [주요 기능](#🔧-주요-기능)
-- [핵심 기술](#🧠-핵심-기술)
-1. A
-2. B
-3. C
-4. D
-5. E
-6. F
+- [1. 프로젝트 개요](#1-프로젝트-개요)
+- [2. 주요 기능](#2-주요-기능)
+- [3. 핵심 기술](#3-핵심-기술)  
+- [4. 기술적 문제 및 해결](#4-기술적-문제-및-해결)
+- [5. 시스템 설계](#5-시스템-설계)
+- [6. 프로젝트 구조](#6-프로젝트-구조)
+- [7. 기술 스택](#7-기술-스택)
+- [8. 일정 관리](#8-프로젝트-일정-관리)
+- [9. 팀 구성](#9-팀-구성)
+- [10. 라이선스](#10-라이선스)
 
 ---
 
-# 🚀 1. 프로젝트 개요
+# 1. 프로젝트 개요
 
 국내외 공항에서는 **조류 충돌**, **FOD 사고**, **활주로 오진입** 등 중대 사고가 **반복적으로 발생**하고 있습니다.  
 이는 관제사·조종사의 **인지 부담**, 감지 장비의 **한계**, 정보 전달 지연 등 복합적인 요인에 기인합니다.
@@ -34,7 +38,7 @@
 | 콩코드 FOD 사고 | 2000 | 이물질 미제거 |
 | 오스틴 활주로 오진입 | 2023 | 관제 실수 + 인지 오류 |
 
----
+FALCON은 이러한 문제의식을 바탕으로, 항공 운항의 **안전성과 효율성**을 높이기 위한 **세 가지 핵심 가치를 제안합니다.**
 
 ## 💡 FALCON의 핵심 가치
 
@@ -48,31 +52,40 @@
   위험 정보를 **GUI/TTS**로 자동 제공해 **반응 속도 향상**
 ---
 
-# 🔧 2. 주요 기능
+# 2. 주요 기능
 
 ## 🛫 관제사 AI 서비스: `Hawkeye`
+
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/hawkeye_mainpage.gif?raw=true" width="60%">
+</p>
 
 - **지상 위험요소 탐지**
   - CCTV 기반 영상 분석
   - 조류, FOD, 사람, 차량 등 탐지 시 GUI 팝업 및 지도 마커 표시
   - 위험도 상태 갱신 및 로그 생성
-  - [영상 보기](link)
+  - [영상 보기](https://youtu.be/lctXpBYrVsU)
 
 - **지상 쓰러짐 감지**
   - 일반인 / 작업자의 쓰러짐 상태 인식
   - 위험도 게이지 시각화 (예: 쓰러진 위치, 시간, 위험 수치)
   - 구조 필요성 판단을 위한 시각적 정보 제공
-  - [영상 보기](link)
+  - [영상 보기](https://youtu.be/jvWLBKryymM)
 
 - **지상 출입 통제**
   - 구역별 출입등급 설정 (1~3단계)
   - 출입 위반 시 자동 감지 및 알림
   - 출입 조건 변경 시 실시간 GUI 반영
-  - [영상 보기](link)
+  - [영상 보기](https://youtu.be/5NFzvtAFr_I)
 
 ---
 
 ## ✈️ 조종사 AI 서비스: `RedWing`
+
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/dynamic_pose.gif?raw=true" width="60%">
+</p>
+
 
 - **운항 위험 경보**
   - 조류 충돌, 활주로 위험요소 등을 실시간 TTS로 경고
@@ -89,13 +102,9 @@
   - 수신호 분석 결과를 조종사에게 음성 안내로 전달
   - [영상 보기](https://youtu.be/sB_zEFfP7kI)
  
-<p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/dynamic_pose.gif?raw=true" width="60%">
-</p>
-
 ---
 
-# 🧠 3. 핵심 기술
+# 3. 핵심 기술
 
 ## 1) 시뮬레이션 기반 위험 예측
 
@@ -310,12 +319,15 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
 
 ---
 
-# 🧪 4. 기술적 문제 및 해결
+# 4. 기술적 문제 및 해결
 
 ### 📉 YOLO 정확도 저하
 
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pr_curve_Image_seg_model.png?raw=true" width="400" height="300">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/old_real_test.gif?raw=true" width="400" height="300"><br>
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pr_curve_Real_box_model.png?raw=true" width="400" height="300">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/real_test.gif?raw=true" width="400" height="300">
 </p>
 
 - 문제: 실사 기반 테스트 시 객체 탐지 정확도 낮음
@@ -383,7 +395,7 @@ FALCON/
 
 ---
 
-# 🛠️ 7. 기술 스택
+# 7. 기술 스택
 
 | 분류 | 사용 기술 |
 |------|-----------|
@@ -398,7 +410,13 @@ FALCON/
 
 ---
 
-## 👥 8. 팀 구성
+# 8. 프로젝트 일정 관리
+
+(추가 예정)
+
+---
+
+# 9. 팀 구성
 
 ### 🧑‍💼 김종명 [`@jongbob1918`](https://github.com/jongbob1918)
 - 프로젝트 총괄  
@@ -426,4 +444,9 @@ FALCON/
 - 조종사 음성 인터페이스 및 LLM 연동 기능 구현  
 - 파일럿 AI 서비스 전체 기능 설계 및 구현
 
+---
 
+# 10. 라이선스
+
+이 프로젝트는 [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)에 따라 오픈소스로 제공됩니다.
+자세한 사항은 [`LICENSE`](./LICENSE) 파일을 참고해주세요.
