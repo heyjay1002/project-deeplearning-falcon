@@ -194,7 +194,8 @@ FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다
 ![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat&logo=numpy&logoColor=white)
 ![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=flat&logo=opencv&logoColor=white)
 ![YOLOv8](https://img.shields.io/badge/YOLOv8-FFB400?style=for-the-badge&logo=aim&logoColor=black)
-![TCN](https://img.shields.io/badge/TCN-005571?style=for-the-badge)
+![UDP](https://img.shields.io/badge/UDP-005571?style=for-the-badge&logo=wifi&logoColor=white)
+![TCP](https://img.shields.io/badge/TCP-004E89?style=for-the-badge&logo=networkx&logoColor=white)
 
 ### GUI
 ![PyQt6](https://img.shields.io/badge/PyQt6-41CD52?style=flat)
