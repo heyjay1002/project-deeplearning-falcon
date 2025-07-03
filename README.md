@@ -52,23 +52,27 @@
 
 ## 🛫 관제사 AI 서비스: `Hawkeye`
 
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/hawkeye_mainpage.gif?raw=true" width="60%">
+</p>
+
 - **지상 위험요소 탐지**
   - CCTV 기반 영상 분석
   - 조류, FOD, 사람, 차량 등 탐지 시 GUI 팝업 및 지도 마커 표시
   - 위험도 상태 갱신 및 로그 생성
-  - [영상 보기](link)
+  - [영상 보기](https://youtu.be/lctXpBYrVsU)
 
 - **지상 쓰러짐 감지**
   - 일반인 / 작업자의 쓰러짐 상태 인식
   - 위험도 게이지 시각화 (예: 쓰러진 위치, 시간, 위험 수치)
   - 구조 필요성 판단을 위한 시각적 정보 제공
-  - [영상 보기](link)
+  - [영상 보기](https://youtu.be/jvWLBKryymM)
 
 - **지상 출입 통제**
   - 구역별 출입등급 설정 (1~3단계)
   - 출입 위반 시 자동 감지 및 알림
   - 출입 조건 변경 시 실시간 GUI 반영
-  - [영상 보기](link)
+  - [영상 보기](https://youtu.be/5NFzvtAFr_I)
 
 ---
 
