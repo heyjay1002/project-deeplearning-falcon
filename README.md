@@ -344,8 +344,8 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
  
   
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/old_poseㅐ.png?raw=true" width="40%">,
-    <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pose.png?raw=true" width="40%">,
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/old_poseㅐ.png?raw=true" width="400" height="300">,
+    <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pose.png?raw=true" width="400" height="300">,
 </p>
 
 
