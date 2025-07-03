@@ -3,6 +3,8 @@
 # FALCON: 딥러닝 기반 항공 운항 안전 서비스
 > Foreign object Auto-detection & Localization Camera Observation Network
 
+[발표자료 보기](https://docs.google.com/presentation/d/1z73na_gwi2OX0oAGJ8FHGI7qYufhDPk5QCgtm7bIQoM/edit?usp=sharing)
+
 ---
 
 # 📚 목차
@@ -42,6 +44,10 @@
 
 ## ⚠️ 기존 시스템의 한계
 
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/background_1.png?raw=true" width="90%">
+</p>
+
 | **탐지 한계** | **판단 한계** |
 |---------------|----------------|
 | 관제사의 **육안 감시** 의존 → 시야각, 기상, 거리 제약 발생 | 관제사의 **인지 부하** → 다수 객체(항공기, 차량, 조류 등) 동시 판단 필요 |
@@ -49,22 +55,11 @@
 
 ---
 
-## 🎯 FALCON의 목표
-
-FALCON 프로젝트는 공항 내에서 발생 가능한 다양한 **지상·공중 위험요소를 실시간으로 탐지**하고, 그 의미를 분석하여 **판단을 보조**하며,  
-시각적 또는 음성적 방식으로 **정보 전달을 자동화**함으로써 관제사와 조종사의 인지 부하를 줄이고 **운항 안전성을 극대화**하는 것을 궁극적인 목표로 한다.
-
-이러한 목표 달성을 위해, FALCON은 다음과 같은 기술적 흐름으로 구성된다:
-
-1. **데이터 확보 및 증강**: 실사 기반 영상 및 3D 시뮬레이션 환경을 활용한 대규모 하이브리드 데이터셋 구축  
-2. **위험요소 인식**: 객체 탐지, 추적, 포즈 분석, 쓰러짐 판단 등 다양한 위험 상황 인식  
-3. **정확한 위치 해석**: ArUco 기반 좌표계 변환 및 CCTV 간 삼각측량을 통한 정밀 위치 매핑  
-4. **판단 보조 시스템**: TCN, LLM 기반의 수신호 및 위험 질의 해석  
-5. **정보 전달 최적화**: GUI 시각화, TTS 음성 출력 등으로 빠르고 정확한 대응 유도
-
----
-
 ## 💡 FALCON의 핵심 가치
+
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/value.png?raw=true" width="90%">
+</p>
 
 - **위험요소 탐지 자동화**  
   사람이 놓치는 위험요소를 실시간으로 감지하여 사각지대를 해소
@@ -81,14 +76,19 @@ FALCON 프로젝트는 공항 내에서 발생 가능한 다양한 **지상·공
 
 FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다양한 위험요소에 능동적으로 대응하는 기능을 제공한다.
 
-![core_features](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/core_features.png?raw=true)
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/core_features.png?raw=true" width="90%">
+</p>
+
 
 ---
 
 ### 🛫 관제사 AI 서비스: **Hawkeye**
 > 지상에서 발생하는 다양한 위험요소를 실시간으로 감지하고, GUI를 통해 시각적 피드백 및 출입 통제를 자동화함으로써 관제 업무를 보조한다.
 
-![hawkeye_features](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/hawkeye_features.png?raw=true)
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/hawkeye_features.png?raw=true" width="90%">
+</p>
 
 - **지상 위험요소 탐지**
   - CCTV 기반 영상 분석
@@ -110,7 +110,9 @@ FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다
 ### ✈️ 조종사 AI 서비스: **RedWing**
 > 조종사의 인지 부담을 줄이고, 지상 유도 및 위험 판단을 자동화하여 더 안전한 운항 결정을 돕는 인터페이스를 제공한다.
 
-![redwing_features](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/redwing_features.png?raw=true)
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/redwing_features.png?raw=true" width="90%">
+</p>
 
 - **운항 위험 경보**
   - 조류 충돌, 활주로 위험요소 등을 실시간 TTS로 경고
@@ -127,19 +129,140 @@ FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다
   - [영상 보기](https://youtu.be/sB_zEFfP7kI)
 ---
 
-# 🔧 핵심 기술
+## 🧠 핵심 기술
 
-### 1. 객체 탐지
-- hello
+> FALCON은 딥러닝 기반 객체 인식, 포즈 분석, 추적, 좌표 변환, 시뮬레이션 등 다양한 기술 요소들을 통합하여 공항 지상 안전을 실시간으로 관리한다.
 
-### 2. 객체 추적
-- hello
+---
 
-### 3. 자세 감지
-- hello
+### 1) 객체 탐지 (Object Detection)
 
-### 4. 좌표계 변환
-- hello
+FALCON은 공항 지상 환경에서의 위험요소를 자동 인식하기 위해 `YOLOv8` 계열 모델을 활용한 객체 탐지 시스템을 구축하였다.
+
+- **탐지 클래스**: 조류, FOD, 사람, 야생동물, 항공기, 차량 (총 6종)
+
+- **데이터셋 구성**:
+  - Unity 기반 시뮬레이션 이미지 + 실제 공항 모형 촬영 이미지로 구성된 Hybrid Dataset
+  - Polycam, Blender, Unity를 활용한 3D 스캔 기반 자동 라벨링 파이프라인 구축
+  - 다양한 조명/각도/환경 조건을 시뮬레이션하여 데이터 다양성 확보
+  - 1시간당 약 3,000장의 이미지와 라벨 자동 생성 가능
+
+- **모델 아키텍처 및 학습 설정**:
+  - YOLOv8n-box 사용 (960×960 해상도, 150 epoch, batch size 8)
+  - 데이터 분할: Train (69.4%) / Validation (20.9%) / Test (9.8%)
+
+- **후처리 기반 식별 기능**:
+  - OpenCV로 형광 조끼(HV 색상) 인식 → 작업자 여부 판단
+  - 차량 색상 기반 분류 → 일반 차량과 작업 차량 구분
+
+- **모델 성능 (v0.3 기준)**:
+  - mAP@0.5: **0.9902**
+  - mAP@0.5:0.95: **0.9005**
+  - Precision: **0.9928**
+  - Recall: **0.9672**
+
+- **주요 개선사항**:
+  - YOLOv11-seg 기반 초기 모델 대비 약 50% 경량화 및 속도 개선
+  - Negative Sample 학습을 통해 ArUco 마커 오인식 문제 해결
+
+---
+
+### 2) 객체 추적 (Object Tracking)
+
+- **지상 객체 추적**:
+  - `ByteTrack` 알고리즘 사용 (Ultralytics 내장)
+  - `Low Score Detection` + `Kalman Filter` 기반 예측
+  - 실시간성과 정확성 우수
+
+- **공중 객체 추적 (조류)**:
+  - **삼각측량 + ByteTrack** 결합
+  - 두 대의 CCTV 동기화 프레임 기반 2D 좌표 → 3D 공간 좌표 변환
+  - 조류 속도 및 위치를 기반으로 **실시간 충돌 위험도 계산**
+
+---
+
+### 3) 자세 감지 (Pose Estimation)
+
+지상 유도사의 제스처를 정확하게 인식하기 위해 정적 및 동적 자세 감지 기술을 결합하여 적용하였다.
+
+---
+
+#### 🔹 정적 자세 감지
+- `YOLOv8n-pose` 기반으로 17개 Keypoint 추출
+- Blender 기반 합성 데이터(683장) + 실제 촬영 데이터로 학습
+- Keypoint 기울기 분석을 통해 쓰러짐 판단 가능
+
+---
+
+#### 🔹 동적 자세 감지
+
+- **모델 구조**:
+  - Temporal Convolutional Network (TCN)
+  - 입력: 17개 관절의 x, y 좌표 (총 34개 feature), 30프레임 시퀀스
+  - 출력 클래스: `stop`, `forward`, `left`, `right` (총 4종)
+  - 채널 구성: [64, 64, 64, 64], kernel size=3, dropout=0.2
+
+- **학습 설정**:
+  - batch size=32, epoch=100, learning rate=0.001, optimizer=Adam
+  - loss: CrossEntropyLoss, early stopping (patience=15)
+
+- **데이터셋 구성**:
+  - 총 3,984개의 시퀀스 (train: 80%, test: 20%)
+  - MediaPipe 기반 17개 관절 좌표 사용
+  - 클래스별 균형 유지 (각 제스처 23~26%)
+
+- **성능 요약**:
+  - Accuracy: **98.99%**
+  - Precision: **99.00%**, Recall: **98.99%**, F1-Score: **98.99%**
+  - 평균 신뢰도: **98.62%**, 표준편차: 6.64%
+
+- **클래스별 성능 (테스트셋 기준)**:
+
+  | 제스처   | Precision | Recall | F1-Score |
+  |----------|-----------|--------|----------|
+  | Stop     | 98.55%    | 99.51% | 99.03%   |
+  | Forward  | 99.46%    | 97.87% | 98.66%   |
+  | Left     | 98.57%    | 99.52% | 99.04%   |
+  | Right    | 99.49%    | 98.98% | 99.23%   |
+
+- **오분류 분석**:
+  - 총 오분류 8건 (1.0% 오류율)
+  - 주요 혼동: `forward → stop`, `right → left`
+  - 오답 평균 신뢰도: 67.4%
+
+- **성과 요약**:
+  - 실시간 처리 가능 (30 FPS)
+  - 평균 AUC > 0.98 수준의 신뢰도 확보
+  - 전체 제스처 클래스에 대해 높은 정밀도 및 균형 있는 성능 유지
+
+- **향후 개선 방향**:
+  - 동일 소스 기반의 train/test 구성 → 일반화 성능 검증 필요
+  - forward ↔ stop 간 혼동 완화를 위한 데이터 보강 검토
+
+---
+
+### 4) 좌표계 변환 (Coordinate Mapping)
+
+- **ArUco 기반 실제 맵 좌표 변환**:
+  - OpenCV의 `perspectiveTransform()` 사용
+  - ArUco 마커 중심점의 픽셀 좌표 ↔ 실제 좌표로 매핑
+  - 오차 범위 ±5mm/픽셀 수준의 정밀도
+
+- **객체 중심 좌표 보정**:
+  - 감지된 객체의 Bounding Box 중심을 실시간 위치로 변환
+  - 구역 침범 여부, 출입 위반 판단 등에 활용
+
+---
+
+### 5) 시뮬레이션 기반 위험 예측
+
+- **Unity 기반 공항 환경 시뮬레이터 구성**:
+  - 실제 활주로 및 주변 환경 모델링
+  - 조류 이동 경로, 항공기 이륙/착륙 경로 시나리오 생성
+
+- **실시간 위험도 시뮬레이션**:
+  - CCTV 영상 기반 조류 위치 예측
+  - 항공기와의 상대 거리, 속도를 분석하여 **충돌 확률 수치화**
 
 ---
 
