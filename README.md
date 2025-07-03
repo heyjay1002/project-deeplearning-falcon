@@ -1,4 +1,4 @@
-![Banner](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/Assets/Images/Banner.png?raw=true)
+![Banner](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/Banner.png?raw=true)
 
 # FALCON: 딥러닝 기반 항공 운항 안전 서비스
 > Foreign object Auto-detection & Localization Camera Observation Network
