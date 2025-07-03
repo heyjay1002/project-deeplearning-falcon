@@ -173,15 +173,39 @@ FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다
 
 ## 폴더 구조 요약
 
-├── ai/           # 딥러닝 모델 및 감정 분석 관련 코드
-├── common/       # 공통 유틸리티 함수
-├── core/         # 챗봇 핵심 로직 (감정 처리, 의도 분석 등)
-├── db/           # 데이터베이스 초기화 및 연동 모듈
-├── interface/    # 사용자 인터페이스 관련 모듈
-├── views/        # PyQt5 기반 화면 구성 파일
-├── network/      # 네트워크/서버 통신 관련 모듈 (확장 대비)
-├── main.py       # 프로그램 실행 진입점
-
+```
+FALCON/
+├── src/
+│   ├── systems/              # 핵심 시스템
+│   │   ├── bds/             # Bird Detection System
+│   │   └── ids/             # Intrusion Detection System
+│   │
+│   ├── simulation/          # 시뮬레이션
+│   │   ├── bird_sim/        # 새 충돌 시뮬레이션
+│   │   └── runway_sim/      # 활주로 시뮬레이션
+│   │
+│   ├── interfaces/          # 사용자 인터페이스
+│   │   ├── hawkeye/         # 관제사용 GUI
+│   │   └── redwing/         # 조종사용 GUI
+│   │
+│   ├── infrastructure/      # 시스템 인프라
+│   │   ├── server/          # 서버 코드
+│   │   ├── network/         # 네트워크 통신
+│   │   └── database/        # 데이터베이스
+│   │
+│   ├── shared/              # 공통 모듈
+│   │   ├── utils/           # 유틸리티
+│   │   ├── models/          # AI 모델
+│   │   └── protocols/       # 통신 프로토콜
+│   │
+│   └── tests/               # 테스트 코드
+│       └── technical_test/  # 기술 검증
+│
+├── docs/                    # 문서
+├── assets/                  # 리소스
+├── tools/                   # 도구
+└── README.md               # 프로젝트 설명서
+```
 
 ---
 
