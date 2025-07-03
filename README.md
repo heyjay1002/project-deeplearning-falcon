@@ -185,17 +185,16 @@ FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다
 ## 🛠️ 기술 스택
 
 ### ML / DL
-![YOLOv8](https://img.shields.io/badge/YOLOv8-FFB400?style=flat&logo=yolo&logoColor=white)
 ![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white)
 ![ByteTrack](https://img.shields.io/badge/ByteTrack-272727?style=flat)
-![TCN](https://img.shields.io/badge/TCN-005571?style=flat)
 ![MediaPipe](https://img.shields.io/badge/MediaPipe-FF6F00?style=flat)
 ![Whisper](https://img.shields.io/badge/Whisper-9467BD?style=flat)
 ![Ollama](https://img.shields.io/badge/Ollama-333333?style=flat)
 ![Coqui](https://img.shields.io/badge/Coqui-FFD166?style=flat)
 ![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat&logo=numpy&logoColor=white)
 ![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=flat&logo=opencv&logoColor=white)
-
+![YOLOv8](https://img.shields.io/badge/YOLOv8-FFB400?style=for-the-badge)
+![TCN](https://img.shields.io/badge/TCN-005571?style=for-the-badge)
 
 ### GUI
 ![PyQt6](https://img.shields.io/badge/PyQt6-41CD52?style=flat)
