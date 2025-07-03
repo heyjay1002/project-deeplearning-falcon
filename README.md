@@ -296,7 +296,7 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
 ## 5) 좌표계 변환 (Coordinate Mapping)
 
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+  <img src="assets/images/output_trim.gif?raw=true" width="90%">
 </p>
 
 - **ArUco 기반 실제 맵 좌표 변환**:
