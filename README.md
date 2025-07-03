@@ -135,9 +135,34 @@ FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다
 
 ---
 
-### 1) 객체 탐지 (Object Detection)
+### 1) 시뮬레이션 기반 위험 예측
 
-FALCON은 공항 지상 환경에서의 위험요소를 자동 인식하기 위해 `YOLOv8` 계열 모델을 활용한 객체 탐지 시스템을 구축하였다.
+- **Unity 기반 공항 환경 시뮬레이터 구성**:
+  - 실제 활주로 및 주변 환경 모델링
+  - 조류 이동 경로, 항공기 이륙/착륙 경로 시나리오 생성
+
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+</p>
+
+- **실시간 위험도 시뮬레이션**:
+  - CCTV 영상 기반 조류 위치 예측
+  - 항공기와의 상대 거리, 속도를 분석하여 **충돌 확률 수치화**
+
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+</p>
+
+### 2) 객체 탐지 (Object Detection)
+
+FALCON의 객체 탐지 시스템은 공항 환경에서 발생할 수 있는 다양한 위험요소를  
+**지상(Ground)** 과 **상공(Aerial)** 영역으로 구분하여 탐지하는 이중 구조로 설계되었다.
+
+#### 🧱 지상 객체 감지 (Ground Object Detection)
+
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+</p>
 
 - **탐지 클래스**: 조류, FOD, 사람, 야생동물, 항공기, 차량 (총 6종)
 
@@ -165,23 +190,89 @@ FALCON은 공항 지상 환경에서의 위험요소를 자동 인식하기 위�
   - YOLOv11-seg 기반 초기 모델 대비 약 50% 경량화 및 속도 개선
   - Negative Sample 학습을 통해 ArUco 마커 오인식 문제 해결
 
+#### 🛩️ 상공 객체 감지 (Aerial Object Detection)
+
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+</p>
+
+조류 등 **공중 위험요소**를 실시간으로 탐지하기 위해 YOLOv8 기반으로 개발된 특화 모델.  
+FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경보** 기능을 수행한다.
+
+- **학습 정보**
+  - 총 Epoch: `72`, 최종 학습률: `0.000495`
+  - 프레임워크: YOLOv8
+
+- **성능 요약**
+
+  | 지표 | Epoch 69 (최고 성능) | Epoch 72 (최종 성능) |
+  |------|------------------------|------------------------|
+  | `mAP@0.5` | 0.9455 | 0.9438 |
+  | `mAP@0.5:0.95` | 0.8278 | **0.8342** |
+  | `Precision` | **0.9850** | 0.9787 |
+  | `Recall` | 0.8949 | **0.9031** |
+
 ---
 
-### 2) 객체 추적 (Object Tracking)
+### 3) 객체 추적 (Object Tracking)
 
-- **지상 객체 추적**:
+#### **지상 객체 추적**:
   - `ByteTrack` 알고리즘 사용 (Ultralytics 내장)
   - `Low Score Detection` + `Kalman Filter` 기반 예측
   - 실시간성과 정확성 우수
 
-- **공중 객체 추적 (조류)**:
-  - **삼각측량 + ByteTrack** 결합
-  - 두 대의 CCTV 동기화 프레임 기반 2D 좌표 → 3D 공간 좌표 변환
-  - 조류 속도 및 위치를 기반으로 **실시간 충돌 위험도 계산**
+#### 🛩️ 공중 객체 추적 (Aerial Object Tracking)
+
+조류 충돌과 같은 공중 위험을 예측하고 대응하기 위해, FALCON은 **삼각측량 기반 위치 추정**, **ByteTrack 기반 객체 추적**, 그리고 **Unity 시뮬레이터 기반 위험도 계산** 기술을 통합하여 다음과 같은 시스템을 구현하였다.
+
+- **📌 실제 적용 사례**
+
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+</p>
+
+  - 2024년 무안공항 조류 충돌 사고를 기반으로  
+    주변 CCTV 영상으로 새떼의 이동 경로를 복원
+  - 제안한 추적 시스템으로 **실시간 위험도 분석이 실질적으로 가능함**을 검증
+
+- **🌐 시뮬레이션 환경 구성**
+
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+</p>
+
+  - 실제 공항 지형을 Unity로 모델링
+  - 다양한 기상 조건 및 비행 경로 시나리오 생성
+  - 항공기는 베지어 곡선 기반 경로로 이동하며 다중 비행 지원
+
+- **🛰️ CCTV 기반 위치 추정 (Triangulation)**
+
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+</p>
+
+  - Unity 시뮬레이터 내 2대의 고정 CCTV를 통해 **동기화된 영상 프레임 확보**
+  - 각 CCTV에서 조류와 항공기의 2D 위치를 감지
+  - 삼각측량 알고리즘을 통해 3D 실제 위치 계산
+
+- **🧠 실시간 객체 추적 및 위험도 계산**
+
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+</p>
+
+  - 추정된 3D 위치 데이터를 기반으로 ByteTrack으로 **프레임 간 추적**
+  - 조류와 항공기의 **상대 거리, 속도, 방향**을 분석하여  
+    **충돌 위험도 수치화 (예: BR_MEDIUM 등급)**  
+  - GUI 및 음성 인터페이스를 통해 조종사/관제사에게 실시간 경고 전달
+
+
+
+> 관제사와 조종사가 실시간으로 변하는 공중 위험에 대응할 수 있도록 선제적 경고 체계를 제공하는 것이 본 기술의 핵심 가치이다.
 
 ---
 
-### 3) 자세 감지 (Pose Estimation)
+### 4) 자세 감지 (Pose Estimation)
 
 지상 유도사의 제스처를 정확하게 인식하기 위해 정적 및 동적 자세 감지 기술을 결합하여 적용하였다.
 
@@ -200,16 +291,10 @@ FALCON은 공항 지상 환경에서의 위험요소를 자동 인식하기 위�
   - Temporal Convolutional Network (TCN)
   - 입력: 17개 관절의 x, y 좌표 (총 34개 feature), 30프레임 시퀀스
   - 출력 클래스: `stop`, `forward`, `left`, `right` (총 4종)
-  - 채널 구성: [64, 64, 64, 64], kernel size=3, dropout=0.2
-
-- **학습 설정**:
-  - batch size=32, epoch=100, learning rate=0.001, optimizer=Adam
-  - loss: CrossEntropyLoss, early stopping (patience=15)
 
 - **데이터셋 구성**:
   - 총 3,984개의 시퀀스 (train: 80%, test: 20%)
   - MediaPipe 기반 17개 관절 좌표 사용
-  - 클래스별 균형 유지 (각 제스처 23~26%)
 
 - **성능 요약**:
   - Accuracy: **98.99%**
@@ -225,23 +310,13 @@ FALCON은 공항 지상 환경에서의 위험요소를 자동 인식하기 위�
   | Left     | 98.57%    | 99.52% | 99.04%   |
   | Right    | 99.49%    | 98.98% | 99.23%   |
 
-- **오분류 분석**:
-  - 총 오분류 8건 (1.0% 오류율)
-  - 주요 혼동: `forward → stop`, `right → left`
-  - 오답 평균 신뢰도: 67.4%
-
-- **성과 요약**:
-  - 실시간 처리 가능 (30 FPS)
-  - 평균 AUC > 0.98 수준의 신뢰도 확보
-  - 전체 제스처 클래스에 대해 높은 정밀도 및 균형 있는 성능 유지
-
-- **향후 개선 방향**:
-  - 동일 소스 기반의 train/test 구성 → 일반화 성능 검증 필요
-  - forward ↔ stop 간 혼동 완화를 위한 데이터 보강 검토
-
 ---
 
-### 4) 좌표계 변환 (Coordinate Mapping)
+### 5) 좌표계 변환 (Coordinate Mapping)
+
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+</p>
 
 - **ArUco 기반 실제 맵 좌표 변환**:
   - OpenCV의 `perspectiveTransform()` 사용
@@ -254,21 +329,14 @@ FALCON은 공항 지상 환경에서의 위험요소를 자동 인식하기 위�
 
 ---
 
-### 5) 시뮬레이션 기반 위험 예측
-
-- **Unity 기반 공항 환경 시뮬레이터 구성**:
-  - 실제 활주로 및 주변 환경 모델링
-  - 조류 이동 경로, 항공기 이륙/착륙 경로 시나리오 생성
-
-- **실시간 위험도 시뮬레이션**:
-  - CCTV 영상 기반 조류 위치 예측
-  - 항공기와의 상대 거리, 속도를 분석하여 **충돌 확률 수치화**
-
----
-
 ## 🧪 기술적 문제 및 해결
 
 ### 📉 YOLO 정확도 저하
+
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+</p>
+
 - 문제: 실사 기반 테스트 시 객체 탐지 정확도 낮음
 - 해결:
   - Polycam + Blender + Unity로 합성 데이터셋 생성
@@ -276,6 +344,12 @@ FALCON은 공항 지상 환경에서의 위험요소를 자동 인식하기 위�
   - 실제 + 합성 데이터 결합 → Hybrid Dataset 구성
 
 ### 🧍‍♂️ Pose Keypoint 인식 오류
+
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+</p>
+
+
 - 문제: 사람 모형이 눕거나 뒤집힌 상태에서 keypoint 인식률 저하
 - 해결:
   - Blender로 포즈 합성 이미지 683장 생성
