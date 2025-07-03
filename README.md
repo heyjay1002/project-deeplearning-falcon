@@ -28,25 +28,21 @@
   - 접근 중 가창오리 떼와 충돌  
   - Go-around 후 랜딩기어 미전개 상태로 동체 착륙  
   - 활주로 이탈 및 기체 화재 → 탑승자 181명 중 179명 사망  
-  - 📌 *전방위 조류 감지 시스템 부재*
+  - 📌 원인: *전방위 조류 감지 시스템 부재*
 
 - **콩코드 여객기 FOD 충돌 사고 (2000)**  
   - 활주로 금속 이물질(FOD)과 접촉 → 타이어 파열 → 연료탱크 손상  
   - 이륙 직후 기체 화재 → 인근 호텔에 충돌, 총 113명 사망  
-  - 📌 *FOD 제거 실패, 활주로 점검 미흡*
+  - 📌 원인: *FOD 제거 실패, 활주로 점검 미흡*
 
 - **오스틴 공항 활주로 오진입 사고 (2023)**  
-  - 짙은 안개 속 이착륙 항공기 간 거리 46m로 충돌 직전 회피  
+  - 짙은 안개 속 이착륙 항공기 간 거리 46m로 충돌 직전 회피
   - 관제사의 이륙 허가 및 감시 시스템 부재로 인한 오판  
-  - 📌 *관제 시스템 부재 + 판단 오류 복합 문제*
+  - 📌 원인: *관제 시스템 부재 + 판단 오류 복합 문제*
  
 ---
 
 ## ⚠️ 기존 시스템의 한계
-
-<p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/background_1.png?raw=true" width="90%">
-</p>
 
 | **탐지 한계** | **판단 한계** |
 |---------------|----------------|
@@ -56,10 +52,6 @@
 ---
 
 ## 💡 FALCON의 핵심 가치
-
-<p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/value.png?raw=true" width="90%">
-</p>
 
 - **위험요소 탐지 자동화**  
   사람이 놓치는 위험요소를 실시간으로 감지하여 사각지대를 해소
@@ -76,47 +68,36 @@
 
 FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다양한 위험요소에 능동적으로 대응하는 기능을 제공한다.
 
-<p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/core_features.png?raw=true" width="90%">
-</p>
-
-
----
-
-### 🛫 관제사 AI 서비스: **Hawkeye**
+### 🛫 관제사 AI 서비스: `Hawkeye`
 > 지상에서 발생하는 다양한 위험요소를 실시간으로 감지하고, GUI를 통해 시각적 피드백 및 출입 통제를 자동화함으로써 관제 업무를 보조한다.
-
-<p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/hawkeye_features.png?raw=true" width="90%">
-</p>
 
 - **지상 위험요소 탐지**
   - CCTV 기반 영상 분석
   - 조류, FOD, 사람, 차량 등 탐지 시 GUI 팝업 및 지도 마커 표시
   - 위험도 상태 갱신 및 로그 생성
+  - [영상 보기](link)
 
 - **지상 쓰러짐 감지**
   - 일반인 / 작업자의 쓰러짐 상태 인식
   - 위험도 게이지 시각화 (예: 쓰러진 위치, 시간, 위험 수치)
   - 구조 필요성 판단을 위한 시각적 정보 제공
+  - [영상 보기](link)
 
 - **지상 출입 통제**
   - 구역별 출입등급 설정 (1~3단계)
   - 출입 위반 시 자동 감지 및 알림
   - 출입 조건 변경 시 실시간 GUI 반영
+  - [영상 보기](link)
 
 ---
 
-### ✈️ 조종사 AI 서비스: **RedWing**
+### ✈️ 조종사 AI 서비스: `RedWing`
 > 조종사의 인지 부담을 줄이고, 지상 유도 및 위험 판단을 자동화하여 더 안전한 운항 결정을 돕는 인터페이스를 제공한다.
-
-<p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/redwing_features.png?raw=true" width="90%">
-</p>
 
 - **운항 위험 경보**
   - 조류 충돌, 활주로 위험요소 등을 실시간 TTS로 경고
   - 영상 분석 + 위험 판단 모델 연동
+  - [영상 보기](https://youtu.be/-si0u8I1h2A)
 
 - **위험도 질의 자동응답**
   - 음성 질의(STT) → LLM 분류 → 음성 응답(TTS)
@@ -127,13 +108,16 @@ FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다
   - CCTV 영상 내 유도사 수신호(정지, 전진, 좌우회전 등) 인식
   - 수신호 분석 결과를 조종사에게 음성 안내로 전달
   - [영상 보기](https://youtu.be/sB_zEFfP7kI)
+ 
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/dynamic_pose.gif?raw=true" width="90%">
+</p>
+
 ---
 
 ## 🧠 핵심 기술
 
 > FALCON은 딥러닝 기반 객체 인식, 포즈 분석, 추적, 좌표 변환, 시뮬레이션 등 다양한 기술 요소들을 통합하여 공항 지상 안전을 실시간으로 관리한다.
-
----
 
 ### 1) 시뮬레이션 기반 위험 예측
 
@@ -142,7 +126,7 @@ FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다
   - 조류 이동 경로, 항공기 이륙/착륙 경로 시나리오 생성
 
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/runwaysim.gif?raw=true" width="90%">
 </p>
 
 - **실시간 위험도 시뮬레이션**:
@@ -150,7 +134,7 @@ FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다
   - 항공기와의 상대 거리, 속도를 분석하여 **충돌 확률 수치화**
 
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bird_sim.gif?raw=true" width="90%">
 </p>
 
 ### 2) 객체 탐지 (Object Detection)
@@ -160,10 +144,6 @@ FALCON의 객체 탐지 시스템은 공항 환경에서 발생할 수 있는 �
 
 #### 🧱 지상 객체 감지 (Ground Object Detection)
 
-<p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
-</p>
-
 - **탐지 클래스**: 조류, FOD, 사람, 야생동물, 항공기, 차량 (총 6종)
 
 - **데이터셋 구성**:
@@ -171,6 +151,31 @@ FALCON의 객체 탐지 시스템은 공항 환경에서 발생할 수 있는 �
   - Polycam, Blender, Unity를 활용한 3D 스캔 기반 자동 라벨링 파이프라인 구축
   - 다양한 조명/각도/환경 조건을 시뮬레이션하여 데이터 다양성 확보
   - 1시간당 약 3,000장의 이미지와 라벨 자동 생성 가능
+ 
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/poly_bird.gif?raw=true" width="200px"><br>
+      <sub>조류</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/poly_fod.gif?raw=true" width="200px"><br>
+      <sub>FOD(이물질)</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/poly_animal.gif?raw=true" width="200px"><br>
+      <sub>야생동물</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/poly_truck.gif?raw=true" width="200px"><br>
+      <sub>차량</sub>
+    </td>
+  </tr>
+</table>
+
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/blender.gif?raw=true" width="90%">
+</p>
 
 - **모델 아키텍처 및 학습 설정**:
   - YOLOv8n-box 사용 (960×960 해상도, 150 epoch, batch size 8)
@@ -179,6 +184,12 @@ FALCON의 객체 탐지 시스템은 공항 환경에서 발생할 수 있는 �
 - **후처리 기반 식별 기능**:
   - OpenCV로 형광 조끼(HV 색상) 인식 → 작업자 여부 판단
   - 차량 색상 기반 분류 → 일반 차량과 작업 차량 구분
+ 
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/work_person.gif?raw=true" width="20%" style="display:inline-block; margin-right: 10px;">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/work_vehicle.gif?raw=true" width="20%" style="display:inline-block;">
+</p>
+
 
 - **모델 성능 (v0.3 기준)**:
   - mAP@0.5: **0.9902**
@@ -191,10 +202,6 @@ FALCON의 객체 탐지 시스템은 공항 환경에서 발생할 수 있는 �
   - Negative Sample 학습을 통해 ArUco 마커 오인식 문제 해결
 
 #### 🛩️ 상공 객체 감지 (Aerial Object Detection)
-
-<p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
-</p>
 
 조류 등 **공중 위험요소**를 실시간으로 탐지하기 위해 YOLOv8 기반으로 개발된 특화 모델.  
 FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경보** 기능을 수행한다.
@@ -216,55 +223,57 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
 
 ### 3) 객체 추적 (Object Tracking)
 
-#### **지상 객체 추적**:
+#### (1) 지상 객체 추적:
   - `ByteTrack` 알고리즘 사용 (Ultralytics 내장)
   - `Low Score Detection` + `Kalman Filter` 기반 예측
   - 실시간성과 정확성 우수
 
-#### 🛩️ 공중 객체 추적 (Aerial Object Tracking)
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/byte_track.gif?raw=true" width="50%">
+</p>
+
+#### (2) 공중 객체 추적 (Aerial Object Tracking)
 
 조류 충돌과 같은 공중 위험을 예측하고 대응하기 위해, FALCON은 **삼각측량 기반 위치 추정**, **ByteTrack 기반 객체 추적**, 그리고 **Unity 시뮬레이터 기반 위험도 계산** 기술을 통합하여 다음과 같은 시스템을 구현하였다.
 
-- **📌 실제 적용 사례**
+- **📌 기술적 가능성 검토**
+  - 2024년 무안공항 조류 충돌 사고를 기반으로 주변 CCTV 영상으로 충돌 직전 새떼의 이동 경로를 사고 이후에 복원.
+  - 이를 활용해 삼각측량 및 트래킹 기술을 활용한 조류 충돌 실시간 위험도 산출 기능 구현이 실제로 가능할 것으로 판단하였음.
 
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bds_muan.png?raw=true" width="90%">
 </p>
-
-  - 2024년 무안공항 조류 충돌 사고를 기반으로  
-    주변 CCTV 영상으로 새떼의 이동 경로를 복원
-  - 제안한 추적 시스템으로 **실시간 위험도 분석이 실질적으로 가능함**을 검증
 
 - **🌐 시뮬레이션 환경 구성**
-
-<p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
-</p>
-
   - 실제 공항 지형을 Unity로 모델링
   - 다양한 기상 조건 및 비행 경로 시나리오 생성
   - 항공기는 베지어 곡선 기반 경로로 이동하며 다중 비행 지원
 
-- **🛰️ CCTV 기반 위치 추정 (Triangulation)**
-
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bird_sim.gif?raw=true" width="90%">
 </p>
 
+- **🛰️ CCTV 기반 위치 추정 (Triangulation)**
   - Unity 시뮬레이터 내 2대의 고정 CCTV를 통해 **동기화된 영상 프레임 확보**
   - 각 CCTV에서 조류와 항공기의 2D 위치를 감지
   - 삼각측량 알고리즘을 통해 3D 실제 위치 계산
 
-- **🧠 실시간 객체 추적 및 위험도 계산**
-
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/sample_image.png?raw=true" width="90%">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/triangulation.gif?raw=true" width="45%" style="display:inline-block; margin-right: 10px;">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/skytrack.gif?raw=true" width="45%" style="display:inline-block;">
 </p>
 
+- **🧠 실시간 객체 추적 및 위험도 계산**
   - 추정된 3D 위치 데이터를 기반으로 ByteTrack으로 **프레임 간 추적**
   - 조류와 항공기의 **상대 거리, 속도, 방향**을 분석하여  
     **충돌 위험도 수치화 (예: BR_MEDIUM 등급)**  
   - GUI 및 음성 인터페이스를 통해 조종사/관제사에게 실시간 경고 전달
+
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bds_result.gif?raw=true" width="90%">
+</p>
+
+
 
 
 
@@ -276,16 +285,12 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
 
 지상 유도사의 제스처를 정확하게 인식하기 위해 정적 및 동적 자세 감지 기술을 결합하여 적용하였다.
 
----
-
-#### 🔹 정적 자세 감지
+#### (1) 정적 자세 감지
 - `YOLOv8n-pose` 기반으로 17개 Keypoint 추출
 - Blender 기반 합성 데이터(683장) + 실제 촬영 데이터로 학습
 - Keypoint 기울기 분석을 통해 쓰러짐 판단 가능
 
----
-
-#### 🔹 동적 자세 감지
+#### (2) 동적 자세 감지
 
 - **모델 구조**:
   - Temporal Convolutional Network (TCN)
