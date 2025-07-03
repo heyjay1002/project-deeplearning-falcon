@@ -185,18 +185,16 @@ FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다
 ## 🛠️ 기술 스택
 
 ### ML / DL
-![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white)
-![ByteTrack](https://img.shields.io/badge/ByteTrack-272727?style=flat)
-![MediaPipe](https://img.shields.io/badge/MediaPipe-FF6F00?style=flat)
-![Whisper](https://img.shields.io/badge/Whisper-9467BD?style=flat)
-![Ollama](https://img.shields.io/badge/Ollama-333333?style=flat)
-![Coqui](https://img.shields.io/badge/Coqui-FFD166?style=flat)
-![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat&logo=numpy&logoColor=white)
-![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=flat&logo=opencv&logoColor=white)
-![YOLOv8](https://img.shields.io/badge/YOLOv8-FFB400?style=for-the-badge&logo=aim&logoColor=black)
-![UDP](https://img.shields.io/badge/UDP-005571?style=for-the-badge&logo=wifi&logoColor=white)
-![TCP](https://img.shields.io/badge/TCP-004E89?style=for-the-badge&logo=networkx&logoColor=white)
-
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)
+![ByteTrack](https://img.shields.io/badge/ByteTrack-222222?style=for-the-badge&logo=github&logoColor=white)
+![MediaPipe](https://img.shields.io/badge/MediaPipe-FF6F00?style=for-the-badge&logo=google&logoColor=white)
+![Whisper](https://img.shields.io/badge/Whisper-9467BD?style=for-the-badge&logo=openai&logoColor=white)
+![Ollama](https://img.shields.io/badge/Ollama-333333?style=for-the-badge&logo=vercel&logoColor=white)
+![Coqui](https://img.shields.io/badge/Coqui-FFD166?style=for-the-badge&logo=soundcloud&logoColor=black)
+![NumPy](https://img.shields.io/badge/NumPy-013243?style=for-the-badge&logo=numpy&logoColor=white)
+![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white)
+![YOLOv8](https://img.shields.io/badge/YOLOv8-FFB400?style=for-the-badge&logo=yolov5&logoColor=black)
+![TCN](https://img.shields.io/badge/TCN-9467BD?style=for-the-badge&logo=neural&logoColor=white)
 ### GUI
 ![PyQt6](https://img.shields.io/badge/PyQt6-41CD52?style=flat)
 
