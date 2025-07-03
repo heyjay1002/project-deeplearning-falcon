@@ -19,37 +19,43 @@
 ## 🛠️ 기술 스택
 
 ### ML / DL
-- YOLOv8  
-- PyTorch  
-- ByteTrack  
-- TCN  
-- MediaPipe  
-- Whisper  
-- Ollama  
-- Coqui  
-- NumPy  
-- OpenCV
+![YOLOv8](https://img.shields.io/badge/YOLOv8-FFB400?style=flat&logo=yolo&logoColor=white)
+![PyTorch](https://img.shields.io/badge/PyTorch-EE4C2C?style=flat&logo=pytorch&logoColor=white)
+![ByteTrack](https://img.shields.io/badge/ByteTrack-272727?style=flat)
+![TCN](https://img.shields.io/badge/TCN-005571?style=flat)
+![MediaPipe](https://img.shields.io/badge/MediaPipe-FF6F00?style=flat)
+![Whisper](https://img.shields.io/badge/Whisper-9467BD?style=flat)
+![Ollama](https://img.shields.io/badge/Ollama-333333?style=flat)
+![Coqui](https://img.shields.io/badge/Coqui-FFD166?style=flat)
+![NumPy](https://img.shields.io/badge/NumPy-013243?style=flat&logo=numpy&logoColor=white)
+![OpenCV](https://img.shields.io/badge/OpenCV-5C3EE8?style=flat&logo=opencv&logoColor=white)
+
 
 ### GUI
-- PyQt6
+![PyQt6](https://img.shields.io/badge/PyQt6-41CD52?style=flat)
+
 
 ### 데이터베이스
-- MySQL
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=flat&logo=mysql&logoColor=white)
+
 
 ### 네트워크 / 통신
-- Socket  
-- JSON  
-- UDP  
-- TCP
+![Socket](https://img.shields.io/badge/Socket-000000?style=flat)
+![JSON](https://img.shields.io/badge/JSON-292929?style=flat&logo=json&logoColor=white)
+![UDP](https://img.shields.io/badge/UDP-005571?style=flat)
+![TCP](https://img.shields.io/badge/TCP-004E89?style=flat)
+
 
 ### 분석 / 시각화
-- pandas  
-- matplotlib
+![Pandas](https://img.shields.io/badge/Pandas-150458?style=flat&logo=pandas&logoColor=white)
+![Matplotlib](https://img.shields.io/badge/Matplotlib-11557C?style=flat)
+
 
 ### 시뮬레이션 / 합성 데이터
-- Unity  
-- Blender  
-- Polycam
+![Unity](https://img.shields.io/badge/Unity-000000?style=flat&logo=unity&logoColor=white)
+![Blender](https://img.shields.io/badge/Blender-F5792A?style=flat&logo=blender&logoColor=white)
+![Polycam](https://img.shields.io/badge/Polycam-272727?style=flat)
+
 
 ---
 
