@@ -44,7 +44,9 @@
 
 ## ⚠️ 기존 시스템의 한계
 
-![background_1](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/background_1.png?raw=true)
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/background_1.png?raw=true" width="90%">
+</p>
 
 | **탐지 한계** | **판단 한계** |
 |---------------|----------------|
@@ -55,7 +57,9 @@
 
 ## 💡 FALCON의 핵심 가치
 
-![value](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/value.png?raw=true)
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/value.png?raw=true" width="90%">
+</p>
 
 - **위험요소 탐지 자동화**  
   사람이 놓치는 위험요소를 실시간으로 감지하여 사각지대를 해소
@@ -72,14 +76,19 @@
 
 FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다양한 위험요소에 능동적으로 대응하는 기능을 제공한다.
 
-![core_features](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/core_features.png?raw=true)
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/core_features.png?raw=true" width="90%">
+</p>
+
 
 ---
 
 ### 🛫 관제사 AI 서비스: **Hawkeye**
 > 지상에서 발생하는 다양한 위험요소를 실시간으로 감지하고, GUI를 통해 시각적 피드백 및 출입 통제를 자동화함으로써 관제 업무를 보조한다.
 
-![hawkeye_features](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/hawkeye_features.png?raw=true)
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/hawkeye_features.png?raw=true" width="90%">
+</p>
 
 - **지상 위험요소 탐지**
   - CCTV 기반 영상 분석
@@ -101,7 +110,9 @@ FALCON은 관제사와 조종사를 위한 AI 서비스를 통해 공항 내 다
 ### ✈️ 조종사 AI 서비스: **RedWing**
 > 조종사의 인지 부담을 줄이고, 지상 유도 및 위험 판단을 자동화하여 더 안전한 운항 결정을 돕는 인터페이스를 제공한다.
 
-![redwing_features](https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/redwing_features.png?raw=true)
+<p align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/redwing_features.png?raw=true" width="90%">
+</p>
 
 - **운항 위험 경보**
   - 조류 충돌, 활주로 위험요소 등을 실시간 TTS로 경고
