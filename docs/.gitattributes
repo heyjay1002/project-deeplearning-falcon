@@ -1,0 +1,4 @@
+*.md linguist-documentation
+*.png linguist-generated
+*.jpg linguist-generated
+*.gif linguist-generated
