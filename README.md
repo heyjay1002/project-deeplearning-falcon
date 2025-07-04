@@ -418,20 +418,19 @@ Confluence와 Jira를 이용해 전체 일정을 관리하였습니다.
 # 9. 팀 구성
 
 ### 🧑‍💼 김종명 [`@jongbob1918`](https://github.com/jongbob1918)
-- 프로젝트 총괄  
-- 프로젝트 문서 관리  
-- 지상 감지 AI 서버 구축  
+- 프로젝트 총괄 (문서 및 일정 관리)
+- 지상 객체 탐지 AI 시스템(IDS) 구축
 - 지상 객체 탐지를 위한 딥러닝 모델 기술조사 및 제작
-- 파일럿 AI 서비스(RedWing) 지상 유도 보조 기능 구현
+- 파일럿 AI 서비스(RedWing) 지상 유도 보조 기능 기술조사
 
 ### 🧑‍💼 김지연 [`@heyjay1002`](https://github.com/heyjay1002)
 - Blender 이용 Pose Keypoint 추출 및 합성 데이터셋 생성
 - 쓰러짐 기반 YOLO Pose Custom Model 제작
-- LLM 및 음성 처리 기능(STT/TTS) 기술조사
-- 관제사 GUI 설계 및 기능 구현
+- 관제사 AI 서비스(Hawkeye) GUI 설계 및 기능 구현
+- 파일럿 AI 서비스(RedWing) LLM 및 음성 처리 기능(STT/TTS) 기술조사
 
 ### 🧑‍💼 박효진 [`@Park-hyojin`](https://github.com/Park-hyojin)
-- 시스템 설계 총괄  
+- 시스템 설계 및 백엔드 총괄
 - 메인 서버 구축 및 관리
 - 데이터베이스 구축 및 관리
 - 시스템 인터페이스 및 통신 구조 설계
@@ -439,8 +438,8 @@ Confluence와 Jira를 이용해 전체 일정을 관리하였습니다.
 
 ### 🧑‍💼 장진혁 [`@jinhyuk2me`](https://github.com/jinhyuk2me)
 - Unity / Blender 기반 합성 데이터 파이프라인 구현  
-- 실시간 조류 충돌 위험도 분석 시스템(BDS) 설계 및 구현
-- 실시간 조류 충돌 위험도 분석 시스템(BDS) 딥러닝 모델 제작
+- 실시간 조류 충돌 위험도 분석 AI 시스템(BDS) 설계 및 구현
+- 실시간 조류 충돌 위험도 분석 AI 시스템(BDS) 딥러닝 모델 제작
 - 실시간 지상 객체 감시 시스템(IDS) 딥러닝 모델 제작
 - 파일럿 AI 서비스(RedWing) 지상 유도 보조 기능 구현
 - 파일럿 AI 서비스(RedWing) 운항 위험도 음성 경보 및 자동응답 기능 구현
