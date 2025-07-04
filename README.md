@@ -108,17 +108,17 @@ FALCON은 이러한 문제의식을 바탕으로, 항공 운항의 **안전성�
 
 ## 1) 시뮬레이션 기반 위험 예측
 
-- **Unity 기반 공항 환경 시뮬레이터 구성**:
-  - 실제 활주로 및 주변 환경 모델링
-  - 조류 이동 경로, 항공기 이륙/착륙 경로 시나리오 생성
+- **Unity 기반 공항 환경 시뮬레이터(`RunwaySim`) 구성**:
+  - 모형 활주로 및 주변 환경 모델링
+  - 지상 객체 탐지 딥러닝 모델 학습을 위한 자동 파이프라인을 위해 제작
 
 <p align="center">
   <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/runwaysim.gif?raw=true" width="60%">
 </p>
 
-- **실시간 위험도 시뮬레이션**:
-  - CCTV 영상 기반 조류 위치 예측
-  - 항공기와의 상대 거리, 속도를 분석하여 **충돌 확률 수치화**
+- **Unity 기반 실시간 조류 충돌 위험도 시뮬레이터(`BirdRiskSim`) 구성**:
+  - 고정 CCTV 영상 기반 조류 위치 예측
+  - 조류-항공기 상대 거리, 조류-항로 상대 거리, 조류-항공기 상대 속도를 분석하여 **충돌 확률** 산출
 
 <p align="center">
   <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bird_sim.gif?raw=true" width="60%">
@@ -238,18 +238,18 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
   <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bird_sim.gif?raw=true" width="60%">
 </p>
 
-- **🛰️ CCTV 기반 위치 추정 (Triangulation)**
+- **🛰️ CCTV 기반 조류 위치 추정 (Triangulation) 및 실시간 경로 추적**
   - Unity 시뮬레이터 내 2대의 고정 CCTV를 통해 **동기화된 영상 프레임 확보**
   - 각 CCTV에서 조류와 항공기의 2D 위치를 감지
   - 삼각측량 알고리즘을 통해 3D 실제 위치 계산
+  - 추정된 3D 위치 데이터를 기반으로 ByteTrack으로 **프레임 간 추적**
 
 <p align="center">
   <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/triangulation.gif?raw=true" width="45%" style="display:inline-block; margin-right: 10px;">
   <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/skytrack.gif?raw=true" width="45%" style="display:inline-block;">
 </p>
 
-- **🧠 실시간 객체 추적 및 위험도 계산**
-  - 추정된 3D 위치 데이터를 기반으로 ByteTrack으로 **프레임 간 추적**
+- **🧠 실시간 조류 충돌 위험도 계산**
   - 조류와 항공기의 **상대 거리, 속도, 방향**을 분석하여  
     **충돌 위험도 수치화 (예: BR_MEDIUM 등급)**  
   - GUI 및 음성 인터페이스를 통해 조종사/관제사에게 실시간 경고 전달
