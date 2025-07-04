@@ -1,3 +1,4 @@
 *.run
 *.pyc
+*.pptx
 __pycache__/
