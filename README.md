@@ -421,7 +421,6 @@ Confluence와 Jira를 이용해 전체 일정을 관리하였습니다.
 - 프로젝트 총괄 (문서 및 일정 관리)
 - 지상 객체 탐지 AI 시스템(IDS) 구축
 - 지상 객체 탐지를 위한 딥러닝 모델 기술조사 및 제작
-- 파일럿 AI 서비스(RedWing) 지상 유도 보조 기능 기술조사
 
 ### 🧑‍💼 김지연 [`@heyjay1002`](https://github.com/heyjay1002)
 - Blender 이용 Pose Keypoint 추출 및 합성 데이터셋 생성
