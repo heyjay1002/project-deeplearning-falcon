@@ -7,3 +7,4 @@
 LICENSE linguist-detectable=false
 README.md linguist-language=Markdown
 docs/* linguist-detectable=false
+asset/* linguist-detectable=false
