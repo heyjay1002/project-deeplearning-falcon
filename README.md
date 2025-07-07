@@ -158,9 +158,10 @@ FALCON은 이러한 문제의식을 바탕으로, 항공 운항의 **안전성�
   </tr>
 </table>
 
-<p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/blender.gif?raw=true" width="60%">
-</p>
+<div align="center">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/blender.gif?raw=true" width="60%"><br>
+  <sub>Blender를 이용한 자동 라벨링 파이프라인 구축</sub>
+</div>
 
 - **모델 아키텍처 및 학습 설정**:
   - YOLOv8n-box 사용 (960×960 해상도, 150 epoch, batch size 8)
@@ -170,10 +171,19 @@ FALCON은 이러한 문제의식을 바탕으로, 항공 운항의 **안전성�
   - OpenCV로 형광 조끼(HV 색상) 인식 → 작업자 여부 판단
   - 차량 색상 기반 분류 → 일반 차량과 작업 차량 구분
  
-<p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/work_person.gif?raw=true" width="20%" style="display:inline-block; margin-right: 10px;">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/work_vehicle.gif?raw=true" width="20%" style="display:inline-block;">
-</p>
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/work_person.gif?raw=true" width="200px"><br>
+      <sub>인가자/비인가자</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/work_vehicle.gif?raw=true" width="200px"><br>
+      <sub>인가차량/비인가차량</sub>
+    </td>
+  </tr>
+</table>
+
 
 
 - **모델 성능 (v0.3 기준)**:
@@ -244,10 +254,19 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
   - 삼각측량 알고리즘을 통해 3D 실제 위치 계산
   - 추정된 3D 위치 데이터를 기반으로 ByteTrack으로 **프레임 간 추적**
 
-<p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/triangulation.gif?raw=true" width="45%" style="display:inline-block; margin-right: 10px;">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/skytrack.gif?raw=true" width="45%" style="display:inline-block;">
-</p>
+<table align="center">
+  <tr>
+    <td align="center">
+      <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/triangulation.gif?raw=true" width="400px"><br>
+      <sub>삼각측량을 통한 위치 추정</sub>
+    </td>
+    <td align="center">
+      <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/skytrack.gif?raw=true" width="400px"><br>
+      <sub>ByteTrack을 통한 경로 추적</sub>
+    </td>
+  </tr>
+</table>
+
 
 - **🧠 실시간 조류 충돌 위험도 계산**
   - 조류와 항공기의 **상대 거리, 속도, 방향**을 분석하여  
@@ -255,7 +274,7 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
   - GUI 및 음성 인터페이스를 통해 조종사/관제사에게 실시간 경고 전달
 
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bds_result.gif?raw=true" width="60%">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/bds_result.gif?raw=true" width="80%">
 </p>
 
 ---
