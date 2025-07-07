@@ -313,34 +313,52 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
 
 ---
 
-# 4. 기술적 문제 및 해결
+## 4. 기술적 문제 및 해결
 
 ### 📉 YOLO 정확도 저하
-- 문제: 실사 기반 테스트 시 객체 탐지 정확도 낮음
-<p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pr_curve_Image_seg_model.png?raw=true" width="400" height="300">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/old_real_test.gif?raw=true" width="400" height="300"><br>
-</p>
 
+**문제**  
+- 실사 기반 테스트 시 객체 탐지 정확도 낮음  
 
-- 해결: 실제 + 합성 데이터 결합 → Hybrid Dataset 구성하여 yolov8n-box모델 학습
-<p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pr_curve_Hybrid_box_model.png?raw=true" width="400" height="300">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/real_test.gif?raw=true" width="400" height="300">
-</p>
+<div align="center">
+
+| 기존 YOLO 모델 성능 (PR Curve) | 기존 모델 실사 테스트 |
+|:--:|:--:|
+| <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pr_curve_Image_seg_model.png?raw=true" width="400"> | <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/old_real_test.gif?raw=true" width="400"> |
+
+</div>
+
+**해결**  
+- 실제 + 합성 데이터 결합한 **Hybrid Dataset** 구성  
+- YOLOv8n-box 모델 재학습
+
+<div align="center">
+
+| Hybrid 모델 PR Curve | Hybrid 모델 실사 테스트 |
+|:--:|:--:|
+| <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pr_curve_Hybrid_box_model.png?raw=true" height="300" width="400"> | <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/real_test.gif?raw=true" height="300" width="400"> |
+
+</div>
+
+---
 
 ### 🧍‍♂️ Pose Keypoint 인식 오류
-- 문제: 사람 모형이 눕거나 뒤집힌 상태에서 keypoint 인식률 저하
-- 해결:
-  - Blender로 포즈 합성 이미지 683장 생성
-  - YOLOv8n-pose 모델 학습
-  - 쓰러짐 감지 성능 향상 확인
- 
-  
-<p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/old_poseㅐ.png?raw=true" width="400" height="300">,
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pose.png?raw=true" width="400" height="300">,
-</p>
+
+**문제**  
+- 사람이 **눕거나 뒤집힌 자세**일 때 keypoint 인식률 저하
+
+**해결**  
+- Blender로 포즈 합성 이미지 **683장** 생성  
+- YOLOv8n-pose 모델 학습 → 쓰러짐 감지 성능 향상
+
+<div align="center">
+
+| 기존 모델 Pose 인식 결과 | 개선된 모델 인식 결과 |
+|:--:|:--:|
+| <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/old_poseㅐ.png?raw=true" height="300" width="400"> | <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pose.png?raw=true" height="300" width="400"> |
+
+</div>
+
 
 
 ---
