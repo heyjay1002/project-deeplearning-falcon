@@ -2,5 +2,7 @@
 *.png linguist-generated
 *.jpg linguist-generated
 *.gif linguist-generated
-*.1 linguist-language=Text
-
+*.1 linguist-detectable=false
+*.man linguist-detectable=false
+LICENSE linguist-detectable=false
+README.md linguist-language=Markdown
