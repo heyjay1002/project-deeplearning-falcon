@@ -6,3 +6,4 @@
 *.man linguist-detectable=false
 LICENSE linguist-detectable=false
 README.md linguist-language=Markdown
+docs/* linguist-detectable=false
