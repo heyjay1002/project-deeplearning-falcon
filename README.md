@@ -325,7 +325,7 @@ FALCON의 **BDS (Bird Detection System)** 에 탑재되어 **운항 위험 경�
 
 - 해결: 실제 + 합성 데이터 결합 → Hybrid Dataset 구성하여 yolov8n-box모델 학습
 <p align="center">
-  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pr_curve_Real_box_model.png?raw=true" width="400" height="300">
+  <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/pr_curve_Hybrid_box_model.png?raw=true" width="400" height="300">
   <img src="https://github.com/addinedu-ros-9th/deeplearning-repo-2/blob/main/assets/images/real_test.gif?raw=true" width="400" height="300">
 </p>
 
