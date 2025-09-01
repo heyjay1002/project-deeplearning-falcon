@@ -10,18 +10,18 @@ public class WaypointPathEditor : Editor
     {
         WaypointBezierPath path = (WaypointBezierPath)target;
 
-        // 기본 Inspector 그리기
+        // 기본 인스펙터 그리기
         DrawDefaultInspector();
 
         EditorGUILayout.Space(10);
-        EditorGUILayout.LabelField("🔧 Waypoint Tools", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("웨이포인트 도구", EditorStyles.boldLabel);
 
-        // 경로 상태 정보
+        // 경로 상태 정보 표시
         DrawPathInfo(path);
 
         EditorGUILayout.Space(5);
 
-        // 기본 버튼들
+        // 기본 버튼들 배치
         EditorGUILayout.BeginHorizontal();
         if (GUILayout.Button("Add Waypoint"))
         {
@@ -46,8 +46,8 @@ public class WaypointPathEditor : Editor
         }
         EditorGUILayout.EndHorizontal();
 
-        // 고급 옵션 토글
-        showAdvancedOptions = EditorGUILayout.Foldout(showAdvancedOptions, "🔧 Advanced Options");
+        // 고급 옵션 토글 버튼
+        showAdvancedOptions = EditorGUILayout.Foldout(showAdvancedOptions, "고급 옵션");
         
         if (showAdvancedOptions)
         {
@@ -56,34 +56,30 @@ public class WaypointPathEditor : Editor
             EditorGUI.indentLevel--;
         }
 
-        // 경고 및 도움말
+        // 경고 메시지와 도움말 표시
         DrawHelpBox(path);
     }
 
-    /// <summary>
-    /// 경로 정보 표시
-    /// </summary>
+    // 경로 정보 표시
     private void DrawPathInfo(WaypointBezierPath path)
     {
         EditorGUILayout.BeginVertical(EditorStyles.helpBox);
-        EditorGUILayout.LabelField("📊 Path Information", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("경로 정보", EditorStyles.boldLabel);
         
-        string status = path.IsValid() ? "✅ Valid" : "❌ Invalid";
-        EditorGUILayout.LabelField($"Status: {status}");
-        EditorGUILayout.LabelField($"Waypoints: {path.waypoints.Count}");
+        string status = path.IsValid() ? "유효함" : "유효하지 않음";
+        EditorGUILayout.LabelField($"상태: {status}");
+        EditorGUILayout.LabelField($"웨이포인트: {path.waypoints.Count}개");
         
         if (path.IsValid())
         {
             float approximateLength = CalculateApproximateLength(path);
-            EditorGUILayout.LabelField($"Approximate Length: {approximateLength:F1} units");
+            EditorGUILayout.LabelField($"대략적인 길이: {approximateLength:F1} 단위");
         }
         
         EditorGUILayout.EndVertical();
     }
 
-    /// <summary>
-    /// 고급 옵션 그리기
-    /// </summary>
+    // 고급 옵션 그리기
     private void DrawAdvancedOptions(WaypointBezierPath path)
     {
         EditorGUILayout.BeginVertical(EditorStyles.helpBox);
@@ -109,9 +105,7 @@ public class WaypointPathEditor : Editor
         EditorGUILayout.EndVertical();
     }
 
-    /// <summary>
-    /// 도움말 및 경고 표시
-    /// </summary>
+    // 도움말 및 경고 표시
     private void DrawHelpBox(WaypointBezierPath path)
     {
         if (!path.IsValid())
@@ -124,9 +118,7 @@ public class WaypointPathEditor : Editor
         }
     }
 
-    /// <summary>
-    /// 웨이포인트 추가 (끝에)
-    /// </summary>
+    // 웨이포인트를 경로 끝에 추가
     private void AddWaypoint(WaypointBezierPath path)
     {
         GameObject newWP = new GameObject($"Waypoint_{path.waypoints.Count}");
@@ -147,9 +139,7 @@ public class WaypointPathEditor : Editor
         EditorUtility.SetDirty(path);
     }
 
-    /// <summary>
-    /// 웨이포인트 중간에 삽입
-    /// </summary>
+    // 웨이포인트를 중간에 삽입
     private void InsertWaypoint(WaypointBezierPath path)
     {
         if (path.waypoints.Count < 2) return;
@@ -158,7 +148,7 @@ public class WaypointPathEditor : Editor
         GameObject newWP = new GameObject($"Waypoint_{insertIndex}");
         newWP.transform.parent = path.transform;
 
-        // 중간 지점 계산
+        // 중간 지점 위치 계산
         Vector3 pos1 = path.waypoints[insertIndex - 1].position;
         Vector3 pos2 = path.waypoints[insertIndex].position;
         newWP.transform.position = Vector3.Lerp(pos1, pos2, 0.5f);
@@ -166,14 +156,12 @@ public class WaypointPathEditor : Editor
         Undo.RegisterCreatedObjectUndo(newWP, "Insert Waypoint");
         path.waypoints.Insert(insertIndex, newWP.transform);
         
-        // 이름 다시 정리
+        // 웨이포인트 이름 다시 정리
         UpdateWaypointNames(path);
         EditorUtility.SetDirty(path);
     }
 
-    /// <summary>
-    /// 경로 직선화
-    /// </summary>
+    // 경로를 직선으로 만들기
     private void StraightenPath(WaypointBezierPath path)
     {
         if (path.waypoints.Count < 2) return;
@@ -192,9 +180,7 @@ public class WaypointPathEditor : Editor
         EditorUtility.SetDirty(path);
     }
 
-    /// <summary>
-    /// 경로 뒤집기
-    /// </summary>
+    // 경로 순서 뒤집기
     private void ReversePath(WaypointBezierPath path)
     {
         if (path.waypoints.Count < 2) return;
@@ -205,14 +191,12 @@ public class WaypointPathEditor : Editor
         EditorUtility.SetDirty(path);
     }
 
-    /// <summary>
-    /// 웨이포인트 최적화 (너무 가까운 점들 제거)
-    /// </summary>
+    // 웨이포인트 최적화 - 너무 가까운 점들 제거
     private void OptimizeWaypoints(WaypointBezierPath path)
     {
         if (path.waypoints.Count < 3) return;
 
-        float minDistance = 1f; // 최소 거리
+        float minDistance = 1f; // 최소 거리 설정
         var toRemove = new System.Collections.Generic.List<Transform>();
 
         for (int i = 1; i < path.waypoints.Count - 1; i++)
@@ -235,9 +219,7 @@ public class WaypointPathEditor : Editor
         Debug.Log($"최적화 완료: {toRemove.Count}개 웨이포인트 제거됨");
     }
 
-    /// <summary>
-    /// 웨이포인트 균등 분배
-    /// </summary>
+    // 웨이포인트를 균등하게 분배
     private void DistributeWaypointsEvenly(WaypointBezierPath path)
     {
         if (path.waypoints.Count < 3) return;
@@ -256,9 +238,7 @@ public class WaypointPathEditor : Editor
         EditorUtility.SetDirty(path);
     }
 
-    /// <summary>
-    /// 모든 웨이포인트 삭제
-    /// </summary>
+    // 모든 웨이포인트 삭제
     private void ClearWaypoints(WaypointBezierPath path)
     {
         foreach (var wp in path.waypoints)
@@ -271,9 +251,7 @@ public class WaypointPathEditor : Editor
         EditorUtility.SetDirty(path);
     }
 
-    /// <summary>
-    /// 웨이포인트 이름 업데이트
-    /// </summary>
+    // 웨이포인트 이름 업데이트
     private void UpdateWaypointNames(WaypointBezierPath path)
     {
         for (int i = 0; i < path.waypoints.Count; i++)
@@ -285,9 +263,7 @@ public class WaypointPathEditor : Editor
         }
     }
 
-    /// <summary>
-    /// 경로 길이 근사 계산
-    /// </summary>
+    // 경로 길이 근사 계산
     private float CalculateApproximateLength(WaypointBezierPath path)
     {
         if (!path.IsValid()) return 0f;

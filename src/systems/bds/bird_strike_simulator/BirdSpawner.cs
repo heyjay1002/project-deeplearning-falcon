@@ -33,7 +33,7 @@ public class BirdSpawner : MonoBehaviour
     public bool enableFormationVariation = true;
     public enum FlockFormation { Random, Tight, Spread, Line, VShape }
 
-    // ✅ 새로운 설정 추가
+    // 새로 추가된 설정
     [Header("Flock Spread Control")]
     [Tooltip("포메이션 타입을 직접 선택 (Random이면 자동으로 랜덤 선택)")]
     public FlockFormation preferredFormation = FlockFormation.Random;
@@ -63,7 +63,7 @@ public class BirdSpawner : MonoBehaviour
     {
         int birdCount = Random.Range(minBirdCount, maxBirdCount + 1);
         
-        // 성능 모드에서는 새 수를 제한
+        // 성능 모드일 때 새 수 제한
         if (enablePerformanceMode)
         {
             birdCount = Mathf.Min(birdCount, maxBirdsInPerformanceMode);
@@ -76,10 +76,10 @@ public class BirdSpawner : MonoBehaviour
         flockGroup.transform.position = center;
         flockGroup.tag = "Flock";
 
-        // ✅ FlockMover 추가 with enhanced movement
+        // FlockMover 컴포넌트 추가하여 향상된 이동 기능 제공
         FlockMover mover = flockGroup.AddComponent<FlockMover>();
         
-        // 다양한 이동 방향 설정 - 모든 각도에서 자연스럽게
+        // 다양한 이동 방향 설정로 모든 각도에서 자연스러운 이동
         Vector3 moveDirection;
         float directionType = Random.value;
         
@@ -110,7 +110,7 @@ public class BirdSpawner : MonoBehaviour
         mover.moveDirection = moveDirection.normalized;
         mover.moveSpeed = Random.Range(minMoveSpeed, maxMoveSpeed);
 
-        // ✅ 포메이션 패턴 선택 (Inspector 설정 우선)
+        // 포메이션 패턴 선택 - Inspector 설정을 우선적으로 사용
         FlockFormation formation;
         
         // 1. 먼저 preferredFormation 설정 확인
@@ -132,7 +132,7 @@ public class BirdSpawner : MonoBehaviour
                 FlockFormation.Tight;
         }
 
-        // 새 개체 생성 (성능 최적화)
+        // 새 개체 생성 - 성능 최적화
         for (int i = 0; i < birdCount; i++)
         {
             Vector3 offset = GetFormationOffset(formation, i, birdCount, spawnRadius);
@@ -140,7 +140,7 @@ public class BirdSpawner : MonoBehaviour
 
             GameObject bird = Instantiate(selectedPrefab, spawnPos, Quaternion.identity, flockGroup.transform);
             bird.name = $"Bird_{i:D2}";
-            // 개별 새는 태그 없음 - FlockGroup만 "Flock" 태그 사용
+            // 개별 새는 태그 없이 FlockGroup만 Flock 태그 사용
 
             // 개별 새에 약간의 랜덤 회전 추가
             bird.transform.rotation = Quaternion.Euler(
@@ -214,10 +214,10 @@ public class BirdSpawner : MonoBehaviour
                 break;
         }
         
-        // ✅ 전체적인 스프레드 배율 적용
+        // 전체적인 스프레드 배율 적용
         offset *= globalSpreadMultiplier;
         
-        // Y값을 항상 양수로 유지 (공중 비행)
+        // Y값을 항상 양수로 유지하여 공중 비행 보장
         offset.y = Mathf.Abs(offset.y);
         return offset;
     }

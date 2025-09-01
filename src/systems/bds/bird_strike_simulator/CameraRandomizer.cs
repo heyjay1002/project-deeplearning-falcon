@@ -3,7 +3,7 @@ using System.Collections;
 
 public class CameraRandomizer : MonoBehaviour
 {
-    [Header("🎯 Camera Position Randomizer")]
+    [Header("카메라 위치 랜덤화 시스템")]
     [Space(10)]
     
     [Header("Target Cameras")]
@@ -71,9 +71,7 @@ public class CameraRandomizer : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 초기 설정 검증
-    /// </summary>
+    // 초기 설정 검증
     void ValidateSetup()
     {
         if (managedCameras == null || managedCameras.Length == 0)
@@ -94,9 +92,7 @@ public class CameraRandomizer : MonoBehaviour
         Debug.Log($"[CameraRandomizer] {managedCameras.Length}개 카메라 랜덤화 시스템 초기화 완료");
     }
 
-    /// <summary>
-    /// 주기적 랜덤화 (InvokeRepeating용)
-    /// </summary>
+    // 주기적 랜덤화 수행
     void ScheduledRandomize()
     {
         if (useSmoothMovement)
@@ -109,10 +105,8 @@ public class CameraRandomizer : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 즉시 모든 카메라 위치 랜덤화
-    /// </summary>
-    [ContextMenu("🎲 Randomize All Cameras")]
+    // 즉시 모든 카메라 위치 랜덤화
+    [ContextMenu("모든 카메라 랜덤화")]
     public void RandomizeAllInstant()
     {
         for (int i = 0; i < managedCameras.Length; i++)
@@ -122,7 +116,7 @@ public class CameraRandomizer : MonoBehaviour
             Vector3 randomPos = GetRandomPosition();
             managedCameras[i].transform.position = randomPos;
             
-            // 타겟 바라보기
+            // 대상 타겟 바라보기
             if (lookTarget != null)
             {
                 Vector3 lookAtPos = lookTarget.position + lookOffset;
@@ -133,9 +127,7 @@ public class CameraRandomizer : MonoBehaviour
         Debug.Log($"[CameraRandomizer] {managedCameras.Length}개 카메라 위치를 즉시 랜덤화했습니다");
     }
 
-    /// <summary>
-    /// 부드럽게 모든 카메라 위치 랜덤화
-    /// </summary>
+    // 부드럽게 모든 카메라 위치 랜덤화
     public void RandomizeAllSmooth()
     {
         // 새 타겟 위치 계산
@@ -154,9 +146,7 @@ public class CameraRandomizer : MonoBehaviour
         smoothMoveCoroutine = StartCoroutine(SmoothMoveToTargets());
     }
 
-    /// <summary>
-    /// 부드러운 이동 코루틴
-    /// </summary>
+    // 부드러운 이동 코루틴
     IEnumerator SmoothMoveToTargets()
     {
         Vector3[] startPositions = new Vector3[managedCameras.Length];
@@ -186,7 +176,7 @@ public class CameraRandomizer : MonoBehaviour
                 Vector3 currentPos = Vector3.Lerp(startPositions[i], targetPositions[i], smoothProgress);
                 managedCameras[i].transform.position = currentPos;
                 
-                // 타겟 바라보기
+                // 대상 타겟 바라보기
                 if (lookTarget != null)
                 {
                     Vector3 lookAtPos = lookTarget.position + lookOffset;
@@ -216,9 +206,7 @@ public class CameraRandomizer : MonoBehaviour
         Debug.Log($"[CameraRandomizer] {managedCameras.Length}개 카메라가 부드럽게 이동 완료");
     }
 
-    /// <summary>
-    /// 랜덤 위치 생성
-    /// </summary>
+    // 랜덤 위치 생성
     Vector3 GetRandomPosition()
     {
         return center + new Vector3(
@@ -228,10 +216,8 @@ public class CameraRandomizer : MonoBehaviour
         );
     }
 
-    /// <summary>
-    /// 랜덤화 시작/중지 토글
-    /// </summary>
-    [ContextMenu("⏯️ Toggle Randomization")]
+    // 랜덤화 시작과 중지 토글
+    [ContextMenu("랜덤화 토글")]
     public void ToggleRandomization()
     {
         if (isRandomizing)
@@ -244,9 +230,7 @@ public class CameraRandomizer : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 랜덤화 시작
-    /// </summary>
+    // 랜덤화 시작
     public void StartRandomization()
     {
         if (!isRandomizing)
@@ -257,9 +241,7 @@ public class CameraRandomizer : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 랜덤화 중지
-    /// </summary>
+    // 랜덤화 중지
     public void StopRandomization()
     {
         if (isRandomizing)
@@ -277,10 +259,8 @@ public class CameraRandomizer : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// 현재 상태 정보 표시
-    /// </summary>
-    [ContextMenu("📊 Show Status")]
+    // 현재 상태 정보 표시
+    [ContextMenu("상태 정보 보기")]
     public void ShowStatus()
     {
         string status = isRandomizing ? "활성" : "비활성";
@@ -294,7 +274,7 @@ public class CameraRandomizer : MonoBehaviour
 
     void OnDestroy()
     {
-        // 정리 작업
+        // 리소스 정리 작업
         if (smoothMoveCoroutine != null)
         {
             StopCoroutine(smoothMoveCoroutine);
